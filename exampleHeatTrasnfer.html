@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 
-<!--    ____   _____   ____      _____                 __                    -->
-<!--   / ___) |  ___) |  _ \    / ____)               (__)             _     -->
-<!--  | |     | |___  | | \ \  | (___     ____   ___   __    ____    _| |_   -->
-<!--  | |     |  ___) | |  ) )  \___ \   / ___) |  _) |  |  |  _ \  |_   _)  -->
-<!--  | |___  | |     | |_/ /   ____) ) | |___  | /   |  |  | |_) )   | |    -->
-<!--   \____) |_|     |____/   |_____/   \____) |/    |__|  |  __/    | |    -->
-<!--                                                        | |       | |    -->
-<!--                                                        |_|       | |_   -->
-<!--   Website:  www.cfdscript.com                                    \ __\  -->
+<!--   _____   _____               _____                 _                    -->
+<!--  |  ___) |  ___)     /\      /  ___)               (_)             _     -->
+<!--  | |___  | |___     /  \    | (___     ____   ___   _    ____    _| |_   --> 
+<!--  |  ___) |  ___)   / /\ \    \___ \   / ___) |  _) | |  |  _ \  |_   _)  --> 
+<!--  | |     | |___   / ____ \   ____) ) | |___  | /   | |  | |_) )   | |    --> 
+<!--  |_|     |_____) /_/    \_\ |_____/   \____) |/    |_|  |  __/    | |    --> 
+<!--                                                         | |       | |    -->
+<!--                                                         |_|       | |    -->
+<!--        Website:  www.feacript.com                                 \ __\  -->
 
 <html>
   <head>
-    <title>CFDScript: Heat transfer on a 2D solid example</title>
+    <title>FEAScript: Heat transfer on a 2D solid example</title>
     <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -20,7 +20,7 @@
       content="finite elements, fem, galerkin, cfd, computational mechanics, javascript"
     />
     <meta name="viewport" content="width=device-width" />
-    <link href="CFDScript-website.css" rel="stylesheet" type="text/css" />
+    <link href="FEAScript-website.css" rel="stylesheet" type="text/css" />
     <!-- In the following we use browser UMD build that exposes the libraries as global variables -->
     <!-- Import the Math.js library for mathematical operations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js"></script>
@@ -41,35 +41,54 @@
   <body>
     <h1 class="top">
       <img
-        src="./images/logo.png"
-        alt="CFDScript Logo"
+        src="./images/FEAScriptLogo.png"
+        alt="FEAScript Logo"
         id="responsive-logo"
         style="vertical-align: middle"
       />
-      <!-- CFDScript&nbsp;<img class="title" src="./images/favicon.ico" alt="" /> -->
+      <!-- FEAScript&nbsp;<img class="title" src="./images/favicon.ico" alt="" /> -->
     </h1>
 
-    <h3>Heat transfer on a 2D solid example</h3>
+    <h1>Heat transfer on a 2D solid example</h1>
+
+    <ul id="menu">
+      <li><a href="#mathematicalformulation">Mathematical formulation</a></li>
+      <li><a href="#solvingwithcfdscript">Solving with FEAScript</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
 
     <p>
       In the following example, we address a stationary heat transfer problem
-      within a 2D rectangular domain. The steady heat conduction is described by
-      the Laplace equation: \(\nabla^{2}T(x,y) = 0\), where \(T\) signifies the
-      temperature values. The following schematic illustrates the problem domain
-      and outlines the associated boundary conditions. The constant temperature
-      boundary conditions are implemented as Dirichlet types in the finite
-      element code. The symmetry boundary condition is implemented as a Neumann
-      zero-flux type (\( \frac{dT}{dx}=0\) ), while the convective cooling
-      boundary condition is of the Robin type. Specifically, the latter is
-      expressed as \( \frac{dT}{dy}=-h(T-T_0)\), where \(h\) is the heat
-      transfer coefficient (\(h\) = 1 m<sup>-1</sup>) and \(T_0\) is the
-      external temperature (\(T_0\) = 20 &deg;C).
+      within a 2D rectangular domain. This is a typical cooling fin problem.
+      Cooling fins are commonly used to increase the area available for heat
+      transfer between metal walls and poorly conducting fluids such as air.
     </p>
 
-    <img src="./images/exampleHeatTrasnfer.png" width="300" />
-
+    <h2 id="mathematicalformulation">
+      <a name="Mathematical formulation"></a>Mathematical formulation
+    </h2>
     <p>
-      A demonstration is provided below on how to utilize the CFDScript library
+      The steady heat conduction is described by the Laplace equation:
+      \(\nabla^{2}T(x,y) = 0\), where \(T\) signifies the temperature values.
+    </p>
+    <img src="./images/exampleHeatTrasnfer.png" width="300" />
+    <p>
+      The above schematic illustrates the problem domain and outlines the
+      associated boundary conditions. The constant temperature boundary
+      conditions are implemented as Dirichlet types in the finite element code.
+      The symmetry boundary condition is implemented as a Neumann zero-flux type
+      (\( \frac{dT}{dx}=0\) ), while the convective cooling boundary condition
+      is of the Robin type. Specifically, the latter is expressed as \(
+      \frac{dT}{dy}=-h(T-T_0)\), where \(h\) is the heat transfer coefficient
+      (\(h\) = 1 m<sup>-1</sup>) and \(T_0\) is the external temperature
+      (\(T_0\) = 20 &deg;C).
+    </p>
+
+    <h2 id="solvingwithcfdscript">
+      <a name="Solving with FEAScript"></a>Solving with FEAScript
+    </h2>
+    <p>
+      A demonstration is provided below on how to utilize the FEAScript library
       for addressing the above stationary heat transfer problem in your
       responsive web project. Initially the following libraries should be
       included in the head element using CDN:
@@ -155,7 +174,7 @@
 </pre
     >
     <p>
-      Subsequently, the solidHeatScript solver, a module of the CFDScript
+      Subsequently, the solidHeatScript solver, a module of the FEAScript
       library, is utilized. This solver implements the Finite Element Method for
       heat conduction problems. The solver accepts the number of elements,
       domain dimensions, and boundary conditions as inputs and returns the grid
@@ -167,20 +186,20 @@
 &lt;body&gt;
     . . .
     &lt;script type="module"&gt;
-        // Import the CFDscript library
-        import { CFDScript } from 'https://cfdscript.github.io/CFDScript/src/index.js';
-        import { plotSolution2D } from 'https://cfdscript.github.io/CFDScript/src/index.js';
-        import { chkSolidHeatboundaryConditions } from 'https://cfdscript.github.io/CFDScript/src/index.js';
-        import { CFDScriptVersion } from 'https://cfdscript.github.io/CFDScript/src/index.js';
+        // Import the FEAScript library
+        import { FEAScript } from 'https://feascript.github.io/FEAScript/src/index.js';
+        import { plotSolution2D } from 'https://feascript.github.io/FEAScript/src/index.js';
+        import { chkSolidHeatboundaryConditions } from 'https://feascript.github.io/FEAScript/src/index.js';
+        import { CFDScriptVersion } from 'https://feascript.github.io/FEAScript/src/index.js';
         window.addEventListener("DOMContentLoaded", (event) => {
-          CFDScriptVersion(); // Print CFDScript version
+          CFDScriptVersion(); // Print FEAScript version
           let {
             solutionVector,
             numNodesX,
             numNodesY,
             nodeXCoordinates,
             nodeYCoordinates,
-          } = CFDScript("solidHeatScript", meshConfig, boundaryConditions); // Assembly matrices and solve the system of equations
+          } = FEAScript("solidHeatScript", meshConfig, boundaryConditions); // Assembly matrices and solve the system of equations
           plotSolution2D(
             // Visualise the solution
             solutionVector,
@@ -206,7 +225,8 @@
     . . .
 &lt;/body&gt;</pre
     >
-
+    <br />
+    <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
       Finally, the solution is calculated in real-time directly in your browser
       and the results are visualized in the contour plot. Below you can see the
@@ -219,7 +239,7 @@
     <div id="plot"></div>
 
     <ul id="menu">
-      <li><a href="https://www.cfdscript.com/index.html">Return to home</a></li>
+      <li><a href="https://www.feascript.com/index.html">Return to home</a></li>
     </ul>
 
     <script>
@@ -241,24 +261,25 @@
     </script>
 
     <script type="module">
-      // Import the CFDscript library from GitHub server *** You should comment the following lines when running CFDscript library from a local server***
-      import { CFDScript } from "https://cfdscript.github.io/CFDScript/src/index.js";
-      import { plotSolution2D } from "https://cfdscript.github.io/CFDScript/src/index.js";
-      import { chkSolidHeatboundaryConditions } from "https://cfdscript.github.io/CFDScript/src/index.js";
-      import { CFDScriptVersion } from "https://cfdscript.github.io/CFDScript/src/index.js";
+      // Import the FEAScript library from GitHub server *** You should comment the following lines when running FEAScript library from a local server***
+      import { FEAScript } from "https://feascript.github.io/FEAScript/src/index.js";
+      import { plotSolution2D } from "https://feascript.github.io/FEAScript/src/index.js";
+      import { chkSolidHeatboundaryConditions } from "https://feascript.github.io/FEAScript/src/index.js";
+      import { CFDScriptVersion } from "https://feascript.github.io/FEAScript/src/index.js";
 
-      // Import the CFDscript library from a local server *** Don't forget to change it before commit ***
-      //import { CFDScript } from "../CFDScript/src/index.js";
-      //import { plotSolution2D } from "../CFDScript/src/index.js";
-      //import { chkSolidHeatboundaryConditions } from "../CFDScript/src/index.js";
-      //import { CFDScriptVersion } from "../CFDScript/src/index.js";
-      // To start a server in Python (without CORS support) run 'python3 -m http.server 8000' (the address is http://0.0.0.0:8000/)
+      // Import the FEAScript library from a local server *** Don't forget to change it before commit ***
+      //import { FEAScript } from "../FEAScript/src/index.js";
+      //import { plotSolution2D } from "../FEAScript/src/index.js";
+      //import { chkSolidHeatboundaryConditions } from "../FEAScript/src/index.js";
+      //import { CFDScriptVersion } from "../FEAScript/src/index.js";
+      // To start a server in Python (without CORS support) run 'python3 -m http.server 8000'
       // To add CORS support you should run the script corsHttpServer.py ('python3 corsHttpServer')
+      // The Python server is running on http://127.0.0.1:8000/
       // For running JavaScript in local HTML files see also https://stackoverflow.com/questions/58067499/runing-javascript-in-local-html-files-in-firefox
 
       // The functions will be executed as soon as the page finishes loading
       window.addEventListener("DOMContentLoaded", (event) => {
-        CFDScriptVersion(); // Print CFDScript version
+        CFDScriptVersion(); // Print FEAScript version
         //chkSolidHeatboundaryConditions(boundaryConditions); // Check boundary conditions
         let {
           solutionVector,
@@ -266,7 +287,7 @@
           numNodesY,
           nodeXCoordinates,
           nodeYCoordinates,
-        } = CFDScript("solidHeatScript", meshConfig, boundaryConditions); // Assembly matrices and solve the system of equations
+        } = FEAScript("solidHeatScript", meshConfig, boundaryConditions); // Assembly matrices and solve the system of equations
         plotSolution2D(
           // Visualise the solution
           solutionVector,

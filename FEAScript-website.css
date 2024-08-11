@@ -1,12 +1,12 @@
-/*  ____   _____   ____      _____                 __                  
-   / ___) |  ___) |  _ \    / ____)               (__)             _     
-  | |     | |___  | | \ \  | (___     ____   ___   __    ____    _| |_   
-  | |     |  ___) | |  ) )  \___ \   / ___) |  _) |  |  |  _ \  |_   _)  
-  | |___  | |     | |_/ /   ____) ) | |___  | /   |  |  | |_) )   | |    
-   \____) |_|     |____/   |_____/   \____) |/    |__|  |  __/    | |    
-                                                        | |       | |    
-                                                        |_|       | |_   
-   Website:  www.cfdscript.com                                    \ __\  */
+/*   _____   _____               _____                 _                   
+    |  ___) |  ___)     /\      /  ___)               (_)             _    
+    | |___  | |___     /  \    | (___     ____   ___   _    ____    _| |_   
+    |  ___) |  ___)   / /\ \    \___ \   / ___) |  _) | |  |  _ \  |_   _)  
+    | |     | |___   / ____ \   ____) ) | |___  | /   | |  | |_) )   | |    
+    |_|     |_____) /_/    \_\ |_____/   \____) |/    |_|  |  __/    | |    
+                                                           | |       | |   
+                                                           |_|       | |   
+          Website:  www.feacript.com                                 \ __\  */  
 
 /* General styles */
 html {
@@ -15,15 +15,14 @@ html {
   font-family: helvetica, sans-serif;
   font-size: 90%;
 }
+
 body {
   padding: 25px;
 }
+
+/* Headings */
 h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h2 {
   background: none;
   font-weight: normal;
   margin: 0;
@@ -31,18 +30,32 @@ h6 {
   padding-bottom: 0.2em;
   width: auto;
 }
+
 h1 {
+  color: #555;
   font-size: 150%;
   margin-bottom: 0.4em;
   line-height: 1.2em;
 }
+
 h1.top {
   color: #555;
   border-bottom: 1px solid #aaa;
 }
+
+h2 {
+  font-size: 130%;
+  color: #555;
+  /* border-bottom: 1px solid #aaa;
+  line-height: 1.1em;  */
+}
+
+/* Paragraphs 
 p {
   margin: 1em 0;
 }
+
+/* Preformatted text */
 pre {
   background-color: #f2f2f2;
   margin: 0;
@@ -50,11 +63,14 @@ pre {
   overflow-x: auto;
   white-space: pre;
 }
+
 pre.prettyprint {
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 10px;
 }
+
+/* Images */
 img.title {
   height: 1em;
 }
@@ -66,6 +82,7 @@ img.title {
   padding-left: 1.5em;
   padding-bottom: 1.5em;
 }
+
 #banner img {
   width: 180px;
   margin-bottom: 1.5ex;
@@ -78,41 +95,33 @@ img.title {
   margin: 1em 0;
   padding: 0;
 }
+
 #menu li {
   display: inline-block;
   margin-right: 1em;
 }
+
 #menu li a {
-  color: #333;
+  color: #555;
   font-weight: bold;
   text-decoration: none;
 }
+
 #menu li a:hover {
-  color: #555;
+  color: #333;
 }
 
 /* Default styles */
 body {
   padding: 10px;
 }
-h1 {
-  font-size: 145%;
-}
-h2 {
-  font-size: 140%;
-}
+
 ul {
   padding-left: 1.5em;
 }
-#banner {
-  padding-left: 1em;
-  padding-bottom: 1em;
-}
-#banner img {
-  margin-bottom: 1ex;
-}
+
 #responsive-logo {
-  height: 60px;
+  height: 80px;
 }
 
 /* Media queries for smaller screens */
@@ -120,24 +129,27 @@ ul {
   body {
     padding: 10px;
   }
+
   h1 {
     font-size: 125%;
   }
+
   h2 {
     font-size: 120%;
+    line-height: 1.1em;
   }
-  ul {
-    padding-left: 1.5em;
-  }
+
   #banner {
     width: 90px;
     padding-left: 1em;
     padding-bottom: 1em;
   }
+
   #banner img {
     width: 90px;
     margin-bottom: 1ex;
   }
+
   #responsive-logo {
     height: 40px;
   }
@@ -148,6 +160,7 @@ ul {
   #banner {
     width: 250px;
   }
+
   #banner img {
     width: 250px;
     margin-bottom: 2.5ex;

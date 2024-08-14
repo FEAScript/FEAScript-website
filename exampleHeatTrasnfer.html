@@ -12,7 +12,7 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat transfer on a 2D solid example</title>
+    <title>FEAScript: Heat transfer on a 2D solid (cooling fin) example</title>
     <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -49,7 +49,7 @@
       <!-- FEAScript&nbsp;<img class="title" src="./images/favicon.ico" alt="" /> -->
     </h1>
 
-    <h1>Heat transfer on a 2D solid example</h1>
+    <h1>Heat transfer on a 2D solid (cooling fin) example</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical formulation</a></li>
@@ -88,12 +88,12 @@
       <a name="Solving with FEAScript"></a>Solving with FEAScript
     </h2>
     <p>
-      A demonstration is provided below on how to utilize the FEAScript library
-      for addressing the above stationary heat transfer problem in your
-      responsive web project. Initially the following libraries should be
-      included in the head element using CDN:
+      A demonstration on how to utilize the FEAScript library for addressing the
+      above stationary heat transfer problem in your web browser is provided
+      below. Initially, the
       <a href="https://mathjs.org/" target="_blank">Math.js</a> and
-      <a href="https://plotly.com/javascript/" target="_blank">Plotly.js</a>.
+      <a href="https://plotly.com/javascript/" target="_blank">Plotly.js</a>
+      libraries should be loaded using a content delivery network protocol:
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
@@ -104,14 +104,14 @@
 &lt;/head&gt;</pre
     >
     <p>
-      Following this, various problem parameters, such as the number of
-      elements, domain boundaries, and boundary conditions, are defined using
+      Following this, the problem parameters, such as the number of elements,
+      domain boundaries, and the boundary conditions, should be defined using
       external
       <a href="https://www.w3schools.com/js/js_json_intro.asp" target="_blank"
         >JSON</a
       >
-      files. The first JSON file, meshConfig.json, is the computational mesh
-      configuration file:
+      files. The first JSON file, meshConfig.json, concerns the computational
+      mesh parameters and it is structured as follows:
     </p>
     <pre class="prettyprint">
 {
@@ -122,13 +122,13 @@
 }</pre
     >
     <p>
-      In this example, the parameters nex and ney represent the number of
-      elements along the x-axis and y-axis, respectively. Additionally, maxX and
-      maxY denote the final x-coordinate and y-coordinate of the mesh,
-      respectively. The second essential JSON file, boundaryConditions.json, is
-      the boundary conditions configuration file. Boundary conditions can be
-      specified as Dirichlet, Robin, or Neumann types. The Dirichlet condition
-      sets a constant temperature value, while the Robin condition describes a
+      In particular, the parameters nex and ney represent the number of elements
+      along the x-axis and y-axis, respectively. Additionally, maxX and maxY
+      denote the final x-coordinate and y-coordinate of the mesh, respectively.
+      The second essential JSON file, boundaryConditions.json, concerns the
+      boundary conditions. In particular, boundary conditions can be specified
+      as Dirichlet, Robin, or Neumann types. The Dirichlet condition sets a
+      constant temperature value, while the Robin condition describes a
       convective heat transfer scenario, allowing users to define a custom heat
       transfer coefficient and an external temperature. The Neumann boundary
       condition represents a zero-flux type. The boundary conditions
@@ -145,11 +145,12 @@
 }</pre
     >
     <p>
-      In the provided example, the second argument for a Dirichlet boundary
-      condition corresponds to the constant temperature value. For a Robin
+      In the above, the second argument of the Dirichlet boundary condition
+      corresponds to the constant temperature value. In the case of a Robin
       boundary condition, the parameter robinHeatTranfCoeff represents the heat
-      transfer coefficient, and robinExtTemp indicates the external temperature.
-      The above JSON files are fetched using the following script:
+      transfer coefficient and the robinExtTemp indicates the external
+      temperature. The above JSON files are fetched into FEAScript using the
+      following script:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -174,11 +175,11 @@
 </pre
     >
     <p>
-      Subsequently, the solidHeatScript solver, a module of the FEAScript
-      library, is utilized. This solver implements the Finite Element Method for
-      heat conduction problems. The solver accepts the number of elements,
-      domain dimensions, and boundary conditions as inputs and returns the grid
-      points (nodeXCoordinates, nodeYCoordinates) and the solution vector
+      Finally, the solidHeatScript solver, a module of the FEAScript library, is
+      utilized. This solver implements the finite element method for heat
+      conduction problems. The solver accepts the number of elements, domain
+      dimensions, and boundary conditions as inputs and returns the grid points
+      (nodeXCoordinates, nodeYCoordinates) and the solution vector
       (solutionVector) as outputs. The following script demonstrates these
       steps:
     </p>
@@ -215,8 +216,8 @@
 </pre
     >
     <p>
-      To display the plotted results, an HTML container element is also required
-      on the page.
+      An HTML container element is also included in the page to display the
+      results.
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -228,11 +229,10 @@
     <br />
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
-      Finally, the solution is calculated in real-time directly in your browser
-      and the results are visualized in the contour plot. Below you can see the
-      results of the heat transfer problem for a mesh of 24 two-dimensional
-      quadratic elements, arranged as 8 in the x-direction and 4 in the
-      y-direction.
+      After solving this case in real-time directly in your browser, the results
+      are visualized in a contour plot. Below you can see the results of the
+      above heat transfer problem for a mesh of 24 two-dimensional quadratic
+      elements, arranged as 8 in the x-direction and 4 in the y-direction.
     </p>
 
     <!-- Container element where the solution plot will be rendered -->

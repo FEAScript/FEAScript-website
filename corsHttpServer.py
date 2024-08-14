@@ -6,7 +6,7 @@
 #  |_|    |______/_/    \_\_____/ \___|_|  |_|  __/| |    #
 #                                            | |   | |    #
 #                                            |_|   | |_   #
-#       Website:  www.feacript.com                  \__|  #
+#       Website: https://feascript.com/             \__|  #
 
 #
 # Set up a Python HTTP Server with CORS Support. It is configured to run on port 8000.

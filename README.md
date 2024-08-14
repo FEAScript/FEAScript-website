@@ -1,5 +1,5 @@
 ## FEAScript website
-<a href="https://www.feascript.com/" target="_blank">www.feascript.com</a>
+<a href="https://feascript.com/" target="_blank">feascript.com</a>
 
 ## Licenses
 

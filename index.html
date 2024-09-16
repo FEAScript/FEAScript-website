@@ -23,7 +23,6 @@
     />
     <meta name="viewport" content="width=device-width" />
     <link href="FEAScript-website.css" rel="stylesheet" type="text/css" />
-    <!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" /> -->
   </head>
 
   <body>
@@ -43,11 +42,11 @@
 
     <h1>
       A JavaScript library for solving differential equations using the finite
-      element method
+      element Method
     </h1>
 
     <ul id="menu">
-      <li><a href="#getstarted">Get Started</a></li>
+      <li><a href="#getstarted">Get started</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="#documentation">Documentation</a></li>
       <li><a href="#licensing">Licensing</a></li>
@@ -58,27 +57,22 @@
       differential equations using the finite element method. It enables the
       creation and running of <b>client-side, browser-based simulations</b> for
       physics and engineering problems without the need for additional
-      installations.
-    </p>
-    <p>
-      FEAScript can also be an excellent solution for
+      installations. FEAScript is an excellent tool for
       <b>hands-on learning of computational mechanics</b> in academic
       environments. It can used as a turnkey solution by the educators without
       requiring any software installations.
     </p>
 
-    <h2 id="getstarted"><a name="Get Started"></a>Get Started</h2>
+    <h2 id="getstarted"><a name="Get started"></a>Get started</h2>
     <p>
       The latest version of FEAScript can be downloaded from our
       <a href="https://github.com/FEAScript/FEAScript" target="_blank"
         >GitHub repository</a
       >. FEAScript is still in early-development stage with continuous addition
-      of new features and improvements.
-    </p>
-    <p>
-      Whether you are a CFD or JavaScript enthusiast, we are currently on the
-      lookout for co-developers to contribute to the project! To get an idea of
-      our short- and long-term goals, please see the
+      of new features and improvements. Whether you are a CFD or JavaScript
+      enthusiast, we are currently on the lookout for co-developers to
+      contribute to the project! To get an idea of our short- and long-term
+      goals, please see the
       <a
         href="https://github.com/FEAScript/FEAScript/wiki/Roadmap"
         target="_blank"
@@ -93,15 +87,18 @@
     <h2 id="features"><a name="Features"></a>Features</h2>
     <ul>
       <li>
-        <strong>Physical Modelling</strong>
+        Solvers
         <ul>
           <li>
-            Heat transfer solver for 2D domains (more solvers are on the way)
+            Boundary value problems solver for 1D domains (<i
+              >under development</i
+            >)
           </li>
+          <li>Heat transfer solver for 2D domains</li>
         </ul>
       </li>
       <li>
-        <strong>Numerical Solution</strong>
+        Numerics
         <ul>
           <li>
             LU decomposition linear system solver using
@@ -110,10 +107,10 @@
         </ul>
       </li>
       <li>
-        <strong>Visualization</strong>
+        Visualization
         <ul>
           <li>
-            Visualization capabilities using
+            Contour plots using
             <a href="https://plotly.com/javascript/" target="_blank"
               >Plotly.js</a
             >
@@ -123,16 +120,17 @@
     </ul>
 
     <h2 id="documentation"><a name="Documentation"></a>Documentation</h2>
+    <h3>Running examples</h3>
     <p>
-      In this section we demonstrate example codes which would serve as a
-      step-by-step introduction to FEAScript.
+      Demonstration of example codes which would serve as a step-by-step
+      introduction to FEAScript.
     </p>
     <ul>
       <!-- Run examples on the GitHub server -->
       <li>
         <a href="https://feascript.com/exampleHeatTrasnfer.html" target="_blank"
-          ><b>Heat transfer on a 2D solid (cooling fin)</b></a
-        >. The example demonstrates the use of FEAScript to define and solve a
+          >Heat transfer on a 2D solid (cooling fin)</a
+        >. This example demonstrates the use of FEAScript to define and solve a
         simple heat transfer problem on your web browser.
       </li>
       <!-- Run examples on a local server *** Don't forget to change it before commit *** -->
@@ -149,7 +147,19 @@
         >GitHub discussions</a
       >.
     </p>
-
+    <h3>Theory notes</h3>
+    <p>
+      Presention of the numerical methods that are utilized in FEAScript. In
+      case you don't have any experience in those methods, we recommend to start
+      with these articles.
+    </p>
+    <ul>
+      <li>
+        <a href="https://feascript.com/finiteElementMethod.html" target="_blank"
+          >Finite element method</a
+        >
+      </li>
+    </ul>
     <h2 id="licensing"><a name="Licensing"></a>Licensing</h2>
     <p>
       FEAScript is distributed under the terms of the

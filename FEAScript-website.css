@@ -22,7 +22,8 @@ body {
 
 /* Headings */
 h1,
-h2 {
+h2,
+h3 {
   background: none;
   font-weight: normal;
   margin: 0;
@@ -50,9 +51,19 @@ h2 {
   line-height: 1.1em;  */
 }
 
-/* Paragraphs 
+h3 {
+  font-size: 110%;
+  color: #555;
+}
+
+/* Paragraphs */
 p {
   margin: 1em 0;
+  max-width: 1000px;
+}
+
+a {
+  text-decoration: none;
 }
 
 /* Preformatted text */
@@ -68,11 +79,17 @@ pre.prettyprint {
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 10px;
+  max-width: 1000px;
 }
 
 /* Images */
 img.title {
   height: 1em;
+}
+
+/* Left-align of MathJax formulas */
+mjx-container {
+  text-align: left!important;
 }
 
 /* Banner styles */

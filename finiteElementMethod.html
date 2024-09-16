@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<!--   ______ ______           _____           _       _     -->
+<!--  |  ____|  ____|   /\    / ____|         (_)     | |    -->
+<!--  | |__  | |__     /  \  | (___   ___ ____ _ ____ | |_   -->
+<!--  |  __| |  __|   / /\ \  \___ \ / __|  __| |  _ \| __|  -->
+<!--  | |    | |____ / ____ \ ____) | (__| |  | | |_) | |    -->
+<!--  |_|    |______/_/    \_\_____/ \___|_|  |_|  __/| |    -->
+<!--                                            | |   | |    -->
+<!--                                            |_|   | |_   -->
+<!--       Website: https://feascript.com/             \__|  -->
+
+<html>
+  <head>
+    <title>FEAScript: Finite element method</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <link href="FEAScript-website.css" rel="stylesheet" type="text/css" />
+    <!-- In the following we use browser UMD build that exposes the libraries as global variables -->
+    <!-- Import the MathJax for writing equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+  </head>
+
+  <body>
+    <h1 class="top">
+      <img
+        src="./images/FEAScriptLogo.png"
+        alt="FEAScript Logo"
+        id="responsive-logo"
+        style="vertical-align: middle"
+      />
+      <!-- FEAScript&nbsp;<img class="title" src="./images/favicon.ico" alt="" /> -->
+    </h1>
+    <h1>Finite element method</h1>
+
+    <ul id="menu">
+      <li><a href="#galerkinresiduals">Galerkin residuals</a></li>
+      <li><a href="#boundaryconditions">Boundary conditions</a></li>
+      <li><a href="#isoparametricmapping">Isoparametric mapping</a></li>
+      <li><a href="#integration">Integration</a></li>
+    </ul>
+
+    <p>
+      The finite element method is a discretization technique that can utilize a
+      computational mesh to approximate the solution of a partial differential
+      equation. Basic concepts of the finite element method are described below.
+    </p>
+    <h2 id="galerkinresiduals">
+      <a name="Galerkin residuals"></a>Galerkin residuals
+    </h2>
+    <p>
+      Consider a typical formulation of a boundary value problem (BVP):
+      $$\begin{eqnarray} Lu &= f \quad \text{in} \quad D, \\ Bu &= g \quad
+      \text{on} \quad \partial D. \end{eqnarray}$$ The solution \(u\) is a
+      function of the position vector \(\bar{x}\) at the domain \(D\) which is a
+      subregion of a one-, two- or tree-dimensional Euclidian space. The
+      position vector \(\bar{x}\) is defined as: \( \bar{x} =\sum_{i=1} ^{n} x_i
+      e_i\), where \(e_i\) are the unit vectors and \(n\) the dimension of the
+      Euclidian space. \(L\) is the differential operator and \(B\) is a
+      boundary operator defined at the boundary \(\partial D\). The solution
+      \(u\) can be approximated using a linear combination of basis functions
+      \(\phi^1, \phi^2, \phi^3, \dots, \phi^N\) such that: \( u(x) = \sum_{j=1}
+      ^{N} u_j \phi^j(x)\), where the number of the basis functions equals to
+      the number of nodes of the computational mesh. The Galerkin method is
+      seeking a solution that zeroes out every one of the following weighted
+      residuals: $$ R_i = \int_{D} (Lu - f) \phi^i \, dS \quad \Rightarrow \quad
+      \int_{D} \phi^i \left( L\left( \sum_{j=1}^N u_j \phi^j \right) \right) \,
+      dS - \int_{D} f \phi^i \, dS \quad \text{for} \quad i = 1, 2, \dots, N. $$
+      These integrals depend solely on the nodal values \(u_j\), which are the
+      unknowns to be determined. Setting the Galerkin residuals to zero leads to
+      a system of \(N\) algebraic equations with \(N\) unknowns, which can be
+      solved to obtain the approximate solution.
+    </p>
+    <h2 id="boundaryconditions">
+      <a name="Boundary conditions"></a>Boundary conditions
+    </h2>
+    <p>
+      The boundary conditions that specify the value of \(u\) on a portion of \(
+      \partial D\) are called Dirichlet boundary conditions, and they are
+      imposed directly in the discretization equations. In particular, the
+      Dirichlet boundary conditions replace the Galerkin residuals at the
+      computational nodes that lie on the portion of the boundary where the
+      solution value is prescribed.
+    </p>
+    <p>
+      The boundary conditions that define the value of the derivative of \(u\)
+      on a portion of \(\partial D\) are called Neumann (or natural) boundary
+      conditions. These are imposed indirectly in the discretization equations.
+    </p>
+    <p>
+      Finally, Robin boundary conditions, also known as mixed boundary
+      conditions, specify a linear combination of the function \(u\) and its
+      derivative on a portion of \(\partial D\).
+    </p>
+    <!--
+    <h2 id="isoparametricmapping">
+      <a name="Isoparametric mapping"></a>Isoparametric mapping
+    </h2>
+    <p></p>
+
+    <h2 id="integration"><a name="Integration"> </a>Integration</h2>
+    <p></p>
+    -->
+    <ul id="menu">
+      <li><a href="https://feascript.com/index.html">Return</a></li>
+    </ul>
+  </body>
+</html>

@@ -85,12 +85,18 @@
       <a name="Boundary conditions"></a>Boundary conditions
     </h2>
     <p>
-      The boundary conditions that specify the value of \(u\) on a portion of \(
-      \partial D\) are called Dirichlet boundary conditions, and they are
-      imposed directly in the discretization equations. In particular, the
-      Dirichlet boundary conditions replace the Galerkin residuals at the
-      computational nodes that lie on the portion of the boundary where the
-      solution value is prescribed.
+      In general, there are three common types of boundary conditions that can
+      be imposed in boundary value problems: Dirichlet, Neumann, and Robin
+      boundary conditions. The boundary conditions that specify the value of
+      \(u\) on a portion of \( \partial D\) are called Dirichlet boundary
+      conditions, and they are imposed directly in the discretization equations.
+      In particular, the Dirichlet boundary conditions replace the Galerkin
+      residuals at the computational nodes that lie on the portion of the
+      boundary where the solution value is prescribed. Consider, for example, a
+      boundary node \(n\) at position \(t_n\), where the solution is defined by
+      the boundary condition \(u = F(t)\), with \(F(t)\) being a known function
+      of the position \(t\) on \(\partial D\). In this case, the \(n\)-th
+      residual is replaced by: \(R_n = u_n - F(t_n)\).
     </p>
     <p>
       The boundary conditions that define the value of the derivative of \(u\)

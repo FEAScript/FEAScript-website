@@ -73,16 +73,16 @@
       ^{N} u_j \phi^j(x)\), where the number of the basis functions equals to
       the number of nodes of the computational mesh. The Galerkin method is
       seeking a solution that zeroes out every one of the following weighted
-      residuals: $$ \begin{aligned} R_i = \int_{D} (Lu - f) \phi^i \, dS \quad
-      &\Rightarrow \\ \quad \int_{D} \phi^i \left( L\left( \sum_{j=1}^N u_j
-      \phi^j \right) \right) \, dS &- \int_{D} f \phi^i \, dS \quad \text{for}
-      \quad i = 1, 2, \dots, N. \end{aligned} \tag{2} $$ These integrals depend
-      solely on the nodal values \(u_j\), which are the unknowns to be
-      determined. The number of residuals is equal to the number of basis
-      functions, which in turn is equal to the number of nodes, \(N\), in the
-      computational mesh. to the Setting the Galerkin residuals to zero leads to
-      a system of \(N\) algebraic equations with \(N\) unknowns, which can be
-      solved to obtain the approximate solution.
+      residuals: $$ \begin{aligned} R_i &= \int_{D} (Lu - f) \phi^i \, dS \\ &=
+      \int_{D} \phi^i \left( L\left( \sum_{j=1}^N u_j \phi^j \right) \right) \,
+      dS - \int_{D} f \phi^i \, dS \\ &\quad \text{for} \quad i = 1, 2, \dots,
+      N. \end{aligned} \tag{2} $$ These integrals depend solely on the nodal
+      values \(u_j\), which are the unknowns to be determined. The number of
+      residuals is equal to the number of basis functions, which in turn is
+      equal to the number of nodes, \(N\), in the computational mesh. to the
+      Setting the Galerkin residuals to zero leads to a system of \(N\)
+      algebraic equations with \(N\) unknowns, which can be solved to obtain the
+      approximate solution.
     </p>
     <h2 id="boundaryconditions">
       <a name="Boundary conditions"></a>Boundary conditions

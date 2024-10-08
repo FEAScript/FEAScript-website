@@ -189,10 +189,9 @@
         // Import the FEAScript library
         import { FEAScript } from 'https://feascript.github.io/FEAScript/src/index.js';
         import { plotSolution2D } from 'https://feascript.github.io/FEAScript/src/index.js';
-        import { chkSolidHeatboundaryConditions } from 'https://feascript.github.io/FEAScript/src/index.js';
-        import { CFDScriptVersion } from 'https://feascript.github.io/FEAScript/src/index.js';
+        import { FEAScriptVersion } from 'https://feascript.github.io/FEAScript/src/index.js';
         window.addEventListener("DOMContentLoaded", (event) => {
-          CFDScriptVersion(); // Print FEAScript version
+          FEAScriptVersion(); // Print FEAScript version
           let {
             solutionVector,
             numNodesX,
@@ -263,14 +262,12 @@
       // Import the FEAScript library from GitHub server *** You should comment the following lines when running FEAScript library from a local server***
       import { FEAScript } from "https://feascript.github.io/FEAScript/src/index.js";
       import { plotSolution2D } from "https://feascript.github.io/FEAScript/src/index.js";
-      import { chkSolidHeatboundaryConditions } from "https://feascript.github.io/FEAScript/src/index.js";
-      import { CFDScriptVersion } from "https://feascript.github.io/FEAScript/src/index.js";
+      import { FEAScriptVersion } from "https://feascript.github.io/FEAScript/src/index.js";
 
       // Import the FEAScript library from a local server *** Don't forget to change it before commit ***
       //import { FEAScript } from "../FEAScript/src/index.js";
       //import { plotSolution2D } from "../FEAScript/src/index.js";
-      //import { chkSolidHeatboundaryConditions } from "../FEAScript/src/index.js";
-      //import { CFDScriptVersion } from "../FEAScript/src/index.js";
+      //import { FEAScriptVersion } from "../FEAScript/src/index.js";
       // To start a server in Python (without CORS support) run 'python3 -m http.server 8000'
       // To add CORS support you should run the script corsHttpServer.py ('python3 corsHttpServer')
       // The Python server is running on http://127.0.0.1:8000/
@@ -278,8 +275,7 @@
 
       // The functions will be executed as soon as the page finishes loading
       window.addEventListener("DOMContentLoaded", (event) => {
-        CFDScriptVersion(); // Print FEAScript version
-        //chkSolidHeatboundaryConditions(boundaryConditions); // Check boundary conditions
+        FEAScriptVersion(); // Print FEAScript version
         let {
           solutionVector,
           numNodesX,

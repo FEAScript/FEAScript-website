@@ -49,6 +49,7 @@
       <li><a href="#boundaryconditions">Boundary conditions</a></li>
       <li><a href="#isoparametricmapping">Isoparametric mapping</a></li>
       <li><a href="#residualscomputation">Residuals computation</a></li>
+      <li><a href="#references">References</a></li>
     </ul>
 
     <p>
@@ -210,10 +211,27 @@
       numerically on the reference element. Specifically, these calculations are
       performed using the Gauss quadrature method: $$ \int_{E_0} f(\bar{\xi}) \,
       d\bar{\xi} = \sum_{k=1}^{NGP} w_k f(\bar{\xi}_{gk}), \tag{13} $$ where
-      \(w_k\) are the Gauss weights, \(\bar{\xi}_{gk}\) are the Gauss points inside
-      the reference element where the integrand is evaluated, and \(NGP\) is the
-      number of Gauss points.
+      \(w_k\) are the Gauss weights, \(\bar{\xi}_{gk}\) are the Gauss points
+      inside the reference element where the integrand is evaluated, and \(NGP\)
+      is the number of Gauss points.
     </p>
+
+    <h2 id="references"><a name="References"> </a>References</h2>
+    <ul>
+      <li>
+        <a
+          href="https://www.chemeng.ntua.gr/dep/boudouvis/index.htm"
+          target="_blank"
+          >A. G. Boudouvis</a
+        >
+        "Computational Analysis with the Finite Element Method", Lecture Notes,
+        National Technical University of Athens, Athens, 1992 (In Greek)
+      </li>
+      <li>
+        O. C. Zienkiewicz "The Finite Element Method", 3rd edition, McGraw-Hill,
+        London, 1977
+      </li>
+    </ul>
 
     <ul id="menu">
       <li><a href="https://feascript.com/index.html">Return</a></li>

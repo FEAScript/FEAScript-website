@@ -1,3 +1,5 @@
+<img src="https://feascript.github.io/FEAScript-website/images/FEAScriptLogo.png" width="80" >
+
 ## FEAScript website
 
 FEAScript is an open-source JavaScript library to solve differential equations using the finite element method. This is the source code of the FEAScript <a href="https://feascript.com/" target="_blank">website</a>.

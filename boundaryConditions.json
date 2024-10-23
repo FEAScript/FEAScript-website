@@ -1,0 +1,8 @@
+{
+  "topBoundary": ["robin", "placeholder"],
+  "bottomBoundary": ["dirichlet", 200.0],
+  "leftBoundary": ["neumann", "placeholder"],
+  "rightBoundary": ["dirichlet", 200.0],
+  "robinHeatTranfCoeff": 1,
+  "robinExtTemp": 20
+}

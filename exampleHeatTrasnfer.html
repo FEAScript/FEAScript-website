@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<!--   ______ ______           _____           _       _     -->
+<!--  |  ____|  ____|   /\    / ____|         (_)     | |    -->
+<!--  | |__  | |__     /  \  | (___   ___ ____ _ ____ | |_   -->
+<!--  |  __| |  __|   / /\ \  \___ \ / __|  __| |  _ \| __|  -->
+<!--  | |    | |____ / ____ \ ____) | (__| |  | | |_) | |    -->
+<!--  |_|    |______/_/    \_\_____/ \___|_|  |_|  __/| |    -->
+<!--                                            | |   | |    -->
+<!--                                            |_|   | |_   -->
+<!--       Website: https://feascript.com/             \__|  -->
+
+<html>
+  <head>
+    <title>FEAScript: Heat transfer on a 2D solid example</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <link href="FEAScript-website.css" rel="stylesheet" type="text/css" />
+    <!-- In the following we use browser UMD build that exposes the libraries as global variables -->
+    <!-- Import the Math.js library for mathematical operations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js"></script>
+    <!-- Import the Plotly.js library for plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+    <!-- Import the MathJax for writing equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Import the run_prettify.js library for JavaScript code coloring *** Depreciated library *** -->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
+
+  <body>
+    <h1 class="top">
+      <a href="index.html">
+        <img
+          src="./images/FEAScriptLogo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+    </h1>
+    <h1>Heat transfer on a 2D solid (cooling fin) example</h1>
+
+    <ul id="menu">
+      <li><a href="#mathematicalformulation">Mathematical formulation</a></li>
+      <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
+
+    <p>
+      In the following example, we address a stationary heat transfer problem
+      within a 2D rectangular domain. This is a typical cooling fin problem.
+      Cooling fins are commonly used to increase the area available for heat
+      transfer between metal walls and poorly conducting fluids such as air.
+    </p>
+
+    <h2 id="mathematicalformulation">
+      <a name="Mathematical formulation"></a>Mathematical formulation
+    </h2>
+    <p>
+      The steady heat conduction is described by the Laplace equation:
+      \(\nabla^{2}T(x,y) = 0\), where \(T\) signifies the temperature values.
+    </p>
+    <img src="./images/exampleHeatTrasnfer.png" width="300" />
+    <p>
+      The above schematic illustrates the problem domain and outlines the
+      associated boundary conditions. The constant temperature boundary
+      conditions are implemented as Dirichlet types in the finite element code.
+      The symmetry boundary condition is implemented as a Neumann zero-flux type
+      (\( \frac{dT}{dx}=0\) ), while the convective cooling boundary condition
+      is of the Robin type. Specifically, the latter is expressed as \(
+      \frac{dT}{dy}=-h(T-T_0)\), where \(h\) is the heat transfer coefficient
+      (\(h\) = 1 m<sup>-1</sup>) and \(T_0\) is the external temperature
+      (\(T_0\) = 20 &deg;C).
+    </p>
+
+    <h2 id="solvingwithfeascript">
+      <a name="Solving with FEAScript"></a>Solving with FEAScript
+    </h2>
+    <p>
+      A demonstration on how to utilize the FEAScript library for addressing the
+      above stationary heat transfer problem in your web browser is provided
+      below. Initially, the
+      <a href="https://mathjs.org/" target="_blank">Math.js</a> and
+      <a href="https://plotly.com/javascript/" target="_blank">Plotly.js</a>
+      libraries should be loaded using a content delivery network protocol:
+    </p>
+    <pre class="prettyprint">
+&lt;head&gt;
+    . . .
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js">&lt;/script&gt;
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js">&lt;/script&gt;
+    . . .
+&lt;/head&gt;</pre
+    >
+    <p>
+      Following this, the problem parameters, such as the number of elements,
+      domain boundaries, and the boundary conditions, should be defined using
+      external
+      <a href="https://www.w3schools.com/js/js_json_intro.asp" target="_blank"
+        >JSON</a
+      >
+      files. The first JSON file, meshConfig.json, concerns the computational
+      mesh parameters and it is structured as follows:
+    </p>
+    <pre class="prettyprint">
+{
+  "numElementsX": 8,
+  "numElementsY": 4,
+  "maxX": 4,
+  "maxY": 2
+}</pre
+    >
+    <p>
+      In particular, the parameters nex and ney represent the number of elements
+      along the x-axis and y-axis, respectively. Additionally, maxX and maxY
+      denote the final x-coordinate and y-coordinate of the mesh, respectively.
+      The second essential JSON file, boundaryConditions.json, concerns the
+      boundary conditions. In particular, boundary conditions can be specified
+      as Dirichlet, Robin, or Neumann types. The Dirichlet condition sets a
+      constant temperature value, while the Robin condition describes a
+      convective heat transfer scenario, allowing users to define a custom heat
+      transfer coefficient and an external temperature. The Neumann boundary
+      condition represents a zero-flux type. The boundary conditions
+      configuration file is structured as follows:
+    </p>
+    <pre class="prettyprint">
+{
+  "topBoundary": ["robin", "placeholder"],
+  "bottomBoundary": ["dirichlet", 200.0],
+  "leftBoundary": ["neumann", "placeholder"],
+  "rightBoundary": ["dirichlet", 200.0],
+  "robinHeatTranfCoeff": 1,
+  "robinExtTemp": 20
+}</pre
+    >
+    <p>
+      In the above, the second argument of the Dirichlet boundary condition
+      corresponds to the constant temperature value. In the case of a Robin
+      boundary condition, the parameter robinHeatTranfCoeff represents the heat
+      transfer coefficient and the robinExtTemp indicates the external
+      temperature. The above JSON files are fetched into FEAScript using the
+      following script:
+    </p>
+    <pre class="prettyprint">
+&lt;body&gt;
+    . . .
+    &lt;script
+        let meshConfig, boundaryConditions;
+        // Function to fetch and parse JSON files
+        function fetchJSON(url) {
+          return fetch(url).then((response) => response.json());
+        }
+        // Fetch all JSON files asynchronously
+        Promise.all([
+          fetchJSON("./meshConfig.json"), // Computational mesh configuration file
+          fetchJSON("./boundaryConditions.json"), // Boundary conditions configuration file
+        ]).then(([meshConfigData, boundaryConditionsData]) => {
+          meshConfig = meshConfigData;
+          boundaryConditions = boundaryConditionsData;
+        });
+    &lt;/script&gt;
+    . . .
+&lt;/body&gt;
+</pre
+    >
+    <p>
+      Finally, the solidHeatScript solver, a module of the FEAScript library, is
+      utilized. This solver implements the finite element method for heat
+      conduction problems. The solver accepts the number of elements, domain
+      dimensions, and boundary conditions as inputs and returns the grid points
+      (nodeXCoordinates, nodeYCoordinates) and the solution vector
+      (solutionVector) as outputs. The following script demonstrates these
+      steps:
+    </p>
+    <pre class="prettyprint">
+&lt;body&gt;
+    . . .
+    &lt;script type="module"&gt;
+        // Import the FEAScript library
+        import { FEAScript } from 'https://feascript.github.io/FEAScript/src/index.js';
+        import { plotSolution2D } from 'https://feascript.github.io/FEAScript/src/index.js';
+        import { FEAScriptVersion } from 'https://feascript.github.io/FEAScript/src/index.js';
+        window.addEventListener("DOMContentLoaded", (event) => {
+          FEAScriptVersion(); // Print FEAScript version
+          let {
+            solutionVector,
+            numNodesX,
+            numNodesY,
+            nodeXCoordinates,
+            nodeYCoordinates,
+          } = FEAScript("solidHeatScript", meshConfig, boundaryConditions); // Assembly matrices and solve the system of equations
+          plotSolution2D(
+            // Visualise the solution
+            solutionVector,
+            numNodesX,
+            numNodesY,
+            nodeXCoordinates,
+            nodeYCoordinates
+          );
+        });
+    &lt;/script&gt;
+    . . .
+&lt;/body&gt;
+</pre
+    >
+    <p>
+      An HTML container element is also included in the page to display the
+      results.
+    </p>
+    <pre class="prettyprint">
+&lt;body&gt;
+    . . .
+    &lt;div id="plot">&lt;/div&gt
+    . . .
+&lt;/body&gt;</pre
+    >
+    <br />
+    <h2 id="results"><a name="Results"></a>Results</h2>
+    <p>
+      After solving this case in real-time directly in your browser, the results
+      are visualized in a contour plot. Below you can see the results of the
+      above heat transfer problem for a mesh of 24 two-dimensional quadratic
+      elements, arranged as 8 in the x-direction and 4 in the y-direction.
+    </p>
+
+    <!-- Container element where the solution plot will be rendered -->
+    <div id="plot"></div>
+
+    <ul id="menu">
+      <li><a href="https://feascript.com/index.html">Return</a></li>
+    </ul>
+
+    <script>
+      let meshConfig, boundaryConditions;
+
+      // Function to fetch and parse JSON files
+      function fetchJSON(url) {
+        return fetch(url).then((response) => response.json());
+      }
+
+      // Fetch all JSON files asynchronously
+      Promise.all([
+        fetchJSON("./meshConfig.json"), // Computational mesh configuration file
+        fetchJSON("./boundaryConditions.json"), // Boundary conditions configuration file
+      ]).then(([meshConfigData, boundaryConditionsData]) => {
+        meshConfig = meshConfigData;
+        boundaryConditions = boundaryConditionsData;
+      });
+    </script>
+
+    <script type="module">
+      // Import the FEAScript library from GitHub server *** You should comment the following lines when running FEAScript library from a local server***
+      import { FEAScript } from "https://feascript.github.io/FEAScript/src/index.js";
+      import { plotSolution2D } from "https://feascript.github.io/FEAScript/src/index.js";
+      import { FEAScriptVersion } from "https://feascript.github.io/FEAScript/src/index.js";
+
+      // Import the FEAScript library from a local server *** Don't forget to change it before commit ***
+      //import { FEAScript } from "../FEAScript/src/index.js";
+      //import { plotSolution2D } from "../FEAScript/src/index.js";
+      //import { FEAScriptVersion } from "../FEAScript/src/index.js";
+      // To start a server in Python (without CORS support) run 'python3 -m http.server 8000'
+      // To add CORS support you should run the script corsHttpServer.py ('python3 corsHttpServer')
+      // The Python server is running on http://127.0.0.1:8000/
+      // For running JavaScript in local HTML files see also https://stackoverflow.com/questions/58067499/runing-javascript-in-local-html-files-in-firefox
+
+      // The functions will be executed as soon as the page finishes loading
+      window.addEventListener("DOMContentLoaded", (event) => {
+        FEAScriptVersion(); // Print FEAScript version
+        let {
+          solutionVector,
+          numNodesX,
+          numNodesY,
+          nodeXCoordinates,
+          nodeYCoordinates,
+        } = FEAScript("solidHeatScript", meshConfig, boundaryConditions); // Assembly matrices and solve the system of equations
+        plotSolution2D(
+          // Visualise the solution
+          solutionVector,
+          numNodesX,
+          numNodesY,
+          nodeXCoordinates,
+          nodeYCoordinates
+        );
+      });
+    </script>
+  </body>
+</html>

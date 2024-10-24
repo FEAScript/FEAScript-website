@@ -89,10 +89,12 @@
     <p>
       A demonstration on how to utilize the FEAScript library for addressing the
       above stationary heat transfer problem in your web browser is provided
-      below. Initially, the
+      below. The following code snippets should be included in a website.
+      Initially, we should load the external libraries
       <a href="https://mathjs.org/" target="_blank">Math.js</a> and
-      <a href="https://plotly.com/javascript/" target="_blank">Plotly.js</a>
-      libraries should be loaded using a content delivery network protocol:
+      <a href="https://plotly.com/javascript/" target="_blank">Plotly.js</a> For
+      portability reasons, these libraries are loaded by using the content
+      delivery network protocol (CDN). The code snippet is the following:
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
@@ -103,14 +105,22 @@
 &lt;/head&gt;</pre
     >
     <p>
-      Following this, the problem parameters, such as the number of elements,
-      domain boundaries, and the boundary conditions, should be defined using
-      external
+      We should then define the problem parameters, such as the solver type, the
+      geometry configuration, and the boundary conditions. This is performed
+      using external
       <a href="https://www.w3schools.com/js/js_json_intro.asp" target="_blank"
         >JSON</a
       >
-      files. The first JSON file, meshConfig.json, concerns the computational
-      mesh parameters and it is structured as follows:
+      files. The first JSON file, solverConfig.json, determines the solver type:
+    </p>
+    <pre class="prettyprint">
+{
+  "solverConfig": "solidHeatScript"
+}</pre
+    >
+    <p>
+      The second JSON file, meshConfig.json, concerns the computational mesh
+      parameters and it is structured as follows:
     </p>
     <pre class="prettyprint">
 {
@@ -121,10 +131,12 @@
 }</pre
     >
     <p>
-      In particular, the parameters nex and ney represent the number of elements
+      In the above, the parameters nex and ney represent the number of elements
       along the x-axis and y-axis, respectively. Additionally, maxX and maxY
       denote the final x-coordinate and y-coordinate of the mesh, respectively.
-      The second essential JSON file, boundaryConditions.json, concerns the
+    </p>
+    <p>
+      The third essential JSON file, boundaryConditionsConfig.json, concerns the
       boundary conditions. In particular, boundary conditions can be specified
       as Dirichlet, Robin, or Neumann types. The Dirichlet condition sets a
       constant temperature value, while the Robin condition describes a
@@ -148,26 +160,28 @@
       corresponds to the constant temperature value. In the case of a Robin
       boundary condition, the parameter robinHeatTranfCoeff represents the heat
       transfer coefficient and the robinExtTemp indicates the external
-      temperature. The above JSON files are fetched into FEAScript using the
-      following script:
+      temperature. The JSON files are fetched into FEAScript using the following
+      script:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
     . . .
     &lt;script
-        let meshConfig, boundaryConditions;
+        let meshConfig, boundaryConditionsConfig, solverConfig;
         // Function to fetch and parse JSON files
         function fetchJSON(url) {
           return fetch(url).then((response) => response.json());
         }
         // Fetch all JSON files asynchronously
         Promise.all([
+          fetchJSON("./solverConfig.json"), // Solver configuration file
           fetchJSON("./meshConfig.json"), // Computational mesh configuration file
-          fetchJSON("./boundaryConditions.json"), // Boundary conditions configuration file
-        ]).then(([meshConfigData, boundaryConditionsData]) => {
-          meshConfig = meshConfigData;
-          boundaryConditions = boundaryConditionsData;
-        });
+          fetchJSON("./boundaryConditionsConfig.json"), // Boundary conditions configuration file
+          ]).then(([solverConfigData, meshConfigData, boundaryConditionsConfigData]) => {
+            solverConfig = solverConfigData.solverConfig;
+            meshConfig = meshConfigData;
+            boundaryConditionsConfig = boundaryConditionsConfigData;
+          });
     &lt;/script&gt;
     . . .
 &lt;/body&gt;
@@ -176,11 +190,11 @@
     <p>
       Finally, the solidHeatScript solver, a module of the FEAScript library, is
       utilized. This solver implements the finite element method for heat
-      conduction problems. The solver accepts the number of elements, domain
-      dimensions, and boundary conditions as inputs and returns the grid points
-      (nodeXCoordinates, nodeYCoordinates) and the solution vector
-      (solutionVector) as outputs. The following script demonstrates these
-      steps:
+      conduction problems. The solver accepts the configuration objects
+      (solverConfig, meshConfig, boundaryConditionsConfig) as inputs and returns
+      the grid points (nodeXCoordinates, nodeYCoordinates) and the solution
+      vector (solutionVector) as outputs. The following script demonstrates the
+      solution process:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -198,7 +212,7 @@
             numNodesY,
             nodeXCoordinates,
             nodeYCoordinates,
-          } = FEAScript("solidHeatScript", meshConfig, boundaryConditions); // Assembly matrices and solve the system of equations
+          } = FEAScript(solverConfig, meshConfig, boundaryConditionsConfig); // Assembly matrices and solve the system of equations
           plotSolution2D(
             // Visualise the solution
             solutionVector,
@@ -214,8 +228,8 @@
 </pre
     >
     <p>
-      An HTML container element is also included in the page to display the
-      results.
+      After the solution, the results are demonstrated in a 2D contour plot. To
+      do so, an HTML container element should also included as follows:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -241,7 +255,7 @@
     </ul>
 
     <script>
-      let meshConfig, boundaryConditions;
+      let meshConfig, boundaryConditionsConfig, solverConfig;
 
       // Function to fetch and parse JSON files
       function fetchJSON(url) {
@@ -250,12 +264,16 @@
 
       // Fetch all JSON files asynchronously
       Promise.all([
+        fetchJSON("./solverConfig.json"), // Solver configuration file
         fetchJSON("./meshConfig.json"), // Computational mesh configuration file
-        fetchJSON("./boundaryConditions.json"), // Boundary conditions configuration file
-      ]).then(([meshConfigData, boundaryConditionsData]) => {
-        meshConfig = meshConfigData;
-        boundaryConditions = boundaryConditionsData;
-      });
+        fetchJSON("./boundaryConditionsConfig.json"), // Boundary conditions configuration file
+      ]).then(
+        ([solverConfigData, meshConfigData, boundaryConditionsConfigData]) => {
+          solverConfig = solverConfigData.solverConfig;
+          meshConfig = meshConfigData;
+          boundaryConditionsConfig = boundaryConditionsConfigData;
+        }
+      );
     </script>
 
     <script type="module">
@@ -282,7 +300,7 @@
           numNodesY,
           nodeXCoordinates,
           nodeYCoordinates,
-        } = FEAScript("solidHeatScript", meshConfig, boundaryConditions); // Assembly matrices and solve the system of equations
+        } = FEAScript(solverConfig, meshConfig, boundaryConditionsConfig); // Assembly matrices and solve the system of equations
         plotSolution2D(
           // Visualise the solution
           solutionVector,

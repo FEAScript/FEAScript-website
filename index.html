@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<!--   ______ ______           _____           _       _     -->
+<!--  |  ____|  ____|   /\    / ____|         (_)     | |    -->
+<!--  | |__  | |__     /  \  | (___   ___ ____ _ ____ | |_   -->
+<!--  |  __| |  __|   / /\ \  \___ \ / __|  __| |  _ \| __|  -->
+<!--  | |    | |____ / ____ \ ____) | (__| |  | | |_) | |    -->
+<!--  |_|    |______/_/    \_\_____/ \___|_|  |_|  __/| |    -->
+<!--                                            | |   | |    -->
+<!--                                            |_|   | |_   -->
+<!--       Website: https://feascript.com/             \__|  -->
+
+<html>
+  <head>
+    <title>FEAScript: A JavaScript Library for Solving Differential Equations</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <link href="FEAScript-website.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <h1 class="top">
+      <a href="index.html">
+        <img
+          src="./images/FEAScriptLogo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+    </h1>
+
+    <div id="banner">
+      <!--<img src="./images/tutorialSolidHeatTransferResults01.png" alt="" />-->
+      <img src="./images/tutorialSolidHeatTransferMesh01.png" alt="" />
+    </div>
+
+    <h1>A JavaScript Library for Solving Differential Equations Using the Finite Element Method</h1>
+
+    <ul id="menu">
+      <li><a href="#getstarted">Get Started</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#documentation">Documentation</a></li>
+      <li><a href="#licensing">Licensing</a></li>
+    </ul>
+
+    <p>
+      FEAScript is an <b>open-source JavaScript library</b> for solving differential equations using the
+      finite element method. It enables the creation and running of
+      <b>client-side, browser-based simulations</b> for physics and engineering problems without the need for
+      additional installations. FEAScript can be an excellent tool for
+      <b>hands-on learning of computational mechanics</b> in academic environments. It can be used as a
+      turnkey solution by educators without requiring any software installations.
+    </p>
+
+    <h2 id="getstarted"><a name="Get Started"></a>Get Started</h2>
+    <p>
+      The latest version of FEAScript can be downloaded from our
+      <a href="https://github.com/FEAScript/FEAScript" target="_blank">GitHub repository</a>. FEAScript is
+      still in the early development stage with continuous addition of new features and improvements. Whether
+      you are a FEA or JavaScript enthusiast, we are currently on the lookout for contributors to help evolve
+      FEAScript!
+      <!--To get an idea of our short- and long-term goals,
+      please see the
+      <a
+        href="https://github.com/FEAScript/FEAScript/wiki/Roadmap"
+        target="_blank"
+        >project roadmap</a
+      >.-->
+      A great way to start getting involved is by reporting issues on the
+      <a href="https://github.com/FEAScript/FEAScript/issues" target="_blank">GitHub tracking system</a>.
+      Contribution guidelines can also be found
+      <a href="https://github.com/FEAScript/FEAScript/blob/main/CONTRIBUTING.md" target="_blank">here</a>.
+    </p>
+
+    <h2 id="features"><a name="Features"></a>Features</h2>
+    <ul>
+      <li>
+        Solvers
+        <ul>
+          <li>
+            General form 1D differential equations solver
+            <i
+              ><a href="https://github.com/FEAScript/FEAScript/issues/3" target="_blank"
+                >(under development)</a
+              ></i
+            >
+          </li>
+          <li>Heat conduction solver</li>
+        </ul>
+      </li>
+      <li>
+        Numerics
+        <ul>
+          <li>2D elliptic mesh generation <i>(under development)</i></li>
+        </ul>
+      </li>
+      <li>
+        Visualization
+        <ul>
+          <li>
+            Results plots using
+            <a href="https://plotly.com/javascript/" target="_blank">Plotly.js</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2 id="documentation"><a name="Documentation"></a>Documentation</h2>
+    <h3>Theory Notes</h3>
+    <p>
+      Presentation of the numerical methods that are utilized in FEAScript. In case you don't have any
+      experience in those methods, we recommend starting with these articles.
+    </p>
+    <ul>
+      <li>
+        <a href="https://feascript.com/finiteElementMethod.html" target="_blank">Finite Element Method</a>
+      </li>
+    </ul>
+    <h3>Tutorials</h3>
+    <p>Demonstration of tutorials which serve as a step-by-step introduction to FEAScript.</p>
+    <ul>
+      <li>Heat conduction in a large plane wall <i>(under development)</i></li>
+      <li>
+        <a
+          href="https://feascript.com/tutorialSolidHeatTransfer01/tutorialSolidHeatTransfer01.html"
+          target="_blank"
+          >Heat conduction in a two-dimensional fin</a
+        >
+      </li>
+    </ul>
+    <p>
+      Please report any feedback on the above tutorials to the
+      <a href="https://github.com/orgs/FEAScript/discussions" target="_blank">GitHub discussions</a>.
+    </p>
+
+    <h2 id="licensing"><a name="Licensing"></a>Licensing</h2>
+    <p>
+      FEAScript is distributed under the terms of the
+      <a href="https://opensource.org/license/mit" target="_blank">MIT license</a>. This website is licensed
+      under a
+      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank"
+        >Creative Commons Attribution 4.0 license</a
+      >.
+    </p>
+    <p>&#169; 2023-<span id="currentYear"></span> FEAScript.</p>
+
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+    </script>
+  </body>
+</html>

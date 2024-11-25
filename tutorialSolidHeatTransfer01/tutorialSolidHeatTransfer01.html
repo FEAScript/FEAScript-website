@@ -21,7 +21,9 @@
       content="finite elements, fem, galerkin, cfd, computational mechanics, javascript"
     />
     <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS file -->
     <link href="../FEAScript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <!-- Import the Math.js library for mathematical operations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js"></script>
     <!-- Import the Plotly.js library for plotting -->
@@ -69,8 +71,8 @@
     </ul>
 
     <p>
-      In this tutorial, we address a stationary heat transfer problem within a 2D rectangular domain. This is a
-      typical cooling fin problem. Cooling fins are commonly used to increase the area available for heat
+      In this tutorial, we address a stationary heat transfer problem within a 2D rectangular domain. This is
+      a typical cooling fin problem. Cooling fins are commonly used to increase the area available for heat
       transfer between metal walls and poorly conducting fluids such as air.
     </p>
 
@@ -114,18 +116,18 @@
       <a href="https://www.w3schools.com/js/js_json_intro.asp" target="_blank">JSON</a>
       files.
     </p>
-    <p>The first JSON file, solverConfig.json, determines the solver type:</p>
+    <p>The first JSON file, `solverConfig.json`, determines the solver type:</p>
     <pre class="prettyprint">
 {
   "solverConfig": "solidHeatTransferScript"
 }</pre
     >
     <p>
-      The second JSON file, meshConfig.json, concerns the computational mesh parameters. In particular, the
-      parameters numElementsX and numElementsY represent the number of elements along the x-axis and y-axis,
-      respectively. Additionally, maxX and maxY denote the final x-coordinate and y-coordinate of the mesh,
-      respectively. When this file is fetched into FEAScript, a simple mapped mesh will be generated. The JSON
-      file is structured as follows:
+      The second JSON file, `meshConfig.json`, concerns the computational mesh parameters. In particular, the
+      parameters `numElementsX` and `numElementsY` represent the number of elements along the x-axis and
+      y-axis, respectively. Additionally, `maxX` and `maxY` denote the final x-coordinate and y-coordinate of
+      the mesh, respectively. When this file is fetched into FEAScript, a simple mapped mesh will be
+      generated. The JSON file is structured as follows:
     </p>
     <pre class="prettyprint">
 {
@@ -138,7 +140,7 @@
 }</pre
     >
     <p>
-      The third essential JSON file, boundaryConditionsConfig.json, concerns the boundary conditions.
+      The third essential JSON file, `boundaryConditionsConfig.json`, concerns the boundary conditions.
       Initially the numbers at the left side (from 0 to 3) indicate the boundaries of the geometry (the mesh
       generator of FEAScript has assigned numbers to the boundaries, starting from the bottom boundary and
       proceeding clockwise). The `constantTemp` condition sets a constant temperature value. The `symmetry`
@@ -194,9 +196,9 @@
     >
     <p>
       Finally, the `solidHeatTransferScript` solver is utilized which implements the finite element method for
-      heat conduction problems. The solver accepts the above configuration JSON files (solverConfig,
-      meshConfig, boundaryConditionsConfig) as inputs and returns the grid points (nodesXCoordinates,
-      nodesYCoordinates) and the solution vector (solutionVector) as outputs. The following script
+      heat conduction problems. The solver accepts the above configuration JSON files (`solverConfig`,
+      `meshConfig`, `boundaryConditionsConfig`) as inputs and returns the grid points (`nodesXCoordinates`,
+      `nodesYCoordinates`) and the solution vector (`solutionVector`) as outputs. The following script
       demonstrates the solution process:
     </p>
     <pre class="prettyprint">
@@ -289,7 +291,11 @@
 
     <script type="module">
       // Import the FEAScript library from GitHub server *** You should comment the following lines when running FEAScript library from a local server***
-      import { FEAScript, plotSolution, printVersion } from "https://feascript.github.io/FEAScript/src/index.js";
+      import {
+        FEAScript,
+        plotSolution,
+        printVersion,
+      } from "https://feascript.github.io/FEAScript/src/index.js";
 
       // Import the FEAScript library from a local server *** Don't forget to change it before committing ***
       //import { FEAScript, plotSolution, printVersion } from "../../FEAScript/src/index.js";

@@ -14,11 +14,16 @@ html {
   margin: auto;
   font-family: "Roboto", sans-serif;
   font-size: 90%;
+  scroll-behavior: smooth;
 }
 
 body {
   padding: 20px;
   line-height: 1.6;
+}
+
+ul {
+  padding-left: 1.5em;
 }
 
 /* Headings */
@@ -30,39 +35,32 @@ h3 {
   margin: 0;
   padding-top: 0.4em;
   padding-bottom: 0.2em;
-  width: auto;
   margin-bottom: 0.5em;
+  color: #555;
 }
 
 h1 {
-  color: #555;
   font-size: 150%;
-  margin-bottom: 0.4em;
   line-height: 1.2em;
+  margin-bottom: 0.4em;
 }
 
 h1.top {
-  color: #555;
   border-bottom: 1px solid #aaa;
 }
 
 h2 {
   font-size: 130%;
-  color: #555;
-  /* border-bottom: 1px solid #aaa;
-  line-height: 1.1em;  */
 }
 
 h3 {
   font-size: 110%;
-  color: #555;
 }
 
-/* Paragraphs */
+/* Paragraphs and links */
 p {
   margin: 1em 0;
   max-width: 1000px;
-  margin-bottom: 1em;
 }
 
 a {
@@ -81,7 +79,6 @@ pre {
 pre.prettyprint {
   border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 10px;
   max-width: 1000px;
 }
 
@@ -90,7 +87,11 @@ img.title {
   height: 1em;
 }
 
-/* Left-align of MathJax formulas */
+#responsive-logo {
+  height: 80px;
+}
+
+/* Left-align MathJax formulas */
 mjx-container {
   text-align: left !important;
 }
@@ -98,14 +99,11 @@ mjx-container {
 /* Banner styles */
 #banner {
   float: right;
-  width: 180px;
   padding-left: 1.5em;
   padding-bottom: 1.5em;
 }
 
 #banner img {
-  width: 180px;
-  margin-bottom: 1.5ex;
   box-shadow: 0px 1px 4px #999;
 }
 
@@ -124,27 +122,13 @@ mjx-container {
 #menu li a {
   color: #555;
   font-weight: bold;
-  text-decoration: none;
 }
 
 #menu li a:hover {
   color: #333;
 }
 
-/* Default styles */
-body {
-  padding: 10px;
-}
-
-ul {
-  padding-left: 1.5em;
-}
-
-#responsive-logo {
-  height: 80px;
-}
-
-/* Media queries for smaller screens */
+/* Media queries */
 @media screen and (max-width: 500px) {
   body {
     padding: 10px;
@@ -167,7 +151,6 @@ ul {
 
   #banner img {
     width: 90px;
-    margin-bottom: 1ex;
   }
 
   #responsive-logo {
@@ -175,7 +158,6 @@ ul {
   }
 }
 
-/* Media queries for larger screens */
 @media screen and (min-width: 1000px) {
   #banner {
     width: 250px;
@@ -183,6 +165,5 @@ ul {
 
   #banner img {
     width: 250px;
-    margin-bottom: 2.5ex;
   }
 }

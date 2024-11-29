@@ -12,7 +12,6 @@
 
 <html>
   <head>
-    <!-- We use the browser UMD build that exposes the libraries as global variables -->
     <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial</title>
     <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -97,10 +96,6 @@
       Below is a demonstration of how to use the FEAScript library to solve the stationary heat transfer
       problem in your web browser. You only need a simple HTML page to run this example where the following
       code snippets should be included. First, we should load the required external libraries:
-      <a href="https://mathjs.org/" target="_blank">Math.js</a> for the LU decomposition linear system solver,
-      and <a href="https://plotly.com/javascript/" target="_blank">Plotly.js</a> for plotting the results.
-      These libraries are loaded using the content delivery network (CDN) for portability. The code snippet is
-      as follows:
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
@@ -112,116 +107,72 @@
     >
     <p>
       We should then define the problem parameters, such as the solver type, the geometry configuration, and
-      the boundary conditions. This is performed using external
-      <a href="https://www.w3schools.com/js/js_json_intro.asp" target="_blank">JSON</a>
-      files.
-    </p>
-    <p>The first JSON file, `solverConfig.json`, determines the solver type:</p>
-    <pre class="prettyprint">
-{
-  "solverConfig": "solidHeatTransferScript"
-}</pre
-    >
-    <p>
-      The second JSON file, `meshConfig.json`, concerns the computational mesh parameters. In particular, the
-      parameters `numElementsX` and `numElementsY` represent the number of elements along the x-axis and
-      y-axis, respectively. Additionally, `maxX` and `maxY` denote the final x-coordinate and y-coordinate of
-      the mesh, respectively. When this file is fetched into FEAScript, a simple mapped mesh will be
-      generated. The JSON file is structured as follows:
-    </p>
-    <pre class="prettyprint">
-{
-  "meshDimension": "2D",
-  "elementOrder": "quadratic",
-  "numElementsX": 8,
-  "numElementsY": 4,
-  "maxX": 4,
-  "maxY": 2
-}</pre
-    >
-    <p>
-      The third essential JSON file, `boundaryConditionsConfig.json`, concerns the boundary conditions.
-      Initially the numbers at the left side (from 0 to 3) indicate the boundaries of the geometry (the mesh
-      generator of FEAScript has assigned numbers to the boundaries, starting from the bottom boundary and
-      proceeding clockwise). The `constantTemp` condition sets a constant temperature value. The `symmetry`
-      boundary condition represents a zero-flux type. Finally, the `convection` condition describes a
-      convective heat transfer scenario. In addition, the second argument of the `constantTemp` boundary
-      condition corresponds to the constant temperature value. For a `convection` boundary condition, the
-      second argument represents the \({\frac{h}{k}}\) value, and the third argument indicates the external
-      temperature \(T_0\). The JSON file is structured as follows:
-    </p>
-    <pre class="prettyprint">
-{
-  "0": ["constantTemp", 200],
-  "1": ["symmetry"],
-  "2": ["convection", 1, 20],
-  "3": ["constantTemp", 200]
-}</pre
-    >
-    <p>
-      The above JSON files can be hosted online, for example, using
-      <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
-      or other services dedicated to JSON file hosting, such as
-      <a href="https://www.jsonkeeper.com/" target="_blank">JSON Keeper</a>. In our case, the JSON files are
-      hosted on the FEAScript website. While it is also possible to load JSON files locally, hosting them
-      online—or using a local Python server—can offer a safer and more reliable solution by adhering to
-      Cross-Origin Resource Sharing (CORS) policies, which enhance security in web applications. These files
-      are then fetched into FEAScript using the following script:
-    </p>
-    <pre class="prettyprint">
-&lt;body&gt;
-    . . .
-    &lt;script&gt;
-        let meshConfig, boundaryConditionsConfig, solverConfig;
-        // Function to fetch and parse JSON files
-        function fetchJSON(url) {
-          return fetch(url).then((response) => response.json());
-        }
-        // Fetch all JSON files asynchronously
-        Promise.all([
-          // Solver configuration file
-          fetchJSON("https://feascript.com/tutorialSolidHeatTransfer01/solverConfig.json"),
-          // Computational mesh configuration file
-          fetchJSON("https://feascript.com/tutorialSolidHeatTransfer01/meshConfig.json"),
-          // Boundary conditions configuration file
-          fetchJSON("https://feascript.com/tutorialSolidHeatTransfer01/boundaryConditionsConfig.json"),
-          ]).then(([solverConfigData, meshConfigData, boundaryConditionsConfigData]) => {
-            solverConfig = solverConfigData.solverConfig;
-            meshConfig = meshConfigData;
-            boundaryConditionsConfig = boundaryConditionsConfigData;
-          });
-    &lt;/script&gt;
-    . . .
-&lt;/body&gt;</pre
-    >
-    <p>
-      Finally, the `solidHeatTransferScript` solver is utilized which implements the finite element method for
-      heat conduction problems. The solver accepts the above configuration JSON files (`solverConfig`,
-      `meshConfig`, `boundaryConditionsConfig`) as inputs and returns the grid points (`nodesXCoordinates`,
-      `nodesYCoordinates`) and the solution vector (`solutionVector`) as outputs. The following script
-      demonstrates the solution process:
+      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
     . . .
     &lt;script type="module"&gt;
         // Import the FEAScript library
-        import { FEAScript, plotSolution, printVersion } from "https://feascript.github.io/FEAScript/src/index.js";
+        import { FEAScriptModel, plotSolution, printVersion } from "https://feascript.github.io/FEAScript/src/index.js";
         window.addEventListener("DOMContentLoaded", (event) => {
+
           // Print FEAScript version
           printVersion();
-          // Assemble matrices and solve the system of equations
-          let { solutionVector, nodesCoordinates } = FEAScript(solverConfig, meshConfig, boundaryConditionsConfig);
-          // Visualize the solution
-          plotSolution(solutionVector, nodesCoordinates, solverConfig, meshConfig.meshDimension, "contour", "solutionPlot");
+
+          // Create a new FEAScript model
+          const model = new FEAScriptModel();
+
+          // Set solver configuration
+          model.setSolverConfig("solidHeatTransferScript");
+
+          // Define mesh configuration
+          model.setMeshConfig({
+            meshDimension: "2D",
+            elementOrder: "quadratic",
+            numElementsX: 8,
+            numElementsY: 4,
+            maxX: 4,
+            maxY: 2,
+          });
+
+          // Define boundary conditions
+          model.addBoundaryCondition("0", ["constantTemp", 200]);
+          model.addBoundaryCondition("1", ["symmetry"]);
+          model.addBoundaryCondition("2", ["convection", 1, 20]);
+          model.addBoundaryCondition("3", ["constantTemp", 200]);
+
+          // Solve the problem and get the solution
+          const { solutionVector, nodesCoordinates } = model.solve();
+
+          // Plot the solution as a 2D contour plot
+          plotSolution(
+            solutionVector,
+            nodesCoordinates,
+            model.solverConfig,
+            model.meshConfig.meshDimension,
+            "contour",
+            "solutionPlot"
+          );
+          
         });
     &lt;/script&gt;
     . . .
 &lt;/body&gt;</pre
     >
     <p>
-      After the solution, the results are demonstrated in a 2D contour plot. To do so, an HTML container
-      element should also be included as follows:
+      In the boundary condition definition, the numbers at the left side (from 0 to 3) indicate the boundaries
+      of the geometry (the mesh generator of FEAScript has assigned numbers to the boundaries, starting from
+      the bottom boundary and proceeding clockwise). The `constantTemp` condition sets a constant temperature
+      value. The `symmetry` boundary condition represents a zero-flux type. Finally, the `convection`
+      condition describes a convective heat transfer scenario. In addition, the second argument of the
+      `constantTemp` boundary condition corresponds to the constant temperature value. For a `convection`
+      boundary condition, the second argument represents the \({\frac{h}{k}}\) value, and the third argument
+      indicates the external temperature \(T_0\).
+    </p>
+    <p>
+      After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
+      HTML container where the plot will render:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -234,10 +185,11 @@
       The `solutionPlot` is the id of the div where the plot will be rendered. This id is passed as an
       argument to the plotSolution function to specify the target div for the plot.
     </p>
+
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
-      The results visualized in the following contour plot are generated real-time in your browser, according
-      to the JSON files provided. The source code of the above tutorial can be found at the corresponding
+      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
+      time using FEAScript. You can find a minimal example of this tutorial in the
       <a
         href="https://github.com/FEAScript/FEAScript/tree/main/examples/solidHeatTransferScript/exampleSolidHeatTransfer01"
         target="_blank"
@@ -257,114 +209,102 @@
       </li>
     </ul>
 
-    <script>
-      let meshConfig, boundaryConditionsConfig, solverConfig;
-
-      // Function to fetch and parse JSON files
-      function fetchJSON(url) {
-        return fetch(url).then((response) => response.json());
-      }
-
-      // Fetch all JSON files asynchronously
-      Promise.all([
-        // Solver configuration file - Use solverConfig.json for debugging
-        fetchJSON(
-          "https://feascript.com/tutorialSolidHeatTransfer01/solverConfig.json"
-          //"solverConfig.json"
-        ),
-        // Computational mesh configuration file - Use meshConfig.json for debugging
-        fetchJSON(
-          "https://feascript.com/tutorialSolidHeatTransfer01/meshConfig.json"
-          //"meshConfig.json"
-        ),
-        // Boundary conditions configuration file - Use boundaryConditionsConfig.json for debugging
-        fetchJSON(
-          "https://feascript.com/tutorialSolidHeatTransfer01/boundaryConditionsConfig.json"
-          //"boundaryConditionsConfig.json"
-        ),
-      ]).then(([solverConfigData, meshConfigData, boundaryConditionsConfigData]) => {
-        solverConfig = solverConfigData.solverConfig;
-        meshConfig = meshConfigData;
-        boundaryConditionsConfig = boundaryConditionsConfigData;
-      });
-    </script>
-
     <script type="module">
-      // Import the FEAScript library from GitHub server *** You should comment the following lines when running FEAScript library from a local server***
-      import {
-        FEAScript,
-        plotSolution,
-        printVersion,
-      } from "https://feascript.github.io/FEAScript/src/index.js";
+      //Load FEAScript from GitHub
+      import { FEAScriptModel, plotSolution, printVersion } from "https://feascript.github.io/FEAScript/src/index.js";
+      //Load FEAScript from a local directory
+      //import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript/src/index.js";
 
-      // Import the FEAScript library from a local server *** Don't forget to change it before committing ***
-      //import { FEAScript, plotSolution, printVersion } from "../../FEAScript/src/index.js";
-
-      /**
-       * To start a simple HTTP server in Python (without CORS support), run:
-       * 'python3 -m http.server 8000'
-       * To add CORS support, run the script corsHttpServer.py:
-       * 'python3 corsHttpServer'
-       * The Python server will be accessible at:
-       * http://127.0.0.1:8000/
-       * This example will be accessible at:
-       * http://127.0.0.1:8000/FEAScript-website/tutorialSolidHeatTransfer01/tutorialSolidHeatTransfer01.html
-       * You can disable CORS in your browser for local testing. However, this is not recommended for security reasons. To disable CORS in Firefox:
-       * 1. Open Firefox and type 'about:config' in the address bar, then press Enter.
-       * 2. Accept the risk and continue to the advanced settings.
-       * 3. In the search bar, type 'security.fileuri.strict_origin_policy'.
-       * 4. Double-click on the 'security.fileuri.strict_origin_policy' preference to set it to 'false'.
-       */
-
-      // The functions will be executed as soon as the page finishes loading
-      window.addEventListener("DOMContentLoaded", (event) => {
+      window.addEventListener("DOMContentLoaded", () => {
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";
           document.getElementById("solutionPlot").style.display = "none";
         } else {
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("solutionPlot").style.display = "block";
+
           // Print FEAScript version
           printVersion();
-          // Assemble matrices and solve the system of equations
-          let { solutionVector, nodesCoordinates } = FEAScript(
-            solverConfig,
-            meshConfig,
-            boundaryConditionsConfig
-          );
-          // Visualize the solution
+
+          // Create a new FEAScript model
+          const model = new FEAScriptModel();
+
+          // Set solver configuration
+          model.setSolverConfig("solidHeatTransferScript");
+
+          // Define mesh configuration
+          model.setMeshConfig({
+            meshDimension: "2D",
+            elementOrder: "quadratic",
+            numElementsX: 8,
+            numElementsY: 4,
+            maxX: 4,
+            maxY: 2,
+          });
+
+          // Define boundary conditions
+          model.addBoundaryCondition("0", ["constantTemp", 200]);
+          model.addBoundaryCondition("1", ["symmetry"]);
+          model.addBoundaryCondition("2", ["convection", 1, 20]);
+          model.addBoundaryCondition("3", ["constantTemp", 200]);
+
+          // Solve the problem and get the solution
+          const { solutionVector, nodesCoordinates } = model.solve();
+
+          // Plot the solution as a 2D contour plot
           plotSolution(
             solutionVector,
             nodesCoordinates,
-            solverConfig,
-            meshConfig.meshDimension,
+            model.solverConfig,
+            model.meshConfig.meshDimension,
             "contour",
             "solutionPlot"
           );
         }
       });
 
-      window.addEventListener("resize", (event) => {
+      window.addEventListener("resize", () => {
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";
           document.getElementById("solutionPlot").style.display = "none";
         } else {
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("solutionPlot").style.display = "block";
+
           // Print FEAScript version
           printVersion();
-          // Assemble matrices and solve the system of equations
-          let { solutionVector, nodesCoordinates } = FEAScript(
-            solverConfig,
-            meshConfig,
-            boundaryConditionsConfig
-          );
-          // Visualize the solution
+
+          // Create a new FEAScript model
+          const model = new FEAScriptModel();
+
+          // Set solver configuration
+          model.setSolverConfig("solidHeatTransferScript");
+
+          // Define mesh configuration
+          model.setMeshConfig({
+            meshDimension: "2D",
+            elementOrder: "quadratic",
+            numElementsX: 8,
+            numElementsY: 4,
+            maxX: 4,
+            maxY: 2,
+          });
+
+          // Define boundary conditions
+          model.addBoundaryCondition("0", ["constantTemp", 200]);
+          model.addBoundaryCondition("1", ["symmetry"]);
+          model.addBoundaryCondition("2", ["convection", 1, 20]);
+          model.addBoundaryCondition("3", ["constantTemp", 200]);
+
+          // Solve the problem and get the solution
+          const { solutionVector, nodesCoordinates } = model.solve();
+
+          // Plot the solution as a 2D contour plot
           plotSolution(
             solutionVector,
             nodesCoordinates,
-            solverConfig,
-            meshConfig.meshDimension,
+            model.solverConfig,
+            model.meshConfig.meshDimension,
             "contour",
             "solutionPlot"
           );

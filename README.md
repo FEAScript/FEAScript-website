@@ -1,4 +1,4 @@
-<img src="https://feascript.github.io/FEAScript-website/images/FEAScriptLogo.png" width="80">
+<img src="https://feascript.github.io/FEAScript-website/assets/FEAScriptLogo.png" width="80">
 
 ## FEAScript-website
 

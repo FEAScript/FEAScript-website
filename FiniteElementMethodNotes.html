@@ -54,12 +54,13 @@
       <li><a href="#residualscomputation">Residuals Computation</a></li>
       <li><a href="#references">References</a></li>
     </ul>
-
-    <p>
-      The finite element method is a discretization technique that can utilize a computational mesh to
-      approximate the solution of a partial differential equation. Basic concepts of the finite element method
-      are described below.
-    </p>
+    <div class="highlight-container">
+      <p>
+        The finite element method is a discretization technique that can utilize a computational mesh to
+        approximate the solution of a partial differential equation. Basic concepts of the finite element
+        method are described below.
+      </p>
+    </div>
     <h2 id="galerkinresiduals"><a name="Galerkin Residuals"></a>Galerkin Residuals</h2>
     <p>
       Consider a typical formulation of a boundary value problem (BVP): $$\begin{eqnarray} Lu &= f \quad
@@ -187,5 +188,11 @@
     <ul id="menu">
       <li><a href="https://feascript.com/index.html">Return</a></li>
     </ul>
+
+    <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+    </script>
+
   </body>
 </html>

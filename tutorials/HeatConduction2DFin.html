@@ -147,6 +147,9 @@
           model.addBoundaryCondition("2", ["convection", 1, 20]);
           model.addBoundaryCondition("3", ["constantTemp", 200]);
 
+          // Set solver method (optional) - 'lusolve' uses LU decomposition
+          model.setSolverMethod("lusolve");
+
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = model.solve();
 
@@ -260,6 +263,9 @@
           model.addBoundaryCondition("2", ["convection", 1, 20]);
           model.addBoundaryCondition("3", ["constantTemp", 200]);
 
+          // Set solver method (optional) - 'lusolve' uses LU decomposition
+          model.setSolverMethod("lusolve");
+
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = model.solve();
 
@@ -311,6 +317,9 @@
           model.addBoundaryCondition("2", ["convection", 1, 20]);
           model.addBoundaryCondition("3", ["constantTemp", 200]);
 
+          // Set solver method (optional) - 'lusolve' uses LU decomposition
+          model.setSolverMethod("lusolve");
+
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = model.solve();
 
@@ -331,6 +340,5 @@
     <script>
       document.getElementById("currentYear").innerHTML = new Date().getFullYear();
     </script>
-
   </body>
 </html>

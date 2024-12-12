@@ -79,34 +79,48 @@
     </p>
 
     <h2 id="features"><a name="Features"></a>Features</h2>
+    <p>The following lists contain some, but not all, of the available features in FEAScript:</p>
     <ul>
       <li>
-        Solvers
+        <b>Physical Modelling</b>
+        <ul>
+          <li>Solid heat conduction solver</li>
+        </ul>
+      </li>
+      <li>
+        <b>Numerical Solution</b>
         <ul>
           <li>
-            General form 1D differential equations solver
+            General form differential equations solver
             <i
               ><a href="https://github.com/FEAScript/FEAScript-core/issues/3" target="_blank"
                 >(under development)</a
               ></i
             >
           </li>
-          <li>Heat conduction solver</li>
+          <li>Linear system solvers (LU decomposition)</li>
         </ul>
       </li>
       <li>
-        Numerics
+        <b>Geometry and Meshing</b>
         <ul>
-          <li>2D elliptic mesh generation <i>(under development)</i></li>
-        </ul>
-      </li>
-      <li>
-        Visualization
-        <ul>
+          <li>Simple mesh generation (1D and rectangular 2D domains)</li>
           <li>
-            Results plots using
-            <a href="https://plotly.com/javascript/" target="_blank">Plotly.js</a>
+            Import of MSH (<a href="https://gmsh.info/" target="_blank"
+            >Gmsh</a
+          >) files 
+            <i
+              ><a href="https://github.com/FEAScript/FEAScript-core/issues/5" target="_blank"
+                >(under development)</a
+              ></i
+            >
           </li>
+        </ul>
+      </li>
+      <li>
+        <b>Visualization</b>
+        <ul>
+          <li>Lines and surfaces plots</li>
         </ul>
       </li>
     </ul>
@@ -161,6 +175,5 @@
     <script>
       document.getElementById("currentYear").innerHTML = new Date().getFullYear();
     </script>
-
   </body>
 </html>

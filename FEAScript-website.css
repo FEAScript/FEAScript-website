@@ -165,6 +165,10 @@ mjx-container {
   #responsive-logo {
     height: 40px;
   }
+
+  .highlight-container {
+    max-width: 90%;
+  }
 }
 
 /* Medium screens: 500px to 1000px */
@@ -203,6 +207,10 @@ mjx-container {
   #responsive-logo {
     height: 60px;
   }
+
+  .highlight-container {
+    max-width: 80%;
+  }
 }
 
 /* Large screens: 1000px and above */
@@ -234,5 +242,9 @@ mjx-container {
 
   #responsive-logo {
     height: 80px;
+  }
+
+  .highlight-container {
+    max-width: 70%;
   }
 }

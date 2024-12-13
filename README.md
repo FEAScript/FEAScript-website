@@ -8,4 +8,4 @@ FEAScript is a lightweight finite element simulation library built in JavaScript
 
 ## License
 
-The content of the FEAScript website is licensed under <a href="https://github.com/FEAScript/FEAScript-website/blob/main/LICENSE" target="_blank">CC-BY 4.0</a>. Note that FEAScript itself is distributed under the terms of the <a href="https://github.com/FEAScript/FEAScript-core/blob/main/LICENSE" target="_blank">MIT license</a>.
+The content of the FEAScript website is licensed under <a href="https://github.com/FEAScript/FEAScript-website/blob/main/LICENSE" target="_blank">CC-BY 4.0</a>. Note that the core library of FEAScript is distributed under the terms of the <a href="https://github.com/FEAScript/FEAScript-core/blob/main/LICENSE" target="_blank">MIT license</a>.

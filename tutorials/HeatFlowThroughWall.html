@@ -12,7 +12,7 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial</title>
+    <title>Heat Flow Through a Wall</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -73,7 +73,7 @@
         />
       </a>
     </h1>
-    <h1>Heat Conduction in a Two-Dimensional Fin Tutorial</h1>
+    <h1>Heat Flow Through a Wall</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
@@ -83,138 +83,25 @@
 
     <div class="highlight-container">
       <p>
-        In this tutorial, we address a stationary heat transfer problem within a two-dimensional rectangular
-        domain. This is a typical cooling fin problem. Cooling fins are commonly used to increase the area
-        available for heat transfer between metal walls and poorly conducting fluids such as air.
+        In this tutorial, we study steady-state heat flow through a wall. We can simplify this problem to one
+        dimension considering that the wall's width and height are much larger than its thickness, and the
+        temperature varies only across the thickness direction.
       </p>
     </div>
 
     <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
-      Steady heat conduction is described by the Laplace equation: \(\nabla^{2}T(x,y) = 0\), where \(T\)
-      signifies the temperature values.
-    </p>
-    <img src="../assets/HeatConduction2DFin.png" width="300" />
-    <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
-      constant temperature boundary conditions are implemented as Dirichlet types in the finite element code.
-      The symmetry boundary condition is implemented as a Neumann zero-flux type \( \left(
-      \frac{dT}{dx}|_{x=0}=0 \right) \), while the convective cooling boundary condition is of the Robin type.
-      Specifically, the latter is expressed as \(\frac{dT}{dy}|_{y=4}=-{\frac{h}{k}}(T-T_0)\), where \(h\) is
-      the heat transfer coefficient, \(k\) the thermal conductivity and \(T_0\) is the external temperature.
-      We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_0\) = 20 &deg;C.
+      <!-- ... -->
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
     <p>
-      Below is a demonstration of how to use the FEAScript library to solve the stationary heat transfer
-      problem in your web browser. You only need a simple HTML page to run this example where the following
-      code snippets should be included. First, we should load the required external libraries:
-    </p>
-    <pre class="prettyprint">
-&lt;head&gt;
-    . . .
-    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js">&lt;/script&gt;
-    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js">&lt;/script&gt;
-    . . .
-&lt;/head&gt;</pre
-    >
-    <p>
-      We should then define the problem parameters, such as the solver type, the geometry configuration, and
-      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
-    </p>
-    <pre class="prettyprint">
-&lt;body&gt;
-    . . .
-    &lt;script type="module"&gt;
-        // Import the FEAScript library
-        import { FEAScriptModel, plotSolution, printVersion } from "https://feascript.github.io/FEAScript-core/src/index.js";
-        window.addEventListener("DOMContentLoaded", (event) => {
-
-          // Print FEAScript version
-          printVersion();
-
-          // Create a new FEAScript model
-          const model = new FEAScriptModel();
-
-          // Set solver configuration
-          model.setSolverConfig("solidHeatTransferScript");
-
-          // Set solver method
-          model.setSolverMethod("lusolve");
-
-          // Define mesh configuration
-          model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
-            maxX: 4,
-            maxY: 2,
-          });
-
-          // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantTemp", 200]);
-          model.addBoundaryCondition("1", ["symmetry"]);
-          model.addBoundaryCondition("2", ["convection", 1, 20]);
-          model.addBoundaryCondition("3", ["constantTemp", 200]);
-
-          // Set solver method (optional) - 'lusolve' uses LU decomposition
-          model.setSolverMethod("lusolve");
-
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = model.solve();
-
-          // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            model.solverConfig,
-            model.meshConfig.meshDimension,
-            "contour",
-            "solutionPlot"
-          );
-          
-        });
-    &lt;/script&gt;
-    . . .
-&lt;/body&gt;</pre
-    >
-    <p>
-      In the boundary condition definition, the numbers at the left side (from 0 to 3) indicate the boundaries
-      of the geometry (the mesh generator of FEAScript has assigned numbers to the boundaries, starting from
-      the bottom boundary and proceeding clockwise). The `constantTemp` condition sets a constant temperature
-      value. The `symmetry` boundary condition represents a zero-flux type. Finally, the `convection`
-      condition describes a convective heat transfer scenario. In addition, the second argument of the
-      `constantTemp` boundary condition corresponds to the constant temperature value. For a `convection`
-      boundary condition, the second argument represents the \({\frac{h}{k}}\) value, and the third argument
-      indicates the external temperature \(T_0\).
-    </p>
-    <p>
-      After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
-      HTML container where the plot will render:
-    </p>
-    <pre class="prettyprint">
-&lt;body&gt;
-    . . .
-    &lt;div id="solutionPlot">&lt;/div&gt;
-    . . .
-&lt;/body&gt;</pre
-    >
-    <p>
-      The `solutionPlot` is the id of the div where the plot will be rendered. This id is passed as an
-      argument to the plotSolution function to specify the target div for the plot.
+      <!-- ... -->
     </p>
 
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
-      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-      time using FEAScript. You can find a minimal example of this tutorial in the
-      <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/solidHeatTransferScript/HeatConduction2DFin"
-        target="_blank"
-        >example directory</a
-      >.
+      <!-- ... -->
     </p>
 
     <!-- Container element where the solution plot will be rendered -->
@@ -261,19 +148,15 @@
 
           // Define mesh configuration
           model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
-            maxX: 4,
-            maxY: 2,
+            meshDimension: "1D",
+            elementOrder: "linear",
+            numElementsX: 10,
+            maxX: 1,
           });
 
           // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantTemp", 200]);
-          model.addBoundaryCondition("1", ["symmetry"]);
-          model.addBoundaryCondition("2", ["convection", 1, 20]);
-          model.addBoundaryCondition("3", ["constantTemp", 200]);
+          model.addBoundaryCondition("0", ["constantTemp", 100]);
+          model.addBoundaryCondition("1", ["constantTemp", 50]);
 
           // Set solver method (optional) - 'lusolve' uses LU decomposition
           model.setSolverMethod("lusolve");
@@ -281,13 +164,13 @@
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = model.solve();
 
-          // Plot the solution as a 2D contour plot
+          // Plot the solution as a 1D line plot
           plotSolution(
             solutionVector,
             nodesCoordinates,
             model.solverConfig,
             model.meshConfig.meshDimension,
-            "contour",
+            "line",
             "solutionPlot"
           );
         }
@@ -315,19 +198,15 @@
 
           // Define mesh configuration
           model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
-            maxX: 4,
-            maxY: 2,
+            meshDimension: "1D",
+            elementOrder: "linear",
+            numElementsX: 10,
+            maxX: 1,
           });
 
           // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantTemp", 200]);
-          model.addBoundaryCondition("1", ["symmetry"]);
-          model.addBoundaryCondition("2", ["convection", 1, 20]);
-          model.addBoundaryCondition("3", ["constantTemp", 200]);
+          model.addBoundaryCondition("0", ["constantTemp", 100]);
+          model.addBoundaryCondition("1", ["constantTemp", 50]);
 
           // Set solver method (optional) - 'lusolve' uses LU decomposition
           model.setSolverMethod("lusolve");
@@ -335,13 +214,13 @@
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = model.solve();
 
-          // Plot the solution as a 2D contour plot
+          // Plot the solution as a 1D line plot
           plotSolution(
             solutionVector,
             nodesCoordinates,
             model.solverConfig,
             model.meshConfig.meshDimension,
-            "contour",
+            "line",
             "solutionPlot"
           );
         }

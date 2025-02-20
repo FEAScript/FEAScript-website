@@ -98,7 +98,12 @@
 
     <img src="../assets/HeatConduction1DWall.png" width="150" />
 
-    <p>The above schematic illustrates the problem domain and outlines the associated boundary conditions.</p>
+    <p>
+      The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
+      particular at the outer side of the wall we apply a constant temperature (\(T_0\)) boundary condition
+      implemented as Dirichlet types in the finite element code. Morevover, a convection boundary condition,
+      implemented as Robin type, is applied at the inner side of the wall.
+    </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
 

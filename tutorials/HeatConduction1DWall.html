@@ -96,14 +96,17 @@
       within common engineering components like house walls.
     </p>
 
-    <img src="../assets/HeatConduction1DWall.png" width="150" />
+    <img src="../assets/HeatConduction1DWall.png" width="100" />
 
     <p>
       The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
       particular, a convection boundary condition, implemented as Robin type, is applied at the inner side of
-      the wall (\(x = 0\)). Morevover, at the outer side of the wall (\(x = W\), where \(W\) is the width of
-      the wall), we apply a constant temperature (\(T_0\)) boundary condition, implemented as Dirichlet type
-      in the finite element code.
+      the wall (\(x = 0\)). The latter is expressed as \(\frac{dT}{dx}|_{x=0}=-{\frac{h}{k}}(T-T_{in})\),
+      where \(h\) is the heat transfer coefficient, \(k\) the thermal conductivity and \(T_{in}\) is the
+      internal temperature. We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_{in}\) = 25
+      &deg;C. At the outer side of the wall (\(x = W\), where \(W\) = 0.15 m, is the width of the wall), we
+      apply a constant temperature (\(T_0\) = 5 &deg;C) boundary condition, implemented as Dirichlet type in
+      the finite element code.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
@@ -120,6 +123,60 @@
     . . .
 &lt;/head&gt;</pre
     >
+    <p>
+      We should then define the problem parameters, such as the solver type, the geometry configuration, and
+      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
+    </p>
+    <pre class="prettyprint">
+      &lt;body&gt;
+          . . .
+          &lt;script type="module"&gt;
+              // Import the FEAScript library
+              import { FEAScriptModel, plotSolution, printVersion } from "https://feascript.github.io/FEAScript-core/src/index.js";
+              window.addEventListener("DOMContentLoaded", (event) => {
+      
+                // Print FEAScript version
+                printVersion();
+      
+                // Create a new FEAScript model
+                const model = new FEAScriptModel();
+      
+                // Set solver configuration
+                model.setSolverConfig("solidHeatTransferScript");
+      
+                // Define mesh configuration
+                model.setMeshConfig({
+                  meshDimension: "1D",
+                  elementOrder: "linear",
+                  numElementsX: 10,
+                  maxX: 0.15,
+                });
+      
+                // Define boundary conditions
+                model.addBoundaryCondition("0", ["convection", 1, 25]);
+                model.addBoundaryCondition("1", ["constantTemp", 5]);
+
+                // Set solver method
+                model.setSolverMethod("lusolve");
+ 
+                // Solve the problem and get the solution
+                const { solutionVector, nodesCoordinates } = model.solve();
+      
+                // Plot the solution as a 1D line plot
+                plotSolution(
+                  solutionVector,
+                  nodesCoordinates,
+                  model.solverConfig,
+                  model.meshConfig.meshDimension,
+                  "line",
+                  "solutionPlot"
+                );
+                
+              });
+          &lt;/script&gt;
+          . . .
+      &lt;/body&gt;</pre
+          >
 
     <h2 id="results"><a name="Results"></a>Results</h2>
 
@@ -162,22 +219,19 @@
           // Set solver configuration
           model.setSolverConfig("solidHeatTransferScript");
 
-          // Set solver method
-          model.setSolverMethod("lusolve");
-
           // Define mesh configuration
           model.setMeshConfig({
             meshDimension: "1D",
             elementOrder: "linear",
             numElementsX: 10,
-            maxX: 1,
+            maxX: 0.15,
           });
 
           // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantTemp", 100]);
-          model.addBoundaryCondition("1", ["constantTemp", 50]);
+          model.addBoundaryCondition("0", ["convection", 1, 25]);
+          model.addBoundaryCondition("1", ["constantTemp", 5]);
 
-          // Set solver method (optional) - 'lusolve' uses LU decomposition
+          // Set solver method
           model.setSolverMethod("lusolve");
 
           // Solve the problem and get the solution
@@ -212,22 +266,19 @@
           // Set solver configuration
           model.setSolverConfig("solidHeatTransferScript");
 
-          // Set solver method
-          model.setSolverMethod("lusolve");
-
           // Define mesh configuration
           model.setMeshConfig({
             meshDimension: "1D",
             elementOrder: "linear",
             numElementsX: 10,
-            maxX: 1,
+            maxX: 0.15,
           });
 
           // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantTemp", 100]);
-          model.addBoundaryCondition("1", ["constantTemp", 50]);
+          model.addBoundaryCondition("0", ["convection", 1, 25]);
+          model.addBoundaryCondition("1", ["constantTemp", 5]);
 
-          // Set solver method (optional) - 'lusolve' uses LU decomposition
+          // Set solver method
           model.setSolverMethod("lusolve");
 
           // Solve the problem and get the solution

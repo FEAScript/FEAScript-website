@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://feascript.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://feascript.com/tutorials/HeatConduction2DFin.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://feascript.com/tutorials/HeatConduction2DFinWorker.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://feascript.com/tutorials/HeatConduction1DWall.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <!-- Blog Pages -->
+  <url>
+    <loc>https://blog.feascript.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://blog.feascript.com/2023/12/01/finite-element-method-notes.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://blog.feascript.com/2025/04/04/javascript-for-scientific-computations.html</loc>
+    <priority>0.7</priority>
+  </url>
+</urlset>

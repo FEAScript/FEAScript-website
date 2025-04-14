@@ -27,6 +27,16 @@
     <!-- Link to the CSS files -->
     <link href="FEAScript-website.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      .menu-separator {
+        color: #ccc;
+        margin: 0 5px;
+        font-weight: 300;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: normal;
+      }
+    </style>
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -66,19 +76,20 @@
       <li><a href="#documentation">Documentation</a></li>
       <li><a href="#tutorials">Tutorials</a></li>
       <li><a href="#licensing">Licensing</a></li>
+      <li class="menu-separator">|</li>
       <li>
         <a href="https://blog.feascript.com/" target="_blank">
-          FEAScript Blog
+          Blog
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/4/43/Feed-icon.svg"
             alt="Blog Icon"
-            style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+            style="width: 13px; height: 13px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
           />
         </a>
       </li>
       <li>
         <a href="https://github.com/FEAScript/FEAScript-core" target="_blank">
-          FEAScript on GitHub
+          GitHub
           <img
             src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
             alt="GitHub Logo"
@@ -135,7 +146,19 @@
         <ul>
           <li>Simple mesh generation (1D and rectangular 2D domains)</li>
           <li>
-            Import of MSH (<a href="https://gmsh.info/" target="_blank">Gmsh</a>) files
+            Import of MSH (<a href="https://gmsh.info/" target="_blank"
+              >Gmsh
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+                alt="External Link Icon"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                " /></a
+            >) files
             <i
               ><a href="https://github.com/FEAScript/FEAScript-core/issues/5" target="_blank"
                 >(under development)</a
@@ -152,10 +175,19 @@
       </li>
     </ul>
 
+    <p>
+      FEAScript is currently under heavy development with new features being added regularly. Interested in
+      contributing? Please check out our
+      <a href="https://github.com/FEAScript/FEAScript-core/blob/main/CONTRIBUTING.md" target="_blank"
+        >contribution guidelines</a
+      >
+      to get started.
+    </p>
+
     <h2 id="documentation"><a name="Documentation"></a>Documentation</h2>
     <p>
-      The documentation for FEAScript is currently under development. For detailed information about the
-      numerical methods utilized in FEAScript and other technical resources, please visit the
+      The documentation for FEAScript is currently under development. In the meantime, for information on the
+      numerical methods used in FEAScript and other technical resources, please visit the
       <a href="https://blog.feascript.com" target="_blank">FEAScript Blog</a>.
     </p>
 

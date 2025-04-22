@@ -12,7 +12,7 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial</title>
+    <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial (Web Worker)</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -52,13 +52,6 @@
         font-weight: bold;
       }
     </style>
-    <script type="module">
-      import {
-        FEAWorkerScript,
-        plotSolution,
-        printVersion,
-      } from "https://feascript.github.io/FEAScript-core/src/index.js";
-    </script>
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -84,154 +77,81 @@
         />
       </a>
     </h1>
-    <h1>Heat Conduction in a Two-Dimensional Fin Tutorial</h1>
+    <h1>Heat Conduction in a Two-Dimensional Fin (Web Worker)</h1>
 
     <ul id="menu">
-      <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
-      <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
-      <li><a href="#results">Results</a></li>
+      <li>
+        <a href="HeatConduction2DFin.html">Back to main tutorial</a>
+      </li>
     </ul>
 
     <div class="highlight-container">
       <p>
-        In this tutorial, we address a stationary heat transfer problem within a two-dimensional rectangular
-        domain. This is a typical cooling fin problem. Cooling fins are commonly used to increase the area
-        available for heat transfer between metal walls and poorly conducting fluids such as air.
+        This page demonstrates solving the 2D heat conduction fin problem using FEAScript in a Web Worker for improved browser responsiveness.
+        For the mathematical formulation and theory, see the <a href="HeatConduction2DFin.html">main tutorial</a>.
       </p>
     </div>
 
-    <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
+    <h2>Web Worker Implementation</h2>
     <p>
-      Steady heat conduction is described by the Laplace equation: \(\nabla^{2}T(x,y) = 0\), where \(T\)
-      signifies the temperature values.
-    </p>
-    <img src="../assets/HeatConduction2DFin.png" width="300" />
-    <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
-      constant temperature boundary conditions are implemented as Dirichlet types in the finite element code.
-      The symmetry boundary condition is implemented as a Neumann zero-flux type \( \left(
-      \frac{dT}{dx}|_{x=0}=0 \right) \), while the convective cooling boundary condition is of the Robin type.
-      Specifically, the latter is expressed as \(\frac{dT}{dy}|_{y=4}=-{\frac{h}{k}}(T-T_0)\), where \(h\) is
-      the heat transfer coefficient, \(k\) the thermal conductivity and \(T_0\) is the external temperature.
-      We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_0\) = 20 &deg;C.
+      The code below shows how to use FEAScript with a Web Worker. The solution is plotted as a 2D contour.
     </p>
 
-    <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
-    <p>
-      Below is a demonstration of how to use the FEAScript library to solve this stationary heat transfer
-      problem in your web browser. You only need a simple HTML page to run this example where the following
-      code snippets should be included. First, we should load the required external libraries:
-    </p>
     <pre class="prettyprint">
-&lt;head&gt;
-    . . .
-    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js">&lt;/script&gt;
-    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js">&lt;/script&gt;
-    . . .
-&lt;/head&gt;</pre
-    >
-    <p>
-      We should then define the problem parameters, such as the solver type, the geometry configuration, and
-      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
-    </p>
-    <pre class="prettyprint">
-&lt;body&gt;
-    . . .
-    &lt;script type="module"&gt;
-        // Import the FEAScript library
-        import { FEAWorkerScript, plotSolution, printVersion } from "https://feascript.github.io/FEAScript-core/src/index.js";
-        window.addEventListener("DOMContentLoaded", async (event) => {
+&lt;script type="module"&gt;
+  import { FEAWorkerScript, plotSolution, printVersion } from "https://feascript.github.io/FEAScript-core/src/index.js";
+  window.addEventListener("DOMContentLoaded", async () =&gt; {
+    // Print FEAScript version
+    printVersion();
 
-          // Print FEAScript version
-          printVersion();
+    // Create a new FEAWorkerScript instance
+    const model = new FEAWorkerScript();
 
-          // Create a new FEAWorkerScript instance
-          const model = new FEAWorkerScript();
+    // Ensure the worker is ready
+    await model.ping();
 
-          // Ensure the worker is ready
-          await model.ping();
+    // Set solver configuration
+    await model.setSolverConfig("solidHeatTransferScript");
 
-          // Set solver configuration
-          await model.setSolverConfig("solidHeatTransferScript");
+    // Define mesh configuration
+    await model.setMeshConfig({
+      meshDimension: "2D",
+      elementOrder: "quadratic",
+      numElementsX: 8,
+      numElementsY: 4,
+      maxX: 4,
+      maxY: 2,
+    });
 
-          // Define mesh configuration
-          await model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
-            maxX: 4,
-            maxY: 2,
-          });
+    // Define boundary conditions
+    await model.addBoundaryCondition("0", ["constantTemp", 200]);
+    await model.addBoundaryCondition("1", ["symmetry"]);
+    await model.addBoundaryCondition("2", ["convection", 1, 20]);
+    await model.addBoundaryCondition("3", ["constantTemp", 200]);
 
-          // Define boundary conditions
-          await model.addBoundaryCondition("0", ["constantTemp", 200]);
-          await model.addBoundaryCondition("1", ["symmetry"]);
-          await model.addBoundaryCondition("2", ["convection", 1, 20]);
-          await model.addBoundaryCondition("3", ["constantTemp", 200]);
+    // Set solver method
+    await model.setSolverMethod("lusolve");
 
-          // Set solver method
-          await model.setSolverMethod("lusolve");
+    // Solve the problem and get the solution
+    const { solutionVector, nodesCoordinates } = await model.solve();
 
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = await model.solve();
+    // Plot the solution as a 2D contour plot
+    plotSolution(
+      solutionVector,
+      nodesCoordinates,
+      "solidHeatTransferScript",
+      "2D",
+      "contour",
+      "solutionPlot"
+    );
 
-          // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            "solidHeatTransferScript",
-            "2D",
-            "contour",
-            "solutionPlot"
-          );
+    // Terminate the worker
+    model.terminate();
+  });
+&lt;/script&gt;
+    </pre>
 
-          // Terminate the worker
-          model.terminate();
-          
-        });
-    &lt;/script&gt;
-    . . .
-&lt;/body&gt;</pre
-    >
-    <p>
-      In the boundary condition definition, the numbers at the left side (from 0 to 3) indicate the boundaries
-      of the geometry (the mesh generator of FEAScript has assigned numbers to the boundaries, starting from
-      the bottom boundary and proceeding clockwise). The `constantTemp` condition sets a constant temperature
-      value. The `symmetry` boundary condition represents a zero-flux type. Finally, the `convection`
-      condition describes a convective heat transfer scenario. In addition, the second argument of the
-      `constantTemp` boundary condition corresponds to the constant temperature value. For a `convection`
-      boundary condition, the second argument represents the \({\frac{h}{k}}\) value, and the third argument
-      indicates the external temperature \(T_0\).
-    </p>
-    <p>
-      After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
-      HTML container where the plot will render:
-    </p>
-    <pre class="prettyprint">
-&lt;body&gt;
-    . . .
-    &lt;div id="solutionPlot">&lt;/div&gt;
-    . . .
-&lt;/body&gt;</pre
-    >
-    <p>
-      The `solutionPlot` is the id of the div where the plot will be rendered. This id is passed as an
-      argument to the plotSolution function to specify the target div for the plot.
-    </p>
-
-    <h2 id="results"><a name="Results"></a>Results</h2>
-    <p>
-      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-      time using FEAScript. You can find a minimal example of this tutorial in the
-      <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/solidHeatTransferScript/HeatConduction2DFin"
-        target="_blank"
-        >example directory</a
-      >.
-    </p>
-
-    <!-- Container element where the solution plot will be rendered -->
+    <h2>Results</h2>
     <div id="orientation-message">
       Cannot draw the results. Please turn your phone to horizontal position to see the results.
     </div>
@@ -244,15 +164,11 @@
     </ul>
 
     <script type="module">
-      //Import FEAScript library from GitHub
       import {
         FEAWorkerScript,
         plotSolution,
         printVersion,
       } from "https://feascript.github.io/FEAScript-core/src/index.js";
-      //Import FEAScript library from a local directory
-      //import { FEAWorkerScript, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
-
       window.addEventListener("DOMContentLoaded", async () => {
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";

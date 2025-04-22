@@ -99,7 +99,7 @@
 
     <pre class="prettyprint">
 &lt;script type="module"&gt;
-  import { FEAWorkerScript, plotSolution, printVersion } from "./FEAWrapperScript.js";
+  import { FEAWorkerScript, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
   window.addEventListener("DOMContentLoaded", async () =&gt; {
     // Print FEAScript version
     printVersion();
@@ -168,7 +168,7 @@
         FEAWorkerScript,
         plotSolution,
         printVersion,
-      } from "./FEAWrapperScript.js";
+      } from "https://core.feascript.com/src/index.js";
       window.addEventListener("DOMContentLoaded", async () => {
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";

@@ -135,6 +135,29 @@ mjx-container {
   color: #333;
 }
 
+/* Loading spinner styles */
+#loading {
+  display: none;
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(0,0,0,.3);
+  border-radius: 50%;
+  border-top-color: #000;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Media queries */
 
 /* Small screens: up to 500px */

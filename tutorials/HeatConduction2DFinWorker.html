@@ -88,7 +88,7 @@
     <div class="highlight-container">
       <p>
         This page demonstrates solving the 2D heat conduction fin problem using FEAScript in a Web Worker for improved browser responsiveness.
-        For the mathematical formulation and theory, see the <a href="HeatConduction2DFin.html">main tutorial</a>.
+        For the mathematical formulation and theory, see the <a href="HeatConduction2DFin.html">main (standard) tutorial</a>.
       </p>
       
       <p><strong>⚠️ Important:</strong> Due to security restrictions, this example requires launching the browser with reduced security settings, e.g.:</p>
@@ -165,6 +165,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         >example directory</a
       >.
     </div>
+    <div id="loading"><div class="spinner"></div>Solving...</div>
     <div id="solutionPlot"></div>
 
     <ul id="menu">
@@ -183,9 +184,13 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";
           document.getElementById("solutionPlot").style.display = "none";
+          document.getElementById("loading").style.display = "none";
         } else {
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("solutionPlot").style.display = "block";
+          
+          // Show loading indicator
+          document.getElementById("loading").style.display = "block";
 
           // Print FEAScript version
           printVersion();
@@ -220,6 +225,9 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = await model.solve();
+          
+          // Hide loading indicator
+          document.getElementById("loading").style.display = "none";
 
           // Plot the solution as a 2D contour plot
           plotSolution(
@@ -240,9 +248,13 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";
           document.getElementById("solutionPlot").style.display = "none";
+          document.getElementById("loading").style.display = "none";
         } else {
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("solutionPlot").style.display = "block";
+          
+          // Show loading indicator
+          document.getElementById("loading").style.display = "block";
 
           // Print FEAScript version
           printVersion();
@@ -277,6 +289,9 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = await model.solve();
+          
+          // Hide loading indicator
+          document.getElementById("loading").style.display = "none";
 
           // Plot the solution as a 2D contour plot
           plotSolution(

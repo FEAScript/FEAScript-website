@@ -104,13 +104,13 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <pre class="prettyprint">
 &lt;script type="module"&gt;
-  import { FEAWorkerScript, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
+  import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
   window.addEventListener("DOMContentLoaded", async () =&gt; {
     // Print FEAScript version
     printVersion();
 
-    // Create a new FEAWorkerScript instance
-    const model = new FEAWorkerScript();
+    // Create a new FEAScriptWorker instance
+    const model = new FEAScriptWorker();
 
     // Ensure the worker is ready
     await model.ping();
@@ -175,11 +175,14 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
     </ul>
 
     <script type="module">
+      //Import FEAScript library from GitHub
       import {
-        FEAWorkerScript,
+        FEAScriptWorker,
         plotSolution,
         printVersion,
       } from "https://core.feascript.com/src/index.js";
+      //Import FEAScript library from a local directory
+      //import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
       window.addEventListener("DOMContentLoaded", async () => {
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";
@@ -195,8 +198,8 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
           // Print FEAScript version
           printVersion();
 
-          // Create a new FEAWorkerScript instance
-          const model = new FEAWorkerScript();
+          // Create a new FEAScriptWorker instance
+          const model = new FEAScriptWorker();
 
           // Ensure the worker is ready
           await model.ping();
@@ -259,8 +262,8 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
           // Print FEAScript version
           printVersion();
 
-          // Create a new FEAWorkerScript instance
-          const model = new FEAWorkerScript();
+          // Create a new FEAScriptWorker instance
+          const model = new FEAScriptWorker();
 
           // Ensure the worker is ready
           await model.ping();

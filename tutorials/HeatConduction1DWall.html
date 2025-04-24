@@ -233,7 +233,7 @@
 
           // Define boundary conditions
           //model.addBoundaryCondition("0", ["convection", 1, 25]);
-          model.addBoundaryCondition("0", ["constantTemp", 25]);
+          model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
           model.addBoundaryCondition("1", ["constantTemp", 5]);
 
           // Set solver method
@@ -280,7 +280,8 @@
           });
 
           // Define boundary conditions
-          model.addBoundaryCondition("0", ["convection", 1, 25]);
+          //model.addBoundaryCondition("0", ["convection", 1, 25]);
+          model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
           model.addBoundaryCondition("1", ["constantTemp", 5]);
 
           // Set solver method

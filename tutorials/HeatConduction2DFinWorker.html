@@ -17,7 +17,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="FEAScript is a lightweight finite element simulation library built in JavaScript for creating client-side, browser-based simulations for physics and engineering problems."
+      content="This example demonstrates solving a steady-state heat transfer problem in a 2D rectangular domain using the FEAScript library. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
     />
     <meta
       name="keywords"
@@ -87,14 +87,23 @@
 
     <div class="highlight-container">
       <p>
-        This page demonstrates solving the 2D heat conduction fin problem using FEAScript in a Web Worker for improved browser responsiveness.
-        For the mathematical formulation and theory, see the <a href="HeatConduction2DFin.html">main (standard) tutorial</a>.
+        This page demonstrates solving the 2D heat conduction fin problem using FEAScript in a Web Worker for
+        improved browser responsiveness. For the mathematical formulation and theory, see the
+        <a href="HeatConduction2DFin.html">main (standard) tutorial</a>.
       </p>
-      
-      <p><strong>⚠️ Important:</strong> Due to security restrictions, this example requires launching the browser with reduced security settings, e.g.:</p>
-      <pre style="background-color: #f8f9fa; padding: 8px; border-radius: 4px; overflow-x: auto;">
-start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disable-site-isolation-trials</pre>
-      <p>These flags disable CORS restrictions which are normally required when working with Web Workers in a local environment. For production applications, proper CORS headers should be configured on your server.</p>
+
+      <p>
+        <strong>⚠️ Important:</strong> Due to security restrictions, this example requires launching the
+        browser with reduced security settings, e.g.:
+      </p>
+      <pre style="background-color: #f8f9fa; padding: 8px; border-radius: 4px; overflow-x: auto">
+start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disable-site-isolation-trials</pre
+      >
+      <p>
+        These flags disable CORS restrictions which are normally required when working with Web Workers in a
+        local environment. For production applications, proper CORS headers should be configured on your
+        server.
+      </p>
     </div>
 
     <h2>Web Worker Implementation</h2>
@@ -158,14 +167,18 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <h2>Results</h2>
     <div id="orientation-message">
-      Cannot draw the results. Please turn your phone to horizontal position to see the results. You can find a minimal example of this tutorial in the
+      Cannot draw the results. Please turn your phone to horizontal position to see the results. You can find
+      a minimal example of this tutorial in the
       <a
         href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/solidHeatTransferScript/HeatConduction2DFin"
         target="_blank"
         >example directory</a
       >.
     </div>
-    <div id="loading"><div class="spinner"></div>Solving...</div>
+    <div id="loading">
+      <div class="spinner"></div>
+      Solving...
+    </div>
     <div id="solutionPlot"></div>
 
     <ul id="menu">
@@ -176,11 +189,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <script type="module">
       //Import FEAScript library from GitHub
-      import {
-        FEAScriptWorker,
-        plotSolution,
-        printVersion,
-      } from "https://core.feascript.com/src/index.js";
+      import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
       //Import FEAScript library from a local directory
       //import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
       window.addEventListener("DOMContentLoaded", async () => {
@@ -191,7 +200,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         } else {
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("solutionPlot").style.display = "block";
-          
+
           // Show loading indicator
           document.getElementById("loading").style.display = "block";
 
@@ -228,7 +237,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = await model.solve();
-          
+
           // Hide loading indicator
           document.getElementById("loading").style.display = "none";
 
@@ -255,7 +264,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         } else {
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("solutionPlot").style.display = "block";
-          
+
           // Show loading indicator
           document.getElementById("loading").style.display = "block";
 
@@ -292,7 +301,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = await model.solve();
-          
+
           // Hide loading indicator
           document.getElementById("loading").style.display = "none";
 

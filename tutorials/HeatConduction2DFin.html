@@ -17,7 +17,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="FEAScript is a lightweight JavaScript library for browser-based finite element simulations in physics, engineering, and computational mechanics."
+      content="This example demonstrates solving a steady-state heat transfer problem in a 2D rectangular domain using the FEAScript library. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
     />
     <meta
       name="keywords"
@@ -229,7 +229,10 @@
     <!-- Link to worker-based implementation -->
     <div class="highlight-container">
       <p>
-        See also the <a href="HeatConduction2DFinWorker.html">Heat Conduction in a Two-Dimensional Fin (Web Worker version)</a>
+        See also the
+        <a href="HeatConduction2DFinWorker.html"
+          >Heat Conduction in a Two-Dimensional Fin (Web Worker version)</a
+        >
         for an example using FEAScript in a separate thread for improved responsiveness.
       </p>
     </div>
@@ -242,11 +245,7 @@
 
     <script type="module">
       //Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        plotSolution,
-        printVersion,
-      } from "https://core.feascript.com/src/index.js";
+      import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
       //Import FEAScript library from a local directory
       //import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 

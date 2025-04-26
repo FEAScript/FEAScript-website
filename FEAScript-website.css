@@ -26,6 +26,11 @@ ul {
   padding-left: 1.5em;
 }
 
+/* Add max-width to list items to match paragraph constraints */
+li {
+  max-width: 1000px;
+}
+
 /* Headings */
 h1,
 h2,
@@ -192,6 +197,10 @@ mjx-container {
   .highlight-container {
     max-width: 90%;
   }
+
+  li {
+    max-width: 90%;
+  }
 }
 
 /* Medium screens: 500px to 1000px */
@@ -234,6 +243,10 @@ mjx-container {
   .highlight-container {
     max-width: 80%;
   }
+
+  li {
+    max-width: 900px;
+  }
 }
 
 /* Large screens: 1000px and above */
@@ -269,5 +282,9 @@ mjx-container {
 
   .highlight-container {
     max-width: 70%;
+  }
+
+  li {
+    max-width: 1000px;
   }
 }

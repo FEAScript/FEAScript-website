@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<!--   ______ ______           _____           _       _     -->
+<!--  |  ____|  ____|   /\    / ____|         (_)     | |    -->
+<!--  | |__  | |__     /  \  | (___   ___ ____ _ ____ | |_   -->
+<!--  |  __| |  __|   / /\ \  \___ \ / __|  __| |  _ \| __|  -->
+<!--  | |    | |____ / ____ \ ____) | (__| |  | | |_) | |    -->
+<!--  |_|    |______/_/    \_\_____/ \___|_|  |_|  __/| |    -->
+<!--                                            | |   | |    -->
+<!--                                            |_|   | |_   -->
+<!--       Website: https://feascript.com/             \__|  -->
+
+<html>
+  <head>
+    <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial (Visual Platform)</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="This tutorial demonstrates solving a steady-state heat transfer problem in a 2D rectangular domain using the FEAScript visual platform. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, visual platform, no-code"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <link href="../FEAScript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Import MathJax for writing equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Import the run_prettify.js library for JavaScript code coloring -->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <style>
+      #orientation-message {
+        display: none;
+        color: red;
+        font-weight: bold;
+      }
+      .image-container {
+        width: 100%;
+        max-width: 800px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .image-container img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .image-caption {
+        margin-top: 8px;
+        font-style: italic;
+        color: #555;
+      }
+    </style>
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
+
+  <body>
+    <h1 class="top">
+      <a href="../index.html">
+        <img
+          src="../assets/FEAScriptLogo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+    </h1>
+    <h1>Heat Conduction in a Two-Dimensional Fin (FEAScript-platform)</h1>
+
+    <ul id="menu">
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#tutorial">Tutorial</a></li>
+    </ul>
+
+    <div class="highlight-container">
+      <p>
+        This tutorial demonstrates how to solve the 2D heat conduction fin problem using the
+        FEAScript-platform with a no-code, block-based approach. For the mathematical formulation and theory
+        behind this example, see the
+        <a href="HeatConduction2DFin.html">JavaScript API tutorial</a>.
+      </p>
+    </div>
+
+    <h2 id="introduction"><a name="Introduction"></a>Introduction</h2>
+
+    <p>
+      The example uses the same mathematical model as described in the JavaScript API tutorial - a
+      steady-state heat transfer problem with a mix of boundary conditions (constant temperature, symmetry,
+      and convection). This visual platform approach provides the same results as the JavaScript API
+      implementation but allows you to set up and solve the problem without writing any code.
+    </p>
+
+    <h2 id="tutorial"><a name="Tutorial"></a>Step-by-Step Tutorial</h2>
+    <p>Follow these steps to load and run the Heat Conduction in 2D Fin simulation:</p>
+
+    <ol>
+      <li>
+        <strong>Visit the FEAScript-platform</strong> in your browser at
+        <a href="https://platform.feascript.com" target="_blank">https://platform.feascript.com</a>.
+      </li>
+      <li>
+        <strong>Locate the Control Panel</strong> on the right side of the screen.
+
+        <!-- Control Panel Image -->
+        <div class="image-container">
+          <img src="../assets/Screenshot_20250428_082825.png" style="vertical-align: middle" />
+          <p class="image-caption">The FEAScript platform Control Panel</p>
+        </div>
+      </li>
+      <li>
+        <strong>Click the "Load Project" button</strong> in the Control Panel under the "Load/Save Project"
+        folder.
+      </li>
+      <li>
+        <strong>Select the <code>HeatConduction2DFin.xml</code> file</strong> from your computer.
+        <p>
+          You can download this file from the
+          <a
+            href="https://github.com/FEAScript/FEAScript-platform/tree/main/examples/solidHeatTransferScript/HeatConduction2DFin"
+            target="_blank"
+          >
+            FEAScript-platform examples repository </a
+          >.
+        </p>
+      </li>
+      <li>
+        <strong>The blocks will be loaded</strong> into the editor, showing the complete simulation setup.
+
+        <!-- Complete Simulation Setup Blocks Image -->
+        <div class="image-container">
+          <img src="../assets/Screenshot_20250428_082807.png" style="vertical-align: middle" />
+          <p class="image-caption">The loaded block diagram showing the complete simulation setup</p>
+        </div>
+
+        <p>These blocks represent the same setup as described in the JavaScript API tutorial.</p>
+      </li>
+      <li>
+        <strong>Click "Evaluate"</strong> in the Control Panel to run the simulation.
+        <p>This will execute the blocks in sequence, performing the finite element analysis.</p>
+      </li>
+      <li>
+        <strong>Switch to the "Solution" tab</strong> to view the results.
+
+        <!-- Results Image -->
+        <div class="image-container">
+          <img src="../assets/Screenshot_20250428_082937.png" style="vertical-align: middle" />
+          <p class="image-caption">
+            The temperature contour plot showing the heat distribution in the 2D fin
+          </p>
+        </div>
+        <p>The results are the same with those obtained from the JavaScript API tutorial.</p>
+      </li>
+    </ol>
+
+    <ul id="menu">
+      <li>
+        <a href="https://feascript.com/index.html" target="_blank">Return to FEAScript Website</a>
+      </li>
+    </ul>
+
+    <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+    </script>
+  </body>
+</html>

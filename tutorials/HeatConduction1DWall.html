@@ -114,30 +114,6 @@
       temperature, implemented as Dirichlet type in the finite element code.
     </p>
 
-    <p>
-      This problem has an analytical solution. Since the governing equation is \(\frac{d^2T}{dx^2} = 0\), 
-      the general solution is a linear function \(T(x) = Ax + B\), where \(A\) and \(B\) are constants 
-      determined by the boundary conditions:
-    </p>
-    <ol>
-      <li>
-        At \(x=0\): \(\frac{dT}{dx} = -\frac{h}{k}(T-T_{in})\)
-      </li>
-      <li>
-        At \(x=W\): \(T(W) = T_0\)
-      </li>
-    </ol>
-    <p>
-      Solving these equations for our specific values (\(\frac{h}{k} = 1\) m<sup>-1</sup>, \(T_{in} = 25\) &deg;C, 
-      \(T_0 = 5\) &deg;C, and \(W = 0.15\) m), we get the analytical solution:
-    </p>
-    <p>
-      \(T(x) \approx 23.53x + 1.47\)
-    </p>
-    <p>
-      The numerical solution using finite elements should closely match this analytical result.
-    </p>
-
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
     <p>
       Below is a demonstration of how to use the FEAScript library to solve this stationary heat transfer

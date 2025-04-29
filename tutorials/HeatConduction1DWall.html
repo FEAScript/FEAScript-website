@@ -103,14 +103,39 @@
     <img src="../assets/HeatConduction1DWall.png" width="100" />
 
     <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
-      particular, a convection boundary condition, implemented as Robin type, is applied at the inner side of
-      the wall (\(x = 0\)). The latter is expressed as \(\frac{dT}{dx}|_{x=0}=-{\frac{h}{k}}(T-T_{in})\),
-      where \(h\) is the heat transfer coefficient, \(k\) the thermal conductivity and \(T_{in}\) is the
-      internal temperature. We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_{in}\) = 25
-      &deg;C. At the outer side of the wall (\(x = W\), where \(W\) = 0.15 m, is the width of the wall), we
-      apply a constant temperature (\(T_0\) = 5 &deg;C) boundary condition, implemented as Dirichlet type in
-      the finite element code.
+      The above schematic illustrates the problem domain and outlines the associated boundary conditions. Our
+      objective is to determine the temperature distribution within the wall itself. In this problem, a
+      convection boundary condition, implemented as Robin type, is applied at the inner side of the wall (\(x
+      = 0\)). The latter is expressed as \(\frac{dT}{dx}|_{x=0}=-{\frac{h}{k}}(T-T_{in})\), where \(h\) is the
+      heat transfer coefficient, \(k\) the thermal conductivity, and \(T_{in}\) is the internal temperature of
+      the house (room temperature). We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_{in}\) =
+      25 &deg;C. At the outer side of the wall (\(x = W\), where \(W\) = 0.15 m, is the width of the wall), we
+      apply a constant temperature (\(T_0\) = 5 &deg;C) boundary condition, representing the outdoor
+      temperature, implemented as Dirichlet type in the finite element code.
+    </p>
+
+    <p>
+      This problem has an analytical solution. Since the governing equation is \(\frac{d^2T}{dx^2} = 0\), 
+      the general solution is a linear function \(T(x) = Ax + B\), where \(A\) and \(B\) are constants 
+      determined by the boundary conditions:
+    </p>
+    <ol>
+      <li>
+        At \(x=0\): \(\frac{dT}{dx} = -\frac{h}{k}(T-T_{in})\)
+      </li>
+      <li>
+        At \(x=W\): \(T(W) = T_0\)
+      </li>
+    </ol>
+    <p>
+      Solving these equations for our specific values (\(\frac{h}{k} = 1\) m<sup>-1</sup>, \(T_{in} = 25\) &deg;C, 
+      \(T_0 = 5\) &deg;C, and \(W = 0.15\) m), we get the analytical solution:
+    </p>
+    <p>
+      \(T(x) \approx 23.53x + 1.47\)
+    </p>
+    <p>
+      The numerical solution using finite elements should closely match this analytical result.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
@@ -228,8 +253,8 @@
           });
 
           // Define boundary conditions
-          //model.addBoundaryCondition("0", ["convection", 1, 25]);
-          model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
+          model.addBoundaryCondition("0", ["convection", 1, 25]);
+          //model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
           model.addBoundaryCondition("1", ["constantTemp", 5]);
 
           // Set solver method
@@ -276,8 +301,8 @@
           });
 
           // Define boundary conditions
-          //model.addBoundaryCondition("0", ["convection", 1, 25]);
-          model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
+          model.addBoundaryCondition("0", ["convection", 1, 25]);
+          //model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
           model.addBoundaryCondition("1", ["constantTemp", 5]);
 
           // Set solver method

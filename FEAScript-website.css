@@ -140,6 +140,16 @@ mjx-container {
   color: #333;
 }
 
+/* Menu separator style */
+.menu-separator {
+  color: #ccc;
+  margin: 0 5px;
+  font-weight: 300;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+
 /* Loading spinner styles */
 #loading {
   display: none;

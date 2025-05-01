@@ -1,6 +1,6 @@
 <img src="https://feascript.github.io/FEAScript-website/assets/FEAScriptLogo.png" width="80">
 
-## FEAScript-website
+# FEAScript-website
 
 ![website status](https://img.shields.io/website?url=https%3A%2F%2Ffeascript.com%2F)
 

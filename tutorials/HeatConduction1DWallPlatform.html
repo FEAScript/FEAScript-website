@@ -12,16 +12,16 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial (FEAScript Platform)</title>
+    <title>FEAScript: Heat Flow Through a Wall Tutorial (FEAScript Platform)</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This tutorial demonstrates solving a steady-state heat transfer problem in a 2D rectangular domain using the FEAScript visual platform. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
+      content="This tutorial demonstrates solving a steady-state heat transfer problem in a 1D wall using the FEAScript visual platform. The problem represents a typical house wall scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, visual platform, no-code"
+      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, visual platform, no-code, 1D heat transfer"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
@@ -61,7 +61,7 @@
         />
       </a>
     </h1>
-    <h1>Heat Conduction in a Two-Dimensional Fin (FEAScript platform)</h1>
+    <h1>Heat Flow Through a Wall (FEAScript Platform)</h1>
 
     <ul id="menu">
       <li><a href="#introduction">Introduction</a></li>
@@ -70,10 +70,10 @@
 
     <div class="highlight-container">
       <p>
-        This tutorial demonstrates how to solve the 2D heat conduction fin problem using the FEAScript
+        This tutorial demonstrates how to solve the 1D heat conduction wall problem using the FEAScript
         platform with a no-code, block-based approach. For the mathematical formulation and theory behind this
         example, see the
-        <a href="HeatConduction2DFin.html" target="_blank">JavaScript API tutorial</a>.
+        <a href="HeatConduction1DWall.html" target="_blank">JavaScript API tutorial</a>.
       </p>
     </div>
 
@@ -81,13 +81,14 @@
 
     <p>
       The example uses the same mathematical model as described in the JavaScript API tutorial - a
-      steady-state heat transfer problem with a mix of boundary conditions (constant temperature, symmetry,
-      and convection). This visual platform approach provides the same results as the JavaScript API
-      implementation but allows you to set up and solve the problem without writing any code.
+      steady-state heat transfer problem through a wall with a convection boundary condition at the inner wall
+      and a constant temperature at the outer wall. This visual platform approach provides the same results as
+      the JavaScript API implementation but allows you to set up and solve the problem without writing any
+      code.
     </p>
 
     <h2 id="tutorial"><a name="Tutorial"></a>Step-by-Step Tutorial</h2>
-    <p>Follow these steps to load and run the Heat Conduction in 2D Fin simulation:</p>
+    <p>Follow these steps to load and run the Heat Conduction in a 1D Wall simulation:</p>
 
     <ol>
       <li>
@@ -99,7 +100,7 @@
 
         <!-- Control Panel Image -->
         <div class="image-container">
-          <img src="../assets/Screenshot_20250428_082825.png" style="vertical-align: middle" />
+          <img src="../assets/Screenshot_20250428_082825.png" alt="FEAScript platform Control Panel" />
           <p class="image-caption">The FEAScript platform Control Panel</p>
         </div>
       </li>
@@ -108,11 +109,11 @@
         folder.
       </li>
       <li>
-        <strong>Select the <code>HeatConduction2DFin.xml</code> file</strong> from your computer.
+        <strong>Select the <code>HeatConduction1DWall.xml</code> file</strong> from your computer.
         <p>
           You can download this file from the
           <a
-            href="https://github.com/FEAScript/FEAScript-platform/tree/main/examples/solidHeatTransferScript/HeatConduction2DFin"
+            href="https://github.com/FEAScript/FEAScript-platform/tree/main/examples/solidHeatTransferScript/HeatConduction1DWall"
             target="_blank"
           >
             FEAScript platform examples repository </a
@@ -124,8 +125,8 @@
 
         <!-- Complete Simulation Setup Blocks Image -->
         <div class="image-container">
-          <img src="../assets/Screenshot_20250428_082807.png" style="vertical-align: middle" />
-          <p class="image-caption">The loaded block diagram showing the complete 2D fin simulation setup</p>
+          <img src="../assets/Screenshot_20250502_080302.png" alt="1D Wall Heat Conduction blocks" />
+          <p class="image-caption">The loaded block diagram showing the complete 1D wall simulation setup</p>
         </div>
 
         <p>
@@ -143,9 +144,9 @@
 
         <!-- Results Image -->
         <div class="image-container">
-          <img src="../assets/Screenshot_20250428_082937.png" style="vertical-align: middle" />
+          <img src="../assets/Screenshot_20250502_082152.png" alt="1D Wall heat conduction results" />
           <p class="image-caption">
-            The temperature contour plot showing the heat distribution in the 2D fin
+            The temperature distribution graph showing how temperature varies through the wall thickness
           </p>
         </div>
         <p>The results are the same with those obtained from the JavaScript API tutorial.</p>
@@ -157,7 +158,9 @@
         <a href="https://feascript.com/index.html" target="_blank">Return to FEAScript Website</a>
       </li>
       <li>
-        <a href="https://platform.feascript.com/help.html" target="_blank">Return to FEAScript Platform Help</a>
+        <a href="https://platform.feascript.com/help.html" target="_blank"
+          >Return to FEAScript Platform Help</a
+        >
       </li>
     </ul>
 

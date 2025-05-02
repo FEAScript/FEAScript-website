@@ -298,3 +298,31 @@ mjx-container {
     max-width: 1000px;
   }
 }
+
+/* Tutorial styles for image display and orientation */
+#orientation-message {
+  display: none;
+  color: red;
+  font-weight: bold;
+}
+
+.image-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.image-caption {
+  margin-top: 8px;
+  font-style: italic;
+  color: #555;
+}

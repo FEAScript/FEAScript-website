@@ -1,7 +1,8 @@
 // 2D Rectangle: 4m (width) x 2m (height)
 // With Physical Lines for boundary labeling
+// Use the command "gmsh rect.geo -2" to generate the mesh
 
-lc = 0.2; // Characteristic length (mesh density)
+lc = 0.8; // Characteristic length (mesh density)
 
 // Points (x, y, z, mesh size)
 Point(1) = {0, 0, 0, lc};     // Bottom left
@@ -29,6 +30,6 @@ Physical Line("left")   = {4};
 Physical Surface("domain") = {1};
 
 // Generate 2D mesh
-//Recombine Surface{1}; // Turns triangle mesh into quads
+Recombine Surface{1}; // Turns triangle mesh into quads
 Mesh 2;
 

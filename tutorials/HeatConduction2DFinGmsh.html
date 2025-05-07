@@ -116,9 +116,9 @@
 
     <script type="module">
       // Import FEAScript library from GitHub
-      import { FEAScriptModel, importGmshQuadTri, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
+      //import { FEAScriptModel, importGmshQuadTri, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
       // Import FEAScript library from a local directory      
-      //import { FEAScriptModel, importGmshQuadTri, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+      import { FEAScriptModel, importGmshQuadTri, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
         // Print FEAScript version in the console
@@ -143,9 +143,7 @@
         // Parse the mesh file first
         const result = await importGmshQuadTri(meshFile);
 
-        // Print the boundary elements to the console
-        console.log("Boundary Elements:", result.boundaryElements);
-        console.log("Physical Properties Map:", result.physicalPropMap);
+        console.log("Boundary Conditions:", result.boundaryConditions);
 
         // Fix nodal numbering format for the solver
         if (result.nodalNumbering.quadElements && result.nodalNumbering.quadElements.length > 0) {
@@ -153,6 +151,8 @@
         } else if (result.nodalNumbering.triangleElements && result.nodalNumbering.triangleElements.length > 0) {
           result.nodalNumbering = result.nodalNumbering.triangleElements;
         }
+
+        console.log("Nodal Numbering:", result.nodalNumbering);
 
         // Define mesh configuration with the parsed result
         model.setMeshConfig({
@@ -166,9 +166,6 @@
         model.addBoundaryCondition("4", ["symmetry"]);          // left boundary
         model.addBoundaryCondition("3", ["convection", 1, 20]); // top boundary
         model.addBoundaryCondition("2", ["constantTemp", 200]); // right boundary
-
-        // After setting up boundary conditions:
-        console.log("Boundary Conditions:", model.boundaryConditions);
 
         // Set solver method
         model.setSolverMethod("lusolve");

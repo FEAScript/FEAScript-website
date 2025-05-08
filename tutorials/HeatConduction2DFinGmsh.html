@@ -149,17 +149,11 @@
         // Parse the mesh file first
         const result = await importGmshQuadTri(meshFile);
 
+        console.log("GMSH Boundary Conditions:", result.boundaryConditions);
         console.log("GMSH Boundary Elements:", result.boundaryElements);
-
-        // Fix nodal numbering format for the solver
-        if (result.nodalNumbering.quadElements && result.nodalNumbering.quadElements.length > 0) {
-          result.nodalNumbering = result.nodalNumbering.quadElements;
-        } else if (
-          result.nodalNumbering.triangleElements &&
-          result.nodalNumbering.triangleElements.length > 0
-        ) {
-          result.nodalNumbering = result.nodalNumbering.triangleElements;
-        }
+        console.log("GMSH Nodal Numbering:", result.nodalNumbering);
+        console.log("x Coordinates:", result.nodesXCoordinates);
+        console.log("y Coordinates:", result.nodesYCoordinates);
 
         // Define mesh configuration with the parsed result
         gmshModel.setMeshConfig({
@@ -169,10 +163,10 @@
         });
 
         // Define boundary conditions using Gmsh physical group tags
-        gmshModel.addBoundaryCondition("1", ["constantTemp", 200]); // bottom boundary
-        gmshModel.addBoundaryCondition("4", ["symmetry"]); // left boundary
-        gmshModel.addBoundaryCondition("3", ["convection", 1, 20]); // top boundary
-        gmshModel.addBoundaryCondition("2", ["constantTemp", 200]); // right boundary
+        gmshModel.addBoundaryCondition("0", ["constantTemp", 200]); // bottom boundary
+        gmshModel.addBoundaryCondition("1", ["constantTemp", 200]); // right boundary
+        gmshModel.addBoundaryCondition("2", ["constantTemp", 100]); // top boundary
+        gmshModel.addBoundaryCondition("3", ["symmetry"]); // left boundary
 
         console.log("GMSH Boundary Conditions:", gmshModel.boundaryConditions);
 

@@ -117,75 +117,117 @@
     <script type="module">
       // Import FEAScript library from GitHub
       //import { FEAScriptModel, importGmshQuadTri, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
-      // Import FEAScript library from a local directory      
-      import { FEAScriptModel, importGmshQuadTri, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+      // Import FEAScript library from a local directory
+      import {
+        FEAScriptModel,
+        importGmshQuadTri,
+        plotSolution,
+        printVersion,
+      } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
         // Print FEAScript version in the console
         printVersion();
 
+        console.log("-------- GMSH MESH APPROACH --------");
         // Fetch the mesh file from your server
         const response = await fetch("./rect_quad.msh");
         if (!response.ok) {
           throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
         }
         const meshContent = await response.text();
-        
+
         // Create a File object with the actual content
         const meshFile = new File([meshContent], "rect_quad.msh");
-        
+
         // Create a new FEAScript model
-        const model = new FEAScriptModel();
-        
+        const gmshModel = new FEAScriptModel();
+
         // Set solver configuration
-        model.setSolverConfig("solidHeatTransferScript");
-        
+        gmshModel.setSolverConfig("solidHeatTransferScript");
+
         // Parse the mesh file first
         const result = await importGmshQuadTri(meshFile);
 
-        console.log("Boundary Conditions:", result.boundaryConditions);
+        console.log("GMSH Boundary Elements:", result.boundaryElements);
 
         // Fix nodal numbering format for the solver
         if (result.nodalNumbering.quadElements && result.nodalNumbering.quadElements.length > 0) {
           result.nodalNumbering = result.nodalNumbering.quadElements;
-        } else if (result.nodalNumbering.triangleElements && result.nodalNumbering.triangleElements.length > 0) {
+        } else if (
+          result.nodalNumbering.triangleElements &&
+          result.nodalNumbering.triangleElements.length > 0
+        ) {
           result.nodalNumbering = result.nodalNumbering.triangleElements;
         }
 
-        console.log("Nodal Numbering:", result.nodalNumbering);
-
         // Define mesh configuration with the parsed result
-        model.setMeshConfig({
+        gmshModel.setMeshConfig({
           parsedMesh: result,
           meshDimension: "2D",
-          elementOrder: "linear"
+          elementOrder: "linear",
         });
 
         // Define boundary conditions using Gmsh physical group tags
-        model.addBoundaryCondition("1", ["constantTemp", 200]); // bottom boundary
-        model.addBoundaryCondition("4", ["symmetry"]);          // left boundary
-        model.addBoundaryCondition("3", ["convection", 1, 20]); // top boundary
-        model.addBoundaryCondition("2", ["constantTemp", 200]); // right boundary
+        gmshModel.addBoundaryCondition("1", ["constantTemp", 200]); // bottom boundary
+        gmshModel.addBoundaryCondition("4", ["symmetry"]); // left boundary
+        gmshModel.addBoundaryCondition("3", ["convection", 1, 20]); // top boundary
+        gmshModel.addBoundaryCondition("2", ["constantTemp", 200]); // right boundary
+
+        console.log("GMSH Boundary Conditions:", gmshModel.boundaryConditions);
 
         // Set solver method
-        model.setSolverMethod("lusolve");
+        //model.setSolverMethod("jacobi");
+        gmshModel.setSolverMethod("lusolve");
 
         // Solve the problem and get the solution
-        const { solutionVector, nodesCoordinates } = model.solve();
+        const { solutionVector: gmshSolutionVector, nodesCoordinates: gmshNodesCoordinates } = gmshModel.solve();
 
-        console.log("Solution Vector:", solutionVector);
-        console.log("Nodes Coordinates:", nodesCoordinates);
+        console.log("GMSH Solution Vector:", gmshSolutionVector);
 
-        // Add this code to display the contour plot
+        // Plot the GMSH solution
         plotSolution(
-          solutionVector,
-          nodesCoordinates,
-          model.solverConfig,
-          model.meshConfig.meshDimension,
+          gmshSolutionVector,
+          gmshNodesCoordinates,
+          gmshModel.solverConfig,
+          gmshModel.meshConfig.meshDimension,
           "contour",
           "solutionPlot",
           "unstructured"
         );
+
+        console.log("-------- GEOMETRY MESH APPROACH --------");
+        // Create a new FEAScript model for the geometry-based mesh
+        const geoModel = new FEAScriptModel();
+
+        // Set solver configuration
+        geoModel.setSolverConfig("solidHeatTransferScript");
+
+        // Define mesh configuration using geometry
+        geoModel.setMeshConfig({
+            meshDimension: "2D",
+            elementOrder: "quadratic",
+            numElementsX: 8,
+            numElementsY: 4,
+            maxX: 4,
+            maxY: 2,
+          });
+
+        // Define boundary conditions - equivalent to the GMSH setup
+        geoModel.addBoundaryCondition("0", ["constantTemp", 200]); // bottom boundary
+        geoModel.addBoundaryCondition("1", ["symmetry"]); // left boundary
+        geoModel.addBoundaryCondition("2", ["convection", 1, 20]); // top boundary
+        geoModel.addBoundaryCondition("3", ["constantTemp", 200]); // right boundary
+
+        console.log("GEO Boundary Conditions:", geoModel.boundaryConditions);
+
+        // Set solver method
+        //model.setSolverMethod("jacobi");
+        geoModel.setSolverMethod("lusolve");
+
+        // Solve the problem and get the solution
+        const { solutionVector: geoSolutionVector, nodesCoordinates: geoNodesCoordinates } = geoModel.solve();
+
       });
     </script>
 

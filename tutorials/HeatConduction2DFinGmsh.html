@@ -84,6 +84,8 @@
 
     <ul id="menu">
       <li><a href="#gmshfileimport">Gmsh File Import</a></li>
+      <li><a href="#gmshgeofile">Example Gmsh .geo File</a></li>
+      <li><a href="#generatedmesh">Generated Mesh</a></li>
       <li><a href="#results">Results</a></li>
     </ul>
 
@@ -97,9 +99,206 @@
     </div>
 
     <h2 id="gmshfileimport"><a name="gmshfileimport"></a>Gmsh File Import</h2>
-    <p>The code below shows how to import a Gmsh (.msh) file and set up the problem.</p>
+    <p>
+      This example demonstrates how to import a Gmsh-generated mesh (.msh file format) and solve a heat
+      conduction problem.
+    </p>
+
+    <p>The key advantages of using Gmsh with FEAScript include:</p>
+    <ul>
+      <li>Ability to create complex geometries that would be difficult to define programmatically</li>
+      <li>Control over mesh refinement in specific regions</li>
+      <li>Ability to define physical groups that map to boundary conditions</li>
+      <li>Support for various element types (quadrilaterals and triangles)</li>
+    </ul>
+
+    <p>The code below shows how to import a Gmsh .msh file and set up the problem:</p>
+
+    <pre class="prettyprint">
+&lt;script type="module"&gt;
+  import { FEAScriptModel, importGmshQuadTri, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
+
+  window.addEventListener("DOMContentLoaded", async () => {
+    // Print FEAScript version in the console
+    printVersion();
+
+    // Fetch the mesh file
+    const response = await fetch("./rect_quad.msh"); // .msh version 4.1 is currently supported
+    if (!response.ok) {
+      throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
+    }
+    const meshContent = await response.text();
+
+    // Create a File object with the actual content
+    const meshFile = new File([meshContent], "rect_quad.msh");
+
+    // Create a new FEAScript model
+    const model = new FEAScriptModel();
+
+    // Set solver configuration
+    model.setSolverConfig("solidHeatTransferScript");
+
+    // Parse the mesh file first
+    const result = await importGmshQuadTri(meshFile);
+
+    // Define mesh configuration with the parsed result
+    model.setMeshConfig({
+      parsedMesh: result,
+      meshDimension: "2D",
+      elementOrder: "linear",
+    });
+
+    // Define boundary conditions using Gmsh physical group tags
+    model.addBoundaryCondition("0", ["constantTemp", 200]); // bottom boundary
+    model.addBoundaryCondition("1", ["constantTemp", 200]); // right boundary
+    model.addBoundaryCondition("2", ["convection", 1, 20]); // top boundary
+    model.addBoundaryCondition("3", ["symmetry"]); // left boundary
+
+    // Set solver method
+    model.setSolverMethod("lusolve");
+
+    // Solve the problem and get the solution
+    const { solutionVector, nodesCoordinates } = model.solve();
+
+    // Plot the solution as a 2D contour plot
+    plotSolution(
+      solutionVector,
+      nodesCoordinates,
+      model.solverConfig,
+      model.meshConfig.meshDimension,
+      "contour",
+      "solutionPlot",
+      "unstructured" // Important: specify unstructured mesh type
+    );
+  });
+&lt;/script&gt;</pre
+    >
+
+    <p>
+      <strong>Important notes about the Gmsh workflow:</strong>
+    </p>
+    <ol>
+      <li>
+        <strong>Physical Groups in Gmsh:</strong> In your .geo file, you need to define physical groups for
+        boundaries using commands like <code>Physical Line("bottom") = {1};</code>. These are mapped to tags
+        in the imported mesh.
+      </li>
+      <li>
+        <strong>Boundary Condition Mapping and Tag Indexing:</strong> When using Gmsh meshes in FEAScript, you
+        need to subtract 1 from the Gmsh physical group tag numbers. For example, if your Gmsh file has
+        physical groups with tags 1, 2, 3, and 4, you would reference them in FEAScript as "0", "1", "2", and
+        "3" respectively:
+        <code>model.addBoundaryCondition("0", ["constantTemp", 200]); // Gmsh physical group tag 1</code>.
+        This conversion is necessary because Gmsh uses 1-based indexing while FEAScript uses 0-based indexing.
+      </li>
+      <li>
+        <strong>Unstructured Plotting:</strong> When plotting results from a Gmsh mesh, add the "unstructured"
+        parameter to the plotSolution function to ensure correct visualization.
+      </li>
+    </ol>
+
+    <p>
+      You can create your own Gmsh files by writing .geo scripts or using Gmsh's GUI. For this example, we
+      used a simple rectangular domain defined in a .geo file with specific physical groups for each boundary.
+    </p>
+
+    <h3 id="gmshgeofile"><a name="gmshgeofile"></a>Example Gmsh .geo File</h3>
+    <p>
+      Below is the <code>rect.geo</code> file used in this tutorial. It defines a 4m × 2m rectangular domain
+      with physical lines for each boundary edge:
+    </p>
+
+    <pre class="prettyprint">
+// 2D Rectangle: 4m (width) x 2m (height)
+// With Physical Lines for boundary labeling
+// Use the command "gmsh rect.geo -2" to generate the mesh
+
+lc = 0.2; // Characteristic length (mesh density)
+
+// Points (x, y, z, mesh size)
+Point(1) = {0, 0, 0, lc};     // Bottom left
+Point(2) = {4, 0, 0, lc};     // Bottom right
+Point(3) = {4, 2, 0, lc};     // Top right
+Point(4) = {0, 2, 0, lc};     // Top left
+
+// Lines
+Line(1) = {1, 2}; // bottom
+Line(2) = {2, 3}; // right
+Line(3) = {3, 4}; // top
+Line(4) = {4, 1}; // left
+
+// Line Loop and Surface
+Line Loop(1) = {1, 2, 3, 4};
+Plane Surface(1) = {1};
+
+// Physical Lines
+Physical Line("bottom") = {1};
+Physical Line("right")  = {2};
+Physical Line("top")    = {3};
+Physical Line("left")   = {4};
+
+// Physical Surface (optional, for FEM domains)
+Physical Surface("domain") = {1};
+
+// Generate 2D mesh
+Recombine Surface{1}; // Turns triangle mesh into quads
+Mesh 2;
+    </pre>
+
+    <p>
+      Note how the physical line tags in the geo file correspond to the boundary conditions in our FEAScript
+      code:
+    </p>
+    <ul>
+      <li>
+        <code>Physical Line("bottom") = {1};</code> →
+        <code>model.addBoundaryCondition("0", ["constantTemp", 200]);</code>
+      </li>
+      <li>
+        <code>Physical Line("right") = {2};</code> →
+        <code>model.addBoundaryCondition("1", ["constantTemp", 200]);</code>
+      </li>
+      <li>
+        <code>Physical Line("top") = {3};</code> →
+        <code>model.addBoundaryCondition("2", ["convection", 1, 20]);</code>
+      </li>
+      <li>
+        <code>Physical Line("left") = {4};</code> →
+        <code>model.addBoundaryCondition("3", ["symmetry"]);</code>
+      </li>
+    </ul>
+
+    <p>
+      To generate a mesh file from this .geo script, you would run: <code>gmsh rect.geo -2</code> in your
+      terminal, which creates a rect.msh file that can be imported into FEAScript.
+    </p>
+
+    <h2 id="generatedmesh"><a name="generatedmesh"></a>Generated Mesh</h2>
+    <p>
+      Below is a visualization of the quadrilateral mesh generated by Gmsh. Notice how Gmsh creates an
+      unstructured mesh with irregular elements that could potentially adapt to complex domain features.
+    </p>
+
+    <div class="center-image">
+      <img
+        src="../assets/gmsh_rect_quad.png"
+        alt="Quadrilateral mesh generated by Gmsh"
+        style="max-width: 80%; height: auto"
+      />
+      <p><em>Figure: Quadrilateral mesh generated using the rect.geo script with Gmsh</em></p>
+    </div>
+
+    <p>
+      The mesh consists of quadrilateral elements with varying sizes and shapes. This unstructured mesh
+      approach would be particularly advantageous for complex geometries. FEAScript's Gmsh reader properly
+      handles this unstructured mesh format and maps the elements and boundary conditions.
+    </p>
 
     <h2 id="results"><a name="results"></a>Results</h2>
+    <p>
+      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
+      time using FEAScript.
+    </p>
 
     <div id="solutionPlot"></div>
 
@@ -116,21 +315,25 @@
 
     <script type="module">
       // Import FEAScript library from GitHub
-      //import { FEAScriptModel, importGmshQuadTri, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
-      // Import FEAScript library from a local directory
       import {
         FEAScriptModel,
         importGmshQuadTri,
         plotSolution,
         printVersion,
-      } from "../../FEAScript-core/src/index.js";
+      } from "https://core.feascript.com/src/index.js";
+      // Import FEAScript library from a local directory
+      //import {
+      //  FEAScriptModel,
+      //  importGmshQuadTri,
+      //  plotSolution,
+      //  printVersion,
+      //} from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
         // Print FEAScript version in the console
         printVersion();
 
-        console.log("-------- GMSH MESH APPROACH --------");
-        // Fetch the mesh file from your server
+        // Fetch the mesh file
         const response = await fetch("./rect_quad.msh");
         if (!response.ok) {
           throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
@@ -149,11 +352,9 @@
         // Parse the mesh file first
         const result = await importGmshQuadTri(meshFile);
 
-        console.log("GMSH Boundary Conditions:", result.boundaryConditions);
-        console.log("GMSH Boundary Elements:", result.boundaryElements);
-        console.log("GMSH Nodal Numbering:", result.nodalNumbering);
-        console.log("x Coordinates:", result.nodesXCoordinates);
-        console.log("y Coordinates:", result.nodesYCoordinates);
+        //console.log("GMSH Nodal Numbering:", result.nodalNumbering);
+        //console.log("x Coordinates:", result.nodesXCoordinates);
+        //console.log("y Coordinates:", result.nodesYCoordinates);
 
         // Define mesh configuration with the parsed result
         gmshModel.setMeshConfig({
@@ -165,19 +366,20 @@
         // Define boundary conditions using Gmsh physical group tags
         gmshModel.addBoundaryCondition("0", ["constantTemp", 200]); // bottom boundary
         gmshModel.addBoundaryCondition("1", ["constantTemp", 200]); // right boundary
-        gmshModel.addBoundaryCondition("2", ["constantTemp", 100]); // top boundary
+        gmshModel.addBoundaryCondition("2", ["convection", 1, 20]); // top boundary
         gmshModel.addBoundaryCondition("3", ["symmetry"]); // left boundary
 
-        console.log("GMSH Boundary Conditions:", gmshModel.boundaryConditions);
+        //console.log("GMSH Boundary Conditions:", gmshModel.boundaryConditions);
 
         // Set solver method
         //model.setSolverMethod("jacobi");
         gmshModel.setSolverMethod("lusolve");
 
         // Solve the problem and get the solution
-        const { solutionVector: gmshSolutionVector, nodesCoordinates: gmshNodesCoordinates } = gmshModel.solve();
+        const { solutionVector: gmshSolutionVector, nodesCoordinates: gmshNodesCoordinates } =
+          gmshModel.solve();
 
-        console.log("GMSH Solution Vector:", gmshSolutionVector);
+        //console.log("GMSH Solution Vector:", gmshSolutionVector);
 
         // Plot the GMSH solution
         plotSolution(
@@ -189,39 +391,6 @@
           "solutionPlot",
           "unstructured"
         );
-
-        console.log("-------- GEOMETRY MESH APPROACH --------");
-        // Create a new FEAScript model for the geometry-based mesh
-        const geoModel = new FEAScriptModel();
-
-        // Set solver configuration
-        geoModel.setSolverConfig("solidHeatTransferScript");
-
-        // Define mesh configuration using geometry
-        geoModel.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
-            maxX: 4,
-            maxY: 2,
-          });
-
-        // Define boundary conditions - equivalent to the GMSH setup
-        geoModel.addBoundaryCondition("0", ["constantTemp", 200]); // bottom boundary
-        geoModel.addBoundaryCondition("1", ["symmetry"]); // left boundary
-        geoModel.addBoundaryCondition("2", ["convection", 1, 20]); // top boundary
-        geoModel.addBoundaryCondition("3", ["constantTemp", 200]); // right boundary
-
-        console.log("GEO Boundary Conditions:", geoModel.boundaryConditions);
-
-        // Set solver method
-        //model.setSolverMethod("jacobi");
-        geoModel.setSolverMethod("lusolve");
-
-        // Solve the problem and get the solution
-        const { solutionVector: geoSolutionVector, nodesCoordinates: geoNodesCoordinates } = geoModel.solve();
-
       });
     </script>
 

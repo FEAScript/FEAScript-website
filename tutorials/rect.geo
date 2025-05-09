@@ -2,7 +2,7 @@
 // With Physical Lines for boundary labeling
 // Use the command "gmsh rect.geo -2" to generate the mesh
 
-lc = 0.3; // Characteristic length (mesh density)
+lc = 0.2; // Characteristic length (mesh density)
 
 // Points (x, y, z, mesh size)
 Point(1) = {0, 0, 0, lc};     // Bottom left

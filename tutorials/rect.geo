@@ -2,7 +2,7 @@
 // With Physical Lines for boundary labeling
 // Use the command "gmsh rect.geo -2" to generate the mesh
 
-lc = 0.2; // Characteristic length (mesh density)
+lc = 0.7; // Characteristic length (mesh density)
 // Note: In the structured case, the lc = 0.2 no longer directly determines the mesh size,
 // as the Transfinite Curve commands explicitly set the number of elements along each boundary
 

@@ -145,7 +145,7 @@
     model.setMeshConfig({
       parsedMesh: result,
       meshDimension: "2D",
-      elementOrder: "linear",
+      elementOrder: "quadratic",
     });
 
     // Define boundary conditions using Gmsh physical group tags
@@ -213,7 +213,7 @@
 // With Physical Lines for boundary labeling
 // Use the command "gmsh rect.geo -2" to generate the mesh
 
-lc = 0.2; // Characteristic length (mesh density)
+lc = 0.7; // Characteristic length (mesh density)
 
 // Points (x, y, z, mesh size)
 Point(1) = {0, 0, 0, lc};     // Bottom left
@@ -297,7 +297,11 @@ Mesh 2;
     <h2 id="results"><a name="results"></a>Results</h2>
     <p>
       Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-      time using FEAScript.
+      time using FEAScript. Please note that solutions computed on unstructured meshes like this may exhibit
+      small numerical differences compared to solutions on structured orthogonal meshes. This occurs because
+      derivative calculations in non-orthogonal elements are inherently less precise due to the Jacobian
+      transformation process. These small differences are expected and acceptable for most engineering
+      applications, but may be noticeable in regions with steep temperature gradients.
     </p>
 
     <div id="solutionPlot"></div>
@@ -327,9 +331,13 @@ Mesh 2;
       //  importGmshQuadTri,
       //  plotSolution,
       //  printVersion,
+      //  logSystem,
       //} from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
+        // Enable debug logging mode
+        //logSystem("debug");
+
         // Print FEAScript version in the console
         printVersion();
 
@@ -352,15 +360,11 @@ Mesh 2;
         // Parse the mesh file first
         const result = await importGmshQuadTri(meshFile);
 
-        //console.log("GMSH Nodal Numbering:", result.nodalNumbering);
-        //console.log("x Coordinates:", result.nodesXCoordinates);
-        //console.log("y Coordinates:", result.nodesYCoordinates);
-
         // Define mesh configuration with the parsed result
         gmshModel.setMeshConfig({
           parsedMesh: result,
           meshDimension: "2D",
-          elementOrder: "linear",
+          elementOrder: "quadratic",
         });
 
         // Define boundary conditions using Gmsh physical group tags
@@ -369,8 +373,6 @@ Mesh 2;
         gmshModel.addBoundaryCondition("2", ["convection", 1, 20]); // top boundary
         gmshModel.addBoundaryCondition("3", ["symmetry"]); // left boundary
 
-        //console.log("GMSH Boundary Conditions:", gmshModel.boundaryConditions);
-
         // Set solver method
         //model.setSolverMethod("jacobi");
         gmshModel.setSolverMethod("lusolve");
@@ -378,8 +380,6 @@ Mesh 2;
         // Solve the problem and get the solution
         const { solutionVector: gmshSolutionVector, nodesCoordinates: gmshNodesCoordinates } =
           gmshModel.solve();
-
-        //console.log("GMSH Solution Vector:", gmshSolutionVector);
 
         // Plot the GMSH solution
         plotSolution(

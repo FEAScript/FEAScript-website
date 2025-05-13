@@ -241,9 +241,9 @@ Physical Line("left")   = {4};
 Physical Surface("domain") = {1};
 
 // Generate 2D mesh
-Recombine Surface{1}; // Turns triangle mesh into quads
-Mesh 2;
-    </pre>
+Recombine Surface{1}; // Turn triangle elements into quadrilaterals
+Mesh.ElementOrder = 2; // Set quadratic elements 
+Mesh 2;</pre>
 
     <p>
       Note how the physical line tags in the geo file correspond to the boundary conditions in our FEAScript

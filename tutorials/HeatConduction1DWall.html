@@ -122,10 +122,10 @@
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
-    . . .
-    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js">&lt;/script&gt;
-    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js">&lt;/script&gt;
-    . . .
+  &lt;!-- ...head region... --&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js">&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js">&lt;/script&gt;
+  &lt;!-- ...continue of head region... --&gt;
 &lt;/head&gt;</pre
     >
     <p>
@@ -133,54 +133,47 @@
       the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
     </p>
     <pre class="prettyprint">
-      &lt;body&gt;
-          . . .
-          &lt;script type="module"&gt;
-              // Import the FEAScript library
-              import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
-              window.addEventListener("DOMContentLoaded", (event) => {
-      
-                // Print FEAScript version
-                printVersion();
-      
-                // Create a new FEAScript model
-                const model = new FEAScriptModel();
-      
-                // Set solver configuration
-                model.setSolverConfig("solidHeatTransferScript");
-      
-                // Define mesh configuration
-                model.setMeshConfig({
-                  meshDimension: "1D",
-                  elementOrder: "linear",
-                  numElementsX: 10,
-                  maxX: 0.15,
-                });
-      
-                // Define boundary conditions
-                model.addBoundaryCondition("0", ["convection", 1, 25]);
-                model.addBoundaryCondition("1", ["constantTemp", 5]);
+&lt;body&gt;
+  &lt;!-- ...body region... --&gt;
+  &lt;script type="module"&gt;
+    // Import FEAScript library
+    import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
+    
+    window.addEventListener("DOMContentLoaded", (event) => {
+      // Print FEAScript version in the console
+      printVersion();
+      // Create and configure model
+      const model = new FEAScriptModel();
+      model.setSolverConfig("solidHeatTransferScript");
+      model.setMeshConfig({
+        meshDimension: "1D",
+        elementOrder: "linear",
+        numElementsX: 10,
+        maxX: 0.15,
+      });
 
-                // Set solver method
-                model.setSolverMethod("lusolve");
- 
-                // Solve the problem and get the solution
-                const { solutionVector, nodesCoordinates } = model.solve();
+      // Apply boundary conditions
+      model.addBoundaryCondition("0", ["convection", 1, 25]);
+      model.addBoundaryCondition("1", ["constantTemp", 5]);
+
+      // Solve
+      model.setSolverMethod("lusolve");
+      const { solutionVector, nodesCoordinates } = model.solve();
+
+      // Plot results
+      plotSolution(
+        solutionVector,
+        nodesCoordinates,
+        model.solverConfig,
+        model.meshConfig.meshDimension,
+        "line",
+        "solutionPlot"
+      );
       
-                // Plot the solution as a 1D line plot
-                plotSolution(
-                  solutionVector,
-                  nodesCoordinates,
-                  model.solverConfig,
-                  model.meshConfig.meshDimension,
-                  "line",
-                  "solutionPlot"
-                );
-                
-              });
-          &lt;/script&gt;
-          . . .
-      &lt;/body&gt;</pre
+    });
+  &lt;/script&gt;
+  &lt;!-- ...continue of body region... --&gt;
+&lt;/body&gt;</pre
     >
 
     <h2 id="results"><a name="Results"></a>Results</h2>

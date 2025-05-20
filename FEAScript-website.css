@@ -195,6 +195,7 @@ mjx-container {
     width: 90px;
     padding-left: 1em;
     padding-bottom: 1em;
+    display: none; /* Hide banner on small screens */
   }
 
   #banner img {
@@ -241,6 +242,7 @@ mjx-container {
     width: 150px;
     padding-left: 1.2em;
     padding-bottom: 1.2em;
+    display: none; /* Hide banner on medium screens */
   }
 
   #banner img {
@@ -330,11 +332,11 @@ mjx-container {
 
 /* Footer styles */
 footer {
-  max-width: 1000px;
+  /* max-width: 1000px; */
   position: relative;
   background-color: #f7e7b7;
-  color: #444;
-  padding: 2px 0 2px 0;
-  text-align: center;
+  /* color: #444; */
+  padding: 2px 0 2px 5px;
+  text-align: left;
   border-top: 2px solid #e0c97f;
 }

@@ -117,10 +117,10 @@
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
-    . . .
-    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js">&lt;/script&gt;
-    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js">&lt;/script&gt;
-    . . .
+  &lt;!-- ...head region... --&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js">&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js">&lt;/script&gt;
+  &lt;!-- ...continue of head region... --&gt;
 &lt;/head&gt;</pre
     >
     <p>
@@ -129,56 +129,50 @@
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
-    . . .
-    &lt;script type="module"&gt;
-        // Import the FEAScript library
-        import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
-        window.addEventListener("DOMContentLoaded", (event) => {
+  &lt;!-- ...body region... --&gt;
+  &lt;script type="module"&gt;
+    // Import FEAScript library
+    import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
+    
+    window.addEventListener("DOMContentLoaded", (event) => {
+      // Print FEAScript version in the console
+      printVersion();
 
-          // Print FEAScript version
-          printVersion();
+      // Create and configure model
+      const model = new FEAScriptModel();
+      model.setSolverConfig("solidHeatTransferScript");
+      model.setMeshConfig({
+        meshDimension: "2D",
+        elementOrder: "quadratic",
+        numElementsX: 8,
+        numElementsY: 4,
+        maxX: 4,
+        maxY: 2,
+      });
 
-          // Create a new FEAScript model
-          const model = new FEAScriptModel();
+      // Apply boundary conditions
+      model.addBoundaryCondition("0", ["constantTemp", 200]);
+      model.addBoundaryCondition("1", ["symmetry"]);
+      model.addBoundaryCondition("2", ["convection", 1, 20]);
+      model.addBoundaryCondition("3", ["constantTemp", 200]);
 
-          // Set solver configuration
-          model.setSolverConfig("solidHeatTransferScript");
+      // Solve
+      model.setSolverMethod("lusolve");
+      const { solutionVector, nodesCoordinates } = model.solve();
 
-          // Define mesh configuration
-          model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
-            maxX: 4,
-            maxY: 2,
-          });
-
-          // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantTemp", 200]);
-          model.addBoundaryCondition("1", ["symmetry"]);
-          model.addBoundaryCondition("2", ["convection", 1, 20]);
-          model.addBoundaryCondition("3", ["constantTemp", 200]);
-
-          // Set solver method
-          model.setSolverMethod("lusolve");
-
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = model.solve();
-
-          // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            model.solverConfig,
-            model.meshConfig.meshDimension,
-            "contour",
-            "solutionPlot"
-          );
-          
-        });
-    &lt;/script&gt;
-    . . .
+      // Plot results
+      plotSolution(
+        solutionVector,
+        nodesCoordinates,
+        model.solverConfig,
+        model.meshConfig.meshDimension,
+        "contour",
+        "solutionPlot"
+      );
+      
+    });
+  &lt;/script&gt;
+  &lt;!-- ...continue of body region... --&gt;
 &lt;/body&gt;</pre
     >
     <p>
@@ -197,9 +191,9 @@
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
-    . . .
-    &lt;div id="solutionPlot">&lt;/div&gt;
-    . . .
+  &lt;!-- ...body region... --&gt;
+  &lt;div id="solutionPlot">&lt;/div&gt;
+  &lt;!-- ...continue of body region... --&gt;
 &lt;/body&gt;</pre
     >
     <p>

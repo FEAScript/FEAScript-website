@@ -57,7 +57,13 @@
 
     <div id="banner">
       <!--<img src="./assets/tutorialSolidHeatTransferResults01.png" alt="" />-->
-      <img src="./assets/HeatConduction2DFinMeshResults.png" alt="" />
+      <img
+        src="./assets/HeatConduction2DFinMeshResults.png"
+        alt="Results of the heat conduction in a two-dimensional fin tutorial"
+      />
+      <p class="image-caption">Solid heat conduction solver</p>
+      <img src="./assets/Screenshot_20250520_084241.png" alt="FEAScript platform in" />
+      <p class="image-caption">FEAScript platform interface</p>
     </div>
 
     <h1>A JavaScript Finite Element Simulation Library</h1>
@@ -123,11 +129,11 @@
     <p>There are two ways to create simulations with FEAScript:</p>
     <ul>
       <li>
-        <b>JavaScript API:</b> For developers comfortable with coding, the JavaScript API provides full
-        programmatic control, allowing direct integration into websites or web applications.
+        <strong>JavaScript API:</strong> For developers comfortable with coding, the JavaScript API provides
+        full programmatic control, allowing direct integration into websites or web applications.
       </li>
       <li>
-        <b>Visual Editor:</b> The
+        <strong>Visual Editor:</strong> The
         <a href="https://platform.feascript.com" target="_blank">FEAScript platform</a>
         provides a no-code, block-based interface for creating simulations without writing any JavaScript
         code.
@@ -154,8 +160,9 @@
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
-  . . .
+  &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
+  // Import FEAScript library
   import { FEAScriptModel, importGmshQuadTri, plotSolution } from "https://core.feascript.com/src/index.js";
 
   window.addEventListener("DOMContentLoaded", async () => {
@@ -183,7 +190,7 @@
     plotSolution(solutionVector, nodesCoordinates, model.solverConfig, "2D", "contour", "solutionPlot", "unstructured");
   });
   &lt;/script&gt;
-  . . .
+  &lt;!-- ...continue of body region... --&gt;
 &lt;/body&gt;</pre
     >
     <p>
@@ -201,13 +208,13 @@
     <p>The following lists contain some, but not all, of the available features in FEAScript:</p>
     <ul>
       <li>
-        <b>Physical Modelling</b>
+        <strong>Physical Modelling</strong>
         <ul>
           <li>Solid heat conduction solver</li>
         </ul>
       </li>
       <li>
-        <b>Geometry and Meshing</b>
+        <strong>Geometry and Meshing</strong>
         <ul>
           <li>Simple mesh generation (1D and rectangular 2D domains)</li>
           <li>
@@ -231,7 +238,7 @@
         </ul>
       </li>
       <li>
-        <b>Numerical Solution</b>
+        <strong>Numerical Solution</strong>
         <ul>
           <!--
           <li>
@@ -247,13 +254,13 @@
         </ul>
       </li>
       <li>
-        <b>Parallelization</b>
+        <strong>Parallelization</strong>
         <ul>
           <li>Web worker support for multi-threaded computation</li>
         </ul>
       </li>
       <li>
-        <b>Visualization</b>
+        <strong>Visualization</strong>
         <ul>
           <li>Line and surface plotting</li>
         </ul>
@@ -262,8 +269,8 @@
 
     <p>
       For a visual approach to creating simulations, we are also developing the
-      <a href="https://platform.feascript.com" target="_blank"><strong>FEAScript platform</strong></a> - a
-      browser-based visual editor built on the
+      <a href="https://platform.feascript.com" target="_blank">FEAScript platform</a> - a
+      <strong>browser-based visual editor</strong> built on the
       <a href="https://developers.google.com/blockly/" target="_blank"
         >Blockly
         <img
@@ -271,11 +278,11 @@
           alt="External Link Icon"
           style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
       /></a>
-      library. This no-code interface allows users to build and run finite element simulations directly in
-      their browser by connecting visual blocks. While FEAScript's JavaScript API offers full programmatic
-      control for advanced customization, the FEAScript platform provides an accessible entry point for users
-      without coding experience. FEAScript platform also provides the ability to save and load projects in XML
-      format, enabling easy sharing and reuse of simulation configurations.
+      library. This <strong>no-code interface</strong> allows users to build and run finite element
+      simulations directly in their browser by connecting visual blocks. While FEAScript's JavaScript API
+      offers full programmatic control for advanced customization, the FEAScript platform provides an
+      accessible entry point for users without coding experience. FEAScript platform also provides the ability
+      to save and load projects in XML format, enabling easy sharing and reuse of simulation configurations.
     </p>
 
     <h2 id="tutorials"><a name="Tutorials"></a>Tutorials</h2>

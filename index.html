@@ -154,10 +154,11 @@
     <p>
       <strong>Quick Start:</strong> Include FEAScript in your HTML via CDN or download from
       <a href="https://github.com/FEAScript/FEAScript-core" target="_blank">GitHub</a> &#8594; add a canvas
-      (e.g., <code>&lt;div id="solutionPlot">&lt;/div&gt;</code>) &#8594; add a mesh file (e.g.,
-      <code>your.msh</code>) or use FEAScript mesh generation tools &#8594; create and run a simulation using
-      the JavaScript API (see <a href="#tutorials">tutorials</a> for detailed examples):
+      (e.g., <code>&lt;div id="solutionPlot">&lt;/div&gt;</code>) &#8594; add a mesh file (e.g., `your.msh`)
+      or use FEAScript mesh generation tools &#8594; create and run a simulation using the JavaScript API (see
+      <a href="#tutorials">tutorials</a> for detailed examples):
     </p>
+
     <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
@@ -174,11 +175,7 @@
     // Create and configure model
     const model = new FEAScriptModel();
     model.setSolverConfig("solverType"); // e.g., "solidHeatTransferScript"
-    model.setMeshConfig({
-      parsedMesh,
-      meshDimension: "2D",
-      elementOrder: "linear" // "linear" or "quadratic"
-    });
+    model.setMeshConfig({parsedMesh, meshDimension: "2D", elementOrder: "linear"});
 
     // Apply boundary conditions (Gmsh physical group tags)
     model.addBoundaryCondition("boundaryIndex", ["conditionType", /* parameters */]);
@@ -187,12 +184,18 @@
     const { solutionVector, nodesCoordinates } = model.solve();
 
     // Plot results
-    plotSolution(solutionVector, nodesCoordinates, model.solverConfig, "2D", "contour", "solutionPlot", "unstructured");
+    plotSolution(solutionVector, nodesCoordinates, model.solverConfig, model.meshConfig.meshDimension, "contour", "solutionPlot", "unstructured");
   });
   &lt;/script&gt;
   &lt;!-- ...continue of body region... --&gt;
 &lt;/body&gt;</pre
     >
+    <p>
+      <em>
+        The above code is an indicative usage example of FEAScript. Adapt paths, solver types, and boundary
+        conditions to your specific problem.
+      </em>
+    </p>
     <p>
       🚧
       <strong>FEAScript is currently under heavy development with new features being added regularly</strong>.
@@ -233,7 +236,7 @@
                 "
               />
             </a>
-            (.msh file format)
+            (`.msh` file format)
           </li>
         </ul>
       </li>

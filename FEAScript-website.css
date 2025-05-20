@@ -69,7 +69,8 @@ p {
 }
 
 .highlight-container {
-  background-color: #fff0b3;
+  /* background-color: #fff0b3; */
+  background: #f7e7b7;
   border-radius: 5px;
   max-width: 1000px;
   padding: 10px;
@@ -325,4 +326,15 @@ mjx-container {
   margin-top: 8px;
   font-style: italic;
   color: #555;
+}
+
+/* Footer styles */
+footer {
+  max-width: 1000px;
+  position: relative;
+  background-color: #f7e7b7;
+  color: #444;
+  padding: 2px 0 2px 0;
+  text-align: center;
+  border-top: 2px solid #e0c97f;
 }

@@ -12,7 +12,7 @@
 
 <html lang="en">
   <head>
-    <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial (Gmsh Example)</title>
+    <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial (Gmsh Mesh)</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -72,11 +72,11 @@
         />
       </a>
     </h1>
-    <h1>Heat Conduction in a Two-Dimensional Fin (Gmsh Example)</h1>
+    <h1>Heat Conduction in a Two-Dimensional Fin (Gmsh Mesh)</h1>
 
     <ul id="menu">
       <li><a href="#gmshfileimport">Gmsh File Import</a></li>
-      <li><a href="#gmshgeofile">Example Gmsh `.geo` File</a></li>
+      <li><a href="#gmshgeofile">Example Gmsh ".geo" File</a></li>
       <li><a href="#generatedmesh">Generated Mesh</a></li>
       <li><a href="#results">Results</a></li>
     </ul>
@@ -92,7 +92,7 @@
 
     <h2 id="gmshfileimport"><a name="gmshfileimport"></a>Gmsh File Import</h2>
     <p>
-      This example demonstrates how to import a Gmsh-generated mesh (`.msh` file format) and solve a heat
+      This example demonstrates how to import a Gmsh-generated mesh (".msh" file format) and solve a heat
       conduction problem.
     </p>
 
@@ -162,7 +162,7 @@
     </p>
     <ol>
       <li>
-        <strong>Physical Groups in Gmsh:</strong> In your `.geo` file, you need to define physical groups for
+        <strong>Physical Groups in Gmsh:</strong> In your ".geo" file, you need to define physical groups for
         boundaries using commands like <code>Physical Line("bottom") = {1};</code>. These are mapped to tags
         in the imported mesh.
       </li>
@@ -181,13 +181,13 @@
     </ol>
 
     <p>
-      You can create your own Gmsh files by writing `.geo` scripts or using Gmsh's GUI. For this example, we
-      used a simple rectangular domain defined in a `.geo` file with specific physical groups for each boundary.
+      You can create your own Gmsh files by writing ".geo" scripts or using Gmsh's GUI. For this example, we
+      used a simple rectangular domain defined in a ".geo" file with specific physical groups for each boundary.
     </p>
 
-    <h3 id="gmshgeofile"><a name="gmshgeofile"></a>Example Gmsh `.geo` File</h3>
+    <h3 id="gmshgeofile"><a name="gmshgeofile"></a>Example Gmsh ".geo" File</h3>
     <p>
-      Below is the `rect.geo` file used in this tutorial. It defines a 4m × 2m rectangular domain with physical
+      Below is the "rect.geo" file used in this tutorial. It defines a 4m × 2m rectangular domain with physical
       lines for each boundary edge:
     </p>
 
@@ -253,8 +253,8 @@ Mesh 2;</pre
     </ul>
 
     <p>
-      To generate a mesh file from this `.geo` script, you would run: <code>gmsh rect.geo -2</code> in your
-      terminal, which creates a `rect.msh` file that can be imported into FEAScript.
+      To generate a mesh file from this ".geo" script, you would run: <code>gmsh rect.geo -2</code> in your
+      terminal, which creates a "rect.msh" file that can be imported into FEAScript.
     </p>
 
     <h2 id="generatedmesh"><a name="generatedmesh"></a>Generated Mesh</h2>
@@ -270,7 +270,7 @@ Mesh 2;</pre
         style="max-width: 40%; height: auto"
       />
       <p class="image-caption">
-        Quadrilateral mesh (`rect_quad_unstruct.msh`) generated using the `rect.geo` script with Gmsh
+        Quadrilateral mesh ("rect_quad_unstruct.msh") generated using the "rect.geo" script with Gmsh
       </p>
     </div>
 

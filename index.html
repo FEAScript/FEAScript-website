@@ -139,7 +139,8 @@
     <div class="highlight-container" style="margin-bottom: 1.5em">
       <p>
         <strong>Latest stable release:</strong>
-        <a href="https://github.com/FEAScript/FEAScript-core/releases/tag/0.1.0" target="_blank">0.1.0</a>
+        <a href="https://github.com/FEAScript/FEAScript-core/releases" target="_blank">0.1.1</a>
+        (<a href="https://www.npmjs.com/package/feascript" target="_blank">npm</a>)
         <br />
         <strong>See the roadmap for the upcoming release </strong>
         <a href="https://github.com/orgs/FEAScript/discussions/17" target="_blank">0.2.0</a>
@@ -147,7 +148,8 @@
     </div>
 
     <p>
-      <strong>Quick Start:</strong> Include FEAScript in your HTML via CDN or download from
+      <strong>Quick Start:</strong> To use FEAScript in your webpage include it in your HTML via CDN
+      (<code>https://core.feascript.com/dist/feascript.esm.js</code>) or download from
       <a href="https://github.com/FEAScript/FEAScript-core" target="_blank">GitHub</a> &#8594; add a canvas
       (e.g., <code>&lt;div id="solutionPlot">&lt;/div&gt;</code>) &#8594; add a mesh file (e.g., "your.msh")
       or use FEAScript mesh generation tools &#8594; create and run a simulation using the JavaScript API (see
@@ -159,7 +161,7 @@
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
   // Import FEAScript library
-  import { FEAScriptModel, importGmshQuadTri, plotSolution } from "https://core.feascript.com/src/index.js";
+  import { FEAScriptModel, importGmshQuadTri, plotSolution } from "https://core.feascript.com/dist/feascript.esm.js";
 
   window.addEventListener("DOMContentLoaded", async () => {
     // Load and parse Gmsh mesh

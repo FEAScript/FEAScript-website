@@ -8,6 +8,12 @@
                                              |_|   | |_ 
        Website: https://feascript.com/              \__|  */
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* General styles */
 html {
   max-width: 1500px;
@@ -26,7 +32,6 @@ ul {
   padding-left: 1.5em;
 }
 
-/* Add max-width to list items to match paragraph constraints */
 li {
   max-width: 1000px;
 }
@@ -64,16 +69,20 @@ h3 {
 
 /* Paragraphs and links */
 p {
-  margin: 1em 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
   max-width: 1000px;
 }
 
 .highlight-container {
-  /* background-color: #fff0b3; */
   background: #f7e7b7;
   border-radius: 5px;
-  max-width: 1000px;
-  padding: 10px;
+  padding: 15px;
+  max-width: 70%;
+}
+
+.highlight-container p {
+  margin: 0;
 }
 
 a {
@@ -109,18 +118,19 @@ mjx-container {
   text-align: left !important;
 }
 
-/* Banner styles */
+/* Banner */
 #banner {
   float: right;
   padding-left: 1.5em;
   padding-bottom: 1.5em;
+  margin-right: 1.5em;
 }
 
 #banner img {
   box-shadow: 0px 1px 4px #999;
 }
 
-/* Menu styles */
+/* Menu */
 #menu {
   list-style: none;
   margin: 1em 0;
@@ -141,7 +151,7 @@ mjx-container {
   color: #333;
 }
 
-/* Menu separator style */
+/* Menu separator */
 .menu-separator {
   color: #ccc;
   margin: 0 5px;
@@ -151,7 +161,7 @@ mjx-container {
   line-height: normal;
 }
 
-/* Loading spinner styles */
+/* Loading spinner */
 #loading {
   display: none;
   margin-top: 20px;
@@ -163,7 +173,7 @@ mjx-container {
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(0,0,0,.3);
+  border: 3px solid rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   border-top-color: #000;
   animation: spin 1s ease-in-out infinite;
@@ -171,7 +181,9 @@ mjx-container {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Media queries */
@@ -195,6 +207,7 @@ mjx-container {
     width: 90px;
     padding-left: 1em;
     padding-bottom: 1em;
+    margin-right: 1em;
     display: none; /* Hide banner on small screens */
   }
 
@@ -242,6 +255,7 @@ mjx-container {
     width: 150px;
     padding-left: 1.2em;
     padding-bottom: 1.2em;
+    margin-right: 1.2em;
     display: none; /* Hide banner on medium screens */
   }
 
@@ -283,6 +297,7 @@ mjx-container {
 
   #banner {
     width: 250px;
+    margin-right: 1.5em;
   }
 
   #banner img {

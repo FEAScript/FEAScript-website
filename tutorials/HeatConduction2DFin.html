@@ -299,48 +299,6 @@
         } else {
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("solutionPlot").style.display = "block";
-
-          // Print FEAScript version
-          printVersion();
-
-          // Create a new FEAScript model
-          const model = new FEAScriptModel();
-
-          // Set solver configuration
-          model.setSolverConfig("solidHeatTransferScript");
-
-          // Define mesh configuration
-          model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
-            maxX: 4,
-            maxY: 2,
-          });
-
-          // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantTemp", 200]);
-          model.addBoundaryCondition("1", ["symmetry"]);
-          model.addBoundaryCondition("2", ["convection", 1, 20]);
-          model.addBoundaryCondition("3", ["constantTemp", 200]);
-
-          // Set solver method
-          //model.setSolverMethod("jacobi");
-          model.setSolverMethod("lusolve");
-
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = model.solve();
-
-          // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            model.solverConfig,
-            model.meshConfig.meshDimension,
-            "contour",
-            "solutionPlot"
-          );
         }
       });
     </script>

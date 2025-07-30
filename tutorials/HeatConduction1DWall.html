@@ -268,54 +268,6 @@
           );
         }
       });
-
-      window.addEventListener("resize", () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("solutionPlot").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("solutionPlot").style.display = "block";
-
-          // Print FEAScript version
-          printVersion();
-
-          // Create a new FEAScript model
-          const model = new FEAScriptModel();
-
-          // Set solver configuration
-          model.setSolverConfig("solidHeatTransferScript");
-
-          // Define mesh configuration
-          model.setMeshConfig({
-            meshDimension: "1D",
-            elementOrder: "linear",
-            numElementsX: 10,
-            maxX: 0.15,
-          });
-
-          // Define boundary conditions
-          model.addBoundaryCondition("0", ["convection", 1, 25]);
-          //model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
-          model.addBoundaryCondition("1", ["constantTemp", 5]);
-
-          // Set solver method
-          model.setSolverMethod("lusolve");
-
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = model.solve();
-
-          // Plot the solution as a 1D line plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            model.solverConfig,
-            model.meshConfig.meshDimension,
-            "line",
-            "solutionPlot"
-          );
-        }
-      });
     </script>
     <footer>
       <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>

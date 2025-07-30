@@ -295,47 +295,6 @@
         } else {
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("solutionPlot").style.display = "block";
-
-          // Print FEAScript version
-          printVersion();
-
-          // Create a new FEAScript model
-          const model = new FEAScriptModel();
-
-          // Set solver configuration
-          model.setSolverConfig("frontPropagationScript");
-
-          // Define mesh configuration
-          model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 12,
-            numElementsY: 8,
-            maxX: 4,
-            maxY: 2,
-          });
-
-          // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
-          model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-          model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-          model.addBoundaryCondition("3", ["constantValue", 0]); // Right
-
-          // Set solver method
-          model.setSolverMethod("lusolve");
-
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = model.solve();
-
-          // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            model.solverConfig,
-            model.meshConfig.meshDimension,
-            "contour",
-            "solutionPlot"
-          );
         }
       });
     </script>

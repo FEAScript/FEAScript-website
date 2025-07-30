@@ -224,14 +224,18 @@
 
     <script type="module">
       // Import FEAScript library from GitHub
-      // import { FEAScriptModel, plotSolution, printVersion, logSystem } from "https://core.feascript.com/dist/feascript.esm.js";
-      // Import FEAScript library from a local directory
       import {
         FEAScriptModel,
         plotSolution,
         printVersion,
-        logSystem,
-      } from "../../FEAScript-core/src/index.js";
+      } from "https://core.feascript.com/dist/feascript.esm.js";
+      // Import FEAScript library from a local directory
+      // import {
+      //   FEAScriptModel,
+      //   plotSolution,
+      //   printVersion,
+      //   logSystem,
+      // } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {
         if (window.innerHeight > window.innerWidth) {

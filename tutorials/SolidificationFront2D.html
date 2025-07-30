@@ -12,16 +12,16 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial</title>
+    <title>FEAScript: Solidification Front Propagation in a Two-Dimensional Domain</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving a steady-state heat transfer problem in a two-dimensional domain using the FEAScript library. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
+      content="This example demonstrates solving an eikonal equation in a two-dimensional domain using the FEAScript library. The problem represents a typical solidification front propagation scenario, where the objective is to track the movement of an interface."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript"
+      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, eikonal, front propagation"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
@@ -72,7 +72,7 @@
         />
       </a>
     </h1>
-    <h1>Heat Conduction in a Two-Dimensional Fin Tutorial</h1>
+    <h1>Solidification Front Propagation in a Two-Dimensional Domain</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
@@ -82,33 +82,48 @@
 
     <div class="highlight-container">
       <p>
-        In this tutorial, we address a stationary heat transfer problem within a two-dimensional rectangular
-        domain. This is a typical cooling fin problem. Cooling fins are commonly used to increase the area
-        available for heat transfer between metal walls and poorly conducting fluids such as air.
+        In this tutorial, we address a solidification front propagation problem in a two-dimensional domain.
+        This is a typical interface tracking problem, used to simulate how a solidification front moves
+        through a medium, such as metal cooling or crystal growth.
       </p>
     </div>
 
     <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
-      Steady heat conduction is described by the Laplace equation: \(\nabla^{2}T(x,y) = 0\), where \(T\)
-      signifies the temperature values.
+      The propagation of a solidification front can be modeled using the eikonal equation that in its general
+      form is given by: \(|\nabla \phi(x,y)| = \frac{1}{F(x,y)}\). In the above, \(\phi(x,y)\) is the arrival
+      time of the front at point (x,y), and \(F(x,y)\) is the local speed of front propagation. This speed can
+      vary spatially based on factors such as temperature gradients, material properties, or crystallographic
+      orientation. For this example, we simplify the problem by using a constant front propagation speed of 1
+      m/s throughout the domain, which reduces the equation to: \(|\nabla \phi(x,y)| = 1\). It's worth noting,
+      however, that actual solidification speeds in real materials typically range from micrometers per second
+      to centimeters per second for most metals and alloys. Only specialized rapid solidification processes
+      might achieve speeds approaching or exceeding 1 m/s.
     </p>
-    <img src="../assets/HeatConduction2DFin.png" width="300" />
+    <img src="../assets/SolidificationFront2D.png" width="300" />
     <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
-      constant temperature boundary conditions are implemented as Dirichlet types in the finite element code.
-      The symmetry boundary condition is implemented as a Neumann zero-flux type \( \left(
-      \frac{dT}{dx}|_{x=0}=0 \right) \), while the convective cooling boundary condition is of the Robin type.
-      Specifically, the latter is expressed as \(\frac{dT}{dy}|_{y=4}=-{\frac{h}{k}}(T-T_0)\), where \(h\) is
-      the heat transfer coefficient, \(k\) the thermal conductivity and \(T_0\) is the external temperature.
-      We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_0\) = 20 &deg;C.
+      The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
+      this model, we consider a square domain where solidification begins simultaneously from three sides
+      (bottom, left, and right boundaries), which are all maintained at a constant value of zero (representing
+      the initial front position). This configuration simulates a common scenario in casting or directional
+      solidification processes, where a molten material is contained within a mold and begins to solidify from
+      the cooled walls. The top boundary has a zero gradient condition, allowing the front to propagate freely
+      in that direction.
+    </p>
+    <p>
+      The eikonal equation is nonlinear, making it challenging to solve directly. Due to convergence
+      difficulties, a viscous term elimination technique is employed. According to this approach, a viscous
+      term \(\varepsilon(\nabla^2\phi)\) is added to the equation, resulting in: \(|\nabla \phi(x,y)| +
+      \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical diffusion that
+      ensures the solution remains smooth throughout the domain. The solution of this modified equation
+      converges to the solution of the original eikonal equation as \(\varepsilon \rightarrow 0\).
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
     <p>
-      Below is a demonstration of how to use the FEAScript library to solve this stationary heat transfer
-      problem in your web browser. You only need a simple HTML page to run this example where the following
-      code snippets should be included. First, we should load the required external libraries:
+      Below is a demonstration of how to use the FEAScript library to solve this front propagation problem in
+      your web browser. You only need a simple HTML page to run this example where the following code snippets
+      should be included. First, we should load the required external libraries:
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
@@ -135,21 +150,21 @@
 
       // Create and configure model
       const model = new FEAScriptModel();
-      model.setSolverConfig("solidHeatTransferScript");
+      model.setSolverConfig("frontPropagationScript");
       model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
-        numElementsX: 8,
-        numElementsY: 4,
+        numElementsX: 12,
+        numElementsY: 8,
         maxX: 4,
         maxY: 2,
       });
 
       // Apply boundary conditions
-      model.addBoundaryCondition("0", ["constantTemp", 200]);
-      model.addBoundaryCondition("1", ["symmetry"]);
-      model.addBoundaryCondition("2", ["convection", 1, 20]);
-      model.addBoundaryCondition("3", ["constantTemp", 200]);
+      model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
+      model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+      model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+      model.addBoundaryCondition("3", ["constantValue", 0])); // Right
 
       // Solve
       model.setSolverMethod("lusolve");
@@ -171,16 +186,6 @@
 &lt;/body&gt;</pre
     >
     <p>
-      In the boundary condition definition, the numbers at the left side (from 0 to 3) indicate the boundaries
-      of the geometry (the mesh generator of FEAScript has assigned numbers to the boundaries, starting from
-      the bottom boundary and proceeding clockwise). The "constantTemp" condition sets a constant temperature
-      value. The "symmetry" boundary condition represents a zero-flux type. Finally, the "convection"
-      condition describes a convective heat transfer scenario. In addition, the second argument of the
-      "constantTemp" boundary condition corresponds to the constant temperature value. For a "convection"
-      boundary condition, the second argument represents the \({\frac{h}{k}}\) value, and the third argument
-      indicates the external temperature \(T_0\).
-    </p>
-    <p>
       After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
       HTML container where the plot will render:
     </p>
@@ -198,13 +203,11 @@
 
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
-      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-      time using FEAScript. You can find a Node.js implementation of this tutorial in the
-      <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/solidHeatTransferScript/HeatConduction2DFin"
-        target="_blank"
-        >example directory</a
-      >.
+      Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
+      time of the front at each position, with contour lines showing the position of the front at different
+      times. This plot is generated in real time using FEAScript. Please note that you may need to wait a few
+      moments for the solution to be calculated and plotted since the eikonal equation is solved iteratively
+      with the Newton-Raphson method directly in your browser.
     </p>
 
     <!-- Container element where the solution plot will be rendered -->
@@ -212,17 +215,6 @@
       Cannot draw the results. Please turn your phone to horizontal position to see the results.
     </div>
     <div id="solutionPlot"></div>
-
-    <br />
-
-    <!-- Links to worker-based and Gmsh implementation -->
-    <p>
-      See also
-      <a href="https://feascript.com/tutorials/HeatConduction2DFinWorker.html" target="_blank">here</a>
-      for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness and
-      <a href="https://feascript.com/tutorials/HeatConduction2DFinGmsh.html" target="_blank">here</a>
-      for a tutorial using an unstructured mesh generated by Gmsh.
-    </p>
 
     <ul id="menu">
       <li>
@@ -232,13 +224,14 @@
 
     <script type="module">
       // Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        plotSolution,
-        printVersion,
-      } from "https://core.feascript.com/dist/feascript.esm.js";
+      import { FEAScriptModel, plotSolution, printVersion, logSystem } from "https://core.feascript.com/dist/feascript.esm.js";
       // Import FEAScript library from a local directory
-      // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+      // import {
+      //   FEAScriptModel,
+      //   plotSolution,
+      //   printVersion,
+      //   logSystem,
+      // } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {
         if (window.innerHeight > window.innerWidth) {
@@ -248,6 +241,9 @@
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("solutionPlot").style.display = "block";
 
+          // Enable debug logging mode
+          // logSystem("debug");
+
           // Print FEAScript version
           printVersion();
 
@@ -255,26 +251,25 @@
           const model = new FEAScriptModel();
 
           // Set solver configuration
-          model.setSolverConfig("solidHeatTransferScript");
+          model.setSolverConfig("frontPropagationScript");
 
           // Define mesh configuration
           model.setMeshConfig({
             meshDimension: "2D",
             elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
+            numElementsX: 12,
+            numElementsY: 8,
             maxX: 4,
             maxY: 2,
           });
 
           // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantTemp", 200]);
-          model.addBoundaryCondition("1", ["symmetry"]);
-          model.addBoundaryCondition("2", ["convection", 1, 20]);
-          model.addBoundaryCondition("3", ["constantTemp", 200]);
+          model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
+          model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+          model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+          model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
           // Set solver method
-          //model.setSolverMethod("jacobi");
           model.setSolverMethod("lusolve");
 
           // Solve the problem and get the solution
@@ -307,26 +302,25 @@
           const model = new FEAScriptModel();
 
           // Set solver configuration
-          model.setSolverConfig("solidHeatTransferScript");
+          model.setSolverConfig("frontPropagationScript");
 
           // Define mesh configuration
           model.setMeshConfig({
             meshDimension: "2D",
             elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
+            numElementsX: 12,
+            numElementsY: 8,
             maxX: 4,
             maxY: 2,
           });
 
           // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantTemp", 200]);
-          model.addBoundaryCondition("1", ["symmetry"]);
-          model.addBoundaryCondition("2", ["convection", 1, 20]);
-          model.addBoundaryCondition("3", ["constantTemp", 200]);
+          model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
+          model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+          model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+          model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
           // Set solver method
-          //model.setSolverMethod("jacobi");
           model.setSolverMethod("lusolve");
 
           // Solve the problem and get the solution

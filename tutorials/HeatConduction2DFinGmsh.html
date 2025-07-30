@@ -17,7 +17,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving a steady-state heat transfer problem in a 2D rectangular domain using a Gmsh-generated mesh."
+      content="This example demonstrates solving a steady-state heat transfer problem in a two-dimensional domain using a Gmsh-generated mesh."
     />
     <meta
       name="keywords"
@@ -182,13 +182,14 @@
 
     <p>
       You can create your own Gmsh files by writing ".geo" scripts or using Gmsh's GUI. For this example, we
-      used a simple rectangular domain defined in a ".geo" file with specific physical groups for each boundary.
+      used a simple rectangular domain defined in a ".geo" file with specific physical groups for each
+      boundary.
     </p>
 
     <h3 id="gmshgeofile"><a name="gmshgeofile"></a>Example Gmsh ".geo" File</h3>
     <p>
-      Below is the "rect.geo" file used in this tutorial. It defines a 4m × 2m rectangular domain with physical
-      lines for each boundary edge:
+      Below is the "rect.geo" file used in this tutorial. It defines a 4m × 2m rectangular domain with
+      physical lines for each boundary edge:
     </p>
 
     <pre class="prettyprint">
@@ -312,13 +313,13 @@ Mesh 2;</pre
         printVersion,
       } from "https://core.feascript.com/dist/feascript.esm.js";
       // Import FEAScript library from a local directory
-      //import {
+      // import {
       //  FEAScriptModel,
       //  importGmshQuadTri,
       //  plotSolution,
       //  printVersion,
       //  logSystem,
-      //} from "../../FEAScript-core/src/index.js";
+      // } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
         // Enable debug logging mode

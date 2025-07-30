@@ -191,7 +191,7 @@
 
     <p>
       Below is the 1D line plot of the computed temperature distribution along the wall thickness. This plot
-      is generated in real time using FEAScript. You can find a minimal example of this tutorial in the
+      is generated in real time using FEAScript. You can find a Node.js implementation of this tutorial in the
       <a
         href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/solidHeatTransferScript/HeatConduction1DWall"
         target="_blank"
@@ -213,7 +213,11 @@
 
     <script type="module">
       //Import FEAScript library from GitHub
-      import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+      import {
+        FEAScriptModel,
+        plotSolution,
+        printVersion,
+      } from "https://core.feascript.com/dist/feascript.esm.js";
       //Import FEAScript library from a local directory
       //import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 

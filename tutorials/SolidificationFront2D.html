@@ -21,7 +21,7 @@
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, eikonal, front propagation"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, eikonal, front propagation"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
@@ -206,8 +206,7 @@
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
       Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
-      time of the front at each position, with contour lines showing the position of the front at different
-      times. This plot is generated in real time using FEAScript.
+      time of the front at each position. This plot is generated in real time using FEAScript.
       <b
         >Please note that you may need to wait a few moments for the solution to be calculated and plotted
         since the eikonal equation is solved iteratively with the Newton-Raphson method directly in your
@@ -220,6 +219,15 @@
       Cannot draw the results. Please turn your phone to horizontal position to see the results.
     </div>
     <div id="solutionPlot"></div>
+
+    <br />
+
+    <!-- Link to the worker-based implementation -->
+    <p>
+      See also
+      <a href="https://feascript.com/tutorials/HeatConduction2DFinWorker.html">here</a>
+      for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness.
+    </p>
 
     <ul id="menu">
       <li>

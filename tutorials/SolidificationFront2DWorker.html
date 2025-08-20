@@ -12,16 +12,16 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat Conduction in a Two-Dimensional Fin Tutorial (Web Worker)</title>
+    <title>FEAScript: Solidification Front Propagation in a Two-Dimensional Domain (Web Worker)</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving a steady-state heat transfer problem in a two-dimensional domain using the FEAScript library. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
+      content="This example demonstrates solving an eikonal equation in a two-dimensional domain using the FEAScript library with Web Workers. The problem represents a typical solidification front propagation scenario, where the objective is to track the movement of an interface."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, computational mechanics, javascript, web workers, 2D heat transfer"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, eikonal, front propagation, web workers"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
@@ -72,7 +72,7 @@
         />
       </a>
     </h1>
-    <h1>Heat Conduction in a Two-Dimensional Fin (Web Worker)</h1>
+    <h1>Solidification Front Propagation in a Two-Dimensional Domain (Web Worker)</h1>
 
     <ul id="menu">
       <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
@@ -81,9 +81,9 @@
 
     <div class="highlight-container">
       <p>
-        This page demonstrates solving the 2D heat conduction fin problem using FEAScript in a web worker for
-        improved browser responsiveness. For the mathematical formulation and theory, see the
-        <a href="https://feascript.com/tutorials/HeatConduction2DFin.html">main (standard) tutorial</a>.
+        This page demonstrates solving the solidification front propagation problem using FEAScript in a web
+        worker for improved browser responsiveness. For the mathematical formulation and theory, see the
+        <a href="https://feascript.com/tutorials/SolidificationFront2D.html">main (standard) tutorial</a>.
       </p>
 
       <p>
@@ -102,7 +102,9 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <h2 id="webworkerimplementation"><a name="Web Worker Implementation"></a>Web Worker Implementation</h2>
     <p>
-      The code below shows how to use FEAScript with a web worker. The solution is plotted as a 2D contour.
+      The code below shows how to use FEAScript with a web worker to solve the eikonal equation for front
+      propagation. This approach moves the computation to a separate thread, preventing the UI from freezing
+      during complex calculations. The solution is plotted as a 2D contour.
     </p>
 
     <pre class="prettyprint">
@@ -123,21 +125,21 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       await model.ping();
   
       // Configure model
-      await model.setSolverConfig("solidHeatTransferScript");
+      await model.setSolverConfig("frontPropagationScript");
       await model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
-        numElementsX: 8,
-        numElementsY: 4,
+        numElementsX: 12,
+        numElementsY: 8,
         maxX: 4,
         maxY: 2,
       });
   
       // Apply boundary conditions
-      await model.addBoundaryCondition("0", ["constantTemp", 200]);
-      await model.addBoundaryCondition("1", ["symmetry"]);
-      await model.addBoundaryCondition("2", ["convection", 1, 20]);
-      await model.addBoundaryCondition("3", ["constantTemp", 200]);
+      await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
+      await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+      await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+      await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
   
       // Solve
       await model.setSolverMethod("lusolve");
@@ -147,7 +149,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       plotSolution(
         solutionVector,
         nodesCoordinates,
-        "solidHeatTransferScript",
+        "frontPropagationScript",
         "2D",
         "contour",
         "solutionPlot"
@@ -163,8 +165,8 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
-      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-      time using FEAScript.
+      Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
+      time of the front at each position. This plot is generated in real time using FEAScript.
     </p>
 
     <div id="orientation-message">
@@ -179,7 +181,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <ul id="menu">
       <li>
-        <a href="https://feascript.com/tutorials/HeatConduction2DFin.html">Return to Main Tutorial</a>
+        <a href="https://feascript.com/tutorials/SolidificationFront2D.html">Return to Main Tutorial</a>
       </li>
       <li>
         <a href="https://feascript.com/index.html">Return to FEAScript Website</a>
@@ -193,9 +195,6 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       // KNOWN BUG: The bundled ESM version has issues with Web Workers due to path resolution problems.
       // Web Workers cannot be properly initialized when importing from the bundled file.
       //import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
-
-      //Import FEAScript library from a local directory
-      //import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
         if (window.innerHeight > window.innerWidth) {
@@ -215,49 +214,64 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
           // Create a new FEAScriptWorker instance
           const model = new FEAScriptWorker();
 
-          // Ensure the worker is ready
-          await model.ping();
+          try {
+            // Ensure the worker is ready
+            await model.ping();
 
-          // Set solver configuration
-          await model.setSolverConfig("solidHeatTransferScript");
+            // Set solver configuration
+            await model.setSolverConfig("frontPropagationScript");
 
-          // Define mesh configuration
-          await model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
-            maxX: 4,
-            maxY: 2,
-          });
+            // Define mesh configuration
+            await model.setMeshConfig({
+              meshDimension: "2D",
+              elementOrder: "quadratic",
+              numElementsX: 12,
+              numElementsY: 8,
+              maxX: 4,
+              maxY: 2,
+            });
 
-          // Define boundary conditions
-          await model.addBoundaryCondition("0", ["constantTemp", 200]);
-          await model.addBoundaryCondition("1", ["symmetry"]);
-          await model.addBoundaryCondition("2", ["convection", 1, 20]);
-          await model.addBoundaryCondition("3", ["constantTemp", 200]);
+            // Define boundary conditions
+            await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
+            await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+            await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+            await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
-          // Set solver method
-          await model.setSolverMethod("lusolve");
+            // Set solver method
+            await model.setSolverMethod("lusolve");
 
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = await model.solve();
+            // Solve the problem and get the solution
+            const { solutionVector, nodesCoordinates } = await model.solve();
 
-          // Hide loading indicator
-          document.getElementById("loading").style.display = "none";
+            // Plot the solution as a 2D contour plot
+            plotSolution(
+              solutionVector,
+              nodesCoordinates,
+              "frontPropagationScript",
+              "2D",
+              "contour",
+              "solutionPlot"
+            );
+          } catch (error) {
+            console.error("Error in worker execution:", error);
+            alert("Error executing the solver. Check console for details.");
+          } finally {
+            // Hide loading indicator
+            document.getElementById("loading").style.display = "none";
 
-          // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            "solidHeatTransferScript",
-            "2D",
-            "contour",
-            "solutionPlot"
-          );
+            // Terminate the worker
+            model.terminate();
+          }
+        }
+      });
 
-          // Terminate the worker
-          model.terminate();
+      window.addEventListener("resize", () => {
+        if (window.innerHeight > window.innerWidth) {
+          document.getElementById("orientation-message").style.display = "block";
+          document.getElementById("solutionPlot").style.display = "none";
+        } else {
+          document.getElementById("orientation-message").style.display = "none";
+          document.getElementById("solutionPlot").style.display = "block";
         }
       });
     </script>

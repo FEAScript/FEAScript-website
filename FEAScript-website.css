@@ -138,6 +138,7 @@ mjx-container {
 }
 
 #menu li {
+  font-size: 105%;
   display: inline-block;
   margin-right: 1em;
 }

@@ -56,19 +56,28 @@
     </h1>
 
     <div id="banner">
-      <!--<img src="./assets/tutorialSolidHeatTransferResults01.png" alt="" />-->
       <img
         src="./assets/HeatConduction2DFinResults.png"
         alt="Results of the heat conduction in a two-dimensional fin tutorial"
       />
-      <p class="image-caption">Solid heat conduction solver</p>
+      <p class="image-caption">
+        <a href="https://feascript.com/tutorials/HeatConduction2DFin.html">Solid heat conduction</a> solver
+      </p>
       <img
         src="./assets/SolidificationFront2DResults.png"
         alt="Results of the solidification front propagation in a two-dimensional domain"
       />
-      <p class="image-caption">Solidification front propagation solver</p>
-      <img src="./assets/Screenshot_20250520_084241.png" alt="FEAScript platform in" />
-      <p class="image-caption">FEAScript platform interface</p>
+      <p class="image-caption">
+        <a href="https://feascript.com/tutorials/SolidificationFront2D.html"
+          >Solidification front propagation</a
+        >
+        solver
+      </p>
+      <img
+        src="./assets/Screenshot_20250520_084241.png"
+        alt="Screenshot of the FEAScript platform interface"
+      />
+      <p class="image-caption"><a href="https://platform.feascript.com/">FEAScript platform</a> interface</p>
     </div>
 
     <h1>A JavaScript Finite Element Simulation Library</h1>
@@ -107,6 +116,18 @@
             alt="GitHub icon"
             style="height: 20px; vertical-align: middle"
           />
+          <span
+            id="github-stars"
+            style="
+              font-size: 0.9em;
+              margin-left: 5px;
+              vertical-align: middle;
+              border: 1px solid #ddd;
+              border-radius: 4px;
+              padding: 1px 5px;
+              background-color: #f8f8f8;
+            "
+          ></span>
         </a>
       </li>
     </ul>
@@ -387,7 +408,20 @@
       <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
     </footer>
     <script>
+      // Update copyright year
       document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+
+      // Fetch GitHub stars
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
     </script>
   </body>
 </html>

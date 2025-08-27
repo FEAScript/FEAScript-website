@@ -32,7 +32,11 @@ ul {
   padding-left: 1.5em;
 }
 
-li {
+/* Default max-width for content elements */
+li,
+p,
+.highlight-container,
+pre.prettyprint {
   max-width: 1000px;
 }
 
@@ -42,10 +46,8 @@ h2,
 h3 {
   background: none;
   font-weight: normal;
-  margin: 0;
-  padding-top: 0.4em;
-  padding-bottom: 0.2em;
-  margin-bottom: 0.5em;
+  padding: 0.4em 0 0.2em;
+  margin: 0 0 0.5em;
   color: #555;
 }
 
@@ -69,16 +71,13 @@ h3 {
 
 /* Paragraphs and links */
 p {
-  margin-top: 1em;
-  margin-bottom: 1em;
-  max-width: 1000px;
+  margin: 1em 0;
 }
 
 .highlight-container {
   background: #f7e7b7;
   border-radius: 5px;
   padding: 15px;
-  max-width: 70%;
 }
 
 .highlight-container p {
@@ -101,7 +100,6 @@ pre {
 pre.prettyprint {
   border: 1px solid #ddd;
   border-radius: 4px;
-  max-width: 1000px;
 }
 
 /* Images */
@@ -118,12 +116,13 @@ mjx-container {
   text-align: left !important;
 }
 
-/* Banner */
+/* Banner - default hidden, shown in large screens via media query */
 #banner {
   float: right;
   padding-left: 1.5em;
   padding-bottom: 1.5em;
   margin-right: 1.5em;
+  display: none;
 }
 
 #banner img {
@@ -152,15 +151,12 @@ mjx-container {
   color: #333;
 }
 
-/* Add a separator before external links */
 #menu li.external-link-start {
   padding-left: 1em;
   border-left: 2px solid #999;
 }
 
-/* Add a space before icon links */
 #menu li.icon-link-start {
-  /* margin-left: 1em; */
   padding-left: 1em;
 }
 
@@ -189,138 +185,7 @@ mjx-container {
   }
 }
 
-/* Media queries */
-
-/* Small screens: up to 500px */
-@media screen and (max-width: 500px) {
-  body {
-    padding: 10px;
-  }
-
-  h1 {
-    font-size: 125%;
-  }
-
-  h2 {
-    font-size: 120%;
-    line-height: 1.1em;
-  }
-
-  #banner {
-    width: 90px;
-    padding-left: 1em;
-    padding-bottom: 1em;
-    margin-right: 1em;
-    display: none; /* Hide banner on small screens */
-  }
-
-  #banner img {
-    width: 90px;
-  }
-
-  #responsive-logo {
-    height: 40px;
-  }
-
-  .highlight-container {
-    max-width: 90%;
-  }
-
-  li {
-    max-width: 90%;
-  }
-}
-
-/* Medium screens: 500px to 1000px */
-@media screen and (min-width: 500px) and (max-width: 1000px) {
-  body {
-    padding: 15px;
-  }
-
-  h1 {
-    font-size: 140%;
-  }
-
-  h2 {
-    font-size: 125%;
-    line-height: 1.3em;
-  }
-
-  h3 {
-    font-size: 115%;
-  }
-
-  p {
-    max-width: 900px;
-  }
-
-  #banner {
-    width: 150px;
-    padding-left: 1.2em;
-    padding-bottom: 1.2em;
-    margin-right: 1.2em;
-    display: none; /* Hide banner on medium screens */
-  }
-
-  #banner img {
-    width: 150px;
-  }
-
-  #responsive-logo {
-    height: 60px;
-  }
-
-  .highlight-container {
-    max-width: 80%;
-  }
-
-  li {
-    max-width: 900px;
-  }
-}
-
-/* Large screens: 1000px and above */
-@media screen and (min-width: 1000px) {
-  body {
-    padding: 20px;
-  }
-
-  h1 {
-    font-size: 150%;
-  }
-
-  h2 {
-    font-size: 130%;
-    line-height: 1.4em;
-  }
-
-  h3 {
-    font-size: 120%;
-  }
-
-  #banner {
-    width: 250px;
-    margin-right: 1.5em;
-  }
-
-  #banner img {
-    width: 250px;
-  }
-
-  #responsive-logo {
-    height: 80px;
-  }
-
-  .highlight-container {
-    max-width: 70%;
-  }
-
-  li {
-    max-width: 1000px;
-  }
-}
-
-/* Tutorial styles for image display and orientation */
+/* Tutorial styles */
 #orientation-message {
   display: none;
   color: red;
@@ -350,11 +215,91 @@ mjx-container {
 
 /* Footer styles */
 footer {
-  /* max-width: 1000px; */
   position: relative;
   background-color: #f7e7b7;
-  /* color: #444; */
   padding: 2px 0 2px 5px;
   text-align: left;
   border-top: 2px solid #e0c97f;
+}
+
+/* Media queries */
+/* Small screens: up to 500px */
+@media screen and (max-width: 500px) {
+  body {
+    padding: 10px;
+  }
+  h1 {
+    font-size: 125%;
+  }
+  h2 {
+    font-size: 120%;
+    line-height: 1.1em;
+  }
+  #responsive-logo {
+    height: 40px;
+  }
+  .highlight-container,
+  li {
+    max-width: 400px;
+  }
+}
+
+/* Medium screens: 500px to 1000px */
+@media screen and (min-width: 500px) and (max-width: 1000px) {
+  body {
+    padding: 15px;
+  }
+  h1 {
+    font-size: 140%;
+  }
+  h2 {
+    font-size: 125%;
+    line-height: 1.3em;
+  }
+  h3 {
+    font-size: 115%;
+  }
+  #responsive-logo {
+    height: 60px;
+  }
+  p,
+  .highlight-container,
+  li {
+    max-width: 900px;
+  }
+}
+
+/* Large screens: 1000px to 1300px */
+@media screen and (min-width: 1000px) and (max-width: 1299px) {
+  h1 {
+    font-size: 150%;
+  }
+  h2 {
+    font-size: 130%;
+    line-height: 1.4em;
+  }
+  h3 {
+    font-size: 120%;
+  }
+}
+
+/* Extra large screens with banner: 1300px and above */
+@media screen and (min-width: 1300px) {
+  #banner {
+    display: block;
+    width: 250px;
+  }
+  #banner img {
+    width: 250px;
+  }
+  h1 {
+    font-size: 150%;
+  }
+  h2 {
+    font-size: 130%;
+    line-height: 1.4em;
+  }
+  h3 {
+    font-size: 120%;
+  }
 }

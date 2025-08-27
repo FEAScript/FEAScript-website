@@ -268,6 +268,16 @@
           );
         }
       });
+
+      window.addEventListener("resize", () => {
+        if (window.innerHeight > window.innerWidth) {
+          document.getElementById("orientation-message").style.display = "block";
+          document.getElementById("solutionPlot").style.display = "none";
+        } else {
+          document.getElementById("orientation-message").style.display = "none";
+          document.getElementById("solutionPlot").style.display = "block";
+        }
+      });
     </script>
     <footer>
       <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>

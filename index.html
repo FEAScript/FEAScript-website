@@ -12,7 +12,7 @@
 
 <html>
   <head>
-    <title>FEAScript: A JavaScript Finite Element Simulation Library</title>
+    <title>FEAScript Finite Element Simulation Library</title>
     <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -146,29 +146,40 @@
     </div>
 
     <h2 id="gettingstarted"><a name="Getting Started"></a>Getting Started</h2>
-    <p>
-      FEAScript is entirely implemented in pure JavaScript and can run in two environments: in the browser
-      with a simple HTML page or via Node.js for server-side simulations. When running in the browser, all
-      simulations are executed locally without the need for any cloud services.
-    </p>
 
     <p>There are two ways to create simulations with FEAScript:</p>
     <ul>
       <li>
         <strong>JavaScript API:</strong> For developers comfortable with coding, the JavaScript API provides
-        full programmatic control, allowing direct integration into websites or web applications.
+        full programmatic control. It runs in three environments: in the browser with a simple HTML page, via
+        Node.js for server-side applications, or with online interactive notebooks.
       </li>
       <li>
-        <strong>Visual Editor:</strong> The
+        <strong>Visual Editor (FEAScript platform):</strong> The
         <a href="https://platform.feascript.com">FEAScript platform</a>
-        provides a no-code, block-based interface for creating simulations without writing any JavaScript
-        code.
+        provides a no-code, block-based interface (based on
+        <a href="https://developers.google.com/blockly/">
+          Blockly
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+            alt="External Link Icon"
+            style="
+              width: 16px;
+              height: 16px;
+              vertical-align: middle;
+              margin-left: 2px;
+              margin-bottom: 4px;
+            " /></a
+        >) for creating simulations without writing any JavaScript code. With the FEAScript platform, you can
+        connect visual blocks, create complex models, and save or load your projects in XML format for easy
+        sharing and reuse.
       </li>
     </ul>
+
     <br />
     <div class="highlight-container" style="margin-bottom: 1.5em">
       <p>
-        <strong>Latest stable release:</strong>
+        <strong>FEAScript latest stable release:</strong>
         <a href="https://github.com/FEAScript/FEAScript-core/releases">0.1.2</a>
         (<a href="https://www.npmjs.com/package/feascript"
           >npm
@@ -189,7 +200,7 @@
         >
         <br />
         <strong
-          >If you find FEAScript useful, please consider supporting its development through a
+          >💖 If you find FEAScript useful, please consider supporting its development through a
           donation:</strong
         >
         <script src="https://liberapay.com/FEAScript/widgets/button.js"></script>
@@ -249,7 +260,7 @@
     >
     <p>
       <em>
-        The above code is an indicative usage example of FEAScript. Adapt paths, solver types, and boundary
+        The above code is an illustrative example. Adapt paths, solver types, and boundary
         conditions to your specific problem.
       </em>
     </p>
@@ -265,10 +276,10 @@
 
     <h2 id="features"><a name="Features"></a>Features</h2>
 
-    <p>The following lists contain some, but not all, of the available features in FEAScript:</p>
+    <p>The following lists highlights key FEAScript features:</p>
     <ul>
       <li>
-        🧠 <strong>Physical Modelling</strong>
+        🧠 <strong>Physical Modeling</strong>
         <ul>
           <li>Solid heat conduction solver</li>
           <li>Front propagation solver</li>
@@ -299,7 +310,7 @@
         </ul>
       </li>
       <li>
-        ⚙️ <strong>Numerical Solution</strong>
+        ⚙️ <strong>Numerical Methods</strong>
         <ul>
           <!--
           <li>
@@ -312,40 +323,79 @@
           </li>
           -->
           <li>Linear system solvers (LU decomposition, Jacobi method)</li>
-          <li>Newton-Raphson method for nonlinear problems</li>
+          <li>Newton-Raphson method for nonlinear systems</li>
         </ul>
       </li>
       <li>
-        📊 <strong>Parallelization</strong>
+        📊 <strong>Performance & Parallelization</strong>
         <ul>
           <li>Web worker support for multi-threaded computation</li>
         </ul>
       </li>
       <li>
-        📈 <strong>Visualization</strong>
+        📈 <strong>Visualization & Post-Processing</strong>
         <ul>
-          <li>Line and surface plotting</li>
+          <li>
+            Interactive line and surface visualization with
+            <a href="https://plotly.com/javascript/">
+              Plotly
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+                alt="External Link Icon"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
+              />
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        🚀 <strong>Platform & Deployment</strong>
+        <ul>
+          <li>Browser runtime (ES modules)</li>
+          <li>
+            Node.js runtime (<a href="https://www.npmjs.com/package/feascript"
+              >npm
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+                alt="External Link Icon"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                " /></a
+            >)
+          </li>
+          <li>
+            No-code interface with <a href="https://platform.feascript.com">FEAScript platform</a> visual
+            editor
+          </li>
+          <li>
+            Online notebooks integration (<a
+              href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
+              >Scribbler
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+                alt="External Link Icon"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                " /></a
+            >)
+          </li>
         </ul>
       </li>
     </ul>
-
-    <p>
-      For a visual approach to creating simulations, we are also developing the
-      <a href="https://platform.feascript.com">FEAScript platform</a> - a
-      <strong>browser-based visual editor</strong> built on the
-      <a href="https://developers.google.com/blockly/"
-        >Blockly
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-          alt="External Link Icon"
-          style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
-      /></a>
-      library. This <strong>no-code interface</strong> allows users to build and run finite element
-      simulations directly in their browser by connecting visual blocks. While FEAScript's JavaScript API
-      offers full programmatic control for advanced customization, the FEAScript platform provides an
-      accessible entry point for users without coding experience. FEAScript platform also provides the ability
-      to save and load projects in XML format, enabling easy sharing and reuse of simulation configurations.
-    </p>
 
     <h2 id="tutorials"><a name="Tutorials"></a>Tutorials</h2>
     <p>
@@ -356,36 +406,38 @@
     </p>
     <ul>
       <li>
-        <strong>Heat conduction through wall</strong>:
-        <a href="https://feascript.com/tutorials/HeatConduction1DWall.html">API</a>
+        <strong>Heat conduction through a wall</strong>:
+        <a href="https://feascript.com/tutorials/HeatConduction1DWall.html">API (browser-based)</a>
         |
-        <a href="https://feascript.com/tutorials/HeatConduction1DWallPlatform.html"
-          >XML (FEAScript platform)</a
-        >
+        <a href="https://feascript.com/tutorials/HeatConduction1DWallPlatform.html">FEAScript platform</a>
       </li>
       <li>
         <strong>Heat conduction in a two-dimensional fin</strong>:
-        <a href="https://feascript.com/tutorials/HeatConduction2DFin.html">API (standard)</a>
+        <a href="https://feascript.com/tutorials/HeatConduction2DFin.html">API (browser-based)</a>
         |
-        <a href="https://feascript.com/tutorials/HeatConduction2DFinWorker.html">API (web worker)</a>
-        |
-        <a href="https://feascript.com/tutorials/HeatConduction2DFinGmsh.html">API (Gmsh mesh)</a>
-        |
-        <a href="https://feascript.com/tutorials/HeatConduction2DFinPlatform.html"
-          >XML (FEAScript platform)</a
+        <a href="https://feascript.com/tutorials/HeatConduction2DFinWorker.html"
+          >API (browser-based with web worker)</a
         >
+        |
+        <a href="https://feascript.com/tutorials/HeatConduction2DFinGmsh.html"
+          >API (browser-based with Gmsh mesh)</a
+        >
+        |
+        <a href="https://feascript.com/tutorials/HeatConduction2DFinPlatform.html">FEAScript platform</a>
       </li>
       <li>
         <strong>Solidification front propagation in a two-dimensional domain</strong>:
-        <a href="https://feascript.com/tutorials/SolidificationFront2D.html">API (standard)</a>
+        <a href="https://feascript.com/tutorials/SolidificationFront2D.html">API (browser-based)</a>
         |
-        <a href="https://feascript.com/tutorials/SolidificationFront2DWorker.html">API (web worker)</a>
+        <a href="https://feascript.com/tutorials/SolidificationFront2DWorker.html"
+          >API (browser-based with web worker)</a
+        >
       </li>
     </ul>
     <p>
       Please report any feedback on the above tutorials to the GitHub
-      <a href="https://github.com/orgs/FEAScript/discussions">discussions</a> or
-      <a href="https://github.com/FEAScript/FEAScript-core/issues">issues</a>.
+      <a href="https://github.com/orgs/FEAScript/discussions">Discussions</a> or
+      <a href="https://github.com/FEAScript/FEAScript-core/issues">Issues</a>.
     </p>
 
     <h2 id="documentation"><a name="Documentation"></a>Documentation</h2>

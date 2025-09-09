@@ -1,13 +1,3 @@
-/*  ______ ______           _____           _       _   
-   |  ____|  ____|   /\    / ____|         (_)     | |  
-   | |__  | |__     /  \  | (___   ___ ____ _ ____ | |_ 
-   |  __| |  __|   / /\ \  \___ \ / __|  __| |  _ \| __|
-   | |    | |____ / ____ \ ____) | (__| |  | | |_) | |  
-   |_|    |______/_/    \_\_____/ \___|_|  |_|  __/| |  
-                                             | |   | |  
-                                             |_|   | |_ 
-       Website: https://feascript.com/              \__|  */
-
 * {
   margin: 0;
   padding: 0;
@@ -214,6 +204,17 @@ mjx-container {
   color: #555;
 }
 
+.tutorials-list .badge {
+  display: inline-block;
+  background-color: #f7e7b7;
+  color: #333;
+  font-size: 90%;
+  padding: 0.2em 0.8em;
+  border-radius: 8px;
+  margin-right: 0.5em;
+  margin-top: 0.3em;
+}
+
 /* Footer styles */
 footer {
   position: relative;
@@ -243,6 +244,12 @@ footer {
   li {
     max-width: 400px;
   }
+  .tutorials-section {
+    padding: 15px;
+  }
+  .tutorials-list li a {
+    font-size: 100%;
+  }
 }
 
 /* Medium screens: 500px to 1000px */
@@ -267,6 +274,9 @@ footer {
   .highlight-container,
   li {
     max-width: 900px;
+  }
+  .tutorials-section {
+    padding: 15px;
   }
 }
 

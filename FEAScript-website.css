@@ -246,7 +246,7 @@ mjx-container {
 .tutorial-name {
   display: inline-block;
   vertical-align: middle;
-  font-style: italic;
+  font-weight: 550;
   margin-right: 10px;
 }
 
@@ -279,9 +279,6 @@ footer {
   li {
     max-width: 400px;
   }
-  .tutorials-section {
-    padding: 15px;
-  }
   .tutorials-list li a {
     font-size: 100%;
   }
@@ -309,9 +306,6 @@ footer {
   .highlight-container,
   li {
     max-width: 900px;
-  }
-  .tutorials-section {
-    padding: 15px;
   }
 }
 

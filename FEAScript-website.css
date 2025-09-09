@@ -213,6 +213,14 @@ mjx-container {
   border-radius: 8px;
   margin-right: 0.5em;
   margin-top: 0.3em;
+  vertical-align: middle;
+}
+
+.tutorial-name {
+  display: inline-block;
+  vertical-align: middle;
+  font-style: italic;
+  margin-right: 10px;
 }
 
 /* Footer styles */

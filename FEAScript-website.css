@@ -140,6 +140,10 @@ mjx-container {
 
 #menu li a:hover {
   color: #333;
+  transform: translateY(-2px);
+  cursor: default;
+  transition: transform 0.2s;
+  display: inline-block;
 }
 
 #menu li.external-link-start {
@@ -214,33 +218,35 @@ mjx-container {
   margin-right: 0.5em;
   margin-top: 0.3em;
   vertical-align: middle;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tutorials-list .badge:hover {
+  transform: translateY(-2px);
+  cursor: default; /* or pointer if clickable */
 }
 
 .tutorials-list .badge-basic {
-  background-color: #d4aa00;
-  color: #fff;
+  background-color: #6a6a6a;
+  color: #f7e7b7;
 }
 
 .tutorials-list .badge-visual {
-  background-color: #e68224;
-  color: #fff;
+  background-color: #d18342;
+  color: #f7e7b7;
 }
 
 .tutorials-list .badge-mt {
-  background-color: #2196f3;
-  color: #fff;
+  background-color: #5585a3;
+  color: #f7e7b7;
 }
 
 .tutorials-list .badge-gmsh {
-  background-color: #4caf50;
-  color: #fff;
-}
-
-.tutorials-list .badge-basic a,
-.tutorials-list .badge-visual a,
-.tutorials-list .badge-mt a,
-.tutorials-list .badge-gmsh a {
-  color: #fff;
+  background-color: #8a9277;
+  color: #f7e7b7;
 }
 
 .tutorial-name {
@@ -342,4 +348,10 @@ footer {
   h3 {
     font-size: 120%;
   }
+}
+
+.social-media-list a:hover {
+  transform: translateY(-2px);
+  cursor: default;
+  transition: transform 0.2s;
 }

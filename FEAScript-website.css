@@ -216,6 +216,33 @@ mjx-container {
   vertical-align: middle;
 }
 
+.tutorials-list .badge-basic {
+  background-color: #d4aa00;
+  color: #fff;
+}
+
+.tutorials-list .badge-visual {
+  background-color: #e68224;
+  color: #fff;
+}
+
+.tutorials-list .badge-mt {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.tutorials-list .badge-gmsh {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.tutorials-list .badge-basic a,
+.tutorials-list .badge-visual a,
+.tutorials-list .badge-mt a,
+.tutorials-list .badge-gmsh a {
+  color: #fff;
+}
+
 .tutorial-name {
   display: inline-block;
   vertical-align: middle;

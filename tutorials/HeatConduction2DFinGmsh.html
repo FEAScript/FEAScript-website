@@ -84,9 +84,16 @@
     <div class="highlight-container">
       <p>
         This page demonstrates solving the 2D heat conduction fin problem using a Gmsh-generated mesh.
-        <a href="https://gmsh.info/">Gmsh</a> is a powerful mesh generation tool that can create complex
-        geometries and meshes for finite element analysis. For the mathematical formulation and theory, see
-        the <a href="HeatConduction2DFin.html">basic tutorial</a>.
+        <a href="https://gmsh.info/">
+          Gmsh
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+            alt="External Link Icon"
+            style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+        /></a>
+        is a powerful mesh generation tool that can create complex geometries and meshes for finite element
+        analysis. For the mathematical formulation and theory, see the
+        <a href="HeatConduction2DFin.html">basic tutorial</a>.
       </p>
     </div>
 
@@ -157,10 +164,8 @@
 &lt;/body&gt;</pre
     >
 
-    <p>
-      <strong>Important notes about the Gmsh workflow:</strong>
-    </p>
-    <ol>
+    <p>Here are some important notes about the Gmsh workflow:</p>
+    <ul>
       <li>
         <strong>Physical Groups in Gmsh:</strong> In your ".geo" file, you need to define physical groups for
         boundaries using commands like <code>Physical Line("bottom") = {1};</code>. These are mapped to tags
@@ -169,8 +174,8 @@
       <li>
         <strong>Boundary Condition Mapping and Tag Indexing:</strong> When using Gmsh meshes in FEAScript, you
         need to subtract 1 from the Gmsh physical group tag numbers. For example, if your Gmsh file has
-        physical groups with tags 1, 2, 3, and 4, you would reference them in FEAScript as "0", "1", "2", and
-        "3" respectively:
+        physical groups with tags "1", "2", "3", "4", you would reference them in FEAScript as "0", "1", "2",
+        "3", respectively. For example:
         <code>model.addBoundaryCondition("0", ["constantTemp", 200]); // Gmsh physical group tag 1</code>.
         This conversion is necessary because Gmsh uses 1-based indexing while FEAScript uses 0-based indexing.
       </li>
@@ -178,7 +183,7 @@
         <strong>Unstructured Plotting:</strong> When plotting results from a Gmsh mesh, add the "unstructured"
         parameter to the plotSolution function to ensure correct visualization.
       </li>
-    </ol>
+    </ul>
 
     <p>
       You can create your own Gmsh files by writing ".geo" scripts or using Gmsh's GUI. For this example, we
@@ -193,9 +198,7 @@
     </p>
 
     <pre class="prettyprint">
-// 2D Rectangle: 4m (width) x 2m (height)
-// With Physical Lines for boundary labeling
-// Use the command "gmsh rect.geo -2" to generate the mesh
+// 2D Rectangle: 4m (width) x 2m (height) with physical lines for boundary labeling
 
 lc = 0.7; // Characteristic length (mesh density)
 
@@ -231,8 +234,8 @@ Mesh 2;</pre
     >
 
     <p>
-      Note how the physical line tags in the ".geo" file correspond to the boundary conditions in our FEAScript
-      code:
+      Note how the physical line tags in the ".geo" file correspond to the boundary conditions in our
+      FEAScript code:
     </p>
     <ul>
       <li>

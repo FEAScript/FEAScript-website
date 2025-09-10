@@ -236,10 +236,11 @@
     </div>
 
     <p>
-      <strong>Quick Start:</strong> To use FEAScript in your HTML, include it from our hosted build
-      (<code>https://core.feascript.com/dist/feascript.esm.js</code>) or download it from
-      <a href="https://github.com/FEAScript/FEAScript-core">GitHub</a> &#8594; add a canvas (e.g.,
-      <code>&lt;div id="solutionPlot">&lt;/div&gt;</code>) &#8594; add a mesh file (e.g., "your.msh" from
+      <strong>Quick Start:</strong> To use FEAScript in your HTML, include it from our hosted build (i.e.,
+      <code>import { FEAScriptModel } from "https://core.feascript.com/dist/feascript.esm.js";</code>) or
+      download it from <a href="https://github.com/FEAScript/FEAScript-core">GitHub</a> &#8594; add a canvas
+      (e.g., <code>&lt;div id="solutionPlot">&lt;/div&gt;</code>) &#8594; add a mesh file (e.g., "your.msh"
+      from
       <a href="https://gmsh.info/">
         Gmsh
         <img
@@ -252,8 +253,8 @@
             margin-left: 2px;
             margin-bottom: 4px;
           " /></a
-      >) or use FEAScript mesh generation tools &#8594; create and run a simulation using the JavaScript API
-      (see <a href="#tutorials">tutorials</a> for detailed examples):
+      >) or use FEAScript mesh generation tools &#8594; create and run a simulation using the JavaScript API.
+      Here is a simple example (see <a href="#tutorials">tutorials</a> for more details):
     </p>
 
     <pre class="prettyprint">
@@ -289,8 +290,8 @@
     >
     <p>
       <em>
-        The above code is an illustrative example. Adapt paths, solver types, and boundary conditions to your
-        specific problem.
+        The above code is an illustrative example of running FEAScript. Adapt paths, solver types, and
+        boundary conditions to your specific problem.
       </em>
     </p>
     <p>

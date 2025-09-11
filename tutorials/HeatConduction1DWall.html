@@ -162,7 +162,7 @@
         model.solverConfig,
         model.meshConfig.meshDimension,
         "line",
-        "solutionPlot"
+        "resultsCanvas"
       );
       
     });
@@ -178,13 +178,13 @@
     <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
-  &lt;div id="solutionPlot">&lt;/div&gt;
+  &lt;div id="resultsCanvas">&lt;/div&gt;
   &lt;!-- ...continue of body region... --&gt;
 &lt;/body&gt;</pre
     >
     <p>
-      The <code>"solutionPlot"</code> is the id of the div where the plot will be rendered. This id is passed as an
-      argument to the "plotSolution" function to specify the target div for the plot.
+      The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
+      as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
     </p>
 
     <h2 id="results"><a name="Results"></a>Results</h2>
@@ -203,7 +203,7 @@
       Cannot draw the results. Please rotate your phone to landscape orientation and refresh the page to see
       the results.
     </div>
-    <div id="solutionPlot"></div>
+    <div id="resultsCanvas"></div>
 
     <ul id="menu">
       <li><a href="https://feascript.com/index.html">Home</a></li>
@@ -223,10 +223,10 @@
       window.addEventListener("DOMContentLoaded", () => {
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("solutionPlot").style.display = "none";
+          document.getElementById("resultsCanvas").style.display = "none";
         } else {
           document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("solutionPlot").style.display = "block";
+          document.getElementById("resultsCanvas").style.display = "block";
 
           // Print FEAScript version
           printVersion();
@@ -263,7 +263,7 @@
             model.solverConfig,
             model.meshConfig.meshDimension,
             "line",
-            "solutionPlot"
+            "resultsCanvas"
           );
         }
       });
@@ -271,10 +271,10 @@
       window.addEventListener("resize", () => {
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("solutionPlot").style.display = "none";
+          document.getElementById("resultsCanvas").style.display = "none";
         } else {
           document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("solutionPlot").style.display = "block";
+          document.getElementById("resultsCanvas").style.display = "block";
         }
       });
     </script>

@@ -102,7 +102,11 @@
       equation and its mathematical properties, please see our
       <a href="https://blog.feascript.com/tutorial/2025/06/15/eikonal-equation.html">blog post</a>.
     </p>
-    <img src="../assets/SolidificationFront2D.png" width="300" />
+    <img
+      src="../assets/SolidificationFront2D.png"
+      width="300"
+      alt="Schematic of 2D solidification front domain"
+    />
     <p>
       The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
       this model, we consider a square domain where solidification begins simultaneously from three sides
@@ -165,8 +169,8 @@
       // Apply boundary conditions
       model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
       model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-      model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-      model.addBoundaryCondition("3", ["constantValue", 0])); // Right
+      model.addBoundaryCondition("2", ["zeroGradient"]);     // Top
+      model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
       // Solve
       model.setSolverMethod("lusolve");
@@ -179,7 +183,7 @@
         model.solverConfig,
         model.meshConfig.meshDimension,
         "contour",
-        "solutionPlot"
+        "resultsCanvas"
       );
       
     });
@@ -194,13 +198,13 @@
     <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
-  &lt;div id="solutionPlot">&lt;/div&gt;
+  &lt;div id="resultsCanvas">&lt;/div&gt;
   &lt;!-- ...continue of body region... --&gt;
 &lt;/body&gt;</pre
     >
     <p>
-      The <code>"solutionPlot"</code> is the id of the div where the plot will be rendered. This id is passed as an
-      argument to the "plotSolution" function to specify the target div for the plot.
+      The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
+      as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
     </p>
 
     <h2 id="results"><a name="Results"></a>Results</h2>
@@ -223,7 +227,7 @@
     <div id="orientation-message">
       Cannot draw the results. Please turn your phone to horizontal position to see the results.
     </div>
-    <div id="solutionPlot"></div>
+    <div id="resultsCanvas"></div>
 
     <br />
 
@@ -245,19 +249,19 @@
         FEAScriptModel,
         plotSolution,
         printVersion,
-      // } from "https://core.feascript.com/dist/feascript.esm.js";
+      } from "https://core.feascript.com/dist/feascript.esm.js";
       // } from "https://core.feascript.com/src/index.js";
       // Import FEAScript library from a local directory
       // } from "../../FEAScript-core/dist/feascript.esm.js";
-      } from "../../FEAScript-core/src/index.js";
+      // } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("solutionPlot").style.display = "none";
+          document.getElementById("resultsCanvas").style.display = "none";
         } else {
           document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("solutionPlot").style.display = "block";
+          document.getElementById("resultsCanvas").style.display = "block";
 
           // Enable debug logging mode
           // logSystem("debug");
@@ -300,7 +304,7 @@
             model.solverConfig,
             model.meshConfig.meshDimension,
             "contour",
-            "solutionPlot"
+            "resultsCanvas"
           );
         }
       });
@@ -308,10 +312,10 @@
       window.addEventListener("resize", () => {
         if (window.innerHeight > window.innerWidth) {
           document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("solutionPlot").style.display = "none";
+          document.getElementById("resultsCanvas").style.display = "none";
         } else {
           document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("solutionPlot").style.display = "block";
+          document.getElementById("resultsCanvas").style.display = "block";
         }
       });
     </script>

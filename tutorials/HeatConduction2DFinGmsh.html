@@ -157,7 +157,7 @@
         model.solverConfig,
         model.meshConfig.meshDimension,
         "contour",
-        "solutionPlot",
+        "resultsCanvas",
         "unstructured" // Important: specify unstructured mesh type for Gmsh meshes
       );
     });
@@ -184,7 +184,7 @@
       <li>
         <strong>Unstructured Plotting:</strong> When plotting results from a Gmsh mesh, add the
         <code>"unstructured"</code>
-        parameter to the plotSolution function to ensure correct visualization.
+        parameter to the <code>plotSolution</code> function to ensure correct visualization.
       </li>
     </ul>
 
@@ -299,7 +299,7 @@ Mesh 2;</pre
       applications, but may be noticeable in regions with steep temperature gradients.
     </p>
 
-    <div id="solutionPlot"></div>
+    <div id="resultsCanvas"></div>
 
     <ul id="menu">
       <li><a href="https://feascript.com/index.html">Home</a></li>
@@ -377,7 +377,7 @@ Mesh 2;</pre
           gmshModel.solverConfig,
           gmshModel.meshConfig.meshDimension,
           "contour",
-          "solutionPlot",
+          "resultsCanvas",
           "unstructured"
         );
       });

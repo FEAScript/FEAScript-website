@@ -239,7 +239,7 @@
       <strong>Quick Start:</strong> To use FEAScript in your HTML, include it from our hosted build (i.e.,
       <code>import { FEAScriptModel } from "https://core.feascript.com/dist/feascript.esm.js";</code>) or
       download it from <a href="https://github.com/FEAScript/FEAScript-core">GitHub</a> &#8594; add a canvas
-      (e.g., <code>&lt;div id="solutionPlot">&lt;/div&gt;</code>) &#8594; add a mesh file (e.g.,
+      (e.g., <code>&lt;div id="resultsCanvas">&lt;/div&gt;</code>) &#8594; add a mesh file (e.g.,
       <code>your.msh</code> from
       <a href="https://gmsh.info/">
         Gmsh
@@ -282,10 +282,10 @@
     const { solutionVector, nodesCoordinates } = model.solve();
 
     // Plot results
-    plotSolution(solutionVector, nodesCoordinates, model.solverConfig, model.meshConfig.meshDimension, "contour", "solutionPlot", "unstructured");
+    plotSolution(solutionVector, nodesCoordinates, model.solverConfig, model.meshConfig.meshDimension, "contour", "resultsCanvas", "unstructured");
   });
   &lt;/script&gt;
-  &lt;!-- ...continue of body region... --&gt;
+  &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
     >
     <p>

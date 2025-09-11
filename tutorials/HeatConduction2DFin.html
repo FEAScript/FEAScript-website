@@ -91,24 +91,24 @@
     <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
       Steady heat conduction is described by the Laplace equation: \(\nabla^{2}T(x,y) = 0\), where \(T\)
-      signifies the temperature values.
+      denotes the temperature.
     </p>
     <img src="../assets/HeatConduction2DFin.png" width="300" />
     <p>
       The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
-      constant temperature boundary conditions are implemented as Dirichlet types in the finite element code.
-      The symmetry boundary condition is implemented as a Neumann zero-flux type \( \left(
-      \frac{dT}{dx}|_{x=0}=0 \right) \), while the convective cooling boundary condition is of the Robin type.
-      Specifically, the latter is expressed as \(\frac{dT}{dy}|_{y=2}=-{\frac{h}{k}}(T-T_0)\), where \(h\) is
-      the heat transfer coefficient, \(k\) the thermal conductivity and \(T_0\) is the external temperature.
-      We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_0\) = 20 &deg;C.
+      constant temperature boundary conditions are implemented as Dirichlet-type conditions in the finite
+      element code. The symmetry boundary condition is implemented as a Neumann zero-flux type \( \left(
+      \frac{dT}{dx}|_{x=0}=0 \right) \), while the convective cooling boundary condition is a Robin-type
+      condition. Specifically, the latter is expressed as \(\frac{dT}{dy}|_{y=2}=-{\frac{h}{k}}(T-T_0)\),
+      where \(h\) is the heat transfer coefficient, \(k\) the thermal conductivity and \(T_0\) is the external
+      temperature. We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_0\) = 20 &deg;C.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
     <p>
       Below is a demonstration of how to use the FEAScript library to solve this stationary heat transfer
       problem in your web browser. You only need a simple HTML page to run this example where the following
-      code snippets should be included. First, we should load the required external libraries:
+      code snippets should be included. First, load the required external libraries:
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
@@ -181,8 +181,8 @@
       indicates the external temperature \(T_0\).
     </p>
     <p>
-      After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
-      HTML container where the plot will render:
+      After solving the case, the results are shown in a 2D contour plot. To visualize it, include an HTML
+      container where the plot will render:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -208,8 +208,8 @@
 
     <!-- Container element where the solution plot will be rendered -->
     <div id="orientation-message">
-      Cannot draw the results. Please turn your phone to horizontal position and refresh the page to see the
-      results.
+      Cannot draw the results. Please rotate your phone to landscape orientation and refresh the page to see
+      the results.
     </div>
     <div id="solutionPlot"></div>
 

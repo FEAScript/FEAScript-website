@@ -83,7 +83,7 @@
     <div class="highlight-container">
       <p>
         In this tutorial, we study steady-state heat flow through a wall. We can simplify this problem to one
-        dimension considering that the wall's width and height are much larger than its thickness, and the
+        dimension, considering that the wall's width and height are much larger than its thickness, and the
         temperature varies only across the thickness direction.
       </p>
     </div>
@@ -91,22 +91,22 @@
     <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
       Steady heat conduction in one dimension is described by the Laplace equation: \(\frac{d^2T}{dx^2} = 0\),
-      where \(T\) signifies the temperature values. The above is used to find the temperature distribution
+      where \(T\) denotes the temperature values. The above is used to find the temperature distribution
       within common engineering components like house walls.
     </p>
 
-    <img src="../assets/HeatConduction1DWall.png" width="100" />
+    <img src="../assets/HeatConduction1DWall.png" alt="1D heat conduction schematic" width="100" />
 
     <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. Our
+      The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
       objective is to determine the temperature distribution within the wall itself. In this problem, a
-      convection boundary condition, implemented as Robin type, is applied at the inner side of the wall (\(x
+      convection boundary condition, implemented as Robin-type, is applied at the inner side of the wall (\(x
       = 0\)). The latter is expressed as \(\frac{dT}{dx}|_{x=0}=-{\frac{h}{k}}(T-T_{in})\), where \(h\) is the
       heat transfer coefficient, \(k\) the thermal conductivity, and \(T_{in}\) is the internal temperature of
       the house (room temperature). We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_{in}\) =
       25 &deg;C. At the outer side of the wall (\(x = W\), where \(W\) = 0.15 m, is the width of the wall), we
       apply a constant temperature (\(T_0\) = 5 &deg;C) boundary condition, representing the outdoor
-      temperature, implemented as Dirichlet type in the finite element code.
+      temperature, implemented as Dirichlet-type in the finite element code.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
@@ -172,8 +172,8 @@
     >
 
     <p>
-      After solving the case, the results are demonstrated as a line plot. To visualize it, include an HTML
-      container where the plot will render:
+      After solving the case, the results appear as a line plot. To visualize it, include an HTML container
+      where the plot will render:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -200,8 +200,8 @@
 
     <!-- Container element where the solution plot will be rendered -->
     <div id="orientation-message">
-      Cannot draw the results. Please turn your phone to horizontal position and refresh the page to see the
-      results.
+      Cannot draw the results. Please rotate your phone to landscape orientation and refresh the page to see
+      the results.
     </div>
     <div id="solutionPlot"></div>
 
@@ -211,13 +211,13 @@
     </ul>
 
     <script type="module">
-      //Import FEAScript library from GitHub
+      // Import FEAScript library from GitHub
       import {
         FEAScriptModel,
         plotSolution,
         printVersion,
       } from "https://core.feascript.com/dist/feascript.esm.js";
-      //Import FEAScript library from a local directory
+      // Import FEAScript library from a local directory
       //import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {

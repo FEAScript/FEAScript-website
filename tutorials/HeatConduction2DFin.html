@@ -173,14 +173,15 @@
 &lt;/body&gt;</pre
     >
     <p>
-      In the boundary condition definition, the numbers at the left side (from 0 to 3) indicate the boundaries
-      of the geometry (the mesh generator of FEAScript has assigned numbers to the boundaries, starting from
-      the bottom boundary and proceeding clockwise). The "constantTemp" condition sets a constant temperature
-      value. The "symmetry" boundary condition represents a zero-flux type. Finally, the "convection"
-      condition describes a convective heat transfer scenario. In addition, the second argument of the
-      "constantTemp" boundary condition corresponds to the constant temperature value. For a "convection"
-      boundary condition, the second argument represents the \({\frac{h}{k}}\) value, and the third argument
-      indicates the external temperature \(T_0\).
+      In the boundary condition definition, the numbers at the left side (from <code>"0"</code> to
+      <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has assigned
+      numbers to the boundaries, starting from the bottom boundary and proceeding clockwise). The
+      <code>"constantTemp"</code> condition sets a constant temperature value. The
+      <code>"symmetry"</code> boundary condition represents a zero-flux type. Finally, the
+      <code>"convection"</code> condition describes a convective heat transfer scenario. In addition, the
+      second argument of the <code>"constantTemp"</code> boundary condition corresponds to the constant
+      temperature value. For a <code>"convection"</code> boundary condition, the second argument represents
+      the \({\frac{h}{k}}\) value, and the third argument indicates the external temperature \(T_0\).
     </p>
     <p>
       After solving the case, the results are shown in a 2D contour plot. To visualize it, include an HTML

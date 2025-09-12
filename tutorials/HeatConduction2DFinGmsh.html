@@ -169,15 +169,17 @@
     <p>Important notes about the Gmsh workflow:</p>
     <ul>
       <li>
-        <strong>Physical Groups in Gmsh:</strong> In your <code>.geo</code> file, you need to define physical
-        groups for boundaries using commands like <code>Physical Line("bottom") = {1};</code>. These are
-        mapped to tags in the imported mesh.
+        <strong>Physical Groups in Gmsh:</strong> In your <code>.geo</code> file (see
+        <a href="#gmshgeofile">Example Gmsh <code>.geo</code> File</a>), you need to define physical groups
+        for boundaries using commands like <code>Physical Line("bottom") = {1};</code>. These are mapped to
+        tags in the imported mesh.
       </li>
       <li>
         <strong>Boundary Condition Mapping and Tag Indexing:</strong> When using Gmsh meshes in FEAScript, you
         need to subtract 1 from the Gmsh physical group tag numbers. For example, if your Gmsh file has
-        physical groups with tags "1", "2", "3", "4", you would reference them in FEAScript as "0", "1", "2",
-        "3", respectively. For example:
+        physical groups with tags <code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>, you
+        would reference them in FEAScript as <code>"0"</code>, <code>"1"</code>, <code>"2"</code>,
+        <code>"3"</code>, respectively. For example:
         <code>model.addBoundaryCondition("0", ["constantTemp", 200]); // Gmsh physical group tag 1</code>.
         This conversion is necessary because Gmsh uses 1-based indexing while FEAScript uses 0-based indexing.
       </li>

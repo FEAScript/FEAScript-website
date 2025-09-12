@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Frontal Solver Test Using FEAScriptModel</title>
+    <!-- Plotly & Math.js needed by plotSolution -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
+    <style>
+      #solutionPlot {
+        width: 640px;
+        height: 480px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Running frontal solver with FEAScriptModel...</p>
+    <div id="solutionPlot"></div>
+    <script type="module">
+      // Import FEAScript library
+      import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js";
+
+      // Create a new FEAScript model
+      const model = new FEAScriptModel();
+
+      // Set solver configuration
+      model.setSolverConfig("solidHeatTransferScript");
+
+      // Define mesh configuration
+      model.setMeshConfig({
+        meshDimension: "2D",
+        elementOrder: "quadratic",
+        numElementsX: 12,
+        numElementsY: 8,
+        maxX: 4,
+        maxY: 2,
+      });
+
+      // Set boundary conditions (matching what's in the frontal solver)
+      model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom edge
+      model.addBoundaryCondition("1", ["constantTemp", 0]); // Left edge
+      model.addBoundaryCondition("2", ["constantTemp", 0]); // Top edge
+      model.addBoundaryCondition("3", ["constantTemp", 200]); // Right edge
+
+      // Set solver method to frontal
+      model.setSolverMethod("frontal");
+
+      // Solve the problem and get the solution
+      const { solutionVector, nodesCoordinates } = model.solve();
+
+      // Plot the solution
+      plotSolution(
+        solutionVector,
+        nodesCoordinates,
+        "solidHeatTransferScript",
+        "2D",
+        "contour",
+        "solutionPlot",
+        "structured"
+      );
+    </script>
+  </body>
+</html>

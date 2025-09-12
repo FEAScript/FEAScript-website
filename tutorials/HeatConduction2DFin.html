@@ -40,13 +40,6 @@
     ></script>
     <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-    <style>
-      #orientation-message {
-        display: none;
-        color: red;
-        font-weight: bold;
-      }
-    </style>
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -93,7 +86,16 @@
       Steady heat conduction is described by the Laplace equation: \(\nabla^{2}T(x,y) = 0\), where \(T\)
       denotes the temperature.
     </p>
-    <img src="../assets/HeatConduction2DFin.png" width="300" />
+
+    <div class="center-image">
+      <img src="../assets/HeatConduction2DFin.png" alt="2D fin heat conduction schematic" width="300" />
+      <p class="image-caption">
+        Schematic of the 2D cooling fin: constant temperature (200&nbsp;°C) at bottom and right edges,
+        symmetry (zero flux) at the left edge, and convection at the top edge (h/k = 1&nbsp;m⁻¹, external
+        temperature 20&nbsp;°C)
+      </p>
+    </div>
+
     <p>
       The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
       constant temperature boundary conditions are implemented as Dirichlet-type conditions in the finite

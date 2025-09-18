@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+
+<!--   ______ ______           _____           _       _     -->
+<!--  |  ____|  ____|   /\    / ____|         (_)     | |    -->
+<!--  | |__  | |__     /  \  | (___   ___ ____ _ ____ | |_   -->
+<!--  |  __| |  __|   / /\ \  \___ \ / __|  __| |  _ \| __|  -->
+<!--  | |    | |____ / ____ \ ____) | (__| |  | | |_) | |    -->
+<!--  |_|    |______/_/    \_\_____/ \___|_|  |_|  __/| |    -->
+<!--                                            | |   | |    -->
+<!--                                            |_|   | |_   -->
+<!--       Website: https://feascript.com/             \__|  -->
+
 <html>
   <head>
     <meta charset="utf-8" />
@@ -18,8 +29,8 @@
     <div id="solutionPlot"></div>
     <script type="module">
       // Import FEAScript library
-      import { FEAScriptModel, plotSolution } from "https://core.feascript.com/dist/feascript.esm.js";
-      // import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js";
+      // import { FEAScriptModel, plotSolution } from "https://core.feascript.com/dist/feascript.esm.js";
+      import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js";
 
       // Create a new FEAScript model
       const model = new FEAScriptModel();
@@ -38,12 +49,13 @@
       });
 
       // Set boundary conditions (matching what's in the frontal solver)
-      model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom edge
-      model.addBoundaryCondition("1", ["constantTemp", 0]); // Left edge
-      model.addBoundaryCondition("2", ["constantTemp", 0]); // Top edge
-      model.addBoundaryCondition("3", ["constantTemp", 200]); // Right edge
+      model.addBoundaryCondition("0", ["constantTemp", 200]);
+      model.addBoundaryCondition("1", ["symmetry"]);
+      model.addBoundaryCondition("2", ["convection", 1, 20]);
+      model.addBoundaryCondition("3", ["constantTemp", 200]);
 
-      // Set solver method to frontal
+      // Set solver method
+      // model.setSolverMethod("lusolve");
       model.setSolverMethod("frontal");
 
       // Solve the problem and get the solution

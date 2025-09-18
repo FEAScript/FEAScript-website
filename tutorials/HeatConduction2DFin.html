@@ -276,8 +276,9 @@
           model.addBoundaryCondition("3", ["constantTemp", 200]);
 
           // Set solver method
-          //model.setSolverMethod("jacobi");
+          // model.setSolverMethod("jacobi");
           model.setSolverMethod("lusolve");
+          // model.setSolverMethod("frontal");
 
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = model.solve();

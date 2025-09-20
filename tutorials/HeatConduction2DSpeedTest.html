@@ -41,12 +41,16 @@
       // Define mesh configuration
       model.setMeshConfig({
         meshDimension: "2D",
-        elementOrder: "quadratic",
-        numElementsX: 16,
-        numElementsY: 8,
+        elementOrder: "linear",
+        numElementsX: 77,
+        numElementsY: 39,
         maxX: 4,
         maxY: 2,
       });
+
+      // Calculate total number of elements
+      const totalElements = model.meshConfig.numElementsX * model.meshConfig.numElementsY;
+      console.log(`Total number of elements in mesh: ${totalElements}`);
 
       // Set boundary conditions (matching what's in the frontal solver)
       model.addBoundaryCondition("0", ["constantTemp", 200]);
@@ -55,8 +59,9 @@
       model.addBoundaryCondition("3", ["constantTemp", 200]);
 
       // Set solver method
-      // model.setSolverMethod("lusolve");
-      model.setSolverMethod("frontal");
+      model.setSolverMethod("lusolve");
+      // model.setSolverMethod("jacobi");
+      // model.setSolverMethod("frontal");
 
       // Solve the problem and get the solution
       const { solutionVector, nodesCoordinates } = model.solve();

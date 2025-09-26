@@ -295,6 +295,7 @@
 
           // Set solver method
           model.setSolverMethod("lusolve");
+          // model.setSolverMethod("frontal");
 
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = model.solve();

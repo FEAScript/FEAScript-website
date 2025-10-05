@@ -128,7 +128,7 @@
   
       // Create and configure model
       const model = new FEAScriptModel();
-      model.setSolverConfig("solidHeatTransferScript");
+      model.setSolverConfig("heatConductionScript");
   
       // Parse the mesh file first
       const result = await importGmshQuadTri(meshFile);
@@ -358,7 +358,7 @@ Mesh 2;</pre
         const gmshModel = new FEAScriptModel();
 
         // Set solver configuration
-        gmshModel.setSolverConfig("solidHeatTransferScript");
+        gmshModel.setSolverConfig("heatConductionScript");
 
         // Parse the mesh file first
         const result = await importGmshQuadTri(meshFile);

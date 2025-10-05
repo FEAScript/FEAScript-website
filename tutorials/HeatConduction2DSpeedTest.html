@@ -84,7 +84,7 @@
         const numElementsY = parseInt(document.getElementById("numElementsY").value);
 
         const model = new FEAScriptModel();
-        model.setSolverConfig("solidHeatTransferScript");
+        model.setSolverConfig("heatConductionScript");
         model.setMeshConfig({
           meshDimension: "2D",
           elementOrder: "linear",
@@ -112,7 +112,7 @@
         plotSolution(
           solutionVector,
           nodesCoordinates,
-          "solidHeatTransferScript",
+          "heatConductionScript",
           "2D",
           "contour",
           "resultsCanvas",

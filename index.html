@@ -272,7 +272,7 @@
 
     // Create and configure model
     const model = new FEAScriptModel();
-    model.setSolverConfig("solverType"); // e.g., "solidHeatTransferScript"
+    model.setSolverConfig("solverType"); // e.g., "heatConductionScript"
     model.setMeshConfig({parsedMesh, meshDimension: "2D", elementOrder: "linear"});
 
     // Apply boundary conditions (Gmsh physical group tags)
@@ -311,7 +311,7 @@
       <li>
         🧠 <strong>Physical Modeling</strong>
         <ul>
-          <li>Solid heat conduction solver</li>
+          <li>Heat conduction solver</li>
           <li>Front propagation solver</li>
         </ul>
       </li>

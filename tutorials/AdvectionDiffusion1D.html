@@ -90,8 +90,8 @@
     </p>
     <p>\(\frac{d^2u}{dx^2} + 10 \frac{du}{dx} = -10 \cdot e^{-200 \cdot (x - 0.5)^2}\)</p>
     <p>
-      This can be rewritten in the general form: \(-\frac{d}{dx}\left(A(x)\frac{du}{dx}\right) +
-      B(x)\frac{du}{dx} - C(x)u = D(x)\)
+      This can be rewritten in the general form: \(\frac{d}{dx}\left(A(x)\frac{du}{dx}\right) +
+      B(x)\frac{du}{dx} + C(x)u = D(x)\)
     </p>
     <p>Where for our specific problem:</p>
     <ul>
@@ -161,7 +161,7 @@
       });
 
       // Define boundary conditions
-      model.addBoundaryCondition("0", ["constantValue", 0]); // Left boundary, u(0) = 0
+      model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
       model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
 
       // Solve

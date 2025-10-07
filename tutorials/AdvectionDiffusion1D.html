@@ -12,16 +12,16 @@
 
 <html>
   <head>
-    <title>FEAScript: Solidification Front Propagation in a 2D Domain</title>
+    <title>FEAScript: Advection-Diffusion with a Gaussian Source Term</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving an eikonal equation in a 2D domain using the FEAScript library. The problem represents a typical solidification front propagation scenario, where the objective is to track the movement of an interface."
+      content="This example demonstrates solving a one-dimensional advection-diffusion equation with a Gaussian source term using the FEAScript library. The problem shows how to model transport phenomena with both diffusion and advection mechanisms."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, computational mechanics, javascript, eikonal, front propagation"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, advection-diffusion, transport phenomena"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
@@ -38,7 +38,7 @@
       async
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     ></script>
-    <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
+    <!-- Import the run_prettify.js library for JavaScript code coloring -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   </head>
 
@@ -65,7 +65,7 @@
         />
       </a>
     </h1>
-    <h1>Solidification Front Propagation in a 2D Domain</h1>
+    <h1>Advection-Diffusion with a Gaussian Source Term</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
@@ -75,63 +75,50 @@
 
     <div class="highlight-container">
       <p>
-        In this tutorial, we address a solidification front propagation problem in a 2D domain. This is a
-        typical interface tracking problem, used to simulate how a solidification front moves through a
-        medium, such as metal cooling or crystal growth.
+        In this tutorial, we address an advection-diffusion problem in a one-dimensional domain with a
+        Gaussian source term. This is a fundamental transport phenomenon that occurs in many fields including
+        fluid dynamics, heat transfer, and contaminant transport, where both diffusion and advection
+        mechanisms are important.
       </p>
     </div>
 
     <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
-      The propagation of a solidification front can be modeled using the eikonal equation that in its general
-      form is given by: \(|\nabla \phi(x,y)| = \frac{1}{F(x,y)}\). In the above, \(\phi(x,y)\) is the arrival
-      time of the front at point (x,y), and \(F(x,y)\) is the local speed of front propagation. This speed can
-      vary spatially based on factors such as temperature gradients, material properties, or crystallographic
-      orientation. For this example, we simplify the problem by using a constant front propagation speed of 1
-      m/s throughout the domain, which reduces the equation to: \(|\nabla \phi(x,y)| = 1\). It's worth noting,
-      however, that actual solidification speeds in real materials typically range from micrometers per second
-      to centimeters per second for most metals and alloys. Only specialized rapid solidification processes
-      might achieve speeds approaching or exceeding 1 m/s. For more detailed background on the eikonal
-      equation and its mathematical properties, please see our
-      <a href="https://blog.feascript.com/tutorial/2025/06/15/eikonal-equation.html">blog post</a>.
+      The advection-diffusion equation is a partial differential equation that describes physical phenomena
+      where particles, energy, or other physical quantities are transferred inside a physical system due to
+      two processes: diffusion (random motion) and advection (directed motion). In one dimension, the
+      steady-state equation is given by:
     </p>
-
-    <div class="center-image">
-      <img
-        src="../assets/SolidificationFront2D.png"
-        alt="Schematic of 2D solidification front domain"
-        width="300"
-      />
-      <p class="image-caption">
-        Schematic of the 2D solidification front propagation domain: constant value (0) at bottom, left, and
-        right edges indicating initial solidification fronts, and zero gradient at the top edge allowing free
-        propagation
-      </p>
-    </div>
+    <p>\(\frac{d^2u}{dx^2} + 10 \frac{du}{dx} = -10 \cdot e^{-200 \cdot (x - 0.5)^2}\)</p>
+    <p>
+      This can be rewritten in the general form: \(-\frac{d}{dx}\left(A(x)\frac{du}{dx}\right) +
+      B(x)\frac{du}{dx} - C(x)u = D(x)\)
+    </p>
+    <p>Where for our specific problem:</p>
+    <ul>
+      <li>\(A(x) = 1\) (diffusion coefficient)</li>
+      <li>\(B(x) = 10\) (advection coefficient)</li>
+      <li>\(C(x) = 0\) (no reaction term)</li>
+      <li>\(D(x) = -10 \cdot e^{-200 \cdot (x - 0.5)^2}\) (Gaussian source term centered at x = 0.5)</li>
+    </ul>
 
     <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
-      this model, we consider a square domain where solidification begins simultaneously from three sides
-      (bottom, left, and right boundaries), which are all maintained at a constant value of zero (representing
-      the initial front position). This configuration simulates a common scenario in casting or directional
-      solidification processes, where a molten material is contained within a mold and begins to solidify from
-      the cooled walls. The top boundary has a zero gradient condition, allowing the front to propagate freely
-      in that direction.
+      We apply Dirichlet boundary condition at the left end: \(u(0) = 1\) and Neumann boundary condition (zero
+      gradient) at the right end: \(\frac{du}{dx}(1) = 0\). These conditions represent a fixed concentration
+      at the inlet and free outflow at the outlet of our domain.
     </p>
     <p>
-      The eikonal equation is nonlinear, making it challenging to solve directly. Due to convergence
-      difficulties, a viscous term elimination technique is employed. According to this approach, a viscous
-      term \(\varepsilon(\nabla^2\phi)\) is added to the equation, resulting in: \(|\nabla \phi(x,y)| +
-      \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical diffusion that
-      ensures the solution remains smooth throughout the domain. The solution of this modified equation
-      converges to the solution of the original eikonal equation as \(\varepsilon \rightarrow 0\).
+      The Gaussian source term acts as a localized input at the center of the domain. The balance between
+      diffusion (spreading) and advection (directed transport) will determine how the solution behaves. With
+      the given advection coefficient of 10, we expect to see the solution skewed in the direction opposite to
+      the advection (toward the left) since the advection term has a positive coefficient.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
     <p>
-      Below is a demonstration of how to use the FEAScript library to solve this front propagation problem in
-      your web browser. You only need a simple HTML page to run this example where the following code snippets
-      should be included. First, load the required external libraries:
+      Below is a demonstration of how to use the FEAScript library to solve this advection-diffusion problem
+      in your web browser. You only need a simple HTML page to run this example where the following code
+      snippets should be included. First, load the required external libraries:
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
@@ -158,21 +145,29 @@
 
       // Create and configure model
       const model = new FEAScriptModel();
-      model.setSolverConfig("frontPropagationScript");
-      model.setMeshConfig({
-        meshDimension: "2D",
-        elementOrder: "quadratic",
-        numElementsX: 12,
-        numElementsY: 8,
-        maxX: 4,
-        maxY: 2,
+      
+      // Set solver configuration with coefficient functions
+      model.setSolverConfig("generalFormPDEScript", {
+        coefficientFunctions: {
+          // Equation d²u/dx² + 10 du/dx = -10 * exp(-200 * (x - 0.5)²)
+          A: (x) => 1, // Diffusion coefficient
+          B: (x) => 10, // Advection coefficient
+          C: (x) => 0,  // Reaction coefficient
+          D: (x) => -10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
+        },
       });
 
-      // Apply boundary conditions
-      model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
-      model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-      model.addBoundaryCondition("2", ["zeroGradient"]);     // Top
-      model.addBoundaryCondition("3", ["constantValue", 0]); // Right
+      // Define mesh configuration
+      model.setMeshConfig({
+        meshDimension: "1D",
+        elementOrder: "quadratic",
+        numElementsX: 20,
+        maxX: 1.0,
+      });
+
+      // Define boundary conditions
+      model.addBoundaryCondition("0", ["constantValue", 0]); // Left boundary, u(0) = 0
+      model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
 
       // Solve
       model.setSolverMethod("lusolve");
@@ -184,18 +179,18 @@
         nodesCoordinates,
         model.solverConfig,
         model.meshConfig.meshDimension,
-        "contour",
+        "line",
         "resultsCanvas"
       );
-      
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
     >
+
     <p>
-      After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
-      HTML container where the plot will render:
+      After solving the case, the results appear as a line plot. To visualize it, include an HTML container
+      where the plot will render:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -210,34 +205,25 @@
     </p>
 
     <h2 id="results"><a name="Results"></a>Results</h2>
+
     <p>
-      Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
-      time of the front at each position. This plot is generated in real time using FEAScript.
-      <b
-        >Please note that you may need to wait a few moments for the solution to be calculated and plotted
-        since the eikonal equation is solved iteratively with the Newton-Raphson method directly in your
-        browser.</b
-      >
-      You can find a Node.js implementation of this tutorial in the
-      <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/frontPropagationScript/solidificationFront2D"
+      Below is the 1D line plot of the computed solution to the advection-diffusion equation. This plot is
+      generated in real time using FEAScript. You can find a Node.js implementation of this tutorial in the
+      <a href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/generalFormPDEScript"
         >example directory</a
       >.
     </p>
 
     <!-- Container element where the solution plot will be rendered -->
     <div id="orientation-message">
-      Cannot draw the results. Please turn your phone to horizontal position to see the results.
+      Cannot draw the results. Please rotate your phone to landscape orientation and refresh the page to see
+      the results.
     </div>
     <div id="resultsCanvas"></div>
 
-    <br />
-
-    <!-- Link to the worker-based implementation -->
     <p>
-      See also
-      <a href="https://feascript.com/tutorials/HeatConduction2DFinWorker.html">here</a>
-      for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness.
+      The solution shows the characteristic behavior of advection-diffusion problems. The magnitude and spread
+      of the solution are determined by the balance between diffusion and advection.
     </p>
 
     <ul id="menu">
@@ -247,15 +233,13 @@
 
     <script type="module">
       // Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        plotSolution,
-        printVersion,
-      } from "https://core.feascript.com/dist/feascript.esm.js";
-      // } from "https://core.feascript.com/src/index.js";
+      //   import {
+      //     FEAScriptModel,
+      //     plotSolution,
+      //     printVersion,
+      //   } from "https://core.feascript.com/dist/feascript.esm.js";
       // Import FEAScript library from a local directory
-      // } from "../../FEAScript-core/dist/feascript.esm.js";
-      // } from "../../FEAScript-core/src/index.js";
+      import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {
         if (window.innerHeight > window.innerWidth) {
@@ -265,48 +249,48 @@
           document.getElementById("orientation-message").style.display = "none";
           document.getElementById("resultsCanvas").style.display = "block";
 
-          // Enable debug logging mode
-          // logSystem("debug");
-
           // Print FEAScript version
           console.log("FEAScript Version:", printVersion);
 
           // Create a new FEAScript model
           const model = new FEAScriptModel();
 
-          // Set solver configuration
-          model.setSolverConfig("frontPropagationScript");
+          // Set solver configuration with coefficient functions
+          model.setSolverConfig("generalFormPDEScript", {
+            coefficientFunctions: {
+              // Equation d²u/dx² + 10 du/dx = -10 * exp(-200 * (x - 0.5)²)
+              A: (x) => 1, // Diffusion coefficient
+              B: (x) => 10, // Advection coefficient
+              C: (x) => 0, // Reaction coefficient
+              D: (x) => -10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
+            },
+          });
 
           // Define mesh configuration
           model.setMeshConfig({
-            meshDimension: "2D",
+            meshDimension: "1D",
             elementOrder: "quadratic",
-            numElementsX: 12,
-            numElementsY: 8,
-            maxX: 4,
-            maxY: 2,
+            numElementsX: 20,
+            maxX: 1.0,
           });
 
           // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
-          model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-          model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-          model.addBoundaryCondition("3", ["constantValue", 0]); // Right
+          model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
+          model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
 
           // Set solver method
           model.setSolverMethod("lusolve");
-          // model.setSolverMethod("frontal");
 
           // Solve the problem and get the solution
           const { solutionVector, nodesCoordinates } = model.solve();
 
-          // Plot the solution as a 2D contour plot
+          // Plot the solution as a 1D line plot
           plotSolution(
             solutionVector,
             nodesCoordinates,
             model.solverConfig,
             model.meshConfig.meshDimension,
-            "contour",
+            "line",
             "resultsCanvas"
           );
         }

@@ -32,4 +32,8 @@
     <loc>https://feascript.com/tutorials/SolidificationFront2DWorker.html</loc>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://feascript.com/tutorials/AdvectionDiffusion1D.html</loc>
+    <priority>0.7</priority>
+  </url>
 </urlset>

@@ -105,13 +105,9 @@
     <p>
       We apply Dirichlet boundary condition at the left end: \(u(0) = 1\) and Neumann boundary condition (zero
       gradient) at the right end: \(\frac{du}{dx}(1) = 0\). These conditions represent a fixed concentration
-      at the inlet and free outflow at the outlet of our domain.
-    </p>
-    <p>
-      The Gaussian source term acts as a localized input at the center of the domain. The balance between
-      diffusion (spreading) and advection (directed transport) will determine how the solution behaves. With
-      the given advection coefficient of 10, we expect to see the solution skewed in the direction opposite to
-      the advection (toward the left) since the advection term has a positive coefficient.
+      at the inlet and free outflow at the outlet of our domain. The Gaussian source term acts as a localized
+      input at the center of the domain. The balance between diffusion (spreading) and advection (directed
+      transport) will determine how the solution behaves.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
@@ -233,11 +229,11 @@
 
     <script type="module">
       // Import FEAScript library from GitHub
-        import {
-          FEAScriptModel,
-          plotSolution,
-          printVersion,
-        } from "https://core.feascript.com/dist/feascript.esm.js";
+      import {
+        FEAScriptModel,
+        plotSolution,
+        printVersion,
+      } from "https://core.feascript.com/dist/feascript.esm.js";
       // Import FEAScript library from a local directory
       // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 

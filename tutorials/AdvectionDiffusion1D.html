@@ -88,7 +88,7 @@
       where particles, energy, or other physical quantities are transferred inside a physical system due to
       two processes: diffusion and advection. In one dimension, the steady-state equation is given by:
     </p>
-    <p>\(\frac{d^2u}{dx^2} + 10 \frac{du}{dx} = -10 \cdot e^{-200 \cdot (x - 0.5)^2}\)</p>
+    <p>\(\frac{d^2u}{dx^2} - 10 \frac{du}{dx} = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\)</p>
     <p>
       This can be rewritten in the general form: \(\frac{d}{dx}\left(A(x)\frac{du}{dx}\right) +
       B(x)\frac{du}{dx} + C(x)u = D(x)\)
@@ -96,9 +96,9 @@
     <p>Where for our specific problem:</p>
     <ul>
       <li>\(A(x) = 1\) (diffusion coefficient)</li>
-      <li>\(B(x) = 10\) (advection coefficient)</li>
+      <li>\(B(x) = -10\) (advection coefficient)</li>
       <li>\(C(x) = 0\) (no reaction term)</li>
-      <li>\(D(x) = -10 \cdot e^{-200 \cdot (x - 0.5)^2}\) (Gaussian source term centered at x = 0.5)</li>
+      <li>\(D(x) = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\) (Gaussian source term centered at x = 0.5)</li>
     </ul>
 
     <p>
@@ -144,11 +144,11 @@
       // Set solver configuration with coefficient functions
       model.setSolverConfig("generalFormPDEScript", {
         coefficientFunctions: {
-          // Equation d²u/dx² + 10 du/dx = -10 * exp(-200 * (x - 0.5)²)
+          // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
           A: (x) => 1, // Diffusion coefficient
-          B: (x) => 10, // Advection coefficient
+          B: (x) => -10, // Advection coefficient
           C: (x) => 0,  // Reaction coefficient
-          D: (x) => -10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
+          D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
         },
       });
 
@@ -254,11 +254,11 @@
           // Set solver configuration with coefficient functions
           model.setSolverConfig("generalFormPDEScript", {
             coefficientFunctions: {
-              // Equation d²u/dx² + 10 du/dx = -10 * exp(-200 * (x - 0.5)²)
+              // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
               A: (x) => 1, // Diffusion coefficient
-              B: (x) => 10, // Advection coefficient
+              B: (x) => -10, // Advection coefficient
               C: (x) => 0, // Reaction coefficient
-              D: (x) => -10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
+              D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
             },
           });
 

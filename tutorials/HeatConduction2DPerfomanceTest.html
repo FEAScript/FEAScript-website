@@ -56,6 +56,11 @@
 
     <h2>Run Performance Test</h2>
     <p>
+      For best benchmark results, download the FEAScript library and use a local import (<code
+        >import { FEAScriptModel, plotSolution } from "path/to/index.js";</code
+      >) instead of loading from the remote server.
+    </p>
+    <p>
       <label for="solverSelect">Select solver:</label>
       <select id="solverSelect">
         <option value="lusolve">LU Solve</option>
@@ -79,7 +84,7 @@
 
     <script type="module">
       import { FEAScriptModel, plotSolution } from "https://core.feascript.com/dist/feascript.esm.js";
-      // import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js";
+      // import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js"; // Use this when running locally
 
       function runSpeedTest(selectedSolver) {
         const numElementsX = parseInt(document.getElementById("numElementsX").value);

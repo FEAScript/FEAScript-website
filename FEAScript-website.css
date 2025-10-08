@@ -216,7 +216,7 @@ mjx-container {
   padding: 0.2em 0.8em;
   border-radius: 8px;
   margin-right: 0.5em;
-  margin-top: 0.3em;
+  margin-top: 0;
   vertical-align: middle;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-weight: 500;
@@ -249,11 +249,26 @@ mjx-container {
   color: #f7e7b7;
 }
 
+.tutorials-list .badge-performance {
+  background-color: #c62828;
+  color: white;
+}
+
 .tutorial-name {
   display: inline-block;
   vertical-align: middle;
   font-weight: 550;
   margin-right: 10px;
+}
+
+.tutorials-list li {
+  margin-bottom: 1em;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5em;
+}
+
+.tutorials-list {
+  list-style: none; /* Remove bullets */
 }
 
 /* Footer styles */

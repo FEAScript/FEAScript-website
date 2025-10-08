@@ -12,7 +12,7 @@
 
 <html>
   <head>
-    <title>FEAScript Speed Test</title>
+    <title>FEAScript Performance Test</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -43,23 +43,23 @@
         />
       </a>
     </h1>
-    <h1>FEAScript Speed Test</h1>
+    <h1>FEAScript Performance Test</h1>
 
     <div class="highlight-container">
       <p>
-        This page demonstrates a speed test for the FEAScript using a 2D heat conduction problem. You can
-        select the solver and mesh size to benchmark performance. For the mathematical formulation and theory,
-        see the
+        This page presents a performance test of FEAScript using the Heat Conduction in a 2D Fin problem. You
+        can choose the solver and mesh size to benchmark performance. For simplicity and speed, this test uses
+        linear elements. For the mathematical formulation and theoretical background, refer to the
         <a href="HeatConduction2DFin.html">basic tutorial</a>.
       </p>
     </div>
 
-    <h2>Run Speed Test</h2>
+    <h2>Run Performance Test</h2>
     <p>
       <label for="solverSelect">Select solver:</label>
       <select id="solverSelect">
         <option value="lusolve">LU Solve</option>
-        <option value="jacobi">Jacobi</option>
+        <!-- <option value="jacobi">Jacobi</option> -->
         <option value="frontal">Frontal</option>
       </select>
       <label for="numElementsX" style="margin-left: 1em">Elements X:</label>
@@ -69,6 +69,8 @@
       <button id="runBtn">Run</button>
     </p>
     <div id="resultsCanvas"></div>
+    <!-- div to display the solving time -->
+    <div id="timeDisplay" style="margin-top: 1em"></div>
 
     <ul id="menu">
       <li><a href="https://feascript.com/index.html">Home</a></li>
@@ -107,7 +109,14 @@
 
         model.setSolverMethod(selectedSolver);
 
+        // Measure the solving time
+        const startTime = performance.now();
         const { solutionVector, nodesCoordinates } = model.solve();
+        const endTime = performance.now();
+        const solvingTime = ((endTime - startTime) / 1000).toFixed(3); // Convert to seconds and round to 3 decimal places
+
+        // Display the time in the HTML
+        document.getElementById("timeDisplay").innerHTML = `Solving time: ${solvingTime} seconds`;
 
         plotSolution(
           solutionVector,

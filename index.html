@@ -57,30 +57,36 @@
 
     <div id="banner">
       <img
+        src="./assets/HeatConduction1DWallResults.png"
+        alt="Results of heat conduction through a wall tutorial"
+      />
+      <p class="image-caption">
+        Heat conduction through a wall
+        <a href="https://feascript.com/tutorials/HeatConduction1DWall.html">tutorial</a>
+      </p>
+      <img
         src="./assets/HeatConduction2DFinResults.png"
         alt="Results of heat conduction in a 2D fin tutorial"
       />
       <p class="image-caption">
-        <a href="https://feascript.com/tutorials/HeatConduction2DFin.html">Solid heat conduction</a>
-        solver
+        Heat conduction in a 2D fin
+        <a href="https://feascript.com/tutorials/HeatConduction2DFin.html">tutorial</a>
       </p>
       <img
         src="./assets/SolidificationFront2DResults.png"
         alt="Results of solidification front propagation in a 2D domain tutorial"
       />
       <p class="image-caption">
-        <a href="https://feascript.com/tutorials/SolidificationFront2D.html"
-          >Solidification front propagation</a
-        >
-        solver
+        Solidification front propagation in a 2D domain
+        <a href="https://feascript.com/tutorials/SolidificationFront2D.html">tutorial</a>
       </p>
       <img
-        src="./assets/Screenshot_20250520_084241.png"
-        alt="Screenshot of the FEAScript Platform interface"
+        src="./assets/AdvectionDiffusion1DResults.png"
+        alt="Results of advection-diffusion with Gaussian source tutorial"
       />
       <p class="image-caption">
-        <a href="https://platform.feascript.com/">FEAScript Platform</a>
-        interface
+        Advection–diffusion with Gaussian source
+        <a href="https://feascript.com/tutorials/AdvectionDiffusion1D.html">tutorial</a>
       </p>
     </div>
 
@@ -320,13 +326,12 @@
     <h2 id="features"><a name="Features"></a>Features</h2>
 
     <p>The following list highlights key FEAScript features:</p>
-    <ul>
+    <ul class="features-list">
       <li>
         🧠 <strong>Physical Modeling</strong>
         <ul>
-          <li>Heat conduction solver</li>
           <li>Front propagation solver</li>
-          <li>General form PDE solver</li>
+          <li>Heat conduction solver</li>
         </ul>
       </li>
       <li>
@@ -335,8 +340,8 @@
           <li>Simple mesh generation (1D and rectangular 2D domains)</li>
           <li>
             Unstructured mesh import from
-            <a href="https://gmsh.info/">
-              Gmsh
+            <a href="https://gmsh.info/"
+              >Gmsh
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
@@ -347,8 +352,7 @@
                   margin-left: 2px;
                   margin-bottom: 4px;
                 "
-              />
-            </a>
+            /></a>
             (<code>.msh</code> file format)
           </li>
         </ul>
@@ -356,31 +360,29 @@
       <li>
         ⚙️ <strong>Numerical Methods</strong>
         <ul>
-          <!--
+          <li>General form PDE solver</li>
           <li>
-            General form differential equations solver
-            <i
-              ><a href="https://github.com/FEAScript/FEAScript-core/issues/3" target="_blank"
-                >(under development)</a
-              ></i
-            >
-          </li>
-          -->
-          <li>
-            Linear system solvers (LU decomposition via
-            <a href="https://mathjs.org/">
-              math.js
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                " /></a
-            >, Jacobi method)
+            Linear system solvers:
+            <ul>
+              <li>Frontal</li>
+              <li>Jacobi</li>
+              <li>
+                LU (via
+                <a href="https://mathjs.org/"
+                  >math.js
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+                    alt="External Link Icon"
+                    style="
+                      width: 16px;
+                      height: 16px;
+                      vertical-align: middle;
+                      margin-left: 2px;
+                      margin-bottom: 4px;
+                    " /></a
+                >)
+              </li>
+            </ul>
           </li>
           <li>Newton-Raphson method for nonlinear systems</li>
         </ul>
@@ -418,6 +420,11 @@
         <ul>
           <li>Browser runtime (ES modules)</li>
           <li>
+            No-code interface with
+            <a href="https://platform.feascript.com">FEAScript Platform</a>
+            visual editor
+          </li>
+          <li>
             Node.js runtime (<a href="https://www.npmjs.com/package/feascript"
               >npm
               <img
@@ -447,11 +454,6 @@
                   margin-bottom: 4px;
                 " /></a
             >)
-          </li>
-          <li>
-            No-code interface with
-            <a href="https://platform.feascript.com">FEAScript Platform</a>
-            visual editor
           </li>
         </ul>
       </li>

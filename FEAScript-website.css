@@ -213,10 +213,11 @@ mjx-container {
   background-color: #f7e7b7;
   color: #333;
   font-size: 90%;
-  padding: 0.2em 0.8em;
+  padding: 0.1em 0.8em;
   border-radius: 8px;
   margin-right: 0.5em;
-  margin-top: 0;
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
   vertical-align: middle;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-weight: 500;
@@ -267,8 +268,22 @@ mjx-container {
   padding-bottom: 0.5em;
 }
 
+/* Remove bullets for tutorials list */
 .tutorials-list {
-  list-style: none; /* Remove bullets */
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+/* Remove bullets from top-level features-list */
+.features-list {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.features-list > li {
+  margin-bottom: 1em;
 }
 
 /* Footer styles */

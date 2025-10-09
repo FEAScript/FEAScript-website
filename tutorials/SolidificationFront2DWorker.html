@@ -12,7 +12,7 @@
 
 <html>
   <head>
-    <title>FEAScript: Solidification Front Propagation in a 2D Domain (Multi-threaded)</title>
+    <title>FEAScript: Solidification Front Propagation in a 2D Domain Tutorial (Multi-threaded)</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -65,7 +65,7 @@
         />
       </a>
     </h1>
-    <h1>Solidification Front Propagation in a 2D Domain (Multi-threaded)</h1>
+    <h1>Solidification Front Propagation in a 2D Domain Tutorial (Multi-threaded)</h1>
 
     <ul id="menu">
       <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
@@ -162,10 +162,6 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       time of the front at each position. This plot is generated in real time using FEAScript.
     </p>
 
-    <div id="orientation-message">
-      Cannot draw the results. Please turn your phone to horizontal position and refresh the page to see the
-      results.
-    </div>
     <div id="loading">
       <div class="spinner"></div>
       Solving...
@@ -189,81 +185,64 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
+        document.getElementById("resultsCanvas").style.display = "block";
+
+        // Show loading indicator
+        document.getElementById("loading").style.display = "block";
+
+        // Print FEAScript version
+        console.log("FEAScript Version:", printVersion);
+
+        // Create a new FEAScriptWorker instance
+        const model = new FEAScriptWorker();
+
+        try {
+          // Ensure the worker is ready
+          await model.ping();
+
+          // Set solver configuration
+          await model.setSolverConfig("frontPropagationScript");
+
+          // Define mesh configuration
+          await model.setMeshConfig({
+            meshDimension: "2D",
+            elementOrder: "quadratic",
+            numElementsX: 12,
+            numElementsY: 8,
+            maxX: 4,
+            maxY: 2,
+          });
+
+          // Define boundary conditions
+          await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
+          await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+          await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+          await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
+
+          // Set solver method
+          await model.setSolverMethod("lusolve");
+
+          // Solve the problem and get the solution
+          const { solutionVector, nodesCoordinates } = await model.solve();
+
+          // Plot the solution as a 2D contour plot
+          plotSolution(
+            solutionVector,
+            nodesCoordinates,
+            "frontPropagationScript",
+            "2D",
+            "contour",
+            "resultsCanvas"
+          );
+        } catch (error) {
+          console.error("Error in worker execution:", error);
+          alert("Error executing the solver. Check console for details.");
+        } finally {
+          // Hide loading indicator
           document.getElementById("loading").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
 
-          // Show loading indicator
-          document.getElementById("loading").style.display = "block";
-
-          // Print FEAScript version
-          console.log("FEAScript Version:", printVersion);
-
-          // Create a new FEAScriptWorker instance
-          const model = new FEAScriptWorker();
-
-          try {
-            // Ensure the worker is ready
-            await model.ping();
-
-            // Set solver configuration
-            await model.setSolverConfig("frontPropagationScript");
-
-            // Define mesh configuration
-            await model.setMeshConfig({
-              meshDimension: "2D",
-              elementOrder: "quadratic",
-              numElementsX: 12,
-              numElementsY: 8,
-              maxX: 4,
-              maxY: 2,
-            });
-
-            // Define boundary conditions
-            await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
-            await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-            await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-            await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
-
-            // Set solver method
-            await model.setSolverMethod("lusolve");
-
-            // Solve the problem and get the solution
-            const { solutionVector, nodesCoordinates } = await model.solve();
-
-            // Plot the solution as a 2D contour plot
-            plotSolution(
-              solutionVector,
-              nodesCoordinates,
-              "frontPropagationScript",
-              "2D",
-              "contour",
-              "resultsCanvas"
-            );
-          } catch (error) {
-            console.error("Error in worker execution:", error);
-            alert("Error executing the solver. Check console for details.");
-          } finally {
-            // Hide loading indicator
-            document.getElementById("loading").style.display = "none";
-
-            // Terminate the worker
-            model.terminate();
-          }
-        }
-      });
-
-      window.addEventListener("resize", () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
+          // Terminate the worker
+          model.terminate();
         }
       });
     </script>

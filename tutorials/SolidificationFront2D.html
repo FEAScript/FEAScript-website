@@ -12,7 +12,7 @@
 
 <html>
   <head>
-    <title>FEAScript: Solidification Front Propagation in a 2D Domain</title>
+    <title>FEAScript: Solidification Front Propagation in a 2D Domain Tutorial</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -65,7 +65,7 @@
         />
       </a>
     </h1>
-    <h1>Solidification Front Propagation in a 2D Domain</h1>
+    <h1>Solidification Front Propagation in a 2D Domain Tutorial</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
@@ -226,9 +226,6 @@
     </p>
 
     <!-- Container element where the solution plot will be rendered -->
-    <div id="orientation-message">
-      Cannot draw the results. Please turn your phone to horizontal position to see the results.
-    </div>
     <div id="resultsCanvas"></div>
 
     <br />
@@ -258,68 +255,50 @@
       // } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
+        // Enable debug logging mode
+        // logSystem("debug");
 
-          // Enable debug logging mode
-          // logSystem("debug");
+        // Print FEAScript version
+        console.log("FEAScript Version:", printVersion);
 
-          // Print FEAScript version
-          console.log("FEAScript Version:", printVersion);
+        // Create a new FEAScript model
+        const model = new FEAScriptModel();
 
-          // Create a new FEAScript model
-          const model = new FEAScriptModel();
+        // Set solver configuration
+        model.setSolverConfig("frontPropagationScript");
 
-          // Set solver configuration
-          model.setSolverConfig("frontPropagationScript");
+        // Define mesh configuration
+        model.setMeshConfig({
+          meshDimension: "2D",
+          elementOrder: "quadratic",
+          numElementsX: 12,
+          numElementsY: 8,
+          maxX: 4,
+          maxY: 2,
+        });
 
-          // Define mesh configuration
-          model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 12,
-            numElementsY: 8,
-            maxX: 4,
-            maxY: 2,
-          });
+        // Define boundary conditions
+        model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
+        model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+        model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+        model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
-          // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
-          model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-          model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-          model.addBoundaryCondition("3", ["constantValue", 0]); // Right
+        // Set solver method
+        model.setSolverMethod("lusolve");
+        // model.setSolverMethod("frontal");
 
-          // Set solver method
-          model.setSolverMethod("lusolve");
-          // model.setSolverMethod("frontal");
+        // Solve the problem and get the solution
+        const { solutionVector, nodesCoordinates } = model.solve();
 
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = model.solve();
-
-          // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            model.solverConfig,
-            model.meshConfig.meshDimension,
-            "contour",
-            "resultsCanvas"
-          );
-        }
-      });
-
-      window.addEventListener("resize", () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
-        }
+        // Plot the solution as a 2D contour plot
+        plotSolution(
+          solutionVector,
+          nodesCoordinates,
+          model.solverConfig,
+          model.meshConfig.meshDimension,
+          "contour",
+          "resultsCanvas"
+        );
       });
     </script>
 

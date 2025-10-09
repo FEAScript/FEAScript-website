@@ -40,13 +40,6 @@
     ></script>
     <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-    <style>
-      #orientation-message {
-        display: none;
-        color: red;
-        font-weight: bold;
-      }
-    </style>
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -301,10 +294,6 @@ Mesh 2;</pre
       applications, but may be noticeable in regions with steep temperature gradients.
     </p>
 
-    <div id="orientation-message">
-      Cannot draw the results. Please rotate your phone to landscape orientation and refresh the page to see
-      the results.
-    </div>
     <div id="resultsCanvas"></div>
 
     <ul id="menu">
@@ -330,14 +319,6 @@ Mesh 2;</pre
       // } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
-        }
-
         // Enable debug logging mode
         //logSystem("debug");
 
@@ -394,16 +375,6 @@ Mesh 2;</pre
           "resultsCanvas",
           "unstructured"
         );
-      });
-
-      window.addEventListener("resize", () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
-        }
       });
     </script>
 

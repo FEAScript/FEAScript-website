@@ -12,7 +12,7 @@
 
 <html>
   <head>
-    <title>FEAScript: Advection-Diffusion with a Gaussian Source Term</title>
+    <title>FEAScript: Advection-Diffusion with a Gaussian Source Term Tutorial</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -65,7 +65,7 @@
         />
       </a>
     </h1>
-    <h1>Advection-Diffusion with a Gaussian Source Term</h1>
+    <h1>Advection-Diffusion with a Gaussian Source Term Tutorial</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
@@ -199,6 +199,7 @@
       as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
     </p>
 
+    <!-- Container element where the solution plot will be rendered -->
     <h2 id="results"><a name="Results"></a>Results</h2>
 
     <p>
@@ -210,11 +211,6 @@
       >.
     </p>
 
-    <!-- Container element where the solution plot will be rendered -->
-    <div id="orientation-message">
-      Cannot draw the results. Please rotate your phone to landscape orientation and refresh the page to see
-      the results.
-    </div>
     <div id="resultsCanvas"></div>
 
     <p>
@@ -238,68 +234,50 @@
       // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
+        // Print FEAScript version
+        console.log("FEAScript Version:", printVersion);
 
-          // Print FEAScript version
-          console.log("FEAScript Version:", printVersion);
+        // Create a new FEAScript model
+        const model = new FEAScriptModel();
 
-          // Create a new FEAScript model
-          const model = new FEAScriptModel();
+        // Set solver configuration with coefficient functions
+        model.setSolverConfig("generalFormPDEScript", {
+          coefficientFunctions: {
+            // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
+            A: (x) => 1, // Diffusion coefficient
+            B: (x) => -10, // Advection coefficient
+            C: (x) => 0, // Reaction coefficient
+            D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
+          },
+        });
 
-          // Set solver configuration with coefficient functions
-          model.setSolverConfig("generalFormPDEScript", {
-            coefficientFunctions: {
-              // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
-              A: (x) => 1, // Diffusion coefficient
-              B: (x) => -10, // Advection coefficient
-              C: (x) => 0, // Reaction coefficient
-              D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
-            },
-          });
+        // Define mesh configuration
+        model.setMeshConfig({
+          meshDimension: "1D",
+          elementOrder: "quadratic",
+          numElementsX: 20,
+          maxX: 1.0,
+        });
 
-          // Define mesh configuration
-          model.setMeshConfig({
-            meshDimension: "1D",
-            elementOrder: "quadratic",
-            numElementsX: 20,
-            maxX: 1.0,
-          });
+        // Define boundary conditions
+        model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
+        model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
 
-          // Define boundary conditions
-          model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
-          model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
+        // Set solver method
+        model.setSolverMethod("lusolve");
 
-          // Set solver method
-          model.setSolverMethod("lusolve");
+        // Solve the problem and get the solution
+        const { solutionVector, nodesCoordinates } = model.solve();
 
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = model.solve();
-
-          // Plot the solution as a 1D line plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            model.solverConfig,
-            model.meshConfig.meshDimension,
-            "line",
-            "resultsCanvas"
-          );
-        }
-      });
-
-      window.addEventListener("resize", () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
-        }
+        // Plot the solution as a 1D line plot
+        plotSolution(
+          solutionVector,
+          nodesCoordinates,
+          model.solverConfig,
+          model.meshConfig.meshDimension,
+          "line",
+          "resultsCanvas"
+        );
       });
     </script>
 

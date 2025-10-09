@@ -160,10 +160,6 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       time using FEAScript.
     </p>
 
-    <div id="orientation-message">
-      Cannot draw the results. Please rotate your phone to landscape orientation and refresh the page to see
-      the results.
-    </div>
     <div id="loading">
       <div class="spinner"></div>
       Solving...
@@ -187,67 +183,58 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-          document.getElementById("loading").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
+        // Show loading indicator
+        document.getElementById("loading").style.display = "block";
 
-          // Show loading indicator
-          document.getElementById("loading").style.display = "block";
+        // Print FEAScript version
+        console.log("FEAScript Version:", printVersion);
 
-          // Print FEAScript version
-          console.log("FEAScript Version:", printVersion);
+        // Create a new FEAScriptWorker instance
+        const model = new FEAScriptWorker();
 
-          // Create a new FEAScriptWorker instance
-          const model = new FEAScriptWorker();
+        // Ensure the worker is ready
+        await model.ping();
 
-          // Ensure the worker is ready
-          await model.ping();
+        // Set solver configuration
+        await model.setSolverConfig("heatConductionScript");
 
-          // Set solver configuration
-          await model.setSolverConfig("heatConductionScript");
+        // Define mesh configuration
+        await model.setMeshConfig({
+          meshDimension: "2D",
+          elementOrder: "quadratic",
+          numElementsX: 8,
+          numElementsY: 4,
+          maxX: 4,
+          maxY: 2,
+        });
 
-          // Define mesh configuration
-          await model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 8,
-            numElementsY: 4,
-            maxX: 4,
-            maxY: 2,
-          });
+        // Define boundary conditions
+        await model.addBoundaryCondition("0", ["constantTemp", 200]);
+        await model.addBoundaryCondition("1", ["symmetry"]);
+        await model.addBoundaryCondition("2", ["convection", 1, 20]);
+        await model.addBoundaryCondition("3", ["constantTemp", 200]);
 
-          // Define boundary conditions
-          await model.addBoundaryCondition("0", ["constantTemp", 200]);
-          await model.addBoundaryCondition("1", ["symmetry"]);
-          await model.addBoundaryCondition("2", ["convection", 1, 20]);
-          await model.addBoundaryCondition("3", ["constantTemp", 200]);
+        // Set solver method
+        await model.setSolverMethod("lusolve");
 
-          // Set solver method
-          await model.setSolverMethod("lusolve");
+        // Solve the problem and get the solution
+        const { solutionVector, nodesCoordinates } = await model.solve();
 
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = await model.solve();
+        // Hide loading indicator
+        document.getElementById("loading").style.display = "none";
 
-          // Hide loading indicator
-          document.getElementById("loading").style.display = "none";
+        // Plot the solution as a 2D contour plot
+        plotSolution(
+          solutionVector,
+          nodesCoordinates,
+          "heatConductionScript",
+          "2D",
+          "contour",
+          "resultsCanvas"
+        );
 
-          // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            "heatConductionScript",
-            "2D",
-            "contour",
-            "resultsCanvas"
-          );
-
-          // Terminate the worker
-          model.terminate();
-        }
+        // Terminate the worker
+        model.terminate();
       });
     </script>
 

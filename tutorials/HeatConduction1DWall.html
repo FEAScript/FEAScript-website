@@ -197,10 +197,6 @@
     </p>
 
     <!-- Container element where the solution plot will be rendered -->
-    <div id="orientation-message">
-      Cannot draw the results. Please rotate your phone to landscape orientation and refresh the page to see
-      the results.
-    </div>
     <div id="resultsCanvas"></div>
 
     <ul id="menu">
@@ -219,61 +215,45 @@
       // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
+        document.getElementById("resultsCanvas").style.display = "block";
 
-          // Print FEAScript version
-          console.log("FEAScript Version:", printVersion);
+        // Print FEAScript version
+        console.log("FEAScript Version:", printVersion);
 
-          // Create a new FEAScript model
-          const model = new FEAScriptModel();
+        // Create a new FEAScript model
+        const model = new FEAScriptModel();
 
-          // Set solver configuration
-          model.setSolverConfig("heatConductionScript");
+        // Set solver configuration
+        model.setSolverConfig("heatConductionScript");
 
-          // Define mesh configuration
-          model.setMeshConfig({
-            meshDimension: "1D",
-            elementOrder: "linear",
-            numElementsX: 10,
-            maxX: 0.15,
-          });
+        // Define mesh configuration
+        model.setMeshConfig({
+          meshDimension: "1D",
+          elementOrder: "linear",
+          numElementsX: 10,
+          maxX: 0.15,
+        });
 
-          // Define boundary conditions
-          model.addBoundaryCondition("0", ["convection", 1, 25]);
-          //model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
-          model.addBoundaryCondition("1", ["constantTemp", 5]);
+        // Define boundary conditions
+        model.addBoundaryCondition("0", ["convection", 1, 25]);
+        //model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
+        model.addBoundaryCondition("1", ["constantTemp", 5]);
 
-          // Set solver method
-          model.setSolverMethod("lusolve");
+        // Set solver method
+        model.setSolverMethod("lusolve");
 
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = model.solve();
+        // Solve the problem and get the solution
+        const { solutionVector, nodesCoordinates } = model.solve();
 
-          // Plot the solution as a 1D line plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            model.solverConfig,
-            model.meshConfig.meshDimension,
-            "line",
-            "resultsCanvas"
-          );
-        }
-      });
-
-      window.addEventListener("resize", () => {
-        if (window.innerHeight > window.innerWidth) {
-          document.getElementById("orientation-message").style.display = "block";
-          document.getElementById("resultsCanvas").style.display = "none";
-        } else {
-          document.getElementById("orientation-message").style.display = "none";
-          document.getElementById("resultsCanvas").style.display = "block";
-        }
+        // Plot the solution as a 1D line plot
+        plotSolution(
+          solutionVector,
+          nodesCoordinates,
+          model.solverConfig,
+          model.meshConfig.meshDimension,
+          "line",
+          "resultsCanvas"
+        );
       });
     </script>
     <footer>

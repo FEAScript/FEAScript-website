@@ -294,9 +294,9 @@
     </div>
 
     <p>
-      <strong>Quick Start:</strong> To use FEAScript in your HTML, include it from our hosted build (i.e.,
+      <strong>Quick Start:</strong> To use FEAScript in your HTML, include it from our hosted ESM build (i.e.,
       <code>import { FEAScriptModel } from "https://core.feascript.com/dist/feascript.esm.js";</code>) or
-      download it from <a href="https://github.com/FEAScript/FEAScript-core">GitHub</a> &#8594; add a canvas
+      download it from <a href="https://github.com/FEAScript/FEAScript-core/releases">GitHub</a> &#8594; add a canvas
       (e.g., <code>&lt;div id="resultsCanvas">&lt;/div&gt;</code>) &#8594; add a mesh file (e.g.,
       <code>your.msh</code> from
       <a href="https://gmsh.info/">
@@ -376,7 +376,7 @@
       <li>
         📐 <strong>Geometry and Meshing</strong>
         <ul>
-          <li>Simple mesh generation (1D and rectangular 2D domains)</li>
+          <li>Simple mesh generation (1D / 2D domains)</li>
           <li>
             Unstructured mesh import from
             <a href="https://gmsh.info/"
@@ -457,7 +457,22 @@
       <li>
         🚀 <strong>Platform & Deployment</strong>
         <ul>
-          <li>Browser runtime (ES modules)</li>
+          <li>
+            Browser runtime (<a href="https://core.feascript.com/dist/feascript.esm.js">hosted ESM build</a> /
+            <a href="https://cdn.jsdelivr.net/gh/FEAScript/FEAScript-core/dist/feascript.esm.js"
+              >JSDelivr CDN
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+                alt="External Link Icon"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                " /></a
+            >)
+          </li>
           <li>
             No-code interface with
             <a href="https://platform.feascript.com">FEAScript Platform</a>

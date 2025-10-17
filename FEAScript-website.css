@@ -240,6 +240,10 @@ mjx-container {
   color: #f7e7b7;
 }
 
+.tutorials-list .badge-scribbler {
+  background-color: #fede02ff;
+}
+
 .tutorials-list .badge-mt {
   background-color: #5585a3;
   color: #f7e7b7;
@@ -252,7 +256,7 @@ mjx-container {
 
 .tutorials-list .badge-performance {
   background-color: #c62828;
-  color: white;
+  color: #f7e7b7;
 }
 
 .tutorial-name {

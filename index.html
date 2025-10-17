@@ -167,9 +167,9 @@
         <strong
           >FEAScript is a lightweight, open-source finite element simulation library developed in
           JavaScript</strong
-        >. <br />It empowers users to perform simulations for physics and engineering problems in both browser-based
-        and server-side environments. FEAScript serves as an excellent tool for building interactive web
-        applications and facilitates hands-on learning of computational mechanics. <br />🎯
+        >. <br />It empowers users to perform simulations for physics and engineering problems in both
+        browser-based and server-side environments. FEAScript serves as an excellent tool for building
+        interactive web applications and facilitates hands-on learning of computational mechanics. <br />🎯
         <strong
           >Our goal is to democratize finite element analysis by making simulation capabilities accessible to
           everyone, everywhere.</strong
@@ -519,11 +519,23 @@
     <h2 id="tutorials"><a name="Tutorials"></a>Tutorials</h2>
     <p>
       Below you can explore tutorials that provide a step-by-step introduction to FEAScript. These tutorials
-      show you how to use FEAScript’s JavaScript API directly—integrating finite element simulations into your
-      own websites and applications—or how to use the FEAScript Platform visual editor for a no-code
-      experience. Each tutorial may include different variations that demonstrate the same physical problem
-      under different configurations, ranging from simple examples to advanced setups using parallel
-      computation, external meshes, or the no-code visual platform.
+      show you how to use FEAScript’s JavaScript API directly, integrating finite element simulations into
+      your own websites and applications, or how to use it in an interactive notebook such as
+      <a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
+        >Scribbler
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+          alt="External Link Icon"
+          style="
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-left: 2px;
+            margin-bottom: 4px;
+          " /></a
+      >. Each tutorial may include different variations that demonstrate the same physical problem under
+      different configurations, ranging from simple examples to advanced setups using external meshes or
+      multiple threads.
     </p>
 
     <ul class="tutorials-list">
@@ -532,27 +544,37 @@
         <a href="https://feascript.com/tutorials/HeatConduction1DWall.html" class="badge badge-basic"
           >Basic</a
         >
-        <a href="https://feascript.com/tutorials/HeatConduction1DWallPlatform.html" class="badge badge-visual"
+        <!-- <a href="https://feascript.com/tutorials/HeatConduction1DWallPlatform.html" class="badge badge-visual"
           >Visual Editor</a
+        > -->
+        <a
+          href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/solidHeatTransferScript/HeatConduction1DWall.jsnb"
+          class="badge badge-scribbler"
+          >Scribbler</a
         >
       </li>
       <li>
         <span class="tutorial-name">Heat Conduction in a 2D Fin</span>
         <a href="https://feascript.com/tutorials/HeatConduction2DFin.html" class="badge badge-basic">Basic</a>
+        <a
+          href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/solidHeatTransferScript/HeatConduction2DFin.jsnb"
+          class="badge badge-scribbler"
+          >Scribbler</a
+        >
         <a href="https://feascript.com/tutorials/HeatConduction2DFinWorker.html" class="badge badge-mt"
           >Multi-threaded</a
         >
         <a href="https://feascript.com/tutorials/HeatConduction2DFinGmsh.html" class="badge badge-gmsh"
           >Gmsh mesh</a
         >
-        <a
+        <!-- <a
           href="https://feascript.com/tutorials/HeatConduction2DPerfomanceTest.html"
           class="badge badge-performance"
           >Performance Test</a
         >
         <a href="https://feascript.com/tutorials/HeatConduction2DFinPlatform.html" class="badge badge-visual"
           >Visual Editor</a
-        >
+        > -->
       </li>
       <li>
         <span class="tutorial-name">Solidification Front Propagation in a 2D Domain</span>

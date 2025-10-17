@@ -123,7 +123,7 @@
       const model = new FEAScriptModel();
       model.setSolverConfig("heatConductionScript");
   
-      // Parse the mesh file first
+      // Parse the mesh file
       const result = await importGmshQuadTri(meshFile);
   
       // Define mesh configuration with the parsed result
@@ -341,7 +341,7 @@ Mesh 2;</pre
         // Set solver configuration
         gmshModel.setSolverConfig("heatConductionScript");
 
-        // Parse the mesh file first
+        // Parse the mesh file
         const result = await importGmshQuadTri(meshFile);
 
         // Define mesh configuration with the parsed result

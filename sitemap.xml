@@ -17,8 +17,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://feascript.com/tutorials/HeatConduction1DWallPlatform.html</loc>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://feascript.com/tutorials/HeatConduction2DFinPlatform.html</loc>
-    <priority>0.8</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://feascript.com/tutorials/HeatConduction2DFinGmsh.html</loc>
@@ -26,7 +30,7 @@
   </url>
   <url>
     <loc>https://feascript.com/tutorials/HeatConduction2DPerfomanceTest.html</loc>
-    <priority>0.8</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://feascript.com/tutorials/SolidificationFront2D.html</loc>

@@ -140,8 +140,6 @@
 
       // Create and configure model
       const model = new FEAScriptModel();
-      
-      // Set solver configuration with coefficient functions
       model.setSolverConfig("generalFormPDEScript", {
         coefficientFunctions: {
           // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)

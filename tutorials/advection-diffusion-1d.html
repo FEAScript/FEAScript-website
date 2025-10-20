@@ -12,20 +12,20 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat Conduction Through a Wall Tutorial</title>
+    <title>FEAScript: Advection-Diffusion with a Gaussian Source Term Tutorial</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="FEAScript is a lightweight JavaScript library for browser-based finite element simulations in physics, engineering, and computational mechanics."
+      content="This example demonstrates solving a one-dimensional advection-diffusion equation with a Gaussian source term using the FEAScript library. The problem shows how to model transport phenomena with both diffusion and advection mechanisms."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, computational mechanics, javascript, 1D heat transfer"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, advection-diffusion, transport phenomena"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
-    <link href="../FEAScript-website.css" rel="stylesheet" type="text/css" />
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <!-- Import the Math.js library for mathematical operations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
@@ -38,7 +38,7 @@
       async
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     ></script>
-    <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
+    <!-- Import the run_prettify.js library for JavaScript code coloring -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   </head>
 
@@ -58,14 +58,14 @@
     <h1 class="top">
       <a href="../index.html">
         <img
-          src="../assets/FEAScriptLogo.png"
+          src="../assets/feascript-logo.png"
           alt="FEAScript Logo"
           id="responsive-logo"
           style="vertical-align: middle"
         />
       </a>
     </h1>
-    <h1>Heat Conduction Through a Wall Tutorial</h1>
+    <h1>Advection-Diffusion with a Gaussian Source Term Tutorial</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
@@ -75,43 +75,45 @@
 
     <div class="highlight-container">
       <p>
-        In this tutorial, we study steady-state heat flow through a wall. We can simplify this problem to one
-        dimension, considering that the wall's width and height are much larger than its thickness, and the
-        temperature varies only across the thickness direction.
+        In this tutorial, we address an advection-diffusion problem in a one-dimensional domain with a
+        Gaussian source term. This is a fundamental transport phenomenon that occurs in many fields including
+        fluid dynamics, heat transfer, and contaminant transport, where both diffusion and advection
+        mechanisms are important.
       </p>
     </div>
 
     <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
-      Steady heat conduction in one dimension is described by the Laplace equation: \(\frac{d^2T}{dx^2} = 0\),
-      where \(T\) denotes the temperature values. The above is used to find the temperature distribution
-      within common engineering components like house walls.
+      The advection-diffusion equation is a partial differential equation that describes physical phenomena
+      where particles, energy, or other physical quantities are transferred inside a physical system due to
+      two processes: diffusion and advection. In one dimension, the steady-state equation is given by:
     </p>
-
-    <div class="center-image">
-      <img src="../assets/HeatConduction1DWall.png" alt="1D heat conduction schematic" width="100" />
-      <p class="image-caption">
-        Schematic of the 1D wall showing convection at x = 0 and prescribed temperature at x = W
-      </p>
-    </div>
+    <p>\(\frac{d^2u}{dx^2} - 10 \frac{du}{dx} = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\)</p>
+    <p>
+      This can be rewritten in the general form: \(\frac{d}{dx}\left(A(x)\frac{du}{dx}\right) +
+      B(x)\frac{du}{dx} + C(x)u = D(x)\)
+    </p>
+    <p>Where for our specific problem:</p>
+    <ul>
+      <li>\(A(x) = 1\) (diffusion coefficient)</li>
+      <li>\(B(x) = -10\) (advection coefficient)</li>
+      <li>\(C(x) = 0\) (no reaction term)</li>
+      <li>\(D(x) = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\) (Gaussian source term centered at x = 0.5)</li>
+    </ul>
 
     <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
-      objective is to determine the temperature distribution within the wall itself. In this problem, a
-      convection boundary condition, implemented as Robin-type, is applied at the inner side of the wall (\(x
-      = 0\)). The latter is expressed as \(\frac{dT}{dx}|_{x=0}=-{\frac{h}{k}}(T-T_{in})\), where \(h\) is the
-      heat transfer coefficient, \(k\) the thermal conductivity, and \(T_{in}\) is the internal temperature of
-      the house (room temperature). We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_{in}\) =
-      25 &deg;C. At the outer side of the wall (\(x = W\), where \(W\) = 0.15 m, is the width of the wall), we
-      apply a constant temperature (\(T_0\) = 5 &deg;C) boundary condition, representing the outdoor
-      temperature, implemented as Dirichlet-type in the finite element code.
+      We apply Dirichlet boundary condition at the left end: \(u(0) = 1\) and Neumann boundary condition (zero
+      gradient) at the right end: \(\frac{du}{dx}(1) = 0\). These conditions represent a fixed concentration
+      at the inlet and free outflow at the outlet of our domain. The Gaussian source term acts as a localized
+      input at the center of the domain. The balance between diffusion (spreading) and advection (directed
+      transport) will determine how the solution behaves.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
     <p>
-      Below is a demonstration of how to use the FEAScript library to solve this stationary heat transfer
-      problem in your web browser. You only need a simple HTML page to run this example where the following
-      code snippets should be included. First, load the required external libraries:
+      Below is a demonstration of how to use the FEAScript library to solve this advection-diffusion problem
+      in your web browser. You only need a simple HTML page to run this example where the following code
+      snippets should be included. First, load the required external libraries:
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
@@ -138,17 +140,27 @@
 
       // Create and configure model
       const model = new FEAScriptModel();
-      model.setSolverConfig("heatConductionScript");
-      model.setMeshConfig({
-        meshDimension: "1D",
-        elementOrder: "linear",
-        numElementsX: 10,
-        maxX: 0.15,
+      model.setSolverConfig("generalFormPDEScript", {
+        coefficientFunctions: {
+          // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
+          A: (x) => 1, // Diffusion coefficient
+          B: (x) => -10, // Advection coefficient
+          C: (x) => 0,  // Reaction coefficient
+          D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
+        },
       });
 
-      // Apply boundary conditions
-      model.addBoundaryCondition("0", ["convection", 1, 25]);
-      model.addBoundaryCondition("1", ["constantTemp", 5]);
+      // Define mesh configuration
+      model.setMeshConfig({
+        meshDimension: "1D",
+        elementOrder: "quadratic",
+        numElementsX: 20,
+        maxX: 1.0,
+      });
+
+      // Define boundary conditions
+      model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
+      model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
 
       // Solve
       model.setSolverMethod("lusolve");
@@ -163,7 +175,6 @@
         "line",
         "resultsCanvas"
       );
-      
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
@@ -186,19 +197,24 @@
       as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
     </p>
 
+    <!-- Container element where the solution plot will be rendered -->
     <h2 id="results"><a name="Results"></a>Results</h2>
 
     <p>
-      Below is the 1D line plot of the computed temperature distribution along the wall thickness. This plot
-      is generated in real time using FEAScript. You can find a Node.js implementation of this tutorial in the
+      Below is the 1D line plot of the computed solution to the advection-diffusion equation. This plot is
+      generated in real time using FEAScript. You can find a Node.js implementation of this tutorial in the
       <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/heatConductionScript/heatConduction1DWall"
+        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/generalFormPDEScript/advectionDiffusion1D"
         >example directory</a
       >.
     </p>
 
-    <!-- Container element where the solution plot will be rendered -->
     <div id="resultsCanvas"></div>
+
+    <p>
+      The solution shows the characteristic behavior of advection-diffusion problems. The magnitude and spread
+      of the solution are determined by the balance between diffusion and advection.
+    </p>
 
     <ul id="menu">
       <li><a href="https://feascript.com/index.html">Home</a></li>
@@ -216,29 +232,34 @@
       // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("resultsCanvas").style.display = "block";
-
         // Print FEAScript version
         console.log("FEAScript version:", printVersion);
 
         // Create a new FEAScript model
         const model = new FEAScriptModel();
 
-        // Set solver configuration
-        model.setSolverConfig("heatConductionScript");
+        // Set solver configuration with coefficient functions
+        model.setSolverConfig("generalFormPDEScript", {
+          coefficientFunctions: {
+            // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
+            A: (x) => 1, // Diffusion coefficient
+            B: (x) => -10, // Advection coefficient
+            C: (x) => 0, // Reaction coefficient
+            D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
+          },
+        });
 
         // Define mesh configuration
         model.setMeshConfig({
           meshDimension: "1D",
-          elementOrder: "linear",
-          numElementsX: 10,
-          maxX: 0.15,
+          elementOrder: "quadratic",
+          numElementsX: 20,
+          maxX: 1.0,
         });
 
         // Define boundary conditions
-        model.addBoundaryCondition("0", ["convection", 1, 25]);
-        //model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
-        model.addBoundaryCondition("1", ["constantTemp", 5]);
+        model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
+        model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
 
         // Set solver method
         model.setSolverMethod("lusolve");
@@ -257,6 +278,7 @@
         );
       });
     </script>
+
     <footer>
       <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
     </footer>

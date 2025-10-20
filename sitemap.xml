@@ -5,43 +5,43 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/HeatConduction2DFin.html</loc>
+    <loc>https://feascript.com/tutorials/heat-conduction-2d-fin.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/HeatConduction2DFinWorker.html</loc>
+    <loc>https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/HeatConduction1DWall.html</loc>
+    <loc>https://feascript.com/tutorials/heat-conduction-1d-wall.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/HeatConduction1DWallPlatform.html</loc>
+    <loc>https://feascript.com/tutorials/heat-conduction-1d-wall-platform.html</loc>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/HeatConduction2DFinPlatform.html</loc>
+    <loc>https://feascript.com/tutorials/heat-conduction-2d-fin-platform.html</loc>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/HeatConduction2DFinGmsh.html</loc>
+    <loc>https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/HeatConduction2DPerfomanceTest.html</loc>
+    <loc>https://feascript.com/tutorials/heat-conduction-2d-fin-performance-test.html</loc>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/SolidificationFront2D.html</loc>
+    <loc>https://feascript.com/tutorials/solidification-front-2d.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/SolidificationFront2DWorker.html</loc>
+    <loc>https://feascript.com/tutorials/solidification-front-2d-worker.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/AdvectionDiffusion1D.html</loc>
+    <loc>https://feascript.com/tutorials/advection-diffusion-1d.html</loc>
     <priority>0.8</priority>
   </url>
 </urlset>

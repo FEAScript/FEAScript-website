@@ -12,20 +12,20 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat Conduction in a 2D Fin Tutorial (Multi-threaded)</title>
+    <title>FEAScript: Solidification Front Propagation in a 2D Domain Tutorial (Multi-threaded)</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving a steady-state heat transfer problem in a 2D domain using the FEAScript library. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
+      content="This example demonstrates solving an eikonal equation in a 2D domain using the FEAScript library with Web Workers. The problem represents a typical solidification front propagation scenario, where the objective is to track the movement of an interface."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, computational mechanics, javascript, web workers, 2D heat transfer"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, eikonal, front propagation, web workers"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
-    <link href="../FEAScript-website.css" rel="stylesheet" type="text/css" />
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <!-- Import the Math.js library for mathematical operations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
@@ -58,14 +58,14 @@
     <h1 class="top">
       <a href="../index.html">
         <img
-          src="../assets/FEAScriptLogo.png"
+          src="../assets/feascript-logo.png"
           alt="FEAScript Logo"
           id="responsive-logo"
           style="vertical-align: middle"
         />
       </a>
     </h1>
-    <h1>Heat Conduction in a 2D Fin Tutorial (Multi-threaded)</h1>
+    <h1>Solidification Front Propagation in a 2D Domain Tutorial (Multi-threaded)</h1>
 
     <ul id="menu">
       <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
@@ -74,9 +74,9 @@
 
     <div class="highlight-container">
       <p>
-        This page demonstrates solving the 2D heat conduction fin problem using FEAScript in a web worker for
-        improved browser responsiveness. For the mathematical formulation and theory, see the
-        <a href="https://feascript.com/tutorials/HeatConduction2DFin.html">basic tutorial</a>.
+        This page demonstrates solving the solidification front propagation problem using FEAScript in a web
+        worker for improved browser responsiveness. For the mathematical formulation and theory, see the
+        <a href="https://feascript.com/tutorials/solidification-front-2d.html">basic tutorial</a>.
       </p>
 
       <p>
@@ -95,7 +95,9 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <h2 id="webworkerimplementation"><a name="Web Worker Implementation"></a>Web Worker Implementation</h2>
     <p>
-      The code below shows how to use FEAScript with a web worker. The solution is plotted as a 2D contour.
+      The code below shows how to use FEAScript with a web worker to solve the eikonal equation for front
+      propagation. This approach moves the computation to a separate thread, preventing the UI from freezing
+      during complex calculations. The solution is plotted as a 2D contour.
     </p>
 
     <pre class="prettyprint">
@@ -116,21 +118,21 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       await model.ping();
   
       // Configure model
-      await model.setSolverConfig("heatConductionScript");
+      await model.setSolverConfig("frontPropagationScript");
       await model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
-        numElementsX: 8,
-        numElementsY: 4,
+        numElementsX: 12,
+        numElementsY: 8,
         maxX: 4,
         maxY: 2,
       });
   
       // Apply boundary conditions
-      await model.addBoundaryCondition("0", ["constantTemp", 200]);
-      await model.addBoundaryCondition("1", ["symmetry"]);
-      await model.addBoundaryCondition("2", ["convection", 1, 20]);
-      await model.addBoundaryCondition("3", ["constantTemp", 200]);
+      await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
+      await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+      await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+      await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
   
       // Solve
       await model.setSolverMethod("lusolve");
@@ -140,7 +142,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       plotSolution(
         solutionVector,
         nodesCoordinates,
-        "heatConductionScript",
+        "frontPropagationScript",
         "2D",
         "contour",
         "resultsCanvas"
@@ -156,8 +158,8 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
-      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-      time using FEAScript.
+      Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
+      time of the front at each position. This plot is generated in real time using FEAScript.
     </p>
 
     <div id="loading">
@@ -183,6 +185,8 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
+        document.getElementById("resultsCanvas").style.display = "block";
+
         // Show loading indicator
         document.getElementById("loading").style.display = "block";
 
@@ -192,49 +196,54 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         // Create a new FEAScriptWorker instance
         const model = new FEAScriptWorker();
 
-        // Ensure the worker is ready
-        await model.ping();
+        try {
+          // Ensure the worker is ready
+          await model.ping();
 
-        // Set solver configuration
-        await model.setSolverConfig("heatConductionScript");
+          // Set solver configuration
+          await model.setSolverConfig("frontPropagationScript");
 
-        // Define mesh configuration
-        await model.setMeshConfig({
-          meshDimension: "2D",
-          elementOrder: "quadratic",
-          numElementsX: 8,
-          numElementsY: 4,
-          maxX: 4,
-          maxY: 2,
-        });
+          // Define mesh configuration
+          await model.setMeshConfig({
+            meshDimension: "2D",
+            elementOrder: "quadratic",
+            numElementsX: 12,
+            numElementsY: 8,
+            maxX: 4,
+            maxY: 2,
+          });
 
-        // Define boundary conditions
-        await model.addBoundaryCondition("0", ["constantTemp", 200]);
-        await model.addBoundaryCondition("1", ["symmetry"]);
-        await model.addBoundaryCondition("2", ["convection", 1, 20]);
-        await model.addBoundaryCondition("3", ["constantTemp", 200]);
+          // Define boundary conditions
+          await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
+          await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+          await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+          await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
-        // Set solver method
-        await model.setSolverMethod("lusolve");
+          // Set solver method
+          await model.setSolverMethod("lusolve");
 
-        // Solve the problem and get the solution
-        const { solutionVector, nodesCoordinates } = await model.solve();
+          // Solve the problem and get the solution
+          const { solutionVector, nodesCoordinates } = await model.solve();
 
-        // Hide loading indicator
-        document.getElementById("loading").style.display = "none";
+          // Plot the solution as a 2D contour plot
+          plotSolution(
+            solutionVector,
+            nodesCoordinates,
+            "frontPropagationScript",
+            "2D",
+            "contour",
+            "resultsCanvas"
+          );
+        } catch (error) {
+          console.error("Error in worker execution:", error);
+          alert("Error executing the solver. Check console for details.");
+        } finally {
+          // Hide loading indicator
+          document.getElementById("loading").style.display = "none";
 
-        // Plot the solution as a 2D contour plot
-        plotSolution(
-          solutionVector,
-          nodesCoordinates,
-          "heatConductionScript",
-          "2D",
-          "contour",
-          "resultsCanvas"
-        );
-
-        // Terminate the worker
-        model.terminate();
+          // Terminate the worker
+          model.terminate();
+        }
       });
     </script>
 

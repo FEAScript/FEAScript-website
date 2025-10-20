@@ -12,20 +12,20 @@
 
 <html>
   <head>
-    <title>FEAScript: Advection-Diffusion with a Gaussian Source Term Tutorial</title>
+    <title>FEAScript: Heat Conduction in a 2D Fin Tutorial</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving a one-dimensional advection-diffusion equation with a Gaussian source term using the FEAScript library. The problem shows how to model transport phenomena with both diffusion and advection mechanisms."
+      content="This example demonstrates solving a steady-state heat transfer problem in a 2D domain using the FEAScript library. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, computational mechanics, javascript, advection-diffusion, transport phenomena"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, 2D heat transfer"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
-    <link href="../FEAScript-website.css" rel="stylesheet" type="text/css" />
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <!-- Import the Math.js library for mathematical operations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
@@ -38,7 +38,7 @@
       async
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     ></script>
-    <!-- Import the run_prettify.js library for JavaScript code coloring -->
+    <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   </head>
 
@@ -58,14 +58,14 @@
     <h1 class="top">
       <a href="../index.html">
         <img
-          src="../assets/FEAScriptLogo.png"
+          src="../assets/feascript-logo.png"
           alt="FEAScript Logo"
           id="responsive-logo"
           style="vertical-align: middle"
         />
       </a>
     </h1>
-    <h1>Advection-Diffusion with a Gaussian Source Term Tutorial</h1>
+    <h1>Heat Conduction in a 2D Fin Tutorial</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
@@ -75,45 +75,42 @@
 
     <div class="highlight-container">
       <p>
-        In this tutorial, we address an advection-diffusion problem in a one-dimensional domain with a
-        Gaussian source term. This is a fundamental transport phenomenon that occurs in many fields including
-        fluid dynamics, heat transfer, and contaminant transport, where both diffusion and advection
-        mechanisms are important.
+        In this tutorial, we address a stationary heat transfer problem within a two-dimensional rectangular
+        domain. This is a typical cooling fin problem. Cooling fins are commonly used to increase the area
+        available for heat transfer between metal walls and poorly conducting fluids such as air.
       </p>
     </div>
 
     <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
-      The advection-diffusion equation is a partial differential equation that describes physical phenomena
-      where particles, energy, or other physical quantities are transferred inside a physical system due to
-      two processes: diffusion and advection. In one dimension, the steady-state equation is given by:
+      Steady heat conduction is described by the Laplace equation: \(\nabla^{2}T(x,y) = 0\), where \(T\)
+      denotes the temperature.
     </p>
-    <p>\(\frac{d^2u}{dx^2} - 10 \frac{du}{dx} = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\)</p>
-    <p>
-      This can be rewritten in the general form: \(\frac{d}{dx}\left(A(x)\frac{du}{dx}\right) +
-      B(x)\frac{du}{dx} + C(x)u = D(x)\)
-    </p>
-    <p>Where for our specific problem:</p>
-    <ul>
-      <li>\(A(x) = 1\) (diffusion coefficient)</li>
-      <li>\(B(x) = -10\) (advection coefficient)</li>
-      <li>\(C(x) = 0\) (no reaction term)</li>
-      <li>\(D(x) = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\) (Gaussian source term centered at x = 0.5)</li>
-    </ul>
+
+    <div class="center-image">
+      <img src="../assets/heat-conduction-2d-fin.png" alt="2D fin heat conduction schematic" width="300" />
+      <p class="image-caption">
+        Schematic of the 2D cooling fin: constant temperature (200&nbsp;°C) at bottom and right edges,
+        symmetry (zero flux) at the left edge, and convection at the top edge (h/k = 1&nbsp;m⁻¹, external
+        temperature 20&nbsp;°C)
+      </p>
+    </div>
 
     <p>
-      We apply Dirichlet boundary condition at the left end: \(u(0) = 1\) and Neumann boundary condition (zero
-      gradient) at the right end: \(\frac{du}{dx}(1) = 0\). These conditions represent a fixed concentration
-      at the inlet and free outflow at the outlet of our domain. The Gaussian source term acts as a localized
-      input at the center of the domain. The balance between diffusion (spreading) and advection (directed
-      transport) will determine how the solution behaves.
+      The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
+      constant temperature boundary conditions are implemented as Dirichlet-type conditions in the finite
+      element code. The symmetry boundary condition is implemented as a Neumann zero-flux type \( \left(
+      \frac{dT}{dx}|_{x=0}=0 \right) \), while the convective cooling boundary condition is a Robin-type
+      condition. Specifically, the latter is expressed as \(\frac{dT}{dy}|_{y=2}=-{\frac{h}{k}}(T-T_0)\),
+      where \(h\) is the heat transfer coefficient, \(k\) the thermal conductivity and \(T_0\) is the external
+      temperature. We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_0\) = 20 &deg;C.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
     <p>
-      Below is a demonstration of how to use the FEAScript library to solve this advection-diffusion problem
-      in your web browser. You only need a simple HTML page to run this example where the following code
-      snippets should be included. First, load the required external libraries:
+      Below is a demonstration of how to use the FEAScript library to solve this stationary heat transfer
+      problem in your web browser. You only need a simple HTML page to run this example where the following
+      code snippets should be included. First, load the required external libraries:
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
@@ -140,27 +137,21 @@
 
       // Create and configure model
       const model = new FEAScriptModel();
-      model.setSolverConfig("generalFormPDEScript", {
-        coefficientFunctions: {
-          // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
-          A: (x) => 1, // Diffusion coefficient
-          B: (x) => -10, // Advection coefficient
-          C: (x) => 0,  // Reaction coefficient
-          D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
-        },
-      });
-
-      // Define mesh configuration
+      model.setSolverConfig("heatConductionScript");
       model.setMeshConfig({
-        meshDimension: "1D",
+        meshDimension: "2D",
         elementOrder: "quadratic",
-        numElementsX: 20,
-        maxX: 1.0,
+        numElementsX: 8,
+        numElementsY: 4,
+        maxX: 4,
+        maxY: 2,
       });
 
-      // Define boundary conditions
-      model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
-      model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
+      // Apply boundary conditions
+      model.addBoundaryCondition("0", ["constantTemp", 200]);
+      model.addBoundaryCondition("1", ["symmetry"]);
+      model.addBoundaryCondition("2", ["convection", 1, 20]);
+      model.addBoundaryCondition("3", ["constantTemp", 200]);
 
       // Solve
       model.setSolverMethod("lusolve");
@@ -172,18 +163,29 @@
         nodesCoordinates,
         model.solverConfig,
         model.meshConfig.meshDimension,
-        "line",
+        "contour",
         "resultsCanvas"
       );
+      
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
     >
-
     <p>
-      After solving the case, the results appear as a line plot. To visualize it, include an HTML container
-      where the plot will render:
+      In the boundary condition definition, the numbers at the left side (from <code>"0"</code> to
+      <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has assigned
+      numbers to the boundaries, starting from the bottom boundary and proceeding clockwise). The
+      <code>"constantTemp"</code> condition sets a constant temperature value. The
+      <code>"symmetry"</code> boundary condition represents a zero-flux type. Finally, the
+      <code>"convection"</code> condition describes a convective heat transfer scenario. In addition, the
+      second argument of the <code>"constantTemp"</code> boundary condition corresponds to the constant
+      temperature value. For a <code>"convection"</code> boundary condition, the second argument represents
+      the \({\frac{h}{k}}\) value, and the third argument indicates the external temperature \(T_0\).
+    </p>
+    <p>
+      After solving the case, the results are shown in a 2D contour plot. To visualize it, include an HTML
+      container where the plot will render:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -197,23 +199,27 @@
       as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
     </p>
 
-    <!-- Container element where the solution plot will be rendered -->
     <h2 id="results"><a name="Results"></a>Results</h2>
-
     <p>
-      Below is the 1D line plot of the computed solution to the advection-diffusion equation. This plot is
-      generated in real time using FEAScript. You can find a Node.js implementation of this tutorial in the
+      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
+      time using FEAScript. You can find a Node.js implementation of this tutorial in the
       <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/generalFormPDEScript/advectionDiffusion1D"
+        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/heatConductionScript/heatConduction2DFin"
         >example directory</a
       >.
     </p>
 
     <div id="resultsCanvas"></div>
 
+    <br />
+
+    <!-- Links to worker-based and Gmsh implementation -->
     <p>
-      The solution shows the characteristic behavior of advection-diffusion problems. The magnitude and spread
-      of the solution are determined by the balance between diffusion and advection.
+      See also
+      <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html">here</a>
+      for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness and
+      <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html">here</a>
+      for a tutorial using an unstructured mesh generated by Gmsh.
     </p>
 
     <ul id="menu">
@@ -230,6 +236,7 @@
       } from "https://core.feascript.com/dist/feascript.esm.js";
       // Import FEAScript library from a local directory
       // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+      // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/dist/feascript.esm.js";
 
       window.addEventListener("DOMContentLoaded", () => {
         // Print FEAScript version
@@ -238,42 +245,40 @@
         // Create a new FEAScript model
         const model = new FEAScriptModel();
 
-        // Set solver configuration with coefficient functions
-        model.setSolverConfig("generalFormPDEScript", {
-          coefficientFunctions: {
-            // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
-            A: (x) => 1, // Diffusion coefficient
-            B: (x) => -10, // Advection coefficient
-            C: (x) => 0, // Reaction coefficient
-            D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
-          },
-        });
+        // Set solver configuration
+        model.setSolverConfig("heatConductionScript");
 
         // Define mesh configuration
         model.setMeshConfig({
-          meshDimension: "1D",
+          meshDimension: "2D",
           elementOrder: "quadratic",
-          numElementsX: 20,
-          maxX: 1.0,
+          numElementsX: 8,
+          numElementsY: 4,
+          maxX: 4,
+          maxY: 2,
         });
 
         // Define boundary conditions
-        model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
-        model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
+        model.addBoundaryCondition("0", ["constantTemp", 200]);
+        model.addBoundaryCondition("1", ["symmetry"]);
+        model.addBoundaryCondition("2", ["convection", 1, 20]);
+        model.addBoundaryCondition("3", ["constantTemp", 200]);
 
         // Set solver method
+        // model.setSolverMethod("jacobi");
         model.setSolverMethod("lusolve");
+        // model.setSolverMethod("frontal");
 
         // Solve the problem and get the solution
         const { solutionVector, nodesCoordinates } = model.solve();
 
-        // Plot the solution as a 1D line plot
+        // Plot the solution as a 2D contour plot
         plotSolution(
           solutionVector,
           nodesCoordinates,
           model.solverConfig,
           model.meshConfig.meshDimension,
-          "line",
+          "contour",
           "resultsCanvas"
         );
       });

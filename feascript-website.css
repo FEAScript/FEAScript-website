@@ -259,6 +259,10 @@ mjx-container {
   color: #f7e7b7;
 }
 
+.tutorials-list .badge-codepen {
+  background-color: #47cf73;
+}
+
 .tutorial-name {
   display: inline-block;
   vertical-align: middle;
@@ -388,4 +392,11 @@ footer {
   transform: translateY(-2px);
   cursor: default;
   transition: transform 0.2s;
+}
+
+/* Orange vertical bar */
+.notice-dev {
+  border-left: 4px solid #f39c12;
+  padding-left: 10px;
+  margin: 1em 0;
 }

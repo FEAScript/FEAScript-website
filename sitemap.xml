@@ -17,12 +17,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://feascript.com/tutorials/heat-conduction-1d-wall-platform.html</loc>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://feascript.com/tutorials/heat-conduction-2d-fin-platform.html</loc>
-    <priority>0.4</priority>
+    <loc>https://feascript.com/feascript-platform.html</loc>
+    <priority>1.0</priority>
   </url>
   <url>
     <loc>https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html</loc>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<!--   ______ ______           _____           _       _     -->
+<!--  |  ____|  ____|   /\    / ____|         (_)     | |    -->
+<!--  | |__  | __|   / /\ \  \___ \ / __|  __| |  _ \| __|  -->
+<!--  | |    | |____ / ____ \ ____) | (__| |  | | |_) | |    -->
+<!--  |_|    |______/_/    \_\_____/ \___|_|  |_|  __/| |    -->
+<!--                                            | |   | |    -->
+<!--                                            |_|   | |_   -->
+<!--       Website: https://feascript.com/             \__|  -->
+
+<html>
+  <head>
+    <title>FEAScript Platform Visual Editor</title>
+    <link rel="icon" type="image/x-icon" href="https://feascript.com/assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="FEAScript Platform is browser-based visual editor designed for the FEAScript finite element simulation library. It empowers users to create and run finite element simulations directly in their browser."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, visual platform, no-code"
+    />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Link to the CSS files -->
+    <link href="feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
+
+  <body>
+    <h1 class="top">
+      <a href="index.html">
+        <img
+          src="./assets/feascript-platform-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+    </h1>
+
+    <h1>A Visual Editor for the FEAScript Library</h1>
+    <div class="highlight-container">
+      <p>
+        <strong>FEAScript Platform is a browser-based visual editor</strong> designed for the
+        <a href="https://feascript.com/">FEAScript</a> finite element simulation library. It provides a
+        no-code, block-based interface (based on
+        <a href="https://developers.google.com/blockly/">
+          Blockly<img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+            alt="External Link Icon"
+            style="
+              width: 16px;
+              height: 16px;
+              vertical-align: middle;
+              margin-left: 2px;
+              margin-bottom: 4px;
+            " /></a
+        >) for creating physics and engineering simulations.
+      </p>
+    </div>
+
+    <br />
+
+    <div class="platform-layout">
+      <div class="container">
+        <div class="left-panel">
+          <div class="text-content">
+            <h1>Why Use FEAScript Platform</h1>
+            <ul class="features-list">
+              <li>
+                <strong>🧱 No-Code Simulation</strong>
+                <p>Just drag, connect, and solve</p>
+              </li>
+              <li>
+                <strong>🌐 Browser-Based and Accessible</strong>
+                <p>Accessible on any device (Windows, macOS, Linux)</p>
+              </li>
+              <li>
+                <strong>🔄 Easy Sharing and Reuse</strong>
+                <p>Save and load your projects in XML format</p>
+              </li>
+            </ul>
+            <!-- <a
+              href="feascript-platform-app.html"
+              style="
+                color: #555;
+                border: 2px solid #e0e0e0;
+                padding: 5px;
+                border-radius: 4px;
+                display: inline-block;
+              "
+              ><img
+                src="https://feascript.com/assets/favicon.ico"
+                alt="FEAScript Icon"
+                style="vertical-align: middle; margin-right: 5px; height: 1em; width: auto"
+              /><strong>Access the FEAScript Platform</strong></a
+            >
+            <p style="margin-top: 1em; font-style: italic">
+              Please note that while the the core library of FEAScript is free to use, FEAScript Platform is
+              offered as a paid service. To get access, please go to our
+              <a href="https://www.paddle.com/">store on Paddle</a>.
+            </p> -->
+          </div>
+        </div>
+        <div class="right-panel">
+          <img
+            src="./assets/Screenshot_20251024_090709.png"
+            alt="FEAScript Platform Screenshot"
+            class="platform-image"
+          />
+        </div>
+      </div>
+    </div>
+
+    <br />
+
+    <footer>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    </footer>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+    </script>
+  </body>
+</html>

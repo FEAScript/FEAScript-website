@@ -59,7 +59,7 @@ h2 {
 }
 
 h3 {
-  font-size: 110%;
+  font-size: 120%;
 }
 
 /* Paragraphs and links */
@@ -432,4 +432,66 @@ mjx-container {
   h3 {
     font-size: 120%;
   }
+}
+
+/* ==========================================================================
+   PLATFORM-SPECIFIC STYLES
+   ========================================================================== */
+.platform-layout {
+  background-color: transparent;
+  margin: 0.5em 0;
+  padding: 0;
+  display: block;
+  min-height: auto;
+  flex-direction: row;
+  max-width: 1000px;
+}
+
+.platform-layout .container {
+  display: flex;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.platform-layout .left-panel {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.platform-layout .text-content {
+  color: #2d2d2d;
+}
+
+.platform-layout .text-content h1 {
+  margin: 0 0 10px 0;
+}
+
+.platform-layout .text-content p {
+  margin: 0 0 10px 0;
+}
+
+.platform-layout .right-panel {
+  flex: 1.5;
+  position: relative;
+  padding: 16px;
+  background: linear-gradient(135deg, #d4aa00ff, #4d4d4d); /* Gold to dark gray gradient */
+  border-radius: 0 10px 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.platform-layout .platform-image {
+  width: 100%;
+  height: auto;
+  border: 10px solid #333;
+  border-radius: 10px;
+  background: #000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }

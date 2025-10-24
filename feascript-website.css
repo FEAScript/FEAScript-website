@@ -372,6 +372,12 @@ mjx-container {
   .tutorials-list li a {
     font-size: 100%;
   }
+  .platform-layout .right-panel {
+    display: none !important;
+  }
+  .platform-layout .left-panel {
+    border-radius: 10px;
+  }
 }
 
 /* Medium screens: 500px to 1000px */

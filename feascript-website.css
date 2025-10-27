@@ -23,6 +23,7 @@ html {
   font-family: "Roboto", sans-serif;
   font-size: 90%;
   scroll-behavior: smooth;
+  position: relative;
 }
 
 body {
@@ -160,11 +161,6 @@ pre {
 pre.prettyprint {
   border: 1px solid #ddd;
   border-radius: 4px;
-}
-
-/* Images */
-img.title {
-  height: 1em;
 }
 
 #responsive-logo {
@@ -333,12 +329,6 @@ mjx-container {
 /* ==========================================================================
    HELPER CLASSES AND UTILITIES
    ========================================================================== */
-/* Social media links */
-.social-media-list a:hover {
-  transform: translateY(-2px);
-  cursor: default;
-  transition: transform 0.2s;
-}
 
 /* Notice bars */
 .notice-dev {
@@ -487,7 +477,7 @@ mjx-container {
   flex: 1.5;
   position: relative;
   padding: 16px;
-  background: linear-gradient(135deg, #d4aa00ff, #4d4d4d); /* Gold to dark gray gradient */
+  background: linear-gradient(135deg, #d4aa00ff, #4d4d4d);
   border-radius: 0 10px 10px 0;
   display: flex;
   align-items: center;
@@ -500,4 +490,51 @@ mjx-container {
   border-radius: 10px;
   background: #000;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Social icons */
+.social-icons-top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.social-icons-top-right ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.social-icons-top-right li {
+  display: inline-block;
+}
+
+.social-icons-top-right a {
+  text-decoration: none;
+}
+
+.social-icons-top-right a:hover img {
+  opacity: 0.8;
+  transform: scale(1.1);
+  transition: all 0.2s ease;
+}
+
+/* Sponsor link styles */
+.sponsor-link {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.sponsor-link:hover {
+  transform: translateY(-2px);
+}
+
+#github-stars {
+  color: #333;
 }

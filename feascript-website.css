@@ -178,8 +178,9 @@ mjx-container {
 /* Highlight containers */
 .highlight-container {
   background: #f7e7b7;
-  border-radius: 5px;
   padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .highlight-container p {
@@ -212,12 +213,6 @@ mjx-container {
 }
 
 /* Tutorial styles */
-#orientation-message {
-  display: none;
-  color: red;
-  font-weight: bold;
-}
-
 .image-container {
   width: 100%;
   max-width: 800px;
@@ -536,5 +531,5 @@ mjx-container {
 }
 
 #github-stars {
-  color: #333;
+  color: #555;
 }

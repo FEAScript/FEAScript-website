@@ -53,6 +53,7 @@ h1 {
 
 h1.top {
   border-bottom: 1px solid #aaa;
+  position: relative;
 }
 
 h2 {
@@ -490,9 +491,8 @@ mjx-container {
 /* Social icons */
 .social-icons-top-right {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1000;
+  bottom: 1px;
+  right: 1px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -532,4 +532,5 @@ mjx-container {
 
 #github-stars {
   color: #555;
+  font-size: 0.6em !important;
 }

@@ -1,14 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
 
-<head>
+<!--   ______ ______           _____           _       _     -->
+<!--  |  ____|  ____|   /\    / ____|         (_)     | |    -->
+<!--  | |__  | |__     /  \  | (___   ___ ____ _ ____ | |_   -->
+<!--  |  __| |  __|   / /\ \  \___ \ / __|  __| |  _ \| __|  -->
+<!--  | |    | |____ / ____ \ ____) | (__| |  | | |_) | |    -->
+<!--  |_|    |______/_/    \_\_____/ \___|_|  |_|  __/| |    -->
+<!--                                            | |   | |    -->
+<!--                                            |_|   | |_   -->
+<!--       Website: https://feascript.com/             \__|  -->
+
+<html>
+  <head>
     <title>FEAScript: Heat Conduction in a 2D Fin (WebGPU)</title>
     <link rel="icon" type="image/x-icon" href="../../../../FEAScript-website/assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="description"
-        content="This example demonstrates solving a steady-state heat transfer problem using the FEAScript library with WebGPU for accelerated computation." />
-    <meta name="keywords"
-        content="finite elements, fem, galerkin, computational mechanics, javascript, webgpu, 2D heat transfer" />
+    <meta
+      name="description"
+      content="This example demonstrates solving a steady-state heat transfer problem using the FEAScript library with WebGPU for accelerated computation."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, webgpu, 2D heat transfer"
+    />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
     <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
@@ -19,48 +33,73 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
     <!-- Import MathJax for writing equations -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
     <!-- Import the run_prettify.js library for JavaScript code coloring -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1 class="top">
-        <a href="../index.html">
-            <img src="../assets/feascript-logo.png" alt="FEAScript Logo" id="responsive-logo"
-                style="vertical-align: middle" />
-        </a>
-        <div class="social-icons-top-right">
-            <ul>
-                <li>
-                    <a href="https://blog.feascript.com/" title="FEAScript blog">
-                        <img src="../assets/blog-icon-feascript.png" alt="Blog icon"
-                            style="height: 18px; vertical-align: middle" />
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
-                        <img src="../assets/youtube-icon-feascript.svg" alt="YouTube icon"
-                            style="height: 18px; vertical-align: middle" />
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
-                        <img src="../assets/linkedin-icon-feascript.png" alt="LinkedIn icon"
-                            style="height: 18px; vertical-align: middle" />
-                    </a>
-                </li>
-                <li>
-                    <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
-                        <img src="../assets/discord-icon-feascript.png" alt="Discord icon"
-                            style="height: 18px; vertical-align: middle" />
-                    </a>
-                </li>
-                <li>
-                    <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
-                        <img src="../assets/github-icon-feascript.png" alt="GitHub icon"
-                            style="height: 20px; vertical-align: middle" />
-                        <span id="github-stars" style="
+      <a href="../index.html">
+        <img
+          src="../assets/feascript-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+      <div class="social-icons-top-right">
+        <ul>
+          <li>
+            <a href="https://blog.feascript.com/" title="FEAScript blog">
+              <img
+                src="../assets/blog-icon-feascript.png"
+                alt="Blog icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+              <img
+                src="../assets/youtube-icon-feascript.svg"
+                alt="YouTube icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+              <img
+                src="../assets/linkedin-icon-feascript.png"
+                alt="LinkedIn icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+              <img
+                src="../assets/discord-icon-feascript.png"
+                alt="Discord icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+              <img
+                src="../assets/github-icon-feascript.png"
+                alt="GitHub icon"
+                style="height: 20px; vertical-align: middle"
+              />
+              <span
+                id="github-stars"
+                style="
                   font-size: 0.9em;
                   margin-left: 5px;
                   vertical-align: middle;
@@ -68,45 +107,49 @@
                   border-radius: 4px;
                   padding: 1px 5px;
                   background-color: #f8f8f8;
-                "></span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+                "
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </h1>
     <h1>Heat Conduction in a 2D Fin Tutorial (WebGPU)</h1>
 
     <ul id="menu">
-        <li><a href="#webgpuimplementation">WebGPU Implementation</a></li>
-        <li><a href="#results">Results</a></li>
+      <li><a href="#webgpuimplementation">WebGPU Implementation</a></li>
+      <li><a href="#results">Results</a></li>
     </ul>
 
     <div class="highlight-container">
-        <p>
-            This page demonstrates solving the 2D heat conduction fin problem using FEAScript with a WebGPU-accelerated
-            Jacobi solver. For the mathematical formulation and theory, see the
-            <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">basic tutorial</a>.
-        </p>
-        <p>
-            <strong>⚠️ Important:</strong> This feature is experimental and requires a browser that supports WebGPU.
-        <p>
-            Also, due to security restrictions, this example requires launching the
-            browser with reduced security settings, e.g.:
-        </p>
-        <pre style="background-color: #f8f9fa; padding: 8px; border-radius: 4px; overflow-x: auto">
-start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disable-site-isolation-trials</pre>
-        <p>
-            These flags temporarily disable CORS restrictions that normally block a web worker from loading
-            scripts or data when running from local files. For production applications, proper CORS headers should
-            be configured on your server.
-        </p>
-        </p>
+      <p>
+        This page demonstrates solving the 2D heat conduction fin problem using FEAScript with a
+        WebGPU-accelerated Jacobi solver. For the mathematical formulation and theory, see the
+        <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">basic tutorial</a>.
+      </p>
+      <p>
+        <strong>⚠️ Important:</strong> This feature is experimental and requires a browser that supports
+        WebGPU.
+      </p>
+
+      <p>
+        Also, due to security restrictions, this example requires launching the browser with reduced security
+        settings, e.g.:
+      </p>
+      <pre style="background-color: #f8f9fa; padding: 8px; border-radius: 4px; overflow-x: auto">
+start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disable-site-isolation-trials</pre
+      >
+      <p>
+        These flags temporarily disable CORS restrictions that normally block a web worker from loading
+        scripts or data when running from local files. For production applications, proper CORS headers should
+        be configured on your server.
+      </p>
     </div>
 
     <h2 id="webgpuimplementation">WebGPU Implementation</h2>
     <p>
-        The code below shows how to use FEAScript with the WebGPU-accelerated Jacobi solver. The solution is plotted as
-        a 2D contour.
+      The code below shows how to use FEAScript with the WebGPU-accelerated Jacobi solver. The solution is
+      plotted as a 2D contour.
     </p>
 
     <pre class="prettyprint">
@@ -154,94 +197,94 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
   });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
-&lt;/body&gt;</pre>
+&lt;/body&gt;</pre
+    >
 
     <h2 id="results">Results</h2>
     <p>
-        Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real time using
-        FEAScript.
+      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
+      time using FEAScript.
     </p>
 
     <div id="loading">
-        <div class="spinner"></div>
-        Solving...
+      <div class="spinner"></div>
+      Solving...
     </div>
     <div id="resultsCanvas"></div>
     <div id="timeDisplay" style="margin-top: 1em"></div>
 
     <ul id="menu">
-        <li><a href="https://feascript.com/index.html">Home</a></li>
-        <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+      <li><a href="https://feascript.com/index.html">Home</a></li>
+      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
     </ul>
 
     <script type="module">
-        //Import FEAScript library from GitHub
-        import { FEAScriptModel, plotSolution } from "https://core.feascript.com/src/index.js";
-        //Import FEAScript library from a local directory
-        // import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js";
+      //Import FEAScript library from GitHub
+      import { FEAScriptModel, plotSolution } from "https://core.feascript.com/src/index.js";
+      //Import FEAScript library from a local directory
+      // import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js";
 
-        window.addEventListener("DOMContentLoaded", async () => {
-            const resultDiv = document.getElementById("loading");
-            const timeDiv = document.getElementById("timeDisplay");
-            resultDiv.style.display = "block";
+      window.addEventListener("DOMContentLoaded", async () => {
+        const resultDiv = document.getElementById("loading");
+        const timeDiv = document.getElementById("timeDisplay");
+        resultDiv.style.display = "block";
 
-            const startTime = performance.now();
+        const startTime = performance.now();
 
-            const model = new FEAScriptModel();
-            model.setSolverConfig("heatConductionScript");
+        const model = new FEAScriptModel();
+        model.setSolverConfig("heatConductionScript");
 
-            model.setMeshConfig({
-                meshDimension: "2D",
-                elementOrder: "quadratic",
-                numElementsX: 8,
-                numElementsY: 4,
-                maxX: 4,
-                maxY: 2,
-            });
-
-            model.addBoundaryCondition("0", ["constantTemp", 200]);
-            model.addBoundaryCondition("1", ["symmetry"]);
-            model.addBoundaryCondition("2", ["convection", 1, 20]);
-            model.addBoundaryCondition("3", ["constantTemp", 200]);
-
-            model.setSolverMethod("jacobi-gpu");
-
-            const { solutionVector, nodesCoordinates } = await model.solveAsync();
-
-            const endTime = performance.now();
-            const solvingTime = ((endTime - startTime) / 1000).toFixed(3);
-            timeDiv.innerHTML = `Solving time: ${solvingTime} seconds`;
-            resultDiv.style.display = "none";
-
-            plotSolution(
-                solutionVector,
-                nodesCoordinates,
-                model.solverConfig,
-                model.meshConfig.meshDimension,
-                "contour",
-                "resultsCanvas"
-            );
+        model.setMeshConfig({
+          meshDimension: "2D",
+          elementOrder: "quadratic",
+          numElementsX: 8,
+          numElementsY: 4,
+          maxX: 4,
+          maxY: 2,
         });
+
+        model.addBoundaryCondition("0", ["constantTemp", 200]);
+        model.addBoundaryCondition("1", ["symmetry"]);
+        model.addBoundaryCondition("2", ["convection", 1, 20]);
+        model.addBoundaryCondition("3", ["constantTemp", 200]);
+
+        model.setSolverMethod("jacobi-gpu");
+
+        const { solutionVector, nodesCoordinates } = await model.solveAsync();
+
+        const endTime = performance.now();
+        const solvingTime = ((endTime - startTime) / 1000).toFixed(3);
+        timeDiv.innerHTML = `Solving time: ${solvingTime} seconds`;
+        resultDiv.style.display = "none";
+
+        plotSolution(
+          solutionVector,
+          nodesCoordinates,
+          model.solverConfig,
+          model.meshConfig.meshDimension,
+          "contour",
+          "resultsCanvas"
+        );
+      });
     </script>
 
     <footer>
-        <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
     </footer>
     <script>
-        document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
 
-        // Fetch GitHub stars
-        fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-            .then((response) => response.json())
-            .then((data) => {
-                const starCount = data.stargazers_count;
-                const starsElement = document.getElementById("github-stars");
-                if (starsElement && starCount) {
-                    starsElement.innerHTML = `★ ${starCount}`;
-                }
-            })
-            .catch((error) => console.error("Error fetching GitHub stars:", error));
+      // Fetch GitHub stars
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
     </script>
-</body>
-
+  </body>
 </html>

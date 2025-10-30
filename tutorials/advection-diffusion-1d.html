@@ -11,78 +11,107 @@
 <!--       Website: https://feascript.com/             \__|  -->
 
 <html>
+  <head>
+    <title>FEAScript: Advection-Diffusion with a Gaussian Source Term Tutorial</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="This example demonstrates solving a one-dimensional advection-diffusion equation with a Gaussian source term using the FEAScript library. The problem shows how to model transport phenomena with both diffusion and advection mechanisms."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, advection-diffusion, transport phenomena"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Import the Math.js library for mathematical operations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+    <!-- Import the Plotly.js library for plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+    <!-- Import MathJax for writing equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Import the run_prettify.js library for JavaScript code coloring -->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
 
-<head>
-  <title>FEAScript: Advection-Diffusion with a Gaussian Source Term Tutorial</title>
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="description"
-    content="This example demonstrates solving a one-dimensional advection-diffusion equation with a Gaussian source term using the FEAScript library. The problem shows how to model transport phenomena with both diffusion and advection mechanisms." />
-  <meta name="keywords"
-    content="finite elements, fem, galerkin, computational mechanics, javascript, advection-diffusion, transport phenomena" />
-  <meta name="viewport" content="width=device-width" />
-  <!-- Link to the CSS files -->
-  <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <!-- Import the Math.js library for mathematical operations -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
-  <!-- Import the Plotly.js library for plotting -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
-  <!-- Import MathJax for writing equations -->
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <!-- Import the run_prettify.js library for JavaScript code coloring -->
-  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-</head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag("js", new Date());
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
 
-  gtag("config", "G-1JPK0KLEC9");
-</script>
-
-<body>
-  <h1 class="top">
-    <a href="../index.html">
-      <img src="../assets/feascript-logo.png" alt="FEAScript Logo" id="responsive-logo"
-        style="vertical-align: middle" />
-    </a>
-    <div class="social-icons-top-right">
-      <ul>
-        <li>
-          <a href="https://blog.feascript.com/" title="FEAScript blog">
-            <img src="../assets/blog-icon-feascript.png" alt="Blog icon" style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
-            <img src="../assets/youtube-icon-feascript.svg" alt="YouTube icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
-            <img src="../assets/linkedin-icon-feascript.png" alt="LinkedIn icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
-            <img src="../assets/discord-icon-feascript.png" alt="Discord icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
-            <img src="../assets/github-icon-feascript.png" alt="GitHub icon"
-              style="height: 20px; vertical-align: middle" />
-            <span id="github-stars" style="
+  <body>
+    <h1 class="top">
+      <a href="../index.html">
+        <img
+          src="../assets/feascript-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+      <div class="social-icons-top-right">
+        <ul>
+          <li>
+            <a href="https://blog.feascript.com/" title="FEAScript blog">
+              <img
+                src="../assets/blog-icon-feascript.png"
+                alt="Blog icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+              <img
+                src="../assets/youtube-icon-feascript.svg"
+                alt="YouTube icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+              <img
+                src="../assets/linkedin-icon-feascript.png"
+                alt="LinkedIn icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+              <img
+                src="../assets/discord-icon-feascript.png"
+                alt="Discord icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+              <img
+                src="../assets/github-icon-feascript.png"
+                alt="GitHub icon"
+                style="height: 20px; vertical-align: middle"
+              />
+              <span
+                id="github-stars"
+                style="
                   font-size: 0.9em;
                   margin-left: 5px;
                   vertical-align: middle;
@@ -90,74 +119,76 @@
                   border-radius: 4px;
                   padding: 1px 5px;
                   background-color: #f8f8f8;
-                "></span>
-          </a>
-        </li>
-      </ul>
+                "
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </h1>
+    <h1>Advection-Diffusion with a Gaussian Source Term Tutorial</h1>
+
+    <ul id="menu">
+      <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
+      <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
+
+    <div class="highlight-container">
+      <p>
+        In this tutorial, we address an advection-diffusion problem in a one-dimensional domain with a
+        Gaussian source term. This is a fundamental transport phenomenon that occurs in many fields including
+        fluid dynamics, heat transfer, and contaminant transport, where both diffusion and advection
+        mechanisms are important.
+      </p>
     </div>
-  </h1>
-  <h1>Advection-Diffusion with a Gaussian Source Term Tutorial</h1>
 
-  <ul id="menu">
-    <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
-    <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
-    <li><a href="#results">Results</a></li>
-  </ul>
-
-  <div class="highlight-container">
+    <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
-      In this tutorial, we address an advection-diffusion problem in a one-dimensional domain with a
-      Gaussian source term. This is a fundamental transport phenomenon that occurs in many fields including
-      fluid dynamics, heat transfer, and contaminant transport, where both diffusion and advection
-      mechanisms are important.
+      The advection-diffusion equation is a partial differential equation that describes physical phenomena
+      where particles, energy, or other physical quantities are transferred inside a physical system due to
+      two processes: diffusion and advection. In one dimension, the steady-state equation is given by:
     </p>
-  </div>
+    <p>\(\frac{d^2u}{dx^2} - 10 \frac{du}{dx} = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\)</p>
+    <p>
+      This can be rewritten in the general form: \(\frac{d}{dx}\left(A(x)\frac{du}{dx}\right) +
+      B(x)\frac{du}{dx} + C(x)u = D(x)\)
+    </p>
+    <p>Where for our specific problem:</p>
+    <ul>
+      <li>\(A(x) = 1\) (diffusion coefficient)</li>
+      <li>\(B(x) = -10\) (advection coefficient)</li>
+      <li>\(C(x) = 0\) (no reaction term)</li>
+      <li>\(D(x) = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\) (Gaussian source term centered at x = 0.5)</li>
+    </ul>
 
-  <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
-  <p>
-    The advection-diffusion equation is a partial differential equation that describes physical phenomena
-    where particles, energy, or other physical quantities are transferred inside a physical system due to
-    two processes: diffusion and advection. In one dimension, the steady-state equation is given by:
-  </p>
-  <p>\(\frac{d^2u}{dx^2} - 10 \frac{du}{dx} = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\)</p>
-  <p>
-    This can be rewritten in the general form: \(\frac{d}{dx}\left(A(x)\frac{du}{dx}\right) +
-    B(x)\frac{du}{dx} + C(x)u = D(x)\)
-  </p>
-  <p>Where for our specific problem:</p>
-  <ul>
-    <li>\(A(x) = 1\) (diffusion coefficient)</li>
-    <li>\(B(x) = -10\) (advection coefficient)</li>
-    <li>\(C(x) = 0\) (no reaction term)</li>
-    <li>\(D(x) = 10 \cdot e^{-200 \cdot (x - 0.5)^2}\) (Gaussian source term centered at x = 0.5)</li>
-  </ul>
+    <p>
+      We apply Dirichlet boundary condition at the left end: \(u(0) = 1\) and Neumann boundary condition (zero
+      gradient) at the right end: \(\frac{du}{dx}(1) = 0\). These conditions represent a fixed concentration
+      at the inlet and free outflow at the outlet of our domain. The Gaussian source term acts as a localized
+      input at the center of the domain. The balance between diffusion (spreading) and advection (directed
+      transport) will determine how the solution behaves.
+    </p>
 
-  <p>
-    We apply Dirichlet boundary condition at the left end: \(u(0) = 1\) and Neumann boundary condition (zero
-    gradient) at the right end: \(\frac{du}{dx}(1) = 0\). These conditions represent a fixed concentration
-    at the inlet and free outflow at the outlet of our domain. The Gaussian source term acts as a localized
-    input at the center of the domain. The balance between diffusion (spreading) and advection (directed
-    transport) will determine how the solution behaves.
-  </p>
-
-  <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
-  <p>
-    Below is a demonstration of how to use the FEAScript library to solve this advection-diffusion problem
-    in your web browser. You only need a simple HTML page to run this example where the following code
-    snippets should be included. First, load the required external libraries:
-  </p>
-  <pre class="prettyprint">
+    <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
+    <p>
+      Below is a demonstration of how to use the FEAScript library to solve this advection-diffusion problem
+      in your web browser. You only need a simple HTML page to run this example where the following code
+      snippets should be included. First, load the required external libraries:
+    </p>
+    <pre class="prettyprint">
 &lt;head&gt;
   &lt;!-- ...head region... --&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js">&lt;/script&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js">&lt;/script&gt;
   &lt;!-- ...rest of head region... --&gt;
-&lt;/head&gt;</pre>
-  <p>
-    We should then define the problem parameters, such as the solver type, the geometry configuration, and
-    the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
-  </p>
-  <pre class="prettyprint">
+&lt;/head&gt;</pre
+    >
+    <p>
+      We should then define the problem parameters, such as the solver type, the geometry configuration, and
+      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
+    </p>
+    <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -208,121 +239,124 @@
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
-&lt;/body&gt;</pre>
+&lt;/body&gt;</pre
+    >
 
-  <p>
-    After solving the case, the results appear as a line plot. To visualize it, include an HTML container
-    where the plot will render:
-  </p>
-  <pre class="prettyprint">
+    <p>
+      After solving the case, the results appear as a line plot. To visualize it, include an HTML container
+      where the plot will render:
+    </p>
+    <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;div id="resultsCanvas">&lt;/div&gt;
   &lt;!-- ...rest of body region... --&gt;
-&lt;/body&gt;</pre>
-  <p>
-    The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
-    as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
-  </p>
+&lt;/body&gt;</pre
+    >
+    <p>
+      The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
+      as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
+    </p>
 
-  <!-- Container element where the solution plot will be rendered -->
-  <h2 id="results"><a name="Results"></a>Results</h2>
+    <!-- Container element where the solution plot will be rendered -->
+    <h2 id="results"><a name="Results"></a>Results</h2>
 
-  <p>
-    Below is the 1D line plot of the computed solution to the advection-diffusion equation. This plot is
-    generated in real time using FEAScript. You can find a Node.js implementation of this tutorial in the
-    <a href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/generalFormPDEScript/advectionDiffusion1D">example
-      directory</a>.
-  </p>
+    <p>
+      Below is the 1D line plot of the computed solution to the advection-diffusion equation. This plot is
+      generated in real time using FEAScript. You can find a Node.js implementation of this tutorial in the
+      <a
+        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/generalFormPDEScript/advectionDiffusion1D"
+        >example directory</a
+      >.
+    </p>
 
-  <div id="resultsCanvas"></div>
+    <div id="resultsCanvas"></div>
 
-  <p>
-    The solution shows the characteristic behavior of advection-diffusion problems. The magnitude and spread
-    of the solution are determined by the balance between diffusion and advection.
-  </p>
+    <p>
+      The solution shows the characteristic behavior of advection-diffusion problems. The magnitude and spread
+      of the solution are determined by the balance between diffusion and advection.
+    </p>
 
-  <ul id="menu">
-    <li><a href="https://feascript.com/index.html">Home</a></li>
-    <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-  </ul>
+    <ul id="menu">
+      <li><a href="https://feascript.com/index.html">Home</a></li>
+      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+    </ul>
 
-  <script type="module">
-    // Import FEAScript library from GitHub
-    import {
-      FEAScriptModel,
-      plotSolution,
-      printVersion,
-    } from "https://core.feascript.com/dist/feascript.esm.js";
-    // Import FEAScript library from a local directory
-    // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+    <script type="module">
+      // Import FEAScript library from GitHub
+      import {
+        FEAScriptModel,
+        plotSolution,
+        printVersion,
+      } from "https://core.feascript.com/dist/feascript.esm.js";
+      // Import FEAScript library from a local directory
+      // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
-    window.addEventListener("DOMContentLoaded", () => {
-      // Print FEAScript version
-      console.log("FEAScript version:", printVersion);
+      window.addEventListener("DOMContentLoaded", () => {
+        // Print FEAScript version
+        console.log("FEAScript version:", printVersion);
 
-      // Create a new FEAScript model
-      const model = new FEAScriptModel();
+        // Create a new FEAScript model
+        const model = new FEAScriptModel();
 
-      // Set solver configuration with coefficient functions
-      model.setSolverConfig("generalFormPDEScript", {
-        coefficientFunctions: {
-          // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
-          A: (x) => 1, // Diffusion coefficient
-          B: (x) => -10, // Advection coefficient
-          C: (x) => 0, // Reaction coefficient
-          D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
-        },
+        // Set solver configuration with coefficient functions
+        model.setSolverConfig("generalFormPDEScript", {
+          coefficientFunctions: {
+            // Equation d²u/dx² - 10 du/dx = 10 * exp(-200 * (x - 0.5)²)
+            A: (x) => 1, // Diffusion coefficient
+            B: (x) => -10, // Advection coefficient
+            C: (x) => 0, // Reaction coefficient
+            D: (x) => 10 * Math.exp(-200 * Math.pow(x - 0.5, 2)), // Source term
+          },
+        });
+
+        // Define mesh configuration
+        model.setMeshConfig({
+          meshDimension: "1D",
+          elementOrder: "quadratic",
+          numElementsX: 20,
+          maxX: 1.0,
+        });
+
+        // Define boundary conditions
+        model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
+        model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
+
+        // Set solver method
+        model.setSolverMethod("lusolve");
+
+        // Solve the problem and get the solution
+        const { solutionVector, nodesCoordinates } = model.solve();
+
+        // Plot the solution as a 1D line plot
+        plotSolution(
+          solutionVector,
+          nodesCoordinates,
+          model.solverConfig,
+          model.meshConfig.meshDimension,
+          "line",
+          "resultsCanvas"
+        );
       });
+    </script>
 
-      // Define mesh configuration
-      model.setMeshConfig({
-        meshDimension: "1D",
-        elementOrder: "quadratic",
-        numElementsX: 20,
-        maxX: 1.0,
-      });
+    <footer>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    </footer>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
 
-      // Define boundary conditions
-      model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
-      model.addBoundaryCondition("1", "zeroGradient"); // Right boundary, zero gradient (du/dx = 0)
-
-      // Set solver method
-      model.setSolverMethod("lusolve");
-
-      // Solve the problem and get the solution
-      const { solutionVector, nodesCoordinates } = model.solve();
-
-      // Plot the solution as a 1D line plot
-      plotSolution(
-        solutionVector,
-        nodesCoordinates,
-        model.solverConfig,
-        model.meshConfig.meshDimension,
-        "line",
-        "resultsCanvas"
-      );
-    });
-  </script>
-
-  <footer>
-    <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
-  </footer>
-  <script>
-    document.getElementById("currentYear").innerHTML = new Date().getFullYear();
-
-    // Fetch GitHub stars
-    fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-      .then((response) => response.json())
-      .then((data) => {
-        const starCount = data.stargazers_count;
-        const starsElement = document.getElementById("github-stars");
-        if (starsElement && starCount) {
-          starsElement.innerHTML = `★ ${starCount}`;
-        }
-      })
-      .catch((error) => console.error("Error fetching GitHub stars:", error));
-  </script>
-</body>
-
+      // Fetch GitHub stars
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
+    </script>
+  </body>
 </html>

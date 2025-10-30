@@ -10,69 +10,95 @@
 <!--       Website: https://feascript.com/             \__|  -->
 
 <html>
+  <head>
+    <title>FEAScript Platform Visual Editor</title>
+    <link rel="icon" type="image/x-icon" href="https://feascript.com/assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="FEAScript Platform is browser-based visual editor designed for the FEAScript finite element simulation library. It empowers users to create and run finite element simulations directly in their browser."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, visual platform, no-code"
+    />
+    <meta name="viewport" content="width=device-width" />
 
-<head>
-  <title>FEAScript Platform Visual Editor</title>
-  <link rel="icon" type="image/x-icon" href="https://feascript.com/assets/favicon.ico" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="description"
-    content="FEAScript Platform is browser-based visual editor designed for the FEAScript finite element simulation library. It empowers users to create and run finite element simulations directly in their browser." />
-  <meta name="keywords"
-    content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, visual platform, no-code" />
-  <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <link href="feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  </head>
 
-  <!-- Link to the CSS files -->
-  <link href="feascript-website.css" rel="stylesheet" type="text/css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-</head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag("js", new Date());
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
 
-  gtag("config", "G-1JPK0KLEC9");
-</script>
-
-<body>
-  <h1 class="top">
-    <a href="index.html">
-      <img src="./assets/feascript-logo.png" alt="FEAScript Logo" id="responsive-logo" style="vertical-align: middle" />
-    </a>
-    <div class="social-icons-top-right">
-      <ul>
-        <li>
-          <a href="https://blog.feascript.com/" title="FEAScript blog">
-            <img src="./assets/blog-icon-feascript.png" alt="Blog icon" style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
-            <img src="./assets/youtube-icon-feascript.svg" alt="YouTube icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
-            <img src="./assets/linkedin-icon-feascript.png" alt="LinkedIn icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
-            <img src="./assets/discord-icon-feascript.png" alt="Discord icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
-            <img src="./assets/github-icon-feascript.png" alt="GitHub icon"
-              style="height: 20px; vertical-align: middle" />
-            <span id="github-stars" style="
+  <body>
+    <h1 class="top">
+      <a href="index.html">
+        <img
+          src="./assets/feascript-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+      <div class="social-icons-top-right">
+        <ul>
+          <li>
+            <a href="https://blog.feascript.com/" title="FEAScript blog">
+              <img
+                src="./assets/blog-icon-feascript.png"
+                alt="Blog icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+              <img
+                src="./assets/youtube-icon-feascript.svg"
+                alt="YouTube icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+              <img
+                src="./assets/linkedin-icon-feascript.png"
+                alt="LinkedIn icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+              <img
+                src="./assets/discord-icon-feascript.png"
+                alt="Discord icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+              <img
+                src="./assets/github-icon-feascript.png"
+                alt="GitHub icon"
+                style="height: 20px; vertical-align: middle"
+              />
+              <span
+                id="github-stars"
+                style="
                   font-size: 0.9em;
                   margin-left: 5px;
                   vertical-align: middle;
@@ -80,80 +106,87 @@
                   border-radius: 4px;
                   padding: 1px 5px;
                   background-color: #f8f8f8;
-                "></span>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </h1>
+                "
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </h1>
 
-  <h1>A Visual Editor for the FEAScript Library</h1>
-  <div class="highlight-container">
-    <p>
-      <strong>FEAScript Platform is a browser-based visual editor</strong> designed for the
-      <a href="https://feascript.com/">FEAScript</a> finite element simulation library. It provides a
-      no-code, block-based interface (based on
-      <a href="https://developers.google.com/blockly/">
-        Blockly<img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-          alt="External Link Icon" style="
+    <h1>A Visual Editor for the FEAScript Library</h1>
+    <div class="highlight-container">
+      <p>
+        <strong>FEAScript Platform is a browser-based visual editor</strong> designed for the
+        <a href="https://feascript.com/">FEAScript</a> finite element simulation library. It provides a
+        no-code, block-based interface (based on
+        <a href="https://developers.google.com/blockly/">
+          Blockly<img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+            alt="External Link Icon"
+            style="
               width: 16px;
               height: 16px;
               vertical-align: middle;
               margin-left: 2px;
               margin-bottom: 4px;
-            " /></a>) for creating physics and engineering simulations.
-    </p>
-  </div>
+            " /></a
+        >) for creating physics and engineering simulations.
+      </p>
+    </div>
 
-  <br />
+    <br />
 
-  <div class="platform-layout">
-    <div class="container">
-      <div class="left-panel">
-        <div class="text-content">
-          <h1>Why Use FEAScript Platform</h1>
-          <ul class="features-list">
-            <li>
-              <strong>🧱 No-Code Simulation</strong>
-              <p>Just drag, connect, and solve</p>
-            </li>
-            <li>
-              <strong>🌐 Browser-Based and Accessible</strong>
-              <p>Accessible on any device (Windows, macOS, Linux)</p>
-            </li>
-            <li>
-              <strong>🔄 Easy Sharing and Reuse</strong>
-              <p>Save and load your projects in XML format</p>
-            </li>
-          </ul>
+    <div class="platform-layout">
+      <div class="container">
+        <div class="left-panel">
+          <div class="text-content">
+            <h1>Why Use FEAScript Platform</h1>
+            <ul class="features-list">
+              <li>
+                <strong>🧱 No-Code Simulation</strong>
+                <p>Just drag, connect, and solve</p>
+              </li>
+              <li>
+                <strong>🌐 Browser-Based and Accessible</strong>
+                <p>Accessible on any device (Windows, macOS, Linux)</p>
+              </li>
+              <li>
+                <strong>🔄 Easy Sharing and Reuse</strong>
+                <p>Save and load your projects in XML format</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="right-panel">
+          <img
+            src="./assets/Screenshot_20251024_090709.png"
+            alt="FEAScript Platform Screenshot"
+            class="platform-image"
+          />
         </div>
       </div>
-      <div class="right-panel">
-        <img src="./assets/Screenshot_20251024_090709.png" alt="FEAScript Platform Screenshot" class="platform-image" />
-      </div>
     </div>
-  </div>
 
-  <br />
+    <br />
 
-  <footer>
-    <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
-  </footer>
-  <script>
-    document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+    <footer>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    </footer>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
 
-    // Fetch GitHub stars
-    fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-      .then((response) => response.json())
-      .then((data) => {
-        const starCount = data.stargazers_count;
-        const starsElement = document.getElementById("github-stars");
-        if (starsElement && starCount) {
-          starsElement.innerHTML = `★ ${starCount}`;
-        }
-      })
-      .catch((error) => console.error("Error fetching GitHub stars:", error));
-  </script>
-</body>
-
+      // Fetch GitHub stars
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
+    </script>
+  </body>
 </html>

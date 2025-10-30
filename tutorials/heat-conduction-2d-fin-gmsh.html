@@ -11,78 +11,107 @@
 <!--       Website: https://feascript.com/             \__|  -->
 
 <html lang="en">
+  <head>
+    <title>FEAScript: Heat Conduction in a 2D Fin Tutorial (Gmsh Mesh)</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="This example demonstrates solving a steady-state heat transfer problem in a 2D domain using a Gmsh-generated mesh."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, gmsh, 2D heat transfer"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Import the Math.js library for mathematical operations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+    <!-- Import the Plotly.js library for plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+    <!-- Import MathJax for writing equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
 
-<head>
-  <title>FEAScript: Heat Conduction in a 2D Fin Tutorial (Gmsh Mesh)</title>
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="description"
-    content="This example demonstrates solving a steady-state heat transfer problem in a 2D domain using a Gmsh-generated mesh." />
-  <meta name="keywords"
-    content="finite elements, fem, galerkin, computational mechanics, javascript, gmsh, 2D heat transfer" />
-  <meta name="viewport" content="width=device-width" />
-  <!-- Link to the CSS files -->
-  <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <!-- Import the Math.js library for mathematical operations -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
-  <!-- Import the Plotly.js library for plotting -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
-  <!-- Import MathJax for writing equations -->
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
-  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-</head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag("js", new Date());
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
 
-  gtag("config", "G-1JPK0KLEC9");
-</script>
-
-<body>
-  <h1 class="top">
-    <a href="../index.html">
-      <img src="../assets/feascript-logo.png" alt="FEAScript Logo" id="responsive-logo"
-        style="vertical-align: middle" />
-    </a>
-    <div class="social-icons-top-right">
-      <ul>
-        <li>
-          <a href="https://blog.feascript.com/" title="FEAScript blog">
-            <img src="../assets/blog-icon-feascript.png" alt="Blog icon" style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
-            <img src="../assets/youtube-icon-feascript.svg" alt="YouTube icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
-            <img src="../assets/linkedin-icon-feascript.png" alt="LinkedIn icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
-            <img src="../assets/discord-icon-feascript.png" alt="Discord icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
-            <img src="../assets/github-icon-feascript.png" alt="GitHub icon"
-              style="height: 20px; vertical-align: middle" />
-            <span id="github-stars" style="
+  <body>
+    <h1 class="top">
+      <a href="../index.html">
+        <img
+          src="../assets/feascript-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+      <div class="social-icons-top-right">
+        <ul>
+          <li>
+            <a href="https://blog.feascript.com/" title="FEAScript blog">
+              <img
+                src="../assets/blog-icon-feascript.png"
+                alt="Blog icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+              <img
+                src="../assets/youtube-icon-feascript.svg"
+                alt="YouTube icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+              <img
+                src="../assets/linkedin-icon-feascript.png"
+                alt="LinkedIn icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+              <img
+                src="../assets/discord-icon-feascript.png"
+                alt="Discord icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+              <img
+                src="../assets/github-icon-feascript.png"
+                alt="GitHub icon"
+                style="height: 20px; vertical-align: middle"
+              />
+              <span
+                id="github-stars"
+                style="
                   font-size: 0.9em;
                   margin-left: 5px;
                   vertical-align: middle;
@@ -90,43 +119,47 @@
                   border-radius: 4px;
                   padding: 1px 5px;
                   background-color: #f8f8f8;
-                "></span>
-          </a>
-        </li>
-      </ul>
+                "
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </h1>
+    <h1>Heat Conduction in a 2D Fin Tutorial (Gmsh Mesh)</h1>
+
+    <ul id="menu">
+      <li><a href="#gmshfileimport">Gmsh File Import</a></li>
+      <li>
+        <a href="#gmshgeofile">Example Gmsh <code>.geo</code> File</a>
+      </li>
+      <li><a href="#generatedmesh">Generated Mesh</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
+
+    <div class="highlight-container">
+      <p>
+        This page demonstrates solving the 2D heat conduction fin problem using a Gmsh-generated mesh.
+        <a href="https://gmsh.info/">
+          Gmsh
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+            alt="External Link Icon"
+            style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+        /></a>
+        is a powerful mesh generation tool that can create complex geometries and meshes for finite element
+        analysis. For the mathematical formulation and theory, see the
+        <a href="heat-conduction-2d-fin.html">basic tutorial</a>.
+      </p>
     </div>
-  </h1>
-  <h1>Heat Conduction in a 2D Fin Tutorial (Gmsh Mesh)</h1>
 
-  <ul id="menu">
-    <li><a href="#gmshfileimport">Gmsh File Import</a></li>
-    <li>
-      <a href="#gmshgeofile">Example Gmsh <code>.geo</code> File</a>
-    </li>
-    <li><a href="#generatedmesh">Generated Mesh</a></li>
-    <li><a href="#results">Results</a></li>
-  </ul>
-
-  <div class="highlight-container">
+    <h2 id="gmshfileimport"><a name="gmshfileimport"></a>Gmsh File Import</h2>
     <p>
-      This page demonstrates solving the 2D heat conduction fin problem using a Gmsh-generated mesh.
-      <a href="https://gmsh.info/">
-        Gmsh
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg" alt="External Link Icon"
-          style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px" /></a>
-      is a powerful mesh generation tool that can create complex geometries and meshes for finite element
-      analysis. For the mathematical formulation and theory, see the
-      <a href="heat-conduction-2d-fin.html">basic tutorial</a>.
+      This example demonstrates how to import a Gmsh-generated mesh (<code>.msh</code> file format) and solve
+      a heat conduction problem.
     </p>
-  </div>
 
-  <h2 id="gmshfileimport"><a name="gmshfileimport"></a>Gmsh File Import</h2>
-  <p>
-    This example demonstrates how to import a Gmsh-generated mesh (<code>.msh</code> file format) and solve
-    a heat conduction problem.
-  </p>
-
-  <pre class="prettyprint">
+    <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -184,45 +217,46 @@
     });
   &lt;/script&gt;
   &lt;!-- ... rest of body region... --&gt;
-&lt;/body&gt;</pre>
+&lt;/body&gt;</pre
+    >
 
-  <p>Important notes about the Gmsh workflow:</p>
-  <ul>
-    <li>
-      <strong>Physical Groups in Gmsh:</strong> In your <code>.geo</code> file (see
-      <a href="#gmshgeofile">Example Gmsh <code>.geo</code> File</a>), you need to define physical groups
-      for boundaries using commands like <code>Physical Line("bottom") = {1};</code>. These are mapped to
-      tags in the imported mesh.
-    </li>
-    <li>
-      <strong>Boundary Condition Mapping and Tag Indexing:</strong> When using Gmsh meshes in FEAScript, you
-      need to subtract 1 from the Gmsh physical group tag numbers. For example, if your Gmsh file has
-      physical groups with tags <code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>, you
-      would reference them in FEAScript as <code>"0"</code>, <code>"1"</code>, <code>"2"</code>,
-      <code>"3"</code>, respectively. For example:
-      <code>model.addBoundaryCondition("0", ["constantTemp", 200]); // Gmsh physical group tag 1</code>.
-      This conversion is necessary because Gmsh uses 1-based indexing while FEAScript uses 0-based indexing.
-    </li>
-    <li>
-      <strong>Unstructured Plotting:</strong> When plotting results from a Gmsh mesh, add the
-      <code>"unstructured"</code>
-      parameter to the <code>plotSolution</code> function to ensure correct visualization.
-    </li>
-  </ul>
+    <p>Important notes about the Gmsh workflow:</p>
+    <ul>
+      <li>
+        <strong>Physical Groups in Gmsh:</strong> In your <code>.geo</code> file (see
+        <a href="#gmshgeofile">Example Gmsh <code>.geo</code> File</a>), you need to define physical groups
+        for boundaries using commands like <code>Physical Line("bottom") = {1};</code>. These are mapped to
+        tags in the imported mesh.
+      </li>
+      <li>
+        <strong>Boundary Condition Mapping and Tag Indexing:</strong> When using Gmsh meshes in FEAScript, you
+        need to subtract 1 from the Gmsh physical group tag numbers. For example, if your Gmsh file has
+        physical groups with tags <code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>, you
+        would reference them in FEAScript as <code>"0"</code>, <code>"1"</code>, <code>"2"</code>,
+        <code>"3"</code>, respectively. For example:
+        <code>model.addBoundaryCondition("0", ["constantTemp", 200]); // Gmsh physical group tag 1</code>.
+        This conversion is necessary because Gmsh uses 1-based indexing while FEAScript uses 0-based indexing.
+      </li>
+      <li>
+        <strong>Unstructured Plotting:</strong> When plotting results from a Gmsh mesh, add the
+        <code>"unstructured"</code>
+        parameter to the <code>plotSolution</code> function to ensure correct visualization.
+      </li>
+    </ul>
 
-  <p>
-    You can create your own Gmsh files by writing <code>.geo</code> scripts or using Gmsh's GUI. For this
-    example, we used a simple rectangular domain defined in a <code>.geo</code> file with specific physical
-    groups for each boundary.
-  </p>
+    <p>
+      You can create your own Gmsh files by writing <code>.geo</code> scripts or using Gmsh's GUI. For this
+      example, we used a simple rectangular domain defined in a <code>.geo</code> file with specific physical
+      groups for each boundary.
+    </p>
 
-  <h3 id="gmshgeofile"><a name="gmshgeofile"></a>Example Gmsh <code>.geo</code> File</h3>
-  <p>
-    Below is the <code>rect.geo</code> file used in this tutorial. It defines a 4 m × 2 m rectangular domain
-    with physical lines for each boundary edge:
-  </p>
+    <h3 id="gmshgeofile"><a name="gmshgeofile"></a>Example Gmsh <code>.geo</code> File</h3>
+    <p>
+      Below is the <code>rect.geo</code> file used in this tutorial. It defines a 4 m × 2 m rectangular domain
+      with physical lines for each boundary edge:
+    </p>
 
-  <pre class="prettyprint">
+    <pre class="prettyprint">
 // 2D Rectangle: 4m (width) x 2m (height) with physical lines for boundary labeling
 
 lc = 0.7; // Characteristic length (mesh density)
@@ -255,168 +289,172 @@ Physical Surface("domain") = {1};
 // Generate 2D mesh
 Recombine Surface{1}; // Turn triangle elements into quadrilaterals
 Mesh.ElementOrder = 2; // Set quadratic elements 
-Mesh 2;</pre>
+Mesh 2;</pre
+    >
 
-  <p>
-    Note how the physical line tags in the <code>.geo</code> file correspond to the boundary conditions in
-    our FEAScript code:
-  </p>
-  <ul>
-    <li>
-      <code>Physical Line("bottom") = {1};</code> →
-      <code>model.addBoundaryCondition("0", ["constantTemp", 200]);</code>
-    </li>
-    <li>
-      <code>Physical Line("right") = {2};</code> →
-      <code>model.addBoundaryCondition("1", ["constantTemp", 200]);</code>
-    </li>
-    <li>
-      <code>Physical Line("top") = {3};</code> →
-      <code>model.addBoundaryCondition("2", ["convection", 1, 20]);</code>
-    </li>
-    <li>
-      <code>Physical Line("left") = {4};</code> →
-      <code>model.addBoundaryCondition("3", ["symmetry"]);</code>
-    </li>
-  </ul>
-
-  <p>
-    To generate a mesh file from this <code>.geo</code> script, you would run:
-    <code>gmsh rect.geo -2</code> in your terminal, which creates a <code>rect.msh</code> file that can be
-    imported into FEAScript.
-  </p>
-
-  <h2 id="generatedmesh"><a name="generatedmesh"></a>Generated Mesh</h2>
-  <p>
-    Below is a visualization of the quadrilateral mesh generated with Gmsh. The mesh consists of 30 elements.
-  </p>
-
-  <div class="center-image">
-    <img src="../assets/gmsh_rect_quad_unstruct.png" alt="Quadrilateral mesh generated by Gmsh"
-      style="max-width: 40%; height: auto" />
-    <p class="image-caption">
-      Quadrilateral mesh (<code>rect_quad_unstruct.msh</code>) generated using the
-      <code>rect.geo</code> script with Gmsh
+    <p>
+      Note how the physical line tags in the <code>.geo</code> file correspond to the boundary conditions in
+      our FEAScript code:
     </p>
-  </div>
+    <ul>
+      <li>
+        <code>Physical Line("bottom") = {1};</code> →
+        <code>model.addBoundaryCondition("0", ["constantTemp", 200]);</code>
+      </li>
+      <li>
+        <code>Physical Line("right") = {2};</code> →
+        <code>model.addBoundaryCondition("1", ["constantTemp", 200]);</code>
+      </li>
+      <li>
+        <code>Physical Line("top") = {3};</code> →
+        <code>model.addBoundaryCondition("2", ["convection", 1, 20]);</code>
+      </li>
+      <li>
+        <code>Physical Line("left") = {4};</code> →
+        <code>model.addBoundaryCondition("3", ["symmetry"]);</code>
+      </li>
+    </ul>
 
-  <p>
-    The unstructured mesh approach would be particularly advantageous for complex geometries, where the mapped mesh
-    approach could not be applied effectively.
-  </p>
+    <p>
+      To generate a mesh file from this <code>.geo</code> script, you would run:
+      <code>gmsh rect.geo -2</code> in your terminal, which creates a <code>rect.msh</code> file that can be
+      imported into FEAScript.
+    </p>
 
-  <h2 id="results"><a name="results"></a>Results</h2>
-  <p>
-    Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-    time using FEAScript. Please note that solutions computed on unstructured meshes like this may exhibit
-    small numerical differences compared to solutions on structured orthogonal meshes. This occurs because
-    derivative calculations in non-orthogonal elements are inherently less precise due to the Jacobian
-    transformation process. These small differences are expected and acceptable for most engineering
-    applications, but may be noticeable in regions with steep temperature gradients.
-  </p>
+    <h2 id="generatedmesh"><a name="generatedmesh"></a>Generated Mesh</h2>
+    <p>
+      Below is a visualization of the quadrilateral mesh generated with Gmsh. The mesh consists of 30
+      elements.
+    </p>
 
-  <div id="resultsCanvas"></div>
+    <div class="center-image">
+      <img
+        src="../assets/gmsh_rect_quad_unstruct.png"
+        alt="Quadrilateral mesh generated by Gmsh"
+        style="max-width: 40%; height: auto"
+      />
+      <p class="image-caption">
+        Quadrilateral mesh (<code>rect_quad_unstruct.msh</code>) generated using the
+        <code>rect.geo</code> script with Gmsh
+      </p>
+    </div>
 
-  <ul id="menu">
-    <li><a href="https://feascript.com/index.html">Home</a></li>
-    <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-  </ul>
+    <p>
+      The unstructured mesh approach would be particularly advantageous for complex geometries, where the
+      mapped mesh approach could not be applied effectively.
+    </p>
 
-  <script type="module">
-    // Import FEAScript library from GitHub
-    import {
-      FEAScriptModel,
-      importGmshQuadTri,
-      plotSolution,
-      printVersion,
-    } from "https://core.feascript.com/dist/feascript.esm.js";
-    // Import FEAScript library from a local directory
-    // import {
-    //  FEAScriptModel,
-    //  importGmshQuadTri,
-    //  plotSolution,
-    //  printVersion,
-    //  logSystem,
-    // } from "../../FEAScript-core/src/index.js";
+    <h2 id="results"><a name="results"></a>Results</h2>
+    <p>
+      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
+      time using FEAScript. Please note that solutions computed on unstructured meshes like this may exhibit
+      small numerical differences compared to solutions on structured orthogonal meshes. This occurs because
+      derivative calculations in non-orthogonal elements are inherently less precise due to the Jacobian
+      transformation process. These small differences are expected and acceptable for most engineering
+      applications, but may be noticeable in regions with steep temperature gradients.
+    </p>
 
-    window.addEventListener("DOMContentLoaded", async () => {
-      // Enable debug logging mode
-      //logSystem("debug");
+    <div id="resultsCanvas"></div>
 
-      // Print FEAScript version in the console
-      console.log("FEAScript version:", printVersion);
+    <ul id="menu">
+      <li><a href="https://feascript.com/index.html">Home</a></li>
+      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+    </ul>
 
-      // Fetch the mesh file
-      const response = await fetch("./rect_quad_unstruct.msh"); // .msh version 4.1 is currently supported
-      if (!response.ok) {
-        throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
-      }
-      const meshContent = await response.text();
+    <script type="module">
+      // Import FEAScript library from GitHub
+      import {
+        FEAScriptModel,
+        importGmshQuadTri,
+        plotSolution,
+        printVersion,
+      } from "https://core.feascript.com/dist/feascript.esm.js";
+      // Import FEAScript library from a local directory
+      // import {
+      //  FEAScriptModel,
+      //  importGmshQuadTri,
+      //  plotSolution,
+      //  printVersion,
+      //  logSystem,
+      // } from "../../FEAScript-core/src/index.js";
 
-      // Create a File object with the actual content
-      const meshFile = new File([meshContent], "rect_quad_unstruct.msh");
+      window.addEventListener("DOMContentLoaded", async () => {
+        // Enable debug logging mode
+        //logSystem("debug");
 
-      // Create a new FEAScript model
-      const gmshModel = new FEAScriptModel();
+        // Print FEAScript version in the console
+        console.log("FEAScript version:", printVersion);
 
-      // Set solver configuration
-      gmshModel.setSolverConfig("heatConductionScript");
-
-      // Parse the mesh file
-      const result = await importGmshQuadTri(meshFile);
-
-      // Define mesh configuration with the parsed result
-      gmshModel.setMeshConfig({
-        parsedMesh: result,
-        meshDimension: "2D",
-        elementOrder: "quadratic",
-      });
-
-      // Define boundary conditions using Gmsh physical group tags
-      gmshModel.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
-      gmshModel.addBoundaryCondition("1", ["constantTemp", 200]); // Right boundary
-      gmshModel.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-      gmshModel.addBoundaryCondition("3", ["symmetry"]); // Left boundary
-
-      // Set solver method
-      //model.setSolverMethod("jacobi");
-      gmshModel.setSolverMethod("lusolve");
-
-      // Solve the problem and get the solution
-      const { solutionVector: gmshSolutionVector, nodesCoordinates: gmshNodesCoordinates } =
-        gmshModel.solve();
-
-      // Plot the GMSH solution
-      plotSolution(
-        gmshSolutionVector,
-        gmshNodesCoordinates,
-        gmshModel.solverConfig,
-        gmshModel.meshConfig.meshDimension,
-        "contour",
-        "resultsCanvas",
-        "unstructured"
-      );
-    });
-  </script>
-
-  <footer>
-    <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
-  </footer>
-  <script>
-    document.getElementById("currentYear").innerHTML = new Date().getFullYear();
-
-    // Fetch GitHub stars
-    fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-      .then((response) => response.json())
-      .then((data) => {
-        const starCount = data.stargazers_count;
-        const starsElement = document.getElementById("github-stars");
-        if (starsElement && starCount) {
-          starsElement.innerHTML = `★ ${starCount}`;
+        // Fetch the mesh file
+        const response = await fetch("./rect_quad_unstruct.msh"); // .msh version 4.1 is currently supported
+        if (!response.ok) {
+          throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
         }
-      })
-      .catch((error) => console.error("Error fetching GitHub stars:", error));
-  </script>
-</body>
+        const meshContent = await response.text();
 
+        // Create a File object with the actual content
+        const meshFile = new File([meshContent], "rect_quad_unstruct.msh");
+
+        // Create a new FEAScript model
+        const gmshModel = new FEAScriptModel();
+
+        // Set solver configuration
+        gmshModel.setSolverConfig("heatConductionScript");
+
+        // Parse the mesh file
+        const result = await importGmshQuadTri(meshFile);
+
+        // Define mesh configuration with the parsed result
+        gmshModel.setMeshConfig({
+          parsedMesh: result,
+          meshDimension: "2D",
+          elementOrder: "quadratic",
+        });
+
+        // Define boundary conditions using Gmsh physical group tags
+        gmshModel.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
+        gmshModel.addBoundaryCondition("1", ["constantTemp", 200]); // Right boundary
+        gmshModel.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
+        gmshModel.addBoundaryCondition("3", ["symmetry"]); // Left boundary
+
+        // Set solver method
+        //model.setSolverMethod("jacobi");
+        gmshModel.setSolverMethod("lusolve");
+
+        // Solve the problem and get the solution
+        const { solutionVector: gmshSolutionVector, nodesCoordinates: gmshNodesCoordinates } =
+          gmshModel.solve();
+
+        // Plot the GMSH solution
+        plotSolution(
+          gmshSolutionVector,
+          gmshNodesCoordinates,
+          gmshModel.solverConfig,
+          gmshModel.meshConfig.meshDimension,
+          "contour",
+          "resultsCanvas",
+          "unstructured"
+        );
+      });
+    </script>
+
+    <footer>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    </footer>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+
+      // Fetch GitHub stars
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
+    </script>
+  </body>
 </html>

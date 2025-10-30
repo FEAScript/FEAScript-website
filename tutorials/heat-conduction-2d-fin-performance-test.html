@@ -11,61 +11,86 @@
 <!--       Website: https://feascript.com/             \__|  -->
 
 <html>
+  <head>
+    <title>FEAScript Performance Test</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="Benchmark the performance of different FEAScript solvers for 2D heat conduction problems. Adjust mesh size and solver to compare speed and efficiency."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, 2D heat transfer, solver benchmark, FEAScript, performance test"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Import the Math.js library for mathematical operations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+    <!-- Import the Plotly.js library for plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+  </head>
 
-<head>
-  <title>FEAScript Performance Test</title>
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="description"
-    content="Benchmark the performance of different FEAScript solvers for 2D heat conduction problems. Adjust mesh size and solver to compare speed and efficiency." />
-  <meta name="keywords"
-    content="finite elements, fem, galerkin, computational mechanics, javascript, 2D heat transfer, solver benchmark, FEAScript, performance test" />
-  <meta name="viewport" content="width=device-width" />
-  <!-- Link to the CSS files -->
-  <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <!-- Import the Math.js library for mathematical operations -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
-  <!-- Import the Plotly.js library for plotting -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
-</head>
-
-<body>
-  <h1 class="top">
-    <a href="../index.html">
-      <img src="../assets/feascript-logo.png" alt="FEAScript Logo" id="responsive-logo"
-        style="vertical-align: middle" />
-    </a>
-    <div class="social-icons-top-right">
-      <ul>
-        <li>
-          <a href="https://blog.feascript.com/" title="FEAScript blog">
-            <img src="../assets/blog-icon-feascript.png" alt="Blog icon" style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
-            <img src="../assets/youtube-icon-feascript.svg" alt="YouTube icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
-            <img src="../assets/linkedin-icon-feascript.png" alt="LinkedIn icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
-            <img src="../assets/discord-icon-feascript.png" alt="Discord icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
-            <img src="../assets/github-icon-feascript.png" alt="GitHub icon"
-              style="height: 20px; vertical-align: middle" />
-            <span id="github-stars" style="
+  <body>
+    <h1 class="top">
+      <a href="../index.html">
+        <img
+          src="../assets/feascript-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+      <div class="social-icons-top-right">
+        <ul>
+          <li>
+            <a href="https://blog.feascript.com/" title="FEAScript blog">
+              <img
+                src="../assets/blog-icon-feascript.png"
+                alt="Blog icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+              <img
+                src="../assets/youtube-icon-feascript.svg"
+                alt="YouTube icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+              <img
+                src="../assets/linkedin-icon-feascript.png"
+                alt="LinkedIn icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+              <img
+                src="../assets/discord-icon-feascript.png"
+                alt="Discord icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+              <img
+                src="../assets/github-icon-feascript.png"
+                alt="GitHub icon"
+                style="height: 20px; vertical-align: middle"
+              />
+              <span
+                id="github-stars"
+                style="
                   font-size: 0.9em;
                   margin-left: 5px;
                   vertical-align: middle;
@@ -73,128 +98,128 @@
                   border-radius: 4px;
                   padding: 1px 5px;
                   background-color: #f8f8f8;
-                "></span>
-          </a>
-        </li>
-      </ul>
+                "
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </h1>
+    <h1>FEAScript Performance Test</h1>
+
+    <div class="highlight-container">
+      <p>
+        This page presents a performance test of FEAScript using the Heat Conduction in a 2D Fin problem. You
+        can choose the solver and mesh size to benchmark performance. For simplicity and speed, this test uses
+        linear elements. For the mathematical formulation and theoretical background, refer to the
+        <a href="heat-conduction-2d-fin.html">basic tutorial</a>.
+      </p>
     </div>
-  </h1>
-  <h1>FEAScript Performance Test</h1>
 
-  <div class="highlight-container">
+    <h2>Run Performance Test</h2>
     <p>
-      This page presents a performance test of FEAScript using the Heat Conduction in a 2D Fin problem. You
-      can choose the solver and mesh size to benchmark performance. For simplicity and speed, this test uses
-      linear elements. For the mathematical formulation and theoretical background, refer to the
-      <a href="heat-conduction-2d-fin.html">basic tutorial</a>.
+      For best benchmark results, download the FEAScript library and use a local import (<code
+        >import { FEAScriptModel, plotSolution } from "path/to/index.js";</code
+      >) instead of loading from the remote server.
     </p>
-  </div>
+    <p>
+      <label for="solverSelect">Select solver:</label>
+      <select id="solverSelect">
+        <option value="lusolve">LU</option>
+        <!-- <option value="jacobi">Jacobi</option> -->
+        <option value="frontal">Frontal</option>
+      </select>
+      <label for="numElementsX" style="margin-left: 1em">Elements X:</label>
+      <input type="number" id="numElementsX" value="77" min="1" style="width: 4em" />
+      <label for="numElementsY" style="margin-left: 1em">Elements Y:</label>
+      <input type="number" id="numElementsY" value="39" min="1" style="width: 4em" />
+      <button id="runBtn">Run</button>
+    </p>
+    <div id="resultsCanvas"></div>
+    <!-- div to display the solving time -->
+    <div id="timeDisplay" style="margin-top: 1em"></div>
 
-  <h2>Run Performance Test</h2>
-  <p>
-    For best benchmark results, download the FEAScript library and use a local import
-    (<code>import { FEAScriptModel, plotSolution } from "path/to/index.js";</code>) instead of loading from the remote
-    server.
-  </p>
-  <p>
-    <label for="solverSelect">Select solver:</label>
-    <select id="solverSelect">
-      <option value="lusolve">LU</option>
-      <!-- <option value="jacobi">Jacobi</option> -->
-      <option value="frontal">Frontal</option>
-    </select>
-    <label for="numElementsX" style="margin-left: 1em">Elements X:</label>
-    <input type="number" id="numElementsX" value="77" min="1" style="width: 4em" />
-    <label for="numElementsY" style="margin-left: 1em">Elements Y:</label>
-    <input type="number" id="numElementsY" value="39" min="1" style="width: 4em" />
-    <button id="runBtn">Run</button>
-  </p>
-  <div id="resultsCanvas"></div>
-  <!-- div to display the solving time -->
-  <div id="timeDisplay" style="margin-top: 1em"></div>
+    <ul id="menu">
+      <li><a href="https://feascript.com/index.html">Home</a></li>
+      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+    </ul>
 
-  <ul id="menu">
-    <li><a href="https://feascript.com/index.html">Home</a></li>
-    <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-  </ul>
+    <script type="module">
+      import { FEAScriptModel, plotSolution } from "https://core.feascript.com/dist/feascript.esm.js";
+      // import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js"; // Use this when running locally
 
-  <script type="module">
-    import { FEAScriptModel, plotSolution } from "https://core.feascript.com/dist/feascript.esm.js";
-    // import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js"; // Use this when running locally
+      function runSpeedTest(selectedSolver) {
+        const numElementsX = parseInt(document.getElementById("numElementsX").value);
+        const numElementsY = parseInt(document.getElementById("numElementsY").value);
 
-    function runSpeedTest(selectedSolver) {
-      const numElementsX = parseInt(document.getElementById("numElementsX").value);
-      const numElementsY = parseInt(document.getElementById("numElementsY").value);
+        const model = new FEAScriptModel();
+        model.setSolverConfig("heatConductionScript");
+        model.setMeshConfig({
+          meshDimension: "2D",
+          elementOrder: "linear",
+          numElementsX,
+          numElementsY,
+          maxX: 4,
+          maxY: 2,
+        });
 
-      const model = new FEAScriptModel();
-      model.setSolverConfig("heatConductionScript");
-      model.setMeshConfig({
-        meshDimension: "2D",
-        elementOrder: "linear",
-        numElementsX,
-        numElementsY,
-        maxX: 4,
-        maxY: 2,
-      });
+        const totalElements = model.meshConfig.numElementsX * model.meshConfig.numElementsY;
+        console.log(`Total number of elements in mesh: ${totalElements}`);
 
-      const totalElements = model.meshConfig.numElementsX * model.meshConfig.numElementsY;
-      console.log(`Total number of elements in mesh: ${totalElements}`);
+        const totalNodes = (numElementsX + 1) * (numElementsY + 1);
+        console.log(`Total number of nodes in mesh: ${totalNodes}`);
 
-      const totalNodes = (numElementsX + 1) * (numElementsY + 1);
-      console.log(`Total number of nodes in mesh: ${totalNodes}`);
+        model.addBoundaryCondition("0", ["constantTemp", 200]);
+        model.addBoundaryCondition("1", ["symmetry"]);
+        model.addBoundaryCondition("2", ["convection", 1, 20]);
+        model.addBoundaryCondition("3", ["constantTemp", 200]);
 
-      model.addBoundaryCondition("0", ["constantTemp", 200]);
-      model.addBoundaryCondition("1", ["symmetry"]);
-      model.addBoundaryCondition("2", ["convection", 1, 20]);
-      model.addBoundaryCondition("3", ["constantTemp", 200]);
+        model.setSolverMethod(selectedSolver);
 
-      model.setSolverMethod(selectedSolver);
+        // Measure the solving time
+        const startTime = performance.now();
+        const { solutionVector, nodesCoordinates } = model.solve();
+        const endTime = performance.now();
+        const solvingTime = ((endTime - startTime) / 1000).toFixed(3); // Convert to seconds and round to 3 decimal places
 
-      // Measure the solving time
-      const startTime = performance.now();
-      const { solutionVector, nodesCoordinates } = model.solve();
-      const endTime = performance.now();
-      const solvingTime = ((endTime - startTime) / 1000).toFixed(3); // Convert to seconds and round to 3 decimal places
+        // Display the time in the HTML
+        document.getElementById("timeDisplay").innerHTML = `Solving time: ${solvingTime} seconds`;
 
-      // Display the time in the HTML
-      document.getElementById("timeDisplay").innerHTML = `Solving time: ${solvingTime} seconds`;
+        plotSolution(
+          solutionVector,
+          nodesCoordinates,
+          "heatConductionScript",
+          "2D",
+          "contour",
+          "resultsCanvas",
+          "structured"
+        );
+      }
 
-      plotSolution(
-        solutionVector,
-        nodesCoordinates,
-        "heatConductionScript",
-        "2D",
-        "contour",
-        "resultsCanvas",
-        "structured"
-      );
-    }
-
-    runSpeedTest(document.getElementById("solverSelect").value);
-
-    document.getElementById("runBtn").addEventListener("click", () => {
       runSpeedTest(document.getElementById("solverSelect").value);
-    });
-  </script>
 
-  <footer>
-    <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
-  </footer>
-  <script>
-    document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+      document.getElementById("runBtn").addEventListener("click", () => {
+        runSpeedTest(document.getElementById("solverSelect").value);
+      });
+    </script>
 
-    // Fetch GitHub stars
-    fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-      .then((response) => response.json())
-      .then((data) => {
-        const starCount = data.stargazers_count;
-        const starsElement = document.getElementById("github-stars");
-        if (starsElement && starCount) {
-          starsElement.innerHTML = `★ ${starCount}`;
-        }
-      })
-      .catch((error) => console.error("Error fetching GitHub stars:", error));
-  </script>
-</body>
+    <footer>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    </footer>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
 
+      // Fetch GitHub stars
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
+    </script>
+  </body>
 </html>

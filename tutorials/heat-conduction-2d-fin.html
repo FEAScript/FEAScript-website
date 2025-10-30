@@ -11,78 +11,107 @@
 <!--       Website: https://feascript.com/             \__|  -->
 
 <html>
+  <head>
+    <title>FEAScript: Heat Conduction in a 2D Fin Tutorial</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="This example demonstrates solving a steady-state heat transfer problem in a 2D domain using the FEAScript library. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, 2D heat transfer"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Import the Math.js library for mathematical operations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+    <!-- Import the Plotly.js library for plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+    <!-- Import MathJax for writing equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
 
-<head>
-  <title>FEAScript: Heat Conduction in a 2D Fin Tutorial</title>
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="description"
-    content="This example demonstrates solving a steady-state heat transfer problem in a 2D domain using the FEAScript library. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions." />
-  <meta name="keywords"
-    content="finite elements, fem, galerkin, computational mechanics, javascript, 2D heat transfer" />
-  <meta name="viewport" content="width=device-width" />
-  <!-- Link to the CSS files -->
-  <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <!-- Import the Math.js library for mathematical operations -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
-  <!-- Import the Plotly.js library for plotting -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
-  <!-- Import MathJax for writing equations -->
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
-  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-</head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag("js", new Date());
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
 
-  gtag("config", "G-1JPK0KLEC9");
-</script>
-
-<body>
-  <h1 class="top">
-    <a href="../index.html">
-      <img src="../assets/feascript-logo.png" alt="FEAScript Logo" id="responsive-logo"
-        style="vertical-align: middle" />
-    </a>
-    <div class="social-icons-top-right">
-      <ul>
-        <li>
-          <a href="https://blog.feascript.com/" title="FEAScript blog">
-            <img src="../assets/blog-icon-feascript.png" alt="Blog icon" style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
-            <img src="../assets/youtube-icon-feascript.svg" alt="YouTube icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
-            <img src="../assets/linkedin-icon-feascript.png" alt="LinkedIn icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
-            <img src="../assets/discord-icon-feascript.png" alt="Discord icon"
-              style="height: 18px; vertical-align: middle" />
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
-            <img src="../assets/github-icon-feascript.png" alt="GitHub icon"
-              style="height: 20px; vertical-align: middle" />
-            <span id="github-stars" style="
+  <body>
+    <h1 class="top">
+      <a href="../index.html">
+        <img
+          src="../assets/feascript-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+      <div class="social-icons-top-right">
+        <ul>
+          <li>
+            <a href="https://blog.feascript.com/" title="FEAScript blog">
+              <img
+                src="../assets/blog-icon-feascript.png"
+                alt="Blog icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+              <img
+                src="../assets/youtube-icon-feascript.svg"
+                alt="YouTube icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+              <img
+                src="../assets/linkedin-icon-feascript.png"
+                alt="LinkedIn icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+              <img
+                src="../assets/discord-icon-feascript.png"
+                alt="Discord icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+              <img
+                src="../assets/github-icon-feascript.png"
+                alt="GitHub icon"
+                style="height: 20px; vertical-align: middle"
+              />
+              <span
+                id="github-stars"
+                style="
                   font-size: 0.9em;
                   margin-left: 5px;
                   vertical-align: middle;
@@ -90,71 +119,73 @@
                   border-radius: 4px;
                   padding: 1px 5px;
                   background-color: #f8f8f8;
-                "></span>
-          </a>
-        </li>
-      </ul>
+                "
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </h1>
+    <h1>Heat Conduction in a 2D Fin Tutorial</h1>
+
+    <ul id="menu">
+      <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
+      <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
+
+    <div class="highlight-container">
+      <p>
+        In this tutorial, we address a stationary heat transfer problem within a two-dimensional rectangular
+        domain. This is a typical cooling fin problem. Cooling fins are commonly used to increase the area
+        available for heat transfer between metal walls and poorly conducting fluids such as air.
+      </p>
     </div>
-  </h1>
-  <h1>Heat Conduction in a 2D Fin Tutorial</h1>
 
-  <ul id="menu">
-    <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
-    <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
-    <li><a href="#results">Results</a></li>
-  </ul>
-
-  <div class="highlight-container">
+    <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
-      In this tutorial, we address a stationary heat transfer problem within a two-dimensional rectangular
-      domain. This is a typical cooling fin problem. Cooling fins are commonly used to increase the area
-      available for heat transfer between metal walls and poorly conducting fluids such as air.
+      Steady heat conduction is described by the Laplace equation: \(\nabla^{2}T(x,y) = 0\), where \(T\)
+      denotes the temperature.
     </p>
-  </div>
 
-  <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
-  <p>
-    Steady heat conduction is described by the Laplace equation: \(\nabla^{2}T(x,y) = 0\), where \(T\)
-    denotes the temperature.
-  </p>
+    <div class="center-image">
+      <img src="../assets/heat-conduction-2d-fin.png" alt="2D fin heat conduction schematic" width="300" />
+      <p class="image-caption">
+        Schematic of the 2D cooling fin: constant temperature (200&nbsp;°C) at bottom and right edges,
+        symmetry (zero flux) at the left edge, and convection at the top edge (h/k = 1&nbsp;m⁻¹, external
+        temperature 20&nbsp;°C)
+      </p>
+    </div>
 
-  <div class="center-image">
-    <img src="../assets/heat-conduction-2d-fin.png" alt="2D fin heat conduction schematic" width="300" />
-    <p class="image-caption">
-      Schematic of the 2D cooling fin: constant temperature (200&nbsp;°C) at bottom and right edges,
-      symmetry (zero flux) at the left edge, and convection at the top edge (h/k = 1&nbsp;m⁻¹, external
-      temperature 20&nbsp;°C)
+    <p>
+      The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
+      constant temperature boundary conditions are implemented as Dirichlet-type conditions in the finite
+      element code. The symmetry boundary condition is implemented as a Neumann zero-flux type \( \left(
+      \frac{dT}{dx}|_{x=0}=0 \right) \), while the convective cooling boundary condition is a Robin-type
+      condition. Specifically, the latter is expressed as \(\frac{dT}{dy}|_{y=2}=-{\frac{h}{k}}(T-T_0)\),
+      where \(h\) is the heat transfer coefficient, \(k\) the thermal conductivity and \(T_0\) is the external
+      temperature. We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_0\) = 20 &deg;C.
     </p>
-  </div>
 
-  <p>
-    The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
-    constant temperature boundary conditions are implemented as Dirichlet-type conditions in the finite
-    element code. The symmetry boundary condition is implemented as a Neumann zero-flux type \( \left(
-    \frac{dT}{dx}|_{x=0}=0 \right) \), while the convective cooling boundary condition is a Robin-type
-    condition. Specifically, the latter is expressed as \(\frac{dT}{dy}|_{y=2}=-{\frac{h}{k}}(T-T_0)\),
-    where \(h\) is the heat transfer coefficient, \(k\) the thermal conductivity and \(T_0\) is the external
-    temperature. We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_0\) = 20 &deg;C.
-  </p>
-
-  <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
-  <p>
-    Below is a demonstration of how to use the FEAScript library to solve this stationary heat transfer
-    problem in your web browser. You only need a simple HTML page to run this example where the following
-    code snippets should be included. First, load the required external libraries:
-  </p>
-  <pre class="prettyprint">
+    <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
+    <p>
+      Below is a demonstration of how to use the FEAScript library to solve this stationary heat transfer
+      problem in your web browser. You only need a simple HTML page to run this example where the following
+      code snippets should be included. First, load the required external libraries:
+    </p>
+    <pre class="prettyprint">
 &lt;head&gt;
   &lt;!-- ...head region... --&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js">&lt;/script&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js">&lt;/script&gt;
   &lt;!-- ...rest of head region... --&gt;
-&lt;/head&gt;</pre>
-  <p>
-    We should then define the problem parameters, such as the solver type, the geometry configuration, and
-    the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
-  </p>
-  <pre class="prettyprint">
+&lt;/head&gt;</pre
+    >
+    <p>
+      We should then define the problem parameters, such as the solver type, the geometry configuration, and
+      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
+    </p>
+    <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -200,134 +231,137 @@
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
-&lt;/body&gt;</pre>
-  <p>
-    In the boundary condition definition, the numbers at the left side (from <code>"0"</code> to
-    <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has assigned
-    numbers to the boundaries, starting from the bottom boundary and proceeding clockwise). The
-    <code>"constantTemp"</code> condition sets a constant temperature value. The
-    <code>"symmetry"</code> boundary condition represents a zero-flux type. Finally, the
-    <code>"convection"</code> condition describes a convective heat transfer scenario. In addition, the
-    second argument of the <code>"constantTemp"</code> boundary condition corresponds to the constant
-    temperature value. For a <code>"convection"</code> boundary condition, the second argument represents
-    the \({\frac{h}{k}}\) value, and the third argument indicates the external temperature \(T_0\).
-  </p>
-  <p>
-    After solving the case, the results are shown in a 2D contour plot. To visualize it, include an HTML
-    container where the plot will render:
-  </p>
-  <pre class="prettyprint">
+&lt;/body&gt;</pre
+    >
+    <p>
+      In the boundary condition definition, the numbers at the left side (from <code>"0"</code> to
+      <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has assigned
+      numbers to the boundaries, starting from the bottom boundary and proceeding clockwise). The
+      <code>"constantTemp"</code> condition sets a constant temperature value. The
+      <code>"symmetry"</code> boundary condition represents a zero-flux type. Finally, the
+      <code>"convection"</code> condition describes a convective heat transfer scenario. In addition, the
+      second argument of the <code>"constantTemp"</code> boundary condition corresponds to the constant
+      temperature value. For a <code>"convection"</code> boundary condition, the second argument represents
+      the \({\frac{h}{k}}\) value, and the third argument indicates the external temperature \(T_0\).
+    </p>
+    <p>
+      After solving the case, the results are shown in a 2D contour plot. To visualize it, include an HTML
+      container where the plot will render:
+    </p>
+    <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;div id="resultsCanvas">&lt;/div&gt;
   &lt;!-- ...rest of body region... --&gt;
-&lt;/body&gt;</pre>
-  <p>
-    The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
-    as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
-  </p>
+&lt;/body&gt;</pre
+    >
+    <p>
+      The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
+      as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
+    </p>
 
-  <h2 id="results"><a name="Results"></a>Results</h2>
-  <p>
-    Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-    time using FEAScript. You can find a Node.js implementation of this tutorial in the
-    <a href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/heatConductionScript/heatConduction2DFin">example
-      directory</a>.
-  </p>
+    <h2 id="results"><a name="Results"></a>Results</h2>
+    <p>
+      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
+      time using FEAScript. You can find a Node.js implementation of this tutorial in the
+      <a
+        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/heatConductionScript/heatConduction2DFin"
+        >example directory</a
+      >.
+    </p>
 
-  <div id="resultsCanvas"></div>
+    <div id="resultsCanvas"></div>
 
-  <br />
+    <br />
 
-  <!-- Links to worker-based and Gmsh implementation -->
-  <p>
-    See also
-    <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html">here</a>
-    for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness and
-    <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html">here</a>
-    for a tutorial using an unstructured mesh generated by Gmsh.
-  </p>
+    <!-- Links to worker-based and Gmsh implementation -->
+    <p>
+      See also
+      <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html">here</a>
+      for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness and
+      <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html">here</a>
+      for a tutorial using an unstructured mesh generated by Gmsh.
+    </p>
 
-  <ul id="menu">
-    <li><a href="https://feascript.com/index.html">Home</a></li>
-    <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-  </ul>
+    <ul id="menu">
+      <li><a href="https://feascript.com/index.html">Home</a></li>
+      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+    </ul>
 
-  <script type="module">
-    // Import FEAScript library from GitHub
-    import {
-      FEAScriptModel,
-      plotSolution,
-      printVersion,
-    } from "https://core.feascript.com/dist/feascript.esm.js";
-    // Import FEAScript library from a local directory
-    // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
-    // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/dist/feascript.esm.js";
+    <script type="module">
+      // Import FEAScript library from GitHub
+      import {
+        FEAScriptModel,
+        plotSolution,
+        printVersion,
+      } from "https://core.feascript.com/dist/feascript.esm.js";
+      // Import FEAScript library from a local directory
+      // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+      // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/dist/feascript.esm.js";
 
-    window.addEventListener("DOMContentLoaded", () => {
-      // Print FEAScript version
-      console.log("FEAScript version:", printVersion);
+      window.addEventListener("DOMContentLoaded", () => {
+        // Print FEAScript version
+        console.log("FEAScript version:", printVersion);
 
-      // Create a new FEAScript model
-      const model = new FEAScriptModel();
+        // Create a new FEAScript model
+        const model = new FEAScriptModel();
 
-      // Set solver configuration
-      model.setSolverConfig("heatConductionScript");
+        // Set solver configuration
+        model.setSolverConfig("heatConductionScript");
 
-      // Define mesh configuration
-      model.setMeshConfig({
-        meshDimension: "2D",
-        elementOrder: "quadratic",
-        numElementsX: 8,
-        numElementsY: 4,
-        maxX: 4,
-        maxY: 2,
+        // Define mesh configuration
+        model.setMeshConfig({
+          meshDimension: "2D",
+          elementOrder: "quadratic",
+          numElementsX: 8,
+          numElementsY: 4,
+          maxX: 4,
+          maxY: 2,
+        });
+
+        // Define boundary conditions
+        model.addBoundaryCondition("0", ["constantTemp", 200]);
+        model.addBoundaryCondition("1", ["symmetry"]);
+        model.addBoundaryCondition("2", ["convection", 1, 20]);
+        model.addBoundaryCondition("3", ["constantTemp", 200]);
+
+        // Set solver method
+        // model.setSolverMethod("jacobi");
+        model.setSolverMethod("lusolve");
+        // model.setSolverMethod("frontal");
+
+        // Solve the problem and get the solution
+        const { solutionVector, nodesCoordinates } = model.solve();
+
+        // Plot the solution as a 2D contour plot
+        plotSolution(
+          solutionVector,
+          nodesCoordinates,
+          model.solverConfig,
+          model.meshConfig.meshDimension,
+          "contour",
+          "resultsCanvas"
+        );
       });
+    </script>
 
-      // Define boundary conditions
-      model.addBoundaryCondition("0", ["constantTemp", 200]);
-      model.addBoundaryCondition("1", ["symmetry"]);
-      model.addBoundaryCondition("2", ["convection", 1, 20]);
-      model.addBoundaryCondition("3", ["constantTemp", 200]);
+    <footer>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    </footer>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
 
-      // Set solver method
-      // model.setSolverMethod("jacobi");
-      model.setSolverMethod("lusolve");
-      // model.setSolverMethod("frontal");
-
-      // Solve the problem and get the solution
-      const { solutionVector, nodesCoordinates } = model.solve();
-
-      // Plot the solution as a 2D contour plot
-      plotSolution(
-        solutionVector,
-        nodesCoordinates,
-        model.solverConfig,
-        model.meshConfig.meshDimension,
-        "contour",
-        "resultsCanvas"
-      );
-    });
-  </script>
-
-  <footer>
-    <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
-  </footer>
-  <script>
-    document.getElementById("currentYear").innerHTML = new Date().getFullYear();
-
-    // Fetch GitHub stars
-    fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-      .then((response) => response.json())
-      .then((data) => {
-        const starCount = data.stargazers_count;
-        const starsElement = document.getElementById("github-stars");
-        if (starsElement && starCount) {
-          starsElement.innerHTML = `★ ${starCount}`;
-        }
-      })
-      .catch((error) => console.error("Error fetching GitHub stars:", error));
-  </script>
-</body>
-
+      // Fetch GitHub stars
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
+    </script>
+  </body>
 </html>

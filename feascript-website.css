@@ -318,7 +318,7 @@ mjx-container {
   padding-left: 0;
 }
 
-.features-list > li {
+.features-list>li {
   margin-bottom: 1em;
 }
 
@@ -341,26 +341,33 @@ mjx-container {
   body {
     padding: 10px;
   }
+
   h1 {
     font-size: 125%;
   }
+
   h2 {
     font-size: 120%;
     line-height: 1.1em;
   }
+
   #responsive-logo {
     height: 40px;
   }
+
   .highlight-container,
   li {
     max-width: 400px;
   }
+
   .tutorials-list li a {
     font-size: 100%;
   }
+
   .platform-layout .right-panel {
     display: none !important;
   }
+
   .platform-layout .left-panel {
     border-radius: 10px;
   }
@@ -371,19 +378,24 @@ mjx-container {
   body {
     padding: 15px;
   }
+
   h1 {
     font-size: 140%;
   }
+
   h2 {
     font-size: 125%;
     line-height: 1.3em;
   }
+
   h3 {
     font-size: 115%;
   }
+
   #responsive-logo {
     height: 60px;
   }
+
   p,
   .highlight-container,
   li {
@@ -396,10 +408,12 @@ mjx-container {
   h1 {
     font-size: 150%;
   }
+
   h2 {
     font-size: 130%;
     line-height: 1.4em;
   }
+
   h3 {
     font-size: 120%;
   }
@@ -411,16 +425,20 @@ mjx-container {
     display: block;
     width: 250px;
   }
+
   #banner img {
     width: 250px;
   }
+
   h1 {
     font-size: 150%;
   }
+
   h2 {
     font-size: 130%;
     line-height: 1.4em;
   }
+
   h3 {
     font-size: 120%;
   }

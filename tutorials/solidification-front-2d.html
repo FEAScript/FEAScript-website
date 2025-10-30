@@ -11,107 +11,78 @@
 <!--       Website: https://feascript.com/             \__|  -->
 
 <html>
-  <head>
-    <title>FEAScript: Solidification Front Propagation in a 2D Domain Tutorial</title>
-    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta
-      name="description"
-      content="This example demonstrates solving an eikonal equation in a 2D domain using the FEAScript library. The problem represents a typical solidification front propagation scenario, where the objective is to track the movement of an interface."
-    />
-    <meta
-      name="keywords"
-      content="finite elements, fem, galerkin, computational mechanics, javascript, eikonal, front propagation"
-    />
-    <meta name="viewport" content="width=device-width" />
-    <!-- Link to the CSS files -->
-    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-    <!-- Import the Math.js library for mathematical operations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
-    <!-- Import the Plotly.js library for plotting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
-    <!-- Import MathJax for writing equations -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script
-      id="MathJax-script"
-      async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    ></script>
-    <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-  </head>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
+<head>
+  <title>FEAScript: Solidification Front Propagation in a 2D Domain Tutorial</title>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="description"
+    content="This example demonstrates solving an eikonal equation in a 2D domain using the FEAScript library. The problem represents a typical solidification front propagation scenario, where the objective is to track the movement of an interface." />
+  <meta name="keywords"
+    content="finite elements, fem, galerkin, computational mechanics, javascript, eikonal, front propagation" />
+  <meta name="viewport" content="width=device-width" />
+  <!-- Link to the CSS files -->
+  <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Import the Math.js library for mathematical operations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+  <!-- Import the Plotly.js library for plotting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+  <!-- Import MathJax for writing equations -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
+  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+</head>
 
-    gtag("config", "G-1JPK0KLEC9");
-  </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
 
-  <body>
-    <h1 class="top">
-      <a href="../index.html">
-        <img
-          src="../assets/feascript-logo.png"
-          alt="FEAScript Logo"
-          id="responsive-logo"
-          style="vertical-align: middle"
-        />
-      </a>
-      <div class="social-icons-top-right">
-        <ul>
-          <li>
-            <a href="https://blog.feascript.com/" title="FEAScript blog">
-              <img
-                src="../assets/blog-icon-feascript.png"
-                alt="Blog icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
-              <img
-                src="../assets/youtube-icon-feascript.svg"
-                alt="YouTube icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
-              <img
-                src="../assets/linkedin-icon-feascript.png"
-                alt="LinkedIn icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
-              <img
-                src="../assets/discord-icon-feascript.png"
-                alt="Discord icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
-              <img
-                src="../assets/github-icon-feascript.png"
-                alt="GitHub icon"
-                style="height: 20px; vertical-align: middle"
-              />
-              <span
-                id="github-stars"
-                style="
+  gtag("config", "G-1JPK0KLEC9");
+</script>
+
+<body>
+  <h1 class="top">
+    <a href="../index.html">
+      <img src="../assets/feascript-logo.png" alt="FEAScript Logo" id="responsive-logo"
+        style="vertical-align: middle" />
+    </a>
+    <div class="social-icons-top-right">
+      <ul>
+        <li>
+          <a href="https://blog.feascript.com/" title="FEAScript blog">
+            <img src="../assets/blog-icon-feascript.png" alt="Blog icon" style="height: 18px; vertical-align: middle" />
+          </a>
+        </li>
+        <li>
+          <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+            <img src="../assets/youtube-icon-feascript.svg" alt="YouTube icon"
+              style="height: 18px; vertical-align: middle" />
+          </a>
+        </li>
+        <li>
+          <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+            <img src="../assets/linkedin-icon-feascript.png" alt="LinkedIn icon"
+              style="height: 18px; vertical-align: middle" />
+          </a>
+        </li>
+        <li>
+          <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+            <img src="../assets/discord-icon-feascript.png" alt="Discord icon"
+              style="height: 18px; vertical-align: middle" />
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+            <img src="../assets/github-icon-feascript.png" alt="GitHub icon"
+              style="height: 20px; vertical-align: middle" />
+            <span id="github-stars" style="
                   font-size: 0.9em;
                   margin-left: 5px;
                   vertical-align: middle;
@@ -119,94 +90,88 @@
                   border-radius: 4px;
                   padding: 1px 5px;
                   background-color: #f8f8f8;
-                "
-              ></span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </h1>
-    <h1>Solidification Front Propagation in a 2D Domain Tutorial</h1>
-
-    <ul id="menu">
-      <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
-      <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
-
-    <div class="highlight-container">
-      <p>
-        In this tutorial, we address a solidification front propagation problem in a 2D domain. This is a
-        typical interface tracking problem, used to simulate how a solidification front moves through a
-        medium, such as metal cooling or crystal growth.
-      </p>
+                "></span>
+          </a>
+        </li>
+      </ul>
     </div>
+  </h1>
+  <h1>Solidification Front Propagation in a 2D Domain Tutorial</h1>
 
-    <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
-    <p>
-      The propagation of a solidification front can be modeled using the eikonal equation that in its general
-      form is given by: \(|\nabla \phi(x,y)| = \frac{1}{F(x,y)}\). In the above, \(\phi(x,y)\) is the arrival
-      time of the front at point (x,y), and \(F(x,y)\) is the local speed of front propagation. This speed can
-      vary spatially based on factors such as temperature gradients, material properties, or crystallographic
-      orientation. For this example, we simplify the problem by using a constant front propagation speed of 1
-      m/s throughout the domain, which reduces the equation to: \(|\nabla \phi(x,y)| = 1\). It's worth noting,
-      however, that actual solidification speeds in real materials typically range from micrometers per second
-      to centimeters per second for most metals and alloys. Only specialized rapid solidification processes
-      might achieve speeds approaching or exceeding 1 m/s. For more detailed background on the eikonal
-      equation and its mathematical properties, please see our
-      <a href="https://blog.feascript.com/tutorial/2025/06/15/eikonal-equation.html">blog post</a>.
-    </p>
+  <ul id="menu">
+    <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
+    <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
+    <li><a href="#results">Results</a></li>
+  </ul>
 
-    <div class="center-image">
-      <img
-        src="../assets/solidification-front-2d.png"
-        alt="Schematic of 2D solidification front domain"
-        width="300"
-      />
-      <p class="image-caption">
-        Schematic of the 2D solidification front propagation domain: constant value (0) at bottom, left, and
-        right edges indicating initial solidification fronts, and zero gradient at the top edge allowing free
-        propagation
-      </p>
-    </div>
+  <div class="highlight-container">
+    <p>
+      In this tutorial, we address a solidification front propagation problem in a 2D domain. This is a
+      typical interface tracking problem, used to simulate how a solidification front moves through a
+      medium, such as metal cooling or crystal growth.
+    </p>
+  </div>
 
-    <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
-      this model, we consider a square domain where solidification begins simultaneously from three sides
-      (bottom, left, and right boundaries), which are all maintained at a constant value of zero (representing
-      the initial front position). This configuration simulates a common scenario in casting or directional
-      solidification processes, where a molten material is contained within a mold and begins to solidify from
-      the cooled walls. The top boundary has a zero gradient condition, allowing the front to propagate freely
-      in that direction.
-    </p>
-    <p>
-      The eikonal equation is nonlinear, making it challenging to solve directly. Due to convergence
-      difficulties, a viscous term elimination technique is employed. According to this approach, a viscous
-      term \(\varepsilon(\nabla^2\phi)\) is added to the equation, resulting in: \(|\nabla \phi(x,y)| +
-      \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical diffusion that
-      ensures the solution remains smooth throughout the domain. The solution of this modified equation
-      converges to the solution of the original eikonal equation as \(\varepsilon \rightarrow 0\).
-    </p>
+  <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
+  <p>
+    The propagation of a solidification front can be modeled using the eikonal equation that in its general
+    form is given by: \(|\nabla \phi(x,y)| = \frac{1}{F(x,y)}\). In the above, \(\phi(x,y)\) is the arrival
+    time of the front at point (x,y), and \(F(x,y)\) is the local speed of front propagation. This speed can
+    vary spatially based on factors such as temperature gradients, material properties, or crystallographic
+    orientation. For this example, we simplify the problem by using a constant front propagation speed of 1
+    m/s throughout the domain, which reduces the equation to: \(|\nabla \phi(x,y)| = 1\). It's worth noting,
+    however, that actual solidification speeds in real materials typically range from micrometers per second
+    to centimeters per second for most metals and alloys. Only specialized rapid solidification processes
+    might achieve speeds approaching or exceeding 1 m/s. For more detailed background on the eikonal
+    equation and its mathematical properties, please see our
+    <a href="https://blog.feascript.com/tutorial/2025/06/15/eikonal-equation.html">blog post</a>.
+  </p>
 
-    <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
-    <p>
-      Below is a demonstration of how to use the FEAScript library to solve this front propagation problem in
-      your web browser. You only need a simple HTML page to run this example where the following code snippets
-      should be included. First, load the required external libraries:
+  <div class="center-image">
+    <img src="../assets/solidification-front-2d.png" alt="Schematic of 2D solidification front domain" width="300" />
+    <p class="image-caption">
+      Schematic of the 2D solidification front propagation domain: constant value (0) at bottom, left, and
+      right edges indicating initial solidification fronts, and zero gradient at the top edge allowing free
+      propagation
     </p>
-    <pre class="prettyprint">
+  </div>
+
+  <p>
+    The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
+    this model, we consider a square domain where solidification begins simultaneously from three sides
+    (bottom, left, and right boundaries), which are all maintained at a constant value of zero (representing
+    the initial front position). This configuration simulates a common scenario in casting or directional
+    solidification processes, where a molten material is contained within a mold and begins to solidify from
+    the cooled walls. The top boundary has a zero gradient condition, allowing the front to propagate freely
+    in that direction.
+  </p>
+  <p>
+    The eikonal equation is nonlinear, making it challenging to solve directly. Due to convergence
+    difficulties, a viscous term elimination technique is employed. According to this approach, a viscous
+    term \(\varepsilon(\nabla^2\phi)\) is added to the equation, resulting in: \(|\nabla \phi(x,y)| +
+    \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical diffusion that
+    ensures the solution remains smooth throughout the domain. The solution of this modified equation
+    converges to the solution of the original eikonal equation as \(\varepsilon \rightarrow 0\).
+  </p>
+
+  <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
+  <p>
+    Below is a demonstration of how to use the FEAScript library to solve this front propagation problem in
+    your web browser. You only need a simple HTML page to run this example where the following code snippets
+    should be included. First, load the required external libraries:
+  </p>
+  <pre class="prettyprint">
 &lt;head&gt;
   &lt;!-- ...head region... --&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js">&lt;/script&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js">&lt;/script&gt;
   &lt;!-- ...rest of head region... --&gt;
-&lt;/head&gt;</pre
-    >
-    <p>
-      We should then define the problem parameters, such as the solver type, the geometry configuration, and
-      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
-    </p>
-    <pre class="prettyprint">
+&lt;/head&gt;</pre>
+  <p>
+    We should then define the problem parameters, such as the solver type, the geometry configuration, and
+    the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
+  </p>
+  <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -252,134 +217,130 @@
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
-&lt;/body&gt;</pre
-    >
-    <p>
-      After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
-      HTML container where the plot will render:
-    </p>
-    <pre class="prettyprint">
+&lt;/body&gt;</pre>
+  <p>
+    After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
+    HTML container where the plot will render:
+  </p>
+  <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;div id="resultsCanvas">&lt;/div&gt;
   &lt;!-- ...rest of body region... --&gt;
-&lt;/body&gt;</pre
-    >
-    <p>
-      The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
-      as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
-    </p>
+&lt;/body&gt;</pre>
+  <p>
+    The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
+    as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
+  </p>
 
-    <h2 id="results"><a name="Results"></a>Results</h2>
-    <p>
-      Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
-      time of the front at each position. This plot is generated in real time using FEAScript.
-      <b
-        >Please note that you may need to wait a few moments for the solution to be calculated and plotted
-        since the eikonal equation is solved iteratively with the Newton-Raphson method directly in your
-        browser.</b
-      >
-      You can find a Node.js implementation of this tutorial in the
-      <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/frontPropagationScript/solidificationFront2D"
-        >example directory</a
-      >.
-    </p>
+  <h2 id="results"><a name="Results"></a>Results</h2>
+  <p>
+    Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
+    time of the front at each position. This plot is generated in real time using FEAScript.
+    <b>Please note that you may need to wait a few moments for the solution to be calculated and plotted
+      since the eikonal equation is solved iteratively with the Newton-Raphson method directly in your
+      browser.</b>
+    You can find a Node.js implementation of this tutorial in the
+    <a
+      href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/frontPropagationScript/solidificationFront2D">example
+      directory</a>.
+  </p>
 
-    <!-- Container element where the solution plot will be rendered -->
-    <div id="resultsCanvas"></div>
+  <!-- Container element where the solution plot will be rendered -->
+  <div id="resultsCanvas"></div>
 
-    <br />
+  <br />
 
-    <!-- Link to the worker-based implementation -->
-    <p>
-      See also
-      <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html">here</a>
-      for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness.
-    </p>
+  <!-- Link to the worker-based implementation -->
+  <p>
+    See also
+    <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html">here</a>
+    for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness.
+  </p>
 
-    <ul id="menu">
-      <li><a href="https://feascript.com/index.html">Home</a></li>
-      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-    </ul>
+  <ul id="menu">
+    <li><a href="https://feascript.com/index.html">Home</a></li>
+    <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+  </ul>
 
-    <script type="module">
-      // Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        plotSolution,
-        printVersion,
-      } from "https://core.feascript.com/dist/feascript.esm.js";
-      // } from "https://core.feascript.com/src/index.js";
-      // Import FEAScript library from a local directory
-      // } from "../../FEAScript-core/dist/feascript.esm.js";
-      // } from "../../FEAScript-core/src/index.js";
+  <script type="module">
+    // Import FEAScript library from GitHub
+    import {
+      FEAScriptModel,
+      plotSolution,
+      printVersion,
+    } from "https://core.feascript.com/dist/feascript.esm.js";
+    // } from "https://core.feascript.com/src/index.js";
+    // Import FEAScript library from a local directory
+    // } from "../../FEAScript-core/dist/feascript.esm.js";
+    // } from "../../FEAScript-core/src/index.js";
 
-      window.addEventListener("DOMContentLoaded", () => {
-        // Enable debug logging mode
-        // logSystem("debug");
+    window.addEventListener("DOMContentLoaded", () => {
+      // Enable debug logging mode
+      // logSystem("debug");
 
-        // Print FEAScript version
-        console.log("FEAScript version:", printVersion);
+      // Print FEAScript version
+      console.log("FEAScript version:", printVersion);
 
-        // Create a new FEAScript model
-        const model = new FEAScriptModel();
+      // Create a new FEAScript model
+      const model = new FEAScriptModel();
 
-        // Set solver configuration
-        model.setSolverConfig("frontPropagationScript");
+      // Set solver configuration
+      model.setSolverConfig("frontPropagationScript");
 
-        // Define mesh configuration
-        model.setMeshConfig({
-          meshDimension: "2D",
-          elementOrder: "quadratic",
-          numElementsX: 12,
-          numElementsY: 8,
-          maxX: 4,
-          maxY: 2,
-        });
-
-        // Define boundary conditions
-        model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
-        model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-        model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-        model.addBoundaryCondition("3", ["constantValue", 0]); // Right
-
-        // Set solver method
-        model.setSolverMethod("lusolve");
-        // model.setSolverMethod("frontal");
-
-        // Solve the problem and get the solution
-        const { solutionVector, nodesCoordinates } = model.solve();
-
-        // Plot the solution as a 2D contour plot
-        plotSolution(
-          solutionVector,
-          nodesCoordinates,
-          model.solverConfig,
-          model.meshConfig.meshDimension,
-          "contour",
-          "resultsCanvas"
-        );
+      // Define mesh configuration
+      model.setMeshConfig({
+        meshDimension: "2D",
+        elementOrder: "quadratic",
+        numElementsX: 12,
+        numElementsY: 8,
+        maxX: 4,
+        maxY: 2,
       });
-    </script>
 
-    <footer>
-      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
-    </footer>
-    <script>
-      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+      // Define boundary conditions
+      model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
+      model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+      model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+      model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
-      // Fetch GitHub stars
-      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-        .then((response) => response.json())
-        .then((data) => {
-          const starCount = data.stargazers_count;
-          const starsElement = document.getElementById("github-stars");
-          if (starsElement && starCount) {
-            starsElement.innerHTML = `★ ${starCount}`;
-          }
-        })
-        .catch((error) => console.error("Error fetching GitHub stars:", error));
-    </script>
-  </body>
+      // Set solver method
+      model.setSolverMethod("lusolve");
+      // model.setSolverMethod("frontal");
+
+      // Solve the problem and get the solution
+      const { solutionVector, nodesCoordinates } = model.solve();
+
+      // Plot the solution as a 2D contour plot
+      plotSolution(
+        solutionVector,
+        nodesCoordinates,
+        model.solverConfig,
+        model.meshConfig.meshDimension,
+        "contour",
+        "resultsCanvas"
+      );
+    });
+  </script>
+
+  <footer>
+    <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+  </footer>
+  <script>
+    document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+
+    // Fetch GitHub stars
+    fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+      .then((response) => response.json())
+      .then((data) => {
+        const starCount = data.stargazers_count;
+        const starsElement = document.getElementById("github-stars");
+        if (starsElement && starCount) {
+          starsElement.innerHTML = `★ ${starCount}`;
+        }
+      })
+      .catch((error) => console.error("Error fetching GitHub stars:", error));
+  </script>
+</body>
+
 </html>

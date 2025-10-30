@@ -11,107 +11,78 @@
 <!--       Website: https://feascript.com/             \__|  -->
 
 <html>
-  <head>
-    <title>FEAScript: Solidification Front Propagation in a 2D Domain Tutorial (Multi-threaded)</title>
-    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta
-      name="description"
-      content="This example demonstrates solving an eikonal equation in a 2D domain using the FEAScript library with Web Workers. The problem represents a typical solidification front propagation scenario, where the objective is to track the movement of an interface."
-    />
-    <meta
-      name="keywords"
-      content="finite elements, fem, galerkin, computational mechanics, javascript, eikonal, front propagation, web workers"
-    />
-    <meta name="viewport" content="width=device-width" />
-    <!-- Link to the CSS files -->
-    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-    <!-- Import the Math.js library for mathematical operations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
-    <!-- Import the Plotly.js library for plotting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
-    <!-- Import MathJax for writing equations -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script
-      id="MathJax-script"
-      async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    ></script>
-    <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-  </head>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
+<head>
+  <title>FEAScript: Solidification Front Propagation in a 2D Domain Tutorial (Multi-threaded)</title>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="description"
+    content="This example demonstrates solving an eikonal equation in a 2D domain using the FEAScript library with Web Workers. The problem represents a typical solidification front propagation scenario, where the objective is to track the movement of an interface." />
+  <meta name="keywords"
+    content="finite elements, fem, galerkin, computational mechanics, javascript, eikonal, front propagation, web workers" />
+  <meta name="viewport" content="width=device-width" />
+  <!-- Link to the CSS files -->
+  <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Import the Math.js library for mathematical operations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+  <!-- Import the Plotly.js library for plotting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+  <!-- Import MathJax for writing equations -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
+  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+</head>
 
-    gtag("config", "G-1JPK0KLEC9");
-  </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
 
-  <body>
-    <h1 class="top">
-      <a href="../index.html">
-        <img
-          src="../assets/feascript-logo.png"
-          alt="FEAScript Logo"
-          id="responsive-logo"
-          style="vertical-align: middle"
-        />
-      </a>
-      <div class="social-icons-top-right">
-        <ul>
-          <li>
-            <a href="https://blog.feascript.com/" title="FEAScript blog">
-              <img
-                src="../assets/blog-icon-feascript.png"
-                alt="Blog icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
-              <img
-                src="../assets/youtube-icon-feascript.svg"
-                alt="YouTube icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
-              <img
-                src="../assets/linkedin-icon-feascript.png"
-                alt="LinkedIn icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
-              <img
-                src="../assets/discord-icon-feascript.png"
-                alt="Discord icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
-              <img
-                src="../assets/github-icon-feascript.png"
-                alt="GitHub icon"
-                style="height: 20px; vertical-align: middle"
-              />
-              <span
-                id="github-stars"
-                style="
+  gtag("config", "G-1JPK0KLEC9");
+</script>
+
+<body>
+  <h1 class="top">
+    <a href="../index.html">
+      <img src="../assets/feascript-logo.png" alt="FEAScript Logo" id="responsive-logo"
+        style="vertical-align: middle" />
+    </a>
+    <div class="social-icons-top-right">
+      <ul>
+        <li>
+          <a href="https://blog.feascript.com/" title="FEAScript blog">
+            <img src="../assets/blog-icon-feascript.png" alt="Blog icon" style="height: 18px; vertical-align: middle" />
+          </a>
+        </li>
+        <li>
+          <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+            <img src="../assets/youtube-icon-feascript.svg" alt="YouTube icon"
+              style="height: 18px; vertical-align: middle" />
+          </a>
+        </li>
+        <li>
+          <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+            <img src="../assets/linkedin-icon-feascript.png" alt="LinkedIn icon"
+              style="height: 18px; vertical-align: middle" />
+          </a>
+        </li>
+        <li>
+          <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+            <img src="../assets/discord-icon-feascript.png" alt="Discord icon"
+              style="height: 18px; vertical-align: middle" />
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+            <img src="../assets/github-icon-feascript.png" alt="GitHub icon"
+              style="height: 20px; vertical-align: middle" />
+            <span id="github-stars" style="
                   font-size: 0.9em;
                   margin-left: 5px;
                   vertical-align: middle;
@@ -119,49 +90,47 @@
                   border-radius: 4px;
                   padding: 1px 5px;
                   background-color: #f8f8f8;
-                "
-              ></span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </h1>
-    <h1>Solidification Front Propagation in a 2D Domain Tutorial (Multi-threaded)</h1>
-
-    <ul id="menu">
-      <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
-
-    <div class="highlight-container">
-      <p>
-        This page demonstrates solving the solidification front propagation problem using FEAScript in a web
-        worker for improved browser responsiveness. For the mathematical formulation and theory, see the
-        <a href="https://feascript.com/tutorials/solidification-front-2d.html">basic tutorial</a>.
-      </p>
-
-      <p>
-        <strong>⚠️ Important:</strong> Due to security restrictions, this example requires launching the
-        browser with reduced security settings, e.g.:
-      </p>
-      <pre style="background-color: #f8f9fa; padding: 8px; border-radius: 4px; overflow-x: auto">
-start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disable-site-isolation-trials</pre
-      >
-      <p>
-        These flags temporarily disable CORS restrictions that normally block a web worker from loading
-        scripts or data when running from local files. For production applications, proper CORS headers should
-        be configured on your server.
-      </p>
+                "></span>
+          </a>
+        </li>
+      </ul>
     </div>
+  </h1>
+  <h1>Solidification Front Propagation in a 2D Domain Tutorial (Multi-threaded)</h1>
 
-    <h2 id="webworkerimplementation"><a name="Web Worker Implementation"></a>Web Worker Implementation</h2>
+  <ul id="menu">
+    <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
+    <li><a href="#results">Results</a></li>
+  </ul>
+
+  <div class="highlight-container">
     <p>
-      The code below shows how to use FEAScript with a web worker to solve the eikonal equation for front
-      propagation. This approach moves the computation to a separate thread, preventing the UI from freezing
-      during complex calculations. The solution is plotted as a 2D contour.
+      This page demonstrates solving the solidification front propagation problem using FEAScript in a web
+      worker for improved browser responsiveness. For the mathematical formulation and theory, see the
+      <a href="https://feascript.com/tutorials/solidification-front-2d.html">basic tutorial</a>.
     </p>
 
-    <pre class="prettyprint">
+    <p>
+      <strong>⚠️ Important:</strong> Due to security restrictions, this example requires launching the
+      browser with reduced security settings, e.g.:
+    </p>
+    <pre style="background-color: #f8f9fa; padding: 8px; border-radius: 4px; overflow-x: auto">
+start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disable-site-isolation-trials</pre>
+    <p>
+      These flags temporarily disable CORS restrictions that normally block a web worker from loading
+      scripts or data when running from local files. For production applications, proper CORS headers should
+      be configured on your server.
+    </p>
+  </div>
+
+  <h2 id="webworkerimplementation"><a name="Web Worker Implementation"></a>Web Worker Implementation</h2>
+  <p>
+    The code below shows how to use FEAScript with a web worker to solve the eikonal equation for front
+    propagation. This approach moves the computation to a separate thread, preventing the UI from freezing
+    during complex calculations. The solution is plotted as a 2D contour.
+  </p>
+
+  <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -214,117 +183,117 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
-&lt;/body&gt;</pre
-    >
+&lt;/body&gt;</pre>
 
-    <h2 id="results"><a name="Results"></a>Results</h2>
-    <p>
-      Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
-      time of the front at each position. This plot is generated in real time using FEAScript.
-    </p>
+  <h2 id="results"><a name="Results"></a>Results</h2>
+  <p>
+    Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
+    time of the front at each position. This plot is generated in real time using FEAScript.
+  </p>
 
-    <div id="loading">
-      <div class="spinner"></div>
-      Solving...
-    </div>
-    <div id="resultsCanvas"></div>
+  <div id="loading">
+    <div class="spinner"></div>
+    Solving...
+  </div>
+  <div id="resultsCanvas"></div>
 
-    <ul id="menu">
-      <li><a href="https://feascript.com/index.html">Home</a></li>
-      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-    </ul>
+  <ul id="menu">
+    <li><a href="https://feascript.com/index.html">Home</a></li>
+    <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+  </ul>
 
-    <script type="module">
-      //Import FEAScript library from GitHub
-      import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
+  <script type="module">
+    //Import FEAScript library from GitHub
+    import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
 
-      // KNOWN BUG: The bundled ESM version has issues with Web Workers due to path resolution problems.
-      // Web Workers cannot be properly initialized when importing from the bundled file.
-      //import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+    // KNOWN BUG: The bundled ESM version has issues with Web Workers due to path resolution problems.
+    // Web Workers cannot be properly initialized when importing from the bundled file.
+    //import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
 
-      //Import FEAScript library from a local directory
-      // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+    //Import FEAScript library from a local directory
+    // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
-      window.addEventListener("DOMContentLoaded", async () => {
-        document.getElementById("resultsCanvas").style.display = "block";
+    window.addEventListener("DOMContentLoaded", async () => {
+      document.getElementById("resultsCanvas").style.display = "block";
 
-        // Show loading indicator
-        document.getElementById("loading").style.display = "block";
+      // Show loading indicator
+      document.getElementById("loading").style.display = "block";
 
-        // Print FEAScript version
-        console.log("FEAScript version:", printVersion);
+      // Print FEAScript version
+      console.log("FEAScript version:", printVersion);
 
-        // Create a new FEAScriptWorker instance
-        const model = new FEAScriptWorker();
+      // Create a new FEAScriptWorker instance
+      const model = new FEAScriptWorker();
 
-        try {
-          // Ensure the worker is ready
-          await model.ping();
+      try {
+        // Ensure the worker is ready
+        await model.ping();
 
-          // Set solver configuration
-          await model.setSolverConfig("frontPropagationScript");
+        // Set solver configuration
+        await model.setSolverConfig("frontPropagationScript");
 
-          // Define mesh configuration
-          await model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 12,
-            numElementsY: 8,
-            maxX: 4,
-            maxY: 2,
-          });
+        // Define mesh configuration
+        await model.setMeshConfig({
+          meshDimension: "2D",
+          elementOrder: "quadratic",
+          numElementsX: 12,
+          numElementsY: 8,
+          maxX: 4,
+          maxY: 2,
+        });
 
-          // Define boundary conditions
-          await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
-          await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-          await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-          await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
+        // Define boundary conditions
+        await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
+        await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+        await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+        await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
-          // Set solver method
-          await model.setSolverMethod("lusolve");
+        // Set solver method
+        await model.setSolverMethod("lusolve");
 
-          // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = await model.solve();
+        // Solve the problem and get the solution
+        const { solutionVector, nodesCoordinates } = await model.solve();
 
-          // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            "frontPropagationScript",
-            "2D",
-            "contour",
-            "resultsCanvas"
-          );
-        } catch (error) {
-          console.error("Error in worker execution:", error);
-          alert("Error executing the solver. Check console for details.");
-        } finally {
-          // Hide loading indicator
-          document.getElementById("loading").style.display = "none";
+        // Plot the solution as a 2D contour plot
+        plotSolution(
+          solutionVector,
+          nodesCoordinates,
+          "frontPropagationScript",
+          "2D",
+          "contour",
+          "resultsCanvas"
+        );
+      } catch (error) {
+        console.error("Error in worker execution:", error);
+        alert("Error executing the solver. Check console for details.");
+      } finally {
+        // Hide loading indicator
+        document.getElementById("loading").style.display = "none";
 
-          // Terminate the worker
-          model.terminate();
+        // Terminate the worker
+        model.terminate();
+      }
+    });
+  </script>
+
+  <footer>
+    <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+  </footer>
+  <script>
+    document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+
+    // Fetch GitHub stars
+    fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+      .then((response) => response.json())
+      .then((data) => {
+        const starCount = data.stargazers_count;
+        const starsElement = document.getElementById("github-stars");
+        if (starsElement && starCount) {
+          starsElement.innerHTML = `★ ${starCount}`;
         }
-      });
-    </script>
+      })
+      .catch((error) => console.error("Error fetching GitHub stars:", error));
+  </script>
+</body>
 
-    <footer>
-      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
-    </footer>
-    <script>
-      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
-
-      // Fetch GitHub stars
-      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-        .then((response) => response.json())
-        .then((data) => {
-          const starCount = data.stargazers_count;
-          const starsElement = document.getElementById("github-stars");
-          if (starsElement && starCount) {
-            starsElement.innerHTML = `★ ${starCount}`;
-          }
-        })
-        .catch((error) => console.error("Error fetching GitHub stars:", error));
-    </script>
-  </body>
 </html>

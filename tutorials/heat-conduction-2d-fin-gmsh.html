@@ -183,11 +183,11 @@
       model.setSolverConfig("heatConductionScript");
   
       // Parse the mesh file
-      const result = await importGmshQuadTri(meshFile);
+      const rect_quad_unstruct = await importGmshQuadTri(meshFile);
   
-      // Define mesh configuration with the parsed result
+      // Define mesh configuration with the parsed rect_quad_unstruct
       model.setMeshConfig({
-        parsedMesh: result,
+        parsedMesh: rect_quad_unstruct,
         meshDimension: "2D",
         elementOrder: "quadratic",
       });
@@ -209,8 +209,7 @@
         model.solverConfig,
         model.meshConfig.meshDimension,
         "contour",
-        "resultsCanvas",
-        "unstructured" // Important: specify unstructured mesh type for Gmsh meshes
+        "resultsCanvas"
       );
     });
   &lt;/script&gt;
@@ -234,11 +233,6 @@
         <code>"3"</code>, respectively. For example:
         <code>model.addBoundaryCondition("0", ["constantTemp", 200]); // Gmsh physical group tag 1</code>.
         This conversion is necessary because Gmsh uses 1-based indexing while FEAScript uses 0-based indexing.
-      </li>
-      <li>
-        <strong>Unstructured Plotting:</strong> When plotting results from a Gmsh mesh, add the
-        <code>"unstructured"</code>
-        parameter to the <code>plotSolution</code> function to ensure correct visualization.
       </li>
     </ul>
 
@@ -369,11 +363,11 @@ Mesh 2;</pre
       } from "https://core.feascript.com/dist/feascript.esm.js";
       // Import FEAScript library from a local directory
       // import {
-      //  FEAScriptModel,
-      //  importGmshQuadTri,
-      //  plotSolution,
-      //  printVersion,
-      //  logSystem,
+      //   FEAScriptModel,
+      //   importGmshQuadTri,
+      //   plotSolution,
+      //   printVersion,
+      //   logSystem,
       // } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
@@ -400,11 +394,11 @@ Mesh 2;</pre
         gmshModel.setSolverConfig("heatConductionScript");
 
         // Parse the mesh file
-        const result = await importGmshQuadTri(meshFile);
+        const rect_quad_unstruct = await importGmshQuadTri(meshFile);
 
-        // Define mesh configuration with the parsed result
+        // Define mesh configuration with the parsed rect_quad_unstruct
         gmshModel.setMeshConfig({
-          parsedMesh: result,
+          parsedMesh: rect_quad_unstruct,
           meshDimension: "2D",
           elementOrder: "quadratic",
         });
@@ -430,8 +424,7 @@ Mesh 2;</pre
           gmshModel.solverConfig,
           gmshModel.meshConfig.meshDimension,
           "contour",
-          "resultsCanvas",
-          "unstructured"
+          "resultsCanvas"
         );
       });
     </script>

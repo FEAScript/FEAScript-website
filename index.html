@@ -82,13 +82,15 @@
                 "></span>
           </a>
         </li>
+        <li>
+          <button id="hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </li>
       </ul>
     </div>
-    <button id="hamburger" aria-label="Menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
 
     <div id="mobile-menu" aria-hidden="true">
       <ul>
@@ -172,14 +174,6 @@
             mobileMenu.classList.remove('open');
             hamburger.setAttribute('aria-expanded', 'false');
           }
-        }
-      });
-
-      // Optional: close on ESC
-      document.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Escape' && mobileMenu.classList.contains('open')) {
-          mobileMenu.classList.remove('open');
-          hamburger.setAttribute('aria-expanded', 'false');
         }
       });
     });

@@ -137,6 +137,104 @@ footer {
   border-top: 2px solid #e0c97f;
 }
 
+#hamburger {
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+#hamburger span {
+  display: block;
+  width: 20px;
+  height: 2.5px;
+  background-color: #555;
+  margin: 2px 0;
+  transition: 0.3s;
+}
+
+#mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  min-width: 200px;
+}
+
+#mobile-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#mobile-menu li {
+  padding: 6px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+#mobile-menu li:last-child {
+  border-bottom: none;
+}
+
+#mobile-menu li a {
+  color: #555;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#mobile-menu li a:hover {
+  color: #333;
+}
+
+#mobile-menu.open {
+  display: block;
+  top: calc(100% + 6px);
+  right: 0px;
+  min-width: 100px;
+  animation: mobileMenuFadeIn 160ms ease;
+}
+
+/* small fade-in */
+@keyframes mobileMenuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Show hamburger only on small screens */
+@media screen and (max-width: 500px) {
+  #hamburger {
+    display: block;
+  }
+
+  #menu {
+    display: none;
+  }
+}
+
+/* On wider screens hide the hamburger */
+@media screen and (min-width: 500px) {
+  #hamburger {
+    display: none !important;
+  }
+}
+
 /*
   ════════════════════════════════════════════════════════════
    CONTENT ELEMENTS
@@ -366,6 +464,10 @@ mjx-container {
     height: 40px;
   }
 
+  #menu {
+    display: none;
+  }
+
   .highlight-container,
   li {
     max-width: 400px;
@@ -407,6 +509,10 @@ mjx-container {
     height: 60px;
   }
 
+  #mobile-menu {
+    display: none;
+  }
+
   p,
   .highlight-container,
   li {
@@ -427,6 +533,10 @@ mjx-container {
 
   h3 {
     font-size: 120%;
+  }
+
+  #mobile-menu {
+    display: none;
   }
 }
 
@@ -452,6 +562,10 @@ mjx-container {
 
   h3 {
     font-size: 120%;
+  }
+
+  #mobile-menu {
+    display: none;
   }
 }
 

@@ -223,17 +223,10 @@
 
       // Solve
       model.setSolverMethod("lusolve");
-      const { solutionVector, nodesCoordinates } = model.solve();
+      const result = model.solve();
 
       // Plot results
-      plotSolution(
-        solutionVector,
-        nodesCoordinates,
-        model.solverConfig,
-        model.meshConfig.meshDimension,
-        "line",
-        "resultsCanvas"
-      );
+      plotSolution(model, result, "line", "resultsCanvas");
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
@@ -324,17 +317,10 @@
         model.setSolverMethod("lusolve");
 
         // Solve the problem and get the solution
-        const { solutionVector, nodesCoordinates } = model.solve();
+        const result = model.solve();
 
         // Plot the solution as a 1D line plot
-        plotSolution(
-          solutionVector,
-          nodesCoordinates,
-          model.solverConfig,
-          model.meshConfig.meshDimension,
-          "line",
-          "resultsCanvas"
-        );
+        plotSolution(model, result, "line", "resultsCanvas");
       });
     </script>
 

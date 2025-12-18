@@ -162,7 +162,7 @@
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
     // Import FEAScript library
-    import { FEAScriptModel, importGmshQuadTri, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+    import { FEAScriptModel, importGmshQuadTri, plotInterpolatedSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
   
     window.addEventListener("DOMContentLoaded", async () => {
       // Print FEAScript version in the console
@@ -200,17 +200,10 @@
   
       // Solve
       model.setSolverMethod("lusolve");
-      const { solutionVector, nodesCoordinates } = model.solve();
+      const result = model.solve();
   
       // Plot results
-      plotSolution(
-        solutionVector,
-        nodesCoordinates,
-        model.solverConfig,
-        model.meshConfig.meshDimension,
-        "contour",
-        "resultsCanvas"
-      );
+      plotInterpolatedSolution(model, result, "contour", "resultsCanvas");
     });
   &lt;/script&gt;
   &lt;!-- ... rest of body region... --&gt;
@@ -358,14 +351,14 @@ Mesh 2;</pre
       import {
         FEAScriptModel,
         importGmshQuadTri,
-        plotSolution,
+        plotInterpolatedSolution,
         printVersion,
       } from "https://core.feascript.com/dist/feascript.esm.js";
       // Import FEAScript library from a local directory
       // import {
       //   FEAScriptModel,
       //   importGmshQuadTri,
-      //   plotSolution,
+      //   plotInterpolatedSolution,
       //   printVersion,
       //   logSystem,
       // } from "../../FEAScript-core/src/index.js";
@@ -414,18 +407,10 @@ Mesh 2;</pre
         gmshModel.setSolverMethod("lusolve");
 
         // Solve the problem and get the solution
-        const { solutionVector: gmshSolutionVector, nodesCoordinates: gmshNodesCoordinates } =
-          gmshModel.solve();
+        const result = gmshModel.solve();
 
-        // Plot the GMSH solution
-        plotSolution(
-          gmshSolutionVector,
-          gmshNodesCoordinates,
-          gmshModel.solverConfig,
-          gmshModel.meshConfig.meshDimension,
-          "contour",
-          "resultsCanvas"
-        );
+        // Plot the Gmsh solution
+        plotInterpolatedSolution(gmshModel, result, "contour", "resultsCanvas");
       });
     </script>
 

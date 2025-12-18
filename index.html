@@ -323,10 +323,10 @@
     model.addBoundaryCondition("boundaryIndex", ["conditionType", /* parameters */]);
 
     // Solve
-    const { solutionVector, nodesCoordinates } = model.solve();
+    const result = model.solve();
 
     // Plot results
-    plotSolution(solutionVector, nodesCoordinates, model.solverConfig, model.meshConfig.meshDimension, "contour", "resultsCanvas");
+    plotSolution(model, result, "contour", "resultsCanvas");
   });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;

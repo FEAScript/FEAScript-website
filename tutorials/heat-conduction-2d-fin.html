@@ -7,6 +7,7 @@
    Version: 0.1.4 | https://feascript.com
   ════════════════════════════════════════════════════════════
 -->
+
 <html>
   <head>
     <title>FEAScript: Heat Conduction in a 2D Fin Tutorial</title>
@@ -213,17 +214,10 @@
 
       // Solve
       model.setSolverMethod("lusolve");
-      const { solutionVector, nodesCoordinates } = model.solve();
+      const result = model.solve();
 
       // Plot results
-      plotSolution(
-        solutionVector,
-        nodesCoordinates,
-        model.solverConfig,
-        model.meshConfig.meshDimension,
-        "contour",
-        "resultsCanvas"
-      );
+      plotSolution(model, result, "contour", "resultsCanvas");
       
     });
   &lt;/script&gt;
@@ -328,17 +322,11 @@
         // model.setSolverMethod("frontal");
 
         // Solve the problem and get the solution
-        const { solutionVector, nodesCoordinates } = model.solve();
+        // const { solutionVector, nodesCoordinates } = model.solve(); // Destructuring syntax
+        const result = model.solve();
 
         // Plot the solution as a 2D contour plot
-        plotSolution(
-          solutionVector,
-          nodesCoordinates,
-          model.solverConfig,
-          model.meshConfig.meshDimension,
-          "contour",
-          "resultsCanvas"
-        );
+        plotSolution(model, result, "contour", "resultsCanvas");
       });
     </script>
 

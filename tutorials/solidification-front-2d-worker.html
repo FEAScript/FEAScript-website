@@ -195,17 +195,10 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
   
       // Solve
       await model.setSolverMethod("lusolve");
-      const { solutionVector, nodesCoordinates } = await model.solve();
+      const result = await model.solve();
   
       // Plot results
-      plotSolution(
-        solutionVector,
-        nodesCoordinates,
-        "frontPropagationScript",
-        "2D",
-        "contour",
-        "resultsCanvas"
-      );
+      plotSolution(model, result, "contour", "resultsCanvas");
   
       // Terminate the worker
       model.terminate();
@@ -282,17 +275,10 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
           await model.setSolverMethod("lusolve");
 
           // Solve the problem and get the solution
-          const { solutionVector, nodesCoordinates } = await model.solve();
+          const result = await model.solve();
 
           // Plot the solution as a 2D contour plot
-          plotSolution(
-            solutionVector,
-            nodesCoordinates,
-            "frontPropagationScript",
-            "2D",
-            "contour",
-            "resultsCanvas"
-          );
+          plotSolution(model, result, "contour", "resultsCanvas");
         } catch (error) {
           console.error("Error in worker execution:", error);
           alert("Error executing the solver. Check console for details.");

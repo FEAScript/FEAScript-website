@@ -176,21 +176,14 @@
 
         // Measure the solving time
         const startTime = performance.now();
-        const { solutionVector, nodesCoordinates } = model.solve();
+        const result = model.solve();
         const endTime = performance.now();
         const solvingTime = ((endTime - startTime) / 1000).toFixed(3); // Convert to seconds and round to 3 decimal places
 
         // Display the time in the HTML
         document.getElementById("timeDisplay").innerHTML = `Solving time: ${solvingTime} seconds`;
 
-        plotSolution(
-          solutionVector,
-          nodesCoordinates,
-          "heatConductionScript",
-          "2D",
-          "contour",
-          "resultsCanvas"
-        );
+        plotSolution(model, result, "contour", "resultsCanvas");
       }
 
       runSpeedTest(document.getElementById("solverSelect").value);

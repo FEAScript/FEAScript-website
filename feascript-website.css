@@ -1,9 +1,10 @@
 /*
-  ════════════════════════════════════════════════════════════
-   FEAScript Library
+  ════════════════════════════════════════════════════════════════
+   FEAScript Website
    Lightweight Finite Element Simulation in JavaScript
-   Version: 0.1.4 | https://feascript.com
-  ════════════════════════════════════════════════════════════
+   Version: 0.2.0 (RC) | https://feascript.com
+   CC BY 4.0 License © 2023–2025 FEAScript
+  ════════════════════════════════════════════════════════════════
 */
 
 /*
@@ -138,7 +139,7 @@ footer {
 }
 
 #hamburger {
- margin-top: -5px;
+  margin-top: -5px;
   display: none;
   background: none;
   border: none;
@@ -422,7 +423,7 @@ mjx-container {
   padding-left: 0;
 }
 
-.features-list>li {
+.features-list > li {
   margin-bottom: 1em;
 }
 
@@ -482,7 +483,6 @@ mjx-container {
   .platform-layout .left-panel {
     border-radius: 10px;
   }
-
 }
 
 /* Medium screens: 500px to 1000px */

@@ -25,6 +25,10 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://feascript.com/tutorials/heat-conduction-2d-rhom-fin-gmsh.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://feascript.com/tutorials/heat-conduction-2d-fin-performance-test.html</loc>
     <priority>0.4</priority>
   </url>

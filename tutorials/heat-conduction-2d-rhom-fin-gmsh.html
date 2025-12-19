@@ -11,12 +11,12 @@
 
 <html lang="en">
   <head>
-    <title>FEAScript: Heat Conduction in a 2D Fin Tutorial (Gmsh Mesh)</title>
+    <title>FEAScript: Heat Conduction in a 2D Rhomboid Fin Tutorial (Gmsh Mesh)</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving a steady-state heat transfer problem in a 2D domain using a Gmsh-generated mesh."
+      content="This example demonstrates solving a steady-state heat transfer problem in a 2D rhomboid domain using a Gmsh-generated mesh."
     />
     <meta
       name="keywords"
@@ -125,7 +125,7 @@
         </ul>
       </div>
     </h1>
-    <h1>Heat Conduction in a 2D Fin Tutorial (Gmsh Mesh)</h1>
+    <h1>Heat Conduction in a 2D Rhomboid Fin Tutorial (Gmsh Mesh)</h1>
 
     <ul id="menu">
       <li><a href="#gmshfileimport">Gmsh File Import</a></li>
@@ -138,7 +138,9 @@
 
     <div class="highlight-container">
       <p>
-        This page demonstrates solving the 2D heat conduction fin problem using a Gmsh-generated mesh.
+        This page demonstrates solving the 2D heat conduction fin problem using a Gmsh-generated mesh. It is a
+        variation of the <a href="heat-conduction-2d-fin-gmsh.html">rectangular fin tutorial</a>, but applied
+        to a rhomboidal domain.
         <a href="https://gmsh.info/">
           Gmsh
           <img
@@ -170,25 +172,25 @@
       printVersion();
   
       // Fetch the mesh file
-      const response = await fetch("./rect_quad.msh"); // .msh version 4.1 is currently supported
+      const response = await fetch("./rhom_quad.msh"); // .msh version 4.1 is currently supported
       if (!response.ok) {
         throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
       }
       const meshContent = await response.text();
   
       // Create a File object with the actual content
-      const meshFile = new File([meshContent], "rect_quad.msh");
+      const meshFile = new File([meshContent], "rhom_quad.msh");
   
       // Create and configure model
       const model = new FEAScriptModel();
       model.setSolverConfig("heatConductionScript");
   
       // Parse the mesh file
-      const rect_quad = await importGmshQuadTri(meshFile);
+      const rhom_quad = await importGmshQuadTri(meshFile);
   
-      // Define mesh configuration with the parsed rect_quad
+      // Define mesh configuration with the parsed rhom_quad
       model.setMeshConfig({
-        parsedMesh: rect_quad,
+        parsedMesh: rhom_quad,
         meshDimension: "2D",
         elementOrder: "quadratic",
       });
@@ -211,53 +213,35 @@
 &lt;/body&gt;</pre
     >
 
-    <p>Important notes about the Gmsh workflow:</p>
-    <ul>
-      <li>
-        <strong>Physical Groups in Gmsh:</strong> In your <code>.geo</code> file (see
-        <a href="#gmshgeofile">Example Gmsh <code>.geo</code> File</a>), you need to define physical groups
-        for boundaries using commands like <code>Physical Line("bottom") = {1};</code>. These are mapped to
-        tags in the imported mesh.
-      </li>
-      <li>
-        <strong>Boundary Condition Mapping and Tag Indexing:</strong> When using Gmsh meshes in FEAScript, you
-        need to subtract 1 from the Gmsh physical group tag numbers. For example, if your Gmsh file has
-        physical groups with tags <code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>, you
-        would reference them in FEAScript as <code>"0"</code>, <code>"1"</code>, <code>"2"</code>,
-        <code>"3"</code>, respectively. For example:
-        <code>model.addBoundaryCondition("0", ["constantTemp", 200]); // Gmsh physical group tag 1</code>.
-        This conversion is necessary because Gmsh uses 1-based indexing while FEAScript uses 0-based indexing.
-      </li>
-    </ul>
-
     <p>
-      You can create your own Gmsh files by writing <code>.geo</code> scripts or using Gmsh's GUI. For this
-      example, we used a simple rectangular domain defined in a <code>.geo</code> file with specific physical
-      groups for each boundary.
+      For details on the Gmsh workflow, physical groups, and boundary condition mapping, please refer to the
+      <a href="heat-conduction-2d-fin-gmsh.html#gmshfileimport">rectangular fin tutorial</a>.
     </p>
 
     <h3 id="gmshgeofile"><a name="gmshgeofile"></a>Example Gmsh <code>.geo</code> File</h3>
     <p>
-      Below is the <code>rect.geo</code> file used in this tutorial. It defines a 4 m × 2 m rectangular domain
+      Below is the <code>rhom.geo</code> file used in this tutorial. It defines a 4 m × 2 m rectangular domain
       with physical lines for each boundary edge:
     </p>
 
     <pre class="prettyprint">
-// 2D Rectangle: 4m (width) x 2m (height) with physical lines for boundary labeling
+// 2D Rhomboid: 4m (base width) x 2m (height) with physical lines for boundary labeling
 
-lc = 0.7; // Characteristic length (mesh density)
+lc = 0.7; // Characteristic length
+
+dx = 1.0; // Horizontal skew amount (controls rhomboid angle)
 
 // Points (x, y, z, mesh size)
-Point(1) = {0, 0, 0, lc}; // Bottom left
-Point(2) = {4, 0, 0, lc}; // Bottom right
-Point(3) = {4, 2, 0, lc}; // Top right
-Point(4) = {0, 2, 0, lc}; // Top left
+Point(1) = {0,    0, 0, lc};     // Bottom left
+Point(2) = {4,    0, 0, lc};     // Bottom right
+Point(3) = {4+dx, 2, 0, lc};     // Top right (shifted)
+Point(4) = {dx,   2, 0, lc};     // Top left  (shifted)
 
 // Lines
-Line(1) = {1, 2}; // Bottom boundary
-Line(2) = {2, 3}; // Right boundary
-Line(3) = {3, 4}; // Top boundary
-Line(4) = {4, 1}; // Left boundary
+Line(1) = {1, 2}; // bottom
+Line(2) = {2, 3}; // right
+Line(3) = {3, 4}; // top
+Line(4) = {4, 1}; // left
 
 // Line Loop and Surface
 Line Loop(1) = {1, 2, 3, 4};
@@ -269,82 +253,45 @@ Physical Line("right")  = {2};
 Physical Line("top")    = {3};
 Physical Line("left")   = {4};
 
-// Physical Surface (optional, for FEM domains)
+// Physical Surface
 Physical Surface("domain") = {1};
 
-// Generate 2D mesh
-Recombine Surface{1}; // Turn triangle elements into quadrilaterals
-Mesh.ElementOrder = 2; // Set quadratic elements 
+// Recombine to quads
+Recombine Surface{1};
+Mesh.ElementOrder = 2;
 Mesh 2;</pre
     >
 
     <p>
-      Note how the physical line tags in the <code>.geo</code> file correspond to the boundary conditions in
-      our FEAScript code:
-    </p>
-    <ul>
-      <li>
-        <code>Physical Line("bottom") = {1};</code> →
-        <code>model.addBoundaryCondition("0", ["constantTemp", 200]);</code>
-      </li>
-      <li>
-        <code>Physical Line("right") = {2};</code> →
-        <code>model.addBoundaryCondition("1", ["constantTemp", 200]);</code>
-      </li>
-      <li>
-        <code>Physical Line("top") = {3};</code> →
-        <code>model.addBoundaryCondition("2", ["convection", 1, 20]);</code>
-      </li>
-      <li>
-        <code>Physical Line("left") = {4};</code> →
-        <code>model.addBoundaryCondition("3", ["symmetry"]);</code>
-      </li>
-    </ul>
-
-    <p>
       To generate a mesh file from this <code>.geo</code> script, you would run:
-      <code>gmsh rect.geo -2</code> in your terminal, which creates a <code>rect.msh</code> file that can be
-      imported into FEAScript.
+      <code>gmsh rhom.geo -2</code> in your terminal.
     </p>
 
     <h2 id="generatedmesh"><a name="generatedmesh"></a>Generated Mesh</h2>
     <p>
-      Below is a visualization of the quadrilateral mesh generated with Gmsh. The mesh consists of 30
+      Below is a visualization of the quadrilateral mesh generated with Gmsh. The mesh consists of 24
       elements.
     </p>
 
     <div class="center-image">
       <img
-        src="../assets/gmsh_rect_quad.png"
+        src="../assets/gmsh_rhom_quad.png"
         alt="Quadrilateral mesh generated by Gmsh"
         style="max-width: 40%; height: auto"
       />
       <p class="image-caption">
-        Quadrilateral mesh (<code>rect_quad.msh</code>) generated using the
-        <code>rect.geo</code> script with Gmsh
+        Quadrilateral mesh (<code>rhom_quad.msh</code>) generated using the
+        <code>rhom.geo</code> script with Gmsh
       </p>
     </div>
-
-    <p>
-      The unstructured mesh approach would be particularly advantageous for complex geometries, where the
-      mapped mesh approach could not be applied effectively.
-    </p>
 
     <h2 id="results"><a name="results"></a>Results</h2>
     <p>
       Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-      time using FEAScript. Please note that solutions computed on unstructured meshes like this may exhibit
-      small numerical differences compared to solutions on structured orthogonal meshes. This occurs because
-      derivative calculations in non-orthogonal elements are inherently less precise due to the Jacobian
-      transformation process. These small differences are expected and acceptable for most engineering
-      applications, but may be noticeable in regions with steep temperature gradients.
+      time using FEAScript.
     </p>
 
     <div id="resultsCanvas"></div>
-
-    <p>
-      See also <a href="heat-conduction-2d-rhom-fin-gmsh.html">here</a> for a variation with a rhomboid fin.
-    </p>
 
     <ul id="menu">
       <li><a href="https://feascript.com/index.html">Home</a></li>
@@ -376,14 +323,14 @@ Mesh 2;</pre
         console.log("FEAScript version:", printVersion);
 
         // Fetch the mesh file
-        const response = await fetch("./rect_quad.msh"); // .msh version 4.1 is currently supported
+        const response = await fetch("./rhom_quad.msh"); // .msh version 4.1 is currently supported
         if (!response.ok) {
           throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
         }
         const meshContent = await response.text();
 
         // Create a File object with the actual content
-        const meshFile = new File([meshContent], "rect_quad.msh");
+        const meshFile = new File([meshContent], "rhom_quad.msh");
 
         // Create a new FEAScript model
         const gmshModel = new FEAScriptModel();
@@ -392,11 +339,11 @@ Mesh 2;</pre
         gmshModel.setSolverConfig("heatConductionScript");
 
         // Parse the mesh file
-        const rect_quad = await importGmshQuadTri(meshFile);
+        const rhom_quad = await importGmshQuadTri(meshFile);
 
-        // Define mesh configuration with the parsed rect_quad
+        // Define mesh configuration with the parsed rhom_quad
         gmshModel.setMeshConfig({
-          parsedMesh: rect_quad,
+          parsedMesh: rhom_quad,
           meshDimension: "2D",
           elementOrder: "quadratic",
         });

@@ -218,7 +218,7 @@
 
       // Create and configure model
       const model = new FEAScriptModel();
-      model.setSolverConfig("frontPropagationScript");
+      model.setModelConfig("frontPropagationScript");
       model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
@@ -318,7 +318,7 @@
         const model = new FEAScriptModel();
 
         // Set solver configuration
-        model.setSolverConfig("frontPropagationScript");
+        model.setModelConfig("frontPropagationScript");
 
         // Define mesh configuration
         model.setMeshConfig({

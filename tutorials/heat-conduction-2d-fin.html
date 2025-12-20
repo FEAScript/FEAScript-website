@@ -197,7 +197,7 @@
 
       // Create and configure model
       const model = new FEAScriptModel();
-      model.setSolverConfig("heatConductionScript");
+      model.setModelConfig("heatConductionScript");
       model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
@@ -299,7 +299,7 @@
         const model = new FEAScriptModel();
 
         // Set solver configuration
-        model.setSolverConfig("heatConductionScript");
+        model.setModelConfig("heatConductionScript");
 
         // Define mesh configuration
         model.setMeshConfig({

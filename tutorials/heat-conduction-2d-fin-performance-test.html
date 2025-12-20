@@ -152,7 +152,7 @@
         const numElementsY = parseInt(document.getElementById("numElementsY").value);
 
         const model = new FEAScriptModel();
-        model.setSolverConfig("heatConductionScript");
+        model.setModelConfig("heatConductionScript");
         model.setMeshConfig({
           meshDimension: "2D",
           elementOrder: "linear",

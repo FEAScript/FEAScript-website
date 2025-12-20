@@ -388,7 +388,7 @@
 
     // Create and configure model
     const model = new FEAScriptModel();
-    model.setSolverConfig("solverType"); // e.g., "heatConductionScript"
+    model.setModelConfig("physicsModel"); // e.g., "heatConductionScript"
     model.setMeshConfig({parsedMesh, meshDimension: "2D", elementOrder: "linear"});
 
     // Apply boundary conditions (Gmsh physical group tags)

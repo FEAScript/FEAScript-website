@@ -164,7 +164,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     // Create and configure model
     const model = new FEAScriptModel();
-    model.setSolverConfig("heatConductionScript");
+    model.setModelConfig("heatConductionScript");
     model.setMeshConfig({
       meshDimension: "2D",
       elementOrder: "quadratic",
@@ -225,7 +225,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         resultDiv.style.display = "block";
 
         const model = new FEAScriptModel();
-        model.setSolverConfig("heatConductionScript");
+        model.setModelConfig("heatConductionScript");
 
         model.setMeshConfig({
           meshDimension: "2D",

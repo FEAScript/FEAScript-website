@@ -11,16 +11,16 @@
 
 <html>
   <head>
-    <title>FEAScript Platform Visual Editor</title>
+    <title>FEAScript Studio</title>
     <link rel="icon" type="image/x-icon" href="https://feascript.com/assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="FEAScript Platform is browser-based visual editor designed for the FEAScript finite element simulation library. It empowers users to create and run finite element simulations directly in their browser."
+      content="FEAScript Studio is a browser-based visual editor with an integrated code editor, project saving/sharing and version control."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, visual platform, no-code"
+      content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, FEAScript Studio, visual editor, no-code, cloud, monaco editor, version control"
     />
     <meta name="viewport" content="width=device-width" />
 
@@ -45,7 +45,7 @@
     <h1 class="top">
       <a href="index.html">
         <img
-          src="./assets/feascript-platform-logo.png"
+          src="./assets/feascript-studio-logo.png"
           alt="FEAScript Logo"
           id="responsive-logo"
           style="vertical-align: middle"
@@ -114,12 +114,14 @@
       </div>
     </h1>
 
-    <h1>A Visual Editor for the FEAScript Library</h1>
+    <h1>FEAScript Studio: A Browser-Based Visual Editor</h1>
     <div class="highlight-container">
       <p>
-        <strong>FEAScript Platform is a browser-based visual editor</strong> designed for the
-        <a href="https://feascript.com/">FEAScript</a> finite element simulation library. It provides a
-        no-code, block-based interface (based on
+        <img
+          src="./assets/favicon.ico"
+          alt="FEAScript Icon"
+          style="vertical-align: middle; margin-right: 5px; height: 1em; width: auto"
+        /><strong>FEAScript Studio</strong> combines a visual, no-code, block-based interface (based on
         <a href="https://developers.google.com/blockly/">
           Blockly<img
             src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
@@ -131,29 +133,82 @@
               margin-left: 2px;
               margin-bottom: 4px;
             " /></a
-        >) for creating physics and engineering simulations.
+        >) with a text editor, project saving &amp; sharing and built-in version control. FEAScript Studio
+        will be provided as a cloud service.
       </p>
+    </div>
+
+    <p class="notice-dev">
+      🚧
+      <strong>FEAScript Studio is currently under development</strong> and planned to be released on the
+      second quarter of 2026. <strong>Join the waitlist</strong> to get updates about FEAScript Studio and be
+      among the first to try it when it’s released.
+    </p>
+
+    <div id="waitlist" class="waitlist-card" aria-label="FEAScript Studio waitlist">
+      <h2>Join the Waitlist</h2>
+      <div class="waitlist-indicates-required"><span class="asterisk">*</span> indicates required</div>
+
+      <form
+        action="https://feascript.us10.list-manage.com/subscribe/post?u=83b4dec50b84e136c2e82c6a4&amp;id=4aa4a60f27&amp;f_id=009362e3f0"
+        method="post"
+        id="mc-embedded-subscribe-form"
+        name="mc-embedded-subscribe-form"
+        target="_blank"
+      >
+        <div class="waitlist-field">
+          <label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label>
+          <div class="waitlist-row">
+            <input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" required value="" />
+            <input
+              type="submit"
+              name="subscribe"
+              id="mc-embedded-subscribe"
+              class="waitlist-button"
+              value="Subscribe"
+            />
+          </div>
+        </div>
+
+        <div id="mce-responses" class="waitlist-responses" aria-live="polite">
+          <div class="response" id="mce-error-response" style="display: none"></div>
+          <div class="response" id="mce-success-response" style="display: none"></div>
+        </div>
+
+        <div class="waitlist-honeypot" aria-hidden="true">
+          <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups -->
+          <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
+        </div>
+      </form>
     </div>
 
     <br />
 
-    <div class="platform-layout">
+    <div class="studio-layout">
       <div class="container">
         <div class="left-panel">
           <div class="text-content">
-            <h1>Why Use FEAScript Platform</h1>
+            <h1>Why Use FEAScript Studio</h1>
             <ul class="features-list">
               <li>
                 <strong>🧱 No-Code Simulation</strong>
-                <p>Just drag, connect, and solve</p>
+                <p>Drag, connect blocks, and run simulations — no programming required</p>
               </li>
               <li>
-                <strong>🌐 Browser-Based and Accessible</strong>
-                <p>Accessible on any device (Windows, macOS, Linux)</p>
+                <strong>📝 Integrated Code Editor</strong>
+                <p>Full-featured Monaco editor (the same engine that powers VS Code)</p>
               </li>
               <li>
-                <strong>🔄 Easy Sharing and Reuse</strong>
-                <p>Save and load your projects in XML format</p>
+                <strong>🌐 Fully Browser-Based</strong>
+                <p>Access from any device with a modern browser — no installation needed</p>
+              </li>
+              <li>
+                <strong>🔄 Cloud Saving & Sharing</strong>
+                <p>Save projects securely in the cloud, share with others and export to XML</p>
+              </li>
+              <li>
+                <strong>🔀 Built-in Version Control</strong>
+                <p>Track changes and revert to previous versions</p>
               </li>
             </ul>
           </div>
@@ -161,8 +216,8 @@
         <div class="right-panel">
           <img
             src="./assets/Screenshot_20251024_090709.png"
-            alt="FEAScript Platform Screenshot"
-            class="platform-image"
+            alt="FEAScript Studio Screenshot"
+            class="studio-image"
           />
         </div>
       </div>

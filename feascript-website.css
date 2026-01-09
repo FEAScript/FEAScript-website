@@ -3,15 +3,11 @@
    FEAScript Website
    Lightweight Finite Element Simulation in JavaScript
    Version: 0.2.0 (RC) | https://feascript.com
-   CC BY 4.0 License © 2023–2025 FEAScript
+   CC BY 4.0 License © 2023–2026 FEAScript
   ════════════════════════════════════════════════════════════════
 */
 
-/*
-  ════════════════════════════════════════════════════════════
-   RESET AND BASE STYLES
-  ════════════════════════════════════════════════════════════
-*/
+/* Reset and base styles  */
 * {
   margin: 0;
   padding: 0;
@@ -32,11 +28,7 @@ body {
   line-height: 1.6;
 }
 
-/*
-  ════════════════════════════════════════════════════════════
-   TYPOGRAPHY
-  ════════════════════════════════════════════════════════════
-*/
+/* Typography */
 /* Headings */
 h1,
 h2,
@@ -76,11 +68,7 @@ a {
   text-decoration: none;
 }
 
-/*
-  ════════════════════════════════════════════════════════════
-   LAYOUT COMPONENTS
-  ════════════════════════════════════════════════════════════
-*/
+/* Layout components */
 /* Banner */
 #banner {
   float: right;
@@ -234,11 +222,7 @@ footer {
   }
 }
 
-/*
-  ════════════════════════════════════════════════════════════
-   CONTENT ELEMENTS
-  ════════════════════════════════════════════════════════════
-*/
+/* Content elements */
 /* Lists */
 ul {
   padding-left: 1.5em;
@@ -276,11 +260,7 @@ mjx-container {
   text-align: left !important;
 }
 
-/*
-  ════════════════════════════════════════════════════════════
-   SPECIAL COMPONENTS
-  ════════════════════════════════════════════════════════════
-*/
+/* Special components */
 /* Highlight containers */
 .highlight-container {
   background: #f7e7b7;
@@ -427,11 +407,7 @@ mjx-container {
   margin-bottom: 1em;
 }
 
-/*
-  ════════════════════════════════════════════════════════════
-   HELPER CLASSES AND UTILITIES
-  ════════════════════════════════════════════════════════════
-*/
+/* Helper classes and utilities */
 /* Notice bars */
 .notice-dev {
   border-left: 4px solid #f39c12;
@@ -519,11 +495,7 @@ mjx-container {
   left: -5000px;
 }
 
-/*
-  ════════════════════════════════════════════════════════════
-   MEDIA QUERIES
-  ════════════════════════════════════════════════════════════
-*/
+/* Media queries */
 /* Small screens: up to 500px */
 @media screen and (max-width: 500px) {
   body {
@@ -648,11 +620,7 @@ mjx-container {
   }
 }
 
-/*
-  ════════════════════════════════════════════════════════════
-   STUDIO-SPECIFIC STYLES
-  ════════════════════════════════════════════════════════════
-*/
+/* Studio-specific styles */
 .studio-layout {
   background-color: transparent;
   margin: 0.5em 0;

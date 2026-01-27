@@ -129,7 +129,7 @@
           <li><a href="#tutorials">Tutorials</a></li>
           <li><a href="#documentation">Documentation</a></li>
           <li><a href="#licensing">Licensing</a></li>
-          <li><a href="feascript-studio.html">FEAScript Studio</a></li>
+          <!-- <li><a href="feascript-studio.html">FEAScript Studio</a></li> -->
         </ul>
       </div>
     </h1>
@@ -191,6 +191,7 @@
       <li><a href="#tutorials">Tutorials</a></li>
       <li><a href="#documentation">Documentation</a></li>
       <li><a href="#licensing">Licensing</a></li>
+      <!-- 
       <li class="external-link-start" style="border: 2px solid #e0e0e0; padding: 5px; border-radius: 4px">
         <a href="feascript-studio.html" style="color: #555"
           ><img
@@ -200,6 +201,7 @@
           />FEAScript Studio</a
         >
       </li>
+      -->
     </ul>
 
     <script>
@@ -276,12 +278,12 @@
     <div style="margin-top: 0.5em"></div>
     <h2 id="howtousefeascript"><a name="Getting Started"></a>How to Use FEAScript</h2>
 
-    <p>There are two ways to perform simulations with FEAScript:</p>
-    <ul>
-      <li>
-        <strong>FEAScript API:</strong> For developers comfortable with coding, FEAScript API provides full
-        programmatic control. It can run in three environments: in a browser using a simple HTML page, on a
-        server via Node.js, or within interactive JavaScript playgrounds (e.g.
+    <p>You can run simulations with FEAScript by calling its functions from JavaScript (the FEAScript API).
+    <!-- <ul>
+      <li> -->
+        <!-- <strong>FEAScript API:</strong> For developers comfortable with coding, FEAScript API provides full
+        programmatic control.  -->
+        The API offers full programmatic control and works across multiple environments, including the browser (simple HTML pages and online JavaScript playgrounds, e.g.
         <a href="https://codepen.io/"
           >CodePen<img
             src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
@@ -300,8 +302,18 @@
               margin-left: 2px;
               margin-bottom: 4px;
             " /></a
-        >).
-      </li>
+        >) and server-side runtimes such as <a href="https://nodejs.org/en">Node.js<img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+            alt="External Link Icon"
+            style="
+              width: 16px;
+              height: 16px;
+              vertical-align: middle;
+              margin-left: 2px;
+              margin-bottom: 4px;
+            " /></a>.</p>
+      <!-- </li> -->
+      <!-- 
       <li>
         <strong>FEAScript Studio:</strong> For users who prefer a visual workflow,
         <a href="feascript-studio.html">FEAScript Studio</a> offers a browser-based visual editor. It combines
@@ -321,9 +333,9 @@
         <a href="feascript-studio.html#waitlist">waitlist</a> to get updates about FEAScript Studio and be
         among the first to try it when it’s released.
       </li>
-    </ul>
+      -->
+    <!-- </ul> -->
 
-    <br />
     <div class="highlight-container" style="margin-bottom: 1.5em">
       <strong>Current stable release</strong>:
       <a href="https://github.com/FEAScript/FEAScript-core/releases"
@@ -558,13 +570,13 @@
                 " /></a
             >)
           </li>
-          <li>
+          <!-- <li>
             No-code interface with
             <a href="feascript-studio.html">FEAScript Studio</a>
             visual editor
-          </li>
+          </li> -->
           <li>
-            Node.js runtime (<a href="https://www.npmjs.com/package/feascript"
+            Server-side runtime (<a href="https://www.npmjs.com/package/feascript"
               >npm<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
@@ -584,9 +596,9 @@
     <div style="margin-top: 0.5em"></div>
     <h2 id="tutorials"><a name="Tutorials"></a>Tutorials</h2>
     <p>
-      Below you can explore tutorials that provide a step-by-step introduction to FEAScript. These tutorials
-      show you how to use FEAScript API directly, integrating finite element simulations into your own
-      websites and applications, or how to use it in interactive JavaScript playgrounds such as
+      Below you can explore tutorials that provide a step-by-step introduction to FEAScript. These tutorials show how to use the FEAScript API directly by writing JavaScript code, either to integrate finite
+element simulations into your own websites and applications or to run them in interactive JavaScript playgrounds
+such as
       <a href="https://codepen.io/FEAScript"
         >CodePen<img
           src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"

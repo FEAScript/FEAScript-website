@@ -1,16 +1,12 @@
 // 2D Rectangle: 4m (width) x 2m (height)
-// With Physical Lines for boundary labeling
 // Use the command "gmsh rect.geo -2" to generate the mesh
 
-lc = 0.7; // Characteristic length (mesh density)
-// Note: In the structured case, the lc = 0.2 no longer directly determines the mesh size,
-// as the Transfinite Curve commands explicitly set the number of elements along each boundary
-
+lc = 0.7; // Characteristic length
 // Points (x, y, z, mesh size)
-Point(1) = {0, 0, 0, lc};     // Bottom left
-Point(2) = {4, 0, 0, lc};     // Bottom right
-Point(3) = {4, 2, 0, lc};     // Top right
-Point(4) = {0, 2, 0, lc};     // Top left
+Point(1) = {0, 0, 0, lc}; // Bottom left
+Point(2) = {4, 0, 0, lc}; // Bottom right
+Point(3) = {4, 2, 0, lc}; // Top right
+Point(4) = {0, 2, 0, lc}; // Top left
 
 // Lines
 Line(1) = {1, 2}; // bottom
@@ -28,7 +24,7 @@ Physical Line("right")  = {2};
 Physical Line("top")    = {3};
 Physical Line("left")   = {4};
 
-// Physical Surface (optional, for FEM domains)
+// Physical Surface
 Physical Surface("domain") = {1};
 
 // Create structured mesh

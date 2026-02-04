@@ -243,9 +243,9 @@
     </p>
 
     <pre class="prettyprint">
-// 2D Rectangle: 4m (width) x 2m (height) with physical lines for boundary labeling
+// 2D Rectangle: 4m (width) x 2m (height)
 
-lc = 0.7; // Characteristic length (mesh density)
+lc = 0.7; // Characteristic length
 
 // Points (x, y, z, mesh size)
 Point(1) = {0, 0, 0, lc}; // Bottom left
@@ -269,7 +269,7 @@ Physical Line("right")  = {2};
 Physical Line("top")    = {3};
 Physical Line("left")   = {4};
 
-// Physical Surface (optional, for FEM domains)
+// Physical Surface
 Physical Surface("domain") = {1};
 
 // Generate 2D mesh

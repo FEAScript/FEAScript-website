@@ -197,7 +197,8 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       const result = await model.solve();
   
       // Plot results
-      plotSolution(model, result, "contour", "resultsCanvas");
+      const modelInfo = await model.getModelInfo(); // Get model info for plotting
+      plotSolution(modelInfo, result, "contour", "resultsCanvas");
   
       // Terminate the worker
       model.terminate();
@@ -273,11 +274,14 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         // Solve the problem and get the solution
         const result = await model.solve();
 
+        // Get model info for plotting
+        const modelInfo = await model.getModelInfo();
+
         // Hide loading indicator
         document.getElementById("loading").style.display = "none";
 
         // Plot the solution as a 2D contour plot
-        plotSolution(model, result, "contour", "resultsCanvas");
+        plotSolution(modelInfo, result, "contour", "resultsCanvas");
 
         // Terminate the worker
         model.terminate();

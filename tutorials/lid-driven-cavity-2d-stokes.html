@@ -146,14 +146,14 @@
     <p>
       The steady Stokes equations for an incompressible Newtonian fluid with no body forces are: \(\nabla
       \cdot \mathbf{u} = 0\) and \(-\mu \nabla^{2} \mathbf{u} + \nabla p = \mathbf{0}\), where
-      \(\mathbf{u} = (u,v)\) is the velocity vector, \(p\) is the pressure, and \(\mu\) is the dynamic
+      \(\mathbf{u} = (u,v)\) is the velocity vector, \(p\) is the pressure and \(\mu\) is the dynamic
       viscosity. In the FEAScript implementation below, we set the viscosity coefficient to \(\mu = 1.0\).
     </p>
 
     <div class="center-image">
       <img src="../assets/stokes-2d-lid-driven.png" alt="2D Stokes flow schematic" width="300" />
       <p class="image-caption">
-        Schematic of the 2D lid-driven cavity: horizontal velocity (u=1) at the top edge, and no-slip
+        Schematic of the 2D lid-driven cavity: horizontal velocity (u=1) at the top edge and no-slip
         condition (u=v=0) at the other edges.
       </p>
     </div>
@@ -180,8 +180,8 @@
 &lt;/head&gt;</pre
     >
     <p>
-      We should then define the problem parameters, such as the model type, the mesh configuration, and
-      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
+      We should then define the problem parameters, such as the model type, the mesh configuration and
+      the boundary conditions. This is performed using the FEAScript API directly in the HTML file:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -250,7 +250,7 @@
       Since the Stokes solver uses a mixed formulation, the solution vector contains all DOFs packed
       sequentially: \([u_0, \ldots, u_{N_2-1}, \, v_0, \ldots, v_{N_2-1}, \, p_0, \ldots, p_{N_1-1}]\),
       where \(N_2\) is the number of velocity nodes (Q2) and \(N_1\) is the number of pressure nodes
-      (Q1). The velocity components are extracted by slicing the solution vector, and each field can then
+      (Q1). The velocity components are extracted by slicing the solution vector and each field can then
       be plotted individually using the existing <code>plotSolution</code> function.
     </p>
     <p>

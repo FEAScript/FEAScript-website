@@ -208,10 +208,10 @@
       });
 
       // Apply boundary conditions
-      model.addBoundaryCondition("0", ["constantTemp", 200]);
-      model.addBoundaryCondition("1", ["symmetry"]);
-      model.addBoundaryCondition("2", ["convection", 1, 20]);
-      model.addBoundaryCondition("3", ["constantTemp", 200]);
+      model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
+      model.addBoundaryCondition("1", ["symmetry"]); // Left boundary
+      model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
+      model.addBoundaryCondition("3", ["constantTemp", 200]); // Right boundary
 
       // Solve
       model.setSolverMethod("lusolve");

@@ -11,16 +11,16 @@
 
 <html>
   <head>
-    <title>FEAScript: Solidification Front Propagation in a 2D Domain Tutorial</title>
+    <title>FEAScript: Stokes Flow in a 2D Lid-Driven Cavity Tutorial</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving an eikonal equation in a 2D domain using the FEAScript library. The problem represents a typical solidification front propagation scenario, where the objective is to track the movement of an interface."
+      content="This tutorial demonstrates solving the steady Stokes equations in a 2D lid-driven cavity using FEAScript. It uses Taylor-Hood (Q2-Q1) mixed finite elements for velocity-pressure coupling."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, computational mechanics, javascript, eikonal, front propagation"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, stokes flow, lid-driven cavity, Taylor-Hood, mixed finite elements, FEAScript"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
@@ -125,7 +125,7 @@
         </ul>
       </div>
     </h1>
-    <h1>Solidification Front Propagation in a 2D Domain Tutorial</h1>
+    <h1>Stokes Flow in a 2D Lid-Driven Cavity Tutorial</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
@@ -135,74 +135,52 @@
 
     <div class="highlight-container">
       <p>
-        In this tutorial, we address a solidification front propagation problem in a 2D domain. This is a
-        typical interface tracking problem, used to simulate how a solidification front moves through a
-        medium, such as metal cooling or crystal growth.
+        In this tutorial, we solve the steady Stokes flow equations inside a two-dimensional lid-driven
+        cavity. The lid-driven cavity is a classical benchmark problem in computational fluid dynamics
+        where the top wall moves at a constant horizontal velocity while the remaining walls are
+        stationary, driving a recirculating flow inside the domain.
       </p>
     </div>
 
     <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
-      The propagation of a solidification front can be modeled using the eikonal equation that in its general
-      form is given by: \(|\nabla \phi(x,y)| = \frac{1}{F(x,y)}\). In the above, \(\phi(x,y)\) is the arrival
-      time of the front at point (x,y), and \(F(x,y)\) is the local speed of front propagation. This speed can
-      vary spatially based on factors such as temperature gradients, material properties, or crystallographic
-      orientation. For this example, we simplify the problem by using a constant front propagation speed of 1
-      m/s throughout the domain, which reduces the equation to: \(|\nabla \phi(x,y)| = 1\). It's worth noting,
-      however, that actual solidification speeds in real materials typically range from micrometers per second
-      to centimeters per second for most metals and alloys. Only specialized rapid solidification processes
-      might achieve speeds approaching or exceeding 1 m/s. For more detailed background on the eikonal
-      equation and its mathematical properties, please see our
-      <a href="https://blog.feascript.com/tutorial/2025/06/15/eikonal-equation.html">blog post</a>.
+      The steady Stokes equations for an incompressible Newtonian fluid with no body forces are: \(\nabla
+      \cdot \mathbf{u} = 0\) and \(-\mu \nabla^{2} \mathbf{u} + \nabla p = \mathbf{0}\), where
+      \(\mathbf{u} = (u,v)\) is the velocity vector, \(p\) is the pressure, and \(\mu\) is the dynamic
+      viscosity. In the FEAScript implementation below, we set the viscosity coefficient to \(\mu = 1.0\).
     </p>
 
     <div class="center-image">
-      <img
-        src="../assets/solidification-front-2d.png"
-        alt="Schematic of 2D solidification front domain"
-        width="300"
-      />
+      <img src="../assets/stokes-2d-lid-driven.png" alt="2D Stokes flow schematic" width="300" />
       <p class="image-caption">
-        Schematic of the 2D solidification front propagation domain: constant value (0) at bottom, left, and
-        right edges indicating initial solidification fronts, and zero gradient at the top edge allowing free
-        propagation
+        Schematic of the 2D lid-driven cavity: horizontal velocity (u=1) at the top edge, and no-slip
+        condition (u=v=0) at the other edges.
       </p>
     </div>
 
     <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
-      this model, we consider a square domain where solidification begins simultaneously from three sides
-      (bottom, left, and right boundaries), which are all maintained at a constant value of zero (representing
-      the initial front position). This configuration simulates a common scenario in casting or directional
-      solidification processes, where a molten material is contained within a mold and begins to solidify from
-      the cooled walls. The top boundary has a zero gradient condition, allowing the front to propagate freely
-      in that direction.
-    </p>
-    <p>
-      The eikonal equation is nonlinear, making it challenging to solve directly. Due to convergence
-      difficulties, a viscous term elimination technique is employed. According to this approach, a viscous
-      term \(\varepsilon(\nabla^2\phi)\) is added to the equation, resulting in: \(|\nabla \phi(x,y)| +
-      \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical diffusion that
-      ensures the solution remains smooth throughout the domain. The solution of this modified equation
-      converges to the solution of the original eikonal equation as \(\varepsilon \rightarrow 0\).
+      The above schematic illustrates the problem domain and outlines the associated boundary conditions. To
+      satisfy the Ladyzhenskaya&ndash;Babu&scaron;ka&ndash;Brezzi (LBB) inf-sup stability condition,
+      FEAScript uses the Taylor-Hood mixed finite element formulation. In this approach, velocity is
+      discretized with 9-node biquadratic (Q2) elements and pressure with 4-node bilinear (Q1) elements.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
     <p>
-      Below is a demonstration of how to use the FEAScript library to solve this front propagation problem in
-      your web browser. You only need a simple HTML page to run this example where the following code snippets
-      should be included. First, load the required external libraries:
+      Below is a demonstration of how to use the FEAScript library to solve the Stokes lid-driven cavity
+      problem in your web browser. You only need a simple HTML page to run this example where the following
+      code snippets should be included. First, load the required external libraries:
     </p>
     <pre class="prettyprint">
 &lt;head&gt;
   &lt;!-- ...head region... --&gt;
-  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js">&lt;/script&gt;
-  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js">&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"&gt;&lt;/script&gt;
   &lt;!-- ...rest of head region... --&gt;
 &lt;/head&gt;</pre
     >
     <p>
-      We should then define the problem parameters, such as the solver type, the geometry configuration, and
+      We should then define the problem parameters, such as the model type, the mesh configuration, and
       the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
     </p>
     <pre class="prettyprint">
@@ -211,84 +189,101 @@
   &lt;script type="module"&gt;
     // Import FEAScript library
     import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
-    
+
     window.addEventListener("DOMContentLoaded", (event) => {
       // Print FEAScript version in the console
       printVersion();
 
       // Create and configure model
       const model = new FEAScriptModel();
-      model.setModelConfig("frontPropagationScript");
+      model.setModelConfig("stokesScript");
       model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
         numElementsX: 12,
-        numElementsY: 8,
+        numElementsY: 6,
         maxX: 4,
         maxY: 2,
       });
 
       // Apply boundary conditions
-      model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom boundary
-      model.addBoundaryCondition("1", ["constantValue", 0]); // Left boundary
-      model.addBoundaryCondition("2", ["zeroGradient"]); // Top boundary
-      model.addBoundaryCondition("3", ["constantValue", 0]); // Right boundary
+      model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom boundary
+      model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left boundary
+      model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Top boundary
+      model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right boundary
 
       // Solve
       model.setSolverMethod("lusolve");
       const result = model.solve();
 
-      // Plot results
-      plotSolution(model, result, "contour", "resultsCanvas");
-      
+      // Extract velocity and pressure fields from the solution vector
+      const totalNodesVelocity = model._stokesMetadata.totalNodesVelocity;
+      const solutionVector = result.solutionVector;
+      const uVelocity = solutionVector.slice(0, totalNodesVelocity);
+      const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
+      const velocityMagnitude = uVelocity.map((u, i) => Math.sqrt(u * u + vVelocity[i] * vVelocity[i]));
+
+      // Plot velocity magnitude as a contour
+      plotSolution(model, { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
+        "contour", "velocityMagnitudeCanvas");
+
+      // Plot u-velocity component as a contour
+      plotSolution(model, { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
+        "contour", "uVelocityCanvas");
+
+      // Plot v-velocity component as a contour
+      plotSolution(model, { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
+        "contour", "vVelocityCanvas");
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
     >
     <p>
-      After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
-      HTML container where the plot will render:
+      In the boundary condition definition, the numbers at the left side (from <code>"0"</code> to
+      <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has
+      assigned numbers to the boundaries, starting from the bottom boundary and proceeding clockwise).
+      The <code>"constantVelocity"</code> condition sets the velocity components \(u\) and \(v\) at the
+      boundary nodes (the second and third arguments respectively).
+    </p>
+    <p>
+      Since the Stokes solver uses a mixed formulation, the solution vector contains all DOFs packed
+      sequentially: \([u_0, \ldots, u_{N_2-1}, \, v_0, \ldots, v_{N_2-1}, \, p_0, \ldots, p_{N_1-1}]\),
+      where \(N_2\) is the number of velocity nodes (Q2) and \(N_1\) is the number of pressure nodes
+      (Q1). The velocity components are extracted by slicing the solution vector, and each field can then
+      be plotted individually using the existing <code>plotSolution</code> function.
+    </p>
+    <p>
+      After solving the case, the results are shown in 2D contour plots. To visualize them, include HTML
+      containers where the plots will render:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
-  &lt;div id="resultsCanvas">&lt;/div&gt;
+  &lt;div id="velocityMagnitudeCanvas"&gt;&lt;/div&gt;
+  &lt;div id="uVelocityCanvas"&gt;&lt;/div&gt;
+  &lt;div id="vVelocityCanvas"&gt;&lt;/div&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
     >
-    <p>
-      The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
-      as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
-    </p>
 
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
-      Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
-      time of the front at each position. This plot is generated in real time using FEAScript.
-      <b
-        >Please note that you may need to wait a few moments for the solution to be calculated and plotted
-        since the eikonal equation is solved iteratively with the Newton-Raphson method directly in your
-        browser.</b
-      >
-      You can find a Node.js implementation of this tutorial in the
-      <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/frontPropagationScript/solidificationFront2D"
-        >example directory</a
-      >.
+      Below are the 2D contour plots of the computed velocity magnitude \(|\mathbf{u}| = \sqrt{u^2+v^2}\),
+      horizontal velocity component \(u\), and vertical velocity component \(v\). These plots are
+      generated in real time using FEAScript.
     </p>
 
-    <!-- Container element where the solution plot will be rendered -->
-    <div id="resultsCanvas"></div>
+    <h3>Velocity Magnitude</h3>
+    <div id="velocityMagnitudeCanvas"></div>
+
+    <h3>Horizontal Velocity (\(u\))</h3>
+    <div id="uVelocityCanvas"></div>
+
+    <h3>Vertical Velocity (\(v\))</h3>
+    <div id="vVelocityCanvas"></div>
 
     <br />
-
-    <!-- Link to the worker-based implementation -->
-    <p>
-      See also
-      <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html">here</a>
-      for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness.
-    </p>
 
     <ul id="menu">
       <li><a href="https://feascript.com/index.html">Home</a></li>
@@ -297,54 +292,77 @@
 
     <script type="module">
       // Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        plotSolution,
-        printVersion,
-      } from "https://core.feascript.com/dist/feascript.esm.js";
-      // } from "https://core.feascript.com/src/index.js";
+      // import {
+      //   FEAScriptModel,
+      //   plotSolution,
+      //   printVersion,
+      // } from "https://core.feascript.com/dist/feascript.esm.js";
       // Import FEAScript library from a local directory
-      // } from "../../FEAScript-core/dist/feascript.esm.js";
-      // } from "../../FEAScript-core/src/index.js";
+      import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", () => {
-        // Enable debug logging mode
-        // logSystem("debug");
-
         // Print FEAScript version
         console.log("FEAScript version:", printVersion);
 
         // Create a new FEAScript model
         const model = new FEAScriptModel();
 
-        // Set solver configuration
-        model.setModelConfig("frontPropagationScript");
+        // Set model configuration
+        model.setModelConfig("stokesScript");
 
         // Define mesh configuration
         model.setMeshConfig({
           meshDimension: "2D",
           elementOrder: "quadratic",
           numElementsX: 12,
-          numElementsY: 8,
+          numElementsY: 6,
           maxX: 4,
           maxY: 2,
         });
 
         // Define boundary conditions
-        model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
-        model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-        model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-        model.addBoundaryCondition("3", ["constantValue", 0]); // Right
+        model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom wall (no-slip)
+        model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left wall (no-slip)
+        model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Top lid (moving)
+        model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right wall (no-slip)
 
         // Set solver method
         model.setSolverMethod("lusolve");
-        // model.setSolverMethod("frontal");
 
         // Solve the problem and get the solution
         const result = model.solve();
 
-        // Plot the solution as a 2D contour plot
-        plotSolution(model, result, "contour", "resultsCanvas");
+        // Extract velocity and pressure fields from the solution vector
+        // DOF layout: [u₀…u_{N₂−1}, v₀…v_{N₂−1}, p₀…p_{N₁−1}]
+        const totalNodesVelocity = model._stokesMetadata.totalNodesVelocity;
+        const solutionVector = result.solutionVector;
+        const uVelocity = solutionVector.slice(0, totalNodesVelocity);
+        const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
+        const velocityMagnitude = uVelocity.map((u, i) => Math.sqrt(u * u + vVelocity[i] * vVelocity[i]));
+
+        // Plot velocity magnitude as a 2D contour plot
+        plotSolution(
+          model,
+          { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
+          "contour",
+          "velocityMagnitudeCanvas"
+        );
+
+        // Plot u-velocity component as a 2D contour plot
+        plotSolution(
+          model,
+          { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
+          "contour",
+          "uVelocityCanvas"
+        );
+
+        // Plot v-velocity component as a 2D contour plot
+        plotSolution(
+          model,
+          { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
+          "contour",
+          "vVelocityCanvas"
+        );
       });
     </script>
 

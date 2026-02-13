@@ -11,16 +11,16 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat Conduction in a 2D Fin Tutorial (Multi-threaded)</title>
+    <title>FEAScript: Stokes Flow in a 2D Lid-Driven Cavity Tutorial (Multi-threaded)</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving a steady-state heat transfer problem in a 2D domain using the FEAScript library. The problem represents a typical cooling fin scenario, where the objective is to model heat conduction and understand temperature distribution under specific boundary conditions."
+      content="This tutorial demonstrates solving the steady Stokes equations in a 2D lid-driven cavity using FEAScript with a web worker. It uses Taylor-Hood (Q2-Q1) mixed finite elements for velocity-pressure coupling."
     />
     <meta
       name="keywords"
-      content="finite elements, fem, galerkin, computational mechanics, javascript, web workers, 2D heat transfer"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, stokes flow, lid-driven cavity, web workers, multi-threaded"
     />
     <meta name="viewport" content="width=device-width" />
     <!-- Link to the CSS files -->
@@ -125,7 +125,7 @@
         </ul>
       </div>
     </h1>
-    <h1>Heat Conduction in a 2D Fin Tutorial (Multi-threaded)</h1>
+    <h1>Stokes Flow in a 2D Lid-Driven Cavity Tutorial (Multi-threaded)</h1>
 
     <ul id="menu">
       <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
@@ -134,9 +134,9 @@
 
     <div class="highlight-container">
       <p>
-        This page demonstrates solving the 2D heat conduction fin problem using FEAScript in a web worker for
+        This page demonstrates solving the 2D lid-driven cavity problem using FEAScript in a web worker for
         improved browser responsiveness. For the mathematical formulation and theory, see the
-        <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">basic tutorial</a>.
+        <a href="https://feascript.com/tutorials/lid-driven-cavity-2d-stokes.html">basic tutorial</a>.
       </p>
 
       <p>
@@ -155,7 +155,7 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <h2 id="webworkerimplementation"><a name="Web Worker Implementation"></a>Web Worker Implementation</h2>
     <p>
-      The code below shows how to use FEAScript with a web worker. The solution is plotted as a 2D contour.
+      The code below shows how to use FEAScript with a web worker. The velocity field is decomposed and plotted as contour plots.
     </p>
 
     <pre class="prettyprint">
@@ -176,29 +176,50 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       await model.ping();
   
       // Configure model
-      await model.setModelConfig("heatConductionScript");
+      await model.setModelConfig("stokesScript");
+      // Mesh parameters
+      const numElementsX = 12;
+      const numElementsY = 6;
       await model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
-        numElementsX: 8,
-        numElementsY: 4,
+        numElementsX: numElementsX,
+        numElementsY: numElementsY,
         maxX: 4,
         maxY: 2,
       });
   
       // Apply boundary conditions
-      await model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
-      await model.addBoundaryCondition("1", ["symmetry"]); // Left boundary
-      await model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-      await model.addBoundaryCondition("3", ["constantTemp", 200]); // Right boundary
+      await model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom boundary
+      await model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left boundary
+      await model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Top boundary
+      await model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right boundary
   
       // Solve
       await model.setSolverMethod("lusolve");
       const result = await model.solve();
   
+      // Calculate total velocity nodes for quadratic elements
+      const nodesX = 2 * numElementsX + 1;
+      const nodesY = 2 * numElementsY + 1;
+      const totalNodesVelocity = nodesX * nodesY;
+
+      // Extract solution components
+      const solutionVector = result.solutionVector;
+      const uVelocity = solutionVector.slice(0, totalNodesVelocity);
+      const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
+      const velocityMagnitude = uVelocity.map((u, i) => Math.sqrt(u * u + vVelocity[i] * vVelocity[i]));
+
+      // Get model info for plotting
+      const modelInfo = await model.getModelInfo();
+
       // Plot results
-      const modelInfo = await model.getModelInfo(); // Get model info for plotting
-      plotSolution(modelInfo, result, "contour", "resultsCanvas");
+      plotSolution(modelInfo, { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
+        "contour", "velocityMagnitudeCanvas");
+      plotSolution(modelInfo, { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
+        "contour", "uVelocityCanvas");
+      plotSolution(modelInfo, { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
+        "contour", "vVelocityCanvas");
   
       // Terminate the worker
       model.terminate();
@@ -210,15 +231,24 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
 
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
-      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-      time using FEAScript.
+      Below are the 2D contour plots of the computed velocity magnitude \(|\mathbf{u}| = \sqrt{u^2+v^2}\),
+      horizontal velocity component \(u\), and vertical velocity component \(v\). These plots are
+      generated in real time using FEAScript.
     </p>
 
     <div id="loading">
       <div class="spinner"></div>
       Solving...
     </div>
-    <div id="resultsCanvas"></div>
+
+    <h3>Velocity Magnitude</h3>
+    <div id="velocityMagnitudeCanvas"></div>
+
+    <h3>Horizontal Velocity (\(u\))</h3>
+    <div id="uVelocityCanvas"></div>
+
+    <h3>Vertical Velocity (\(v\))</h3>
+    <div id="vVelocityCanvas"></div>
 
     <ul id="menu">
       <li><a href="https://feascript.com/index.html">Home</a></li>
@@ -229,13 +259,11 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       //Import FEAScript library from GitHub
       import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
 
-      // KNOWN BUG: The bundled ESM version has issues with Web Workers due to path resolution problems.
-      // Web Workers cannot be properly initialized when importing from the bundled file.
-      //import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
-
-      //Import FEAScript library from a local directory
-      // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
-
+      //Data Layer
+      if (typeof window.dataLayer === 'undefined') {
+        window.dataLayer = [];
+      }
+      
       window.addEventListener("DOMContentLoaded", async () => {
         // Show loading indicator
         document.getElementById("loading").style.display = "block";
@@ -250,23 +278,25 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         await model.ping();
 
         // Set solver configuration
-        await model.setModelConfig("heatConductionScript");
+        await model.setModelConfig("stokesScript");
 
         // Define mesh configuration
+        const numElementsX = 12;
+        const numElementsY = 6;
         await model.setMeshConfig({
           meshDimension: "2D",
           elementOrder: "quadratic",
-          numElementsX: 8,
-          numElementsY: 4,
+          numElementsX: numElementsX,
+          numElementsY: numElementsY,
           maxX: 4,
           maxY: 2,
         });
 
         // Define boundary conditions
-        await model.addBoundaryCondition("0", ["constantTemp", 200]);
-        await model.addBoundaryCondition("1", ["symmetry"]);
-        await model.addBoundaryCondition("2", ["convection", 1, 20]);
-        await model.addBoundaryCondition("3", ["constantTemp", 200]);
+        await model.addBoundaryCondition("0", ["constantVelocity", 0, 0]);
+        await model.addBoundaryCondition("1", ["constantVelocity", 0, 0]);
+        await model.addBoundaryCondition("2", ["constantVelocity", 1, 0]);
+        await model.addBoundaryCondition("3", ["constantVelocity", 0, 0]);
 
         // Set solver method
         await model.setSolverMethod("lusolve");
@@ -274,14 +304,32 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         // Solve the problem and get the solution
         const result = await model.solve();
 
+        // Calculate totalNodesVelocity manually as it is not exposed by worker getModelInfo
+        const nodesX = 2 * numElementsX + 1;
+        const nodesY = 2 * numElementsY + 1;
+        const totalNodesVelocity = nodesX * nodesY;
+
+        // Extract velocity and pressure fields from the solution vector
+        const solutionVector = result.solutionVector;
+        const uVelocity = solutionVector.slice(0, totalNodesVelocity);
+        const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
+        const velocityMagnitude = uVelocity.map((u, i) => Math.sqrt(u * u + vVelocity[i] * vVelocity[i]));
+
         // Get model info for plotting
         const modelInfo = await model.getModelInfo();
 
         // Hide loading indicator
         document.getElementById("loading").style.display = "none";
 
-        // Plot the solution as a 2D contour plot
-        plotSolution(modelInfo, result, "contour", "resultsCanvas");
+        // Plot results
+        plotSolution(modelInfo, { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
+          "contour", "velocityMagnitudeCanvas");
+        
+        plotSolution(modelInfo, { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
+          "contour", "uVelocityCanvas");
+
+        plotSolution(modelInfo, { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
+          "contour", "vVelocityCanvas");
 
         // Terminate the worker
         model.terminate();

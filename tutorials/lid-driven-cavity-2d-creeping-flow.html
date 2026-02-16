@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>FEAScript: Stokes Flow in a 2D Lid-Driven Cavity Tutorial</title>
+    <title>FEAScript: Creeping Flow in a 2D Lid-Driven Cavity Tutorial</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -125,7 +125,7 @@
         </ul>
       </div>
     </h1>
-    <h1>Stokes Flow in a 2D Lid-Driven Cavity Tutorial</h1>
+    <h1>Creeping Flow in a 2D Lid-Driven Cavity Tutorial</h1>
 
     <ul id="menu">
       <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
@@ -196,7 +196,7 @@
 
       // Create and configure model
       const model = new FEAScriptModel();
-      model.setModelConfig("stokesScript");
+      model.setModelConfig("creepingFlowScript");
       model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
@@ -217,7 +217,7 @@
       const result = model.solve();
 
       // Extract velocity and pressure fields from the solution vector
-      const totalNodesVelocity = model._stokesMetadata.totalNodesVelocity;
+      const totalNodesVelocity = model._creepingFlowMetadata.totalNodesVelocity;
       const solutionVector = result.solutionVector;
       const uVelocity = solutionVector.slice(0, totalNodesVelocity);
       const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
@@ -308,7 +308,7 @@
         const model = new FEAScriptModel();
 
         // Set model configuration
-        model.setModelConfig("stokesScript");
+        model.setModelConfig("creepingFlowScript");
 
         // Define mesh configuration
         model.setMeshConfig({
@@ -334,7 +334,7 @@
 
         // Extract velocity and pressure fields from the solution vector
         // DOF layout: [u₀…u_{N₂−1}, v₀…v_{N₂−1}, p₀…p_{N₁−1}]
-        const totalNodesVelocity = model._stokesMetadata.totalNodesVelocity;
+        const totalNodesVelocity = model._creepingFlowMetadata.totalNodesVelocity;
         const solutionVector = result.solutionVector;
         const uVelocity = solutionVector.slice(0, totalNodesVelocity);
         const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);

@@ -1,0 +1,559 @@
+<!doctype html>
+
+<!--
+  ════════════════════════════════════════════════════════════════
+   FEAScript Website
+   Lightweight Finite Element Simulation in JavaScript
+   Version: 0.2.0 | https://feascript.com
+   CC BY 4.0 License © 2023–2026 FEAScript
+  ════════════════════════════════════════════════════════════════
+-->
+
+<html lang="en">
+  <head>
+    <title>FEAScript: Heat Conduction in a Rectangle with a Hole</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="Responsive FEAScript tutorial: solve 2D heat conduction on a rectangle-with-hole Gmsh mesh directly in the browser with configurable boundary conditions."
+    />
+    <meta
+      name="description"
+      content="Interactive FEAScript tutorial for steady-state 2D heat conduction on a rectangle-with-hole Gmsh mesh. Configure boundary conditions and visualize temperature contours instantly in the browser."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+    <style>
+      .simulation-layout {
+        display: grid;
+        gap: 16px;
+        max-width: 1200px;
+        margin: 0 auto;
+        grid-template-columns: 1fr;
+      }
+
+      .control-card {
+        border: 1px solid #d9d9d9;
+        border-radius: 12px;
+        padding: 14px;
+        background: #fff;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+      }
+
+      .boundary-row {
+        border: 1px solid #e6e6e6;
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background: #fafafa;
+      }
+
+      .boundary-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .field-group {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .field-group label {
+        font-size: 95%;
+      }
+
+      .field-group select,
+      .field-group input {
+        width: 100%;
+        font-size: 16px;
+        padding: 8px;
+      }
+
+      .solve-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      #solveBtn {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 12px;
+      }
+
+      #statusText,
+      #timeDisplay {
+        font-weight: bold;
+      }
+
+      #resultsCanvas {
+        width: 100%;
+        min-height: 420px;
+      }
+
+      .mobile-note {
+        font-size: 95%;
+      }
+
+      .mesh-figure {
+        max-width: 1200px;
+        margin: 0 auto 12px;
+      }
+
+      .mesh-figure img {
+        width: 100%;
+        border: 1px solid #e6e6e6;
+        border-radius: 10px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .mesh-panel {
+        display: none;
+      }
+
+      .mesh-panel.is-open {
+        display: block;
+      }
+
+      .toggle-mesh-btn {
+        width: 100%;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 10px 12px;
+      }
+
+      @media screen and (min-width: 740px) {
+        .field-group {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .solve-row {
+          grid-template-columns: auto 1fr;
+          align-items: center;
+        }
+      }
+
+      @media screen and (min-width: 980px) {
+        .simulation-layout {
+          grid-template-columns: minmax(340px, 420px) 1fr;
+          align-items: start;
+          margin: 0;
+        }
+
+        #resultsCanvas {
+          min-height: 520px;
+        }
+      }
+    </style>
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
+
+  <body>
+    <h1 class="top">
+      <a href="../index.html">
+        <img
+          src="../assets/feascript-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+      <div class="social-icons-top-right">
+        <ul>
+          <li>
+            <a href="https://blog.feascript.com/" title="FEAScript blog">
+              <img
+                src="../assets/blog-icon-feascript.png"
+                alt="Blog icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+              <img
+                src="../assets/youtube-icon-feascript.svg"
+                alt="YouTube icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+              <img
+                src="../assets/linkedin-icon-feascript.png"
+                alt="LinkedIn icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+              <img
+                src="../assets/discord-icon-feascript.png"
+                alt="Discord icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+              <img
+                src="../assets/github-icon-feascript.png"
+                alt="GitHub icon"
+                style="height: 20px; vertical-align: middle"
+              />
+              <span
+                id="github-stars"
+                style="
+                  font-size: 0.9em;
+                  margin-left: 5px;
+                  vertical-align: middle;
+                  border: 1px solid #ddd;
+                  border-radius: 4px;
+                  padding: 1px 5px;
+                  background-color: #f8f8f8;
+                "
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </h1>
+
+    <h1>Heat Conduction in a Rectangle with a Hole</h1>
+
+    <div class="highlight-container">
+      <p>
+        This interactive FEAScript demo computes steady-state 2D heat conduction on a rectangle-with-hole mesh
+        generated in Gmsh (~4k nodes). Configure boundary conditions, click Solve, and instantly visualize
+        high-resolution temperature contours directly in your browser.
+      </p>
+    </div>
+
+    <p class="mobile-note">
+      Boundary tags in this mesh are: <strong>0</strong> bottom, <strong>1</strong> right,
+      <strong>2</strong> top, <strong>3</strong> left, <strong>4</strong> hole. Units: temperature in &deg;C,
+      h/k in 1/m.
+    </p>
+    <div class="simulation-layout">
+      <section class="control-card">
+        <h2>Boundary Conditions</h2>
+        <div id="boundaryControls"></div>
+        <div class="solve-row">
+          <button id="solveBtn" disabled>Solve</button>
+          <div>
+            <div id="statusText">Loading mesh...</div>
+            <div id="timeDisplay"></div>
+          </div>
+        </div>
+        <div id="loading"><span class="spinner"></span>Running FE solve...</div>
+      </section>
+
+      <section class="control-card">
+        <h2>Temperature Contour</h2>
+        <div id="resultsCanvas"></div>
+      </section>
+    </div>
+
+    <section class="control-card">
+      <button id="toggleMeshBtn" class="toggle-mesh-btn">Show mesh</button>
+    </section>
+
+    <section class="control-card mesh-figure mesh-panel" id="meshPanel">
+      <h2>Mesh Preview</h2>
+      <img
+        src="../assets/rect-with-hole-quad.png"
+        alt="Quadrilateral Gmsh mesh of a rectangle with a central hole"
+        loading="lazy"
+      />
+      <figcaption class="mobile-note">Mesh file: rect_with_hole_quad.msh (Gmsh quadrilaterals).</figcaption>
+    </section>
+
+    <ul id="menu">
+      <li><a href="https://feascript.com/index.html">Home</a></li>
+      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+    </ul>
+
+    <script type="module">
+      import {
+        FEAScriptModel,
+        importGmshQuadTri,
+        plotInterpolatedSolution,
+      } from "https://core.feascript.com/dist/feascript.esm.js";
+      // import {
+      //   FEAScriptModel,
+      //   plotInterpolatedSolution,
+      //   importGmshQuadTri,
+      //   printVersion,
+      // } from "../../FEAScript-core/src/index.js";
+
+      const MESH_LOCAL_URL = "./rect_with_hole_quad.msh";
+
+      const boundaries = [
+        { id: "0", name: "Bottom" },
+        { id: "1", name: "Right" },
+        { id: "2", name: "Top" },
+        { id: "3", name: "Left" },
+        { id: "4", name: "Hole" },
+      ];
+
+      const defaultBoundaryState = {
+        0: { type: "constantTemp", temp: 220, hOverK: 1, ambient: 20 },
+        1: { type: "constantTemp", temp: 120, hOverK: 1, ambient: 20 },
+        2: { type: "convection", temp: 200, hOverK: 1.2, ambient: 20 },
+        3: { type: "symmetry", temp: 200, hOverK: 1, ambient: 20 },
+        4: { type: "convection", temp: 200, hOverK: 2, ambient: 20 },
+      };
+
+      const boundaryControlsEl = document.getElementById("boundaryControls");
+      const solveBtn = document.getElementById("solveBtn");
+      const statusText = document.getElementById("statusText");
+      const loadingEl = document.getElementById("loading");
+      const timeDisplay = document.getElementById("timeDisplay");
+      const toggleMeshBtn = document.getElementById("toggleMeshBtn");
+      const meshPanel = document.getElementById("meshPanel");
+
+      let parsedMesh = null;
+
+      function renderBoundaryControls() {
+        boundaryControlsEl.innerHTML = "";
+
+        boundaries.forEach((boundary) => {
+          const state = defaultBoundaryState[boundary.id];
+
+          const row = document.createElement("div");
+          row.className = "boundary-row";
+          row.dataset.boundaryId = boundary.id;
+
+          const title = document.createElement("div");
+          title.className = "boundary-title";
+          title.textContent = `${boundary.name} (tag ${boundary.id})`;
+
+          const fields = document.createElement("div");
+          fields.className = "field-group";
+
+          const typeLabel = document.createElement("label");
+          typeLabel.textContent = "Condition type";
+          const typeSelect = document.createElement("select");
+          typeSelect.className = "bc-type";
+          typeSelect.innerHTML = `
+            <option value="constantTemp">Constant Temp.</option>
+            <option value="convection">Convection</option>
+            <option value="symmetry">Symmetry</option>
+          `;
+          typeSelect.value = state.type;
+          typeLabel.appendChild(typeSelect);
+
+          const valueFields = document.createElement("div");
+          valueFields.className = "bc-values";
+
+          fields.appendChild(typeLabel);
+          fields.appendChild(valueFields);
+
+          row.appendChild(title);
+          row.appendChild(fields);
+          boundaryControlsEl.appendChild(row);
+
+          typeSelect.addEventListener("change", () => {
+            renderValueInputs(row, typeSelect.value, state);
+          });
+
+          renderValueInputs(row, typeSelect.value, state);
+        });
+      }
+
+      function renderValueInputs(row, type, state) {
+        const valueFields = row.querySelector(".bc-values");
+        valueFields.innerHTML = "";
+
+        if (type === "constantTemp") {
+          const tempLabel = document.createElement("label");
+          tempLabel.textContent = "Temperature (°C)";
+          const tempInput = document.createElement("input");
+          tempInput.type = "number";
+          tempInput.className = "bc-temp";
+          tempInput.value = state.temp;
+          tempLabel.appendChild(tempInput);
+          valueFields.appendChild(tempLabel);
+          return;
+        }
+
+        if (type === "convection") {
+          const hkLabel = document.createElement("label");
+          hkLabel.textContent = "h/k (1/m)";
+          const hkInput = document.createElement("input");
+          hkInput.type = "number";
+          hkInput.step = "any";
+          hkInput.className = "bc-hk";
+          hkInput.value = state.hOverK;
+          hkLabel.appendChild(hkInput);
+
+          const ambientLabel = document.createElement("label");
+          ambientLabel.textContent = "Ambient temperature (°C)";
+          const ambientInput = document.createElement("input");
+          ambientInput.type = "number";
+          ambientInput.className = "bc-ambient";
+          ambientInput.value = state.ambient;
+          ambientLabel.appendChild(ambientInput);
+
+          valueFields.appendChild(hkLabel);
+          valueFields.appendChild(ambientLabel);
+        }
+      }
+
+      function readBoundaryConditions() {
+        const rows = Array.from(document.querySelectorAll(".boundary-row"));
+        const conditions = [];
+        let hasConstantTemp = false;
+
+        for (const row of rows) {
+          const boundaryId = row.dataset.boundaryId;
+          const type = row.querySelector(".bc-type")?.value;
+
+          if (type === "constantTemp") {
+            hasConstantTemp = true;
+            const temp = Number(row.querySelector(".bc-temp")?.value);
+            if (!Number.isFinite(temp)) {
+              throw new Error(`Invalid temperature value on boundary tag ${boundaryId}.`);
+            }
+            conditions.push({ boundaryId, condition: ["constantTemp", temp] });
+            continue;
+          }
+
+          if (type === "convection") {
+            const hOverK = Number(row.querySelector(".bc-hk")?.value);
+            const ambient = Number(row.querySelector(".bc-ambient")?.value);
+            if (!Number.isFinite(hOverK) || !Number.isFinite(ambient)) {
+              throw new Error(`Invalid convection values on boundary tag ${boundaryId}.`);
+            }
+            conditions.push({ boundaryId, condition: ["convection", hOverK, ambient] });
+            continue;
+          }
+
+          conditions.push({ boundaryId, condition: ["symmetry"] });
+        }
+
+        if (!hasConstantTemp) {
+          throw new Error("At least one boundary must use constant temperature to anchor the solution.");
+        }
+
+        return conditions;
+      }
+
+      async function loadMesh() {
+        const response = await fetch(MESH_LOCAL_URL);
+        if (!response.ok) {
+          throw new Error(`Unable to load local mesh file: ${response.status} ${response.statusText}`);
+        }
+        const meshContent = await response.text();
+
+        const meshFile = new File([meshContent], "rect_with_hole_quad.msh");
+        parsedMesh = await importGmshQuadTri(meshFile);
+      }
+
+      async function solveAndPlot() {
+        if (!parsedMesh) {
+          statusText.textContent = "Mesh is not loaded yet.";
+          return;
+        }
+
+        loadingEl.style.display = "block";
+        solveBtn.disabled = true;
+        statusText.textContent = "Solving...";
+        timeDisplay.textContent = "";
+
+        try {
+          const model = new FEAScriptModel();
+          model.setModelConfig("heatConductionScript");
+          model.setMeshConfig({
+            parsedMesh,
+            meshDimension: "2D",
+            elementOrder: "linear",
+          });
+
+          const conditions = readBoundaryConditions();
+          conditions.forEach(({ boundaryId, condition }) => {
+            model.addBoundaryCondition(boundaryId, condition);
+          });
+
+          model.setSolverMethod("lusolve");
+          const startTime = performance.now();
+          const result = model.solve();
+          const endTime = performance.now();
+
+          plotInterpolatedSolution(model, result, "contour", "resultsCanvas");
+
+          const elapsed = ((endTime - startTime) / 1000).toFixed(3);
+          statusText.textContent = "Solved successfully.";
+          timeDisplay.textContent = `Solve time: ${elapsed} s`;
+        } catch (error) {
+          statusText.textContent = `Error: ${error.message}`;
+        } finally {
+          loadingEl.style.display = "none";
+          solveBtn.disabled = false;
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        renderBoundaryControls();
+
+        try {
+          await loadMesh();
+          statusText.textContent = "Configure boundary conditions and click Solve";
+          solveBtn.disabled = false;
+        } catch (error) {
+          statusText.textContent = `Error loading mesh: ${error.message}`;
+          solveBtn.disabled = true;
+        }
+
+        solveBtn.addEventListener("click", solveAndPlot);
+
+        if (toggleMeshBtn && meshPanel) {
+          toggleMeshBtn.addEventListener("click", () => {
+            const isOpen = meshPanel.classList.toggle("is-open");
+            toggleMeshBtn.textContent = isOpen ? "Hide mesh" : "Show mesh";
+            if (isOpen) {
+              meshPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          });
+        }
+      });
+    </script>
+
+    <footer>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    </footer>
+
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
+    </script>
+  </body>
+</html>

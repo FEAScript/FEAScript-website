@@ -377,6 +377,13 @@ mjx-container {
   margin-bottom: 2px;
 }
 
+.tutorial-description {
+  font-size: 0.875em;
+  color: #666;
+  margin: 3px 0 0 0;
+  line-height: 1.4;
+}
+
 .tutorials-list .badge {
   display: inline-flex;
   align-items: center;

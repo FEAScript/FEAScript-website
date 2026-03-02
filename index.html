@@ -208,6 +208,27 @@
       </p>
     </div>
 
+    <div style="margin-top: 1em"></div>
+    <p class="blue-label" style="margin-bottom: 0">INDUSTRY CASE STUDY</p>
+    <div class="blue-box" style="margin-top: 5px">
+      <p style="display: flex; align-items: center">
+        <img
+          src="assets/better-building-logo.png"
+          alt="BetterBuilding Logo"
+          style="height: 30px; margin-right: 10px; transform: translateY(-1px)"
+        />
+        <span>
+          <a href="https://betterbuilding.io/">Better Building</a> leverages FEAScript to power an online
+          <a
+            href="https://docs.betterbuilding.io/sign-up-and-plans/news-and-updates/2025/introducing-our-free-heat-transfer-simulator"
+          >
+            Heat Transfer Simulator</a
+          >
+          for architects and engineers.
+        </span>
+      </p>
+    </div>
+
     <div style="margin-top: 0.5em"></div>
     <h2 id="whyusefeascript"><a name="Why Use FEAScript"></a>Why Use FEAScript</h2>
 
@@ -293,16 +314,89 @@
       <a href="https://liberapay.com/FEAScript/donate">Liberapay</a>
     </div>
 
-    <p>
-      <strong>Quick Start:</strong> The example below runs a real simulation — steady-state heat conduction in a 2D rectangular fin with a circular hole, solved using a Gmsh-generated mesh. Add a
-      <code>&lt;div id="resultsCanvas"&gt;&lt;/div&gt;</code> container to your page and drop in the snippet. See the <a href="#tutorials">tutorials section</a> for more examples.
-    </p>
+    <p class="blue-label" style="margin-bottom: 0">QUICK START</p>
+    <div class="blue-box" style="margin-top: 5px">
+      <p>
+        The example below demonstrates a simulation workflow: steady-state heat conduction in a 2D rectangular
+        fin with a circular hole, solved using a Gmsh-generated mesh. Create an HTML file with the code below
+        to run the simulation. See the <a href="#tutorials">tutorials section</a> for more examples.
+      </p>
+    </div>
 
     <div class="code-block-wrapper">
       <button class="copy-code-btn" id="copy-qs-btn" title="Copy code" onclick="copyQuickstartCode()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
         <span>Copy</span>
       </button>
+      <div class="quickstart-overlay-actions">
+        <a
+          href="https://www.youtube.com/watch?v=35_aqDGPq50"
+          class="btn-video-quickstart"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="2" y="5" width="20" height="14" rx="4" ry="4"></rect>
+            <polygon points="10 9 16 12 10 15 10 9"></polygon>
+          </svg>
+          Watch tutorial<img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+            alt="External Link Icon"
+            style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px"
+          />
+        </a>
+        <a
+          href="https://codepen.io/FEAScript/pen/ByzVveQ"
+          class="btn-codepen btn-codepen-quickstart"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Run on CodePen<img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+            alt="External Link Icon"
+            style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px"
+          />
+        </a>
+      </div>
       <pre class="prettyprint" id="quickstart-code">
 &lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
@@ -349,17 +443,13 @@
       >
     </div>
 
-    <div class="quickstart-actions">
+    <!-- <div class="quickstart-actions">
       <p class="quickstart-note">
         💡 The mesh is hosted on
         <a href="https://gist.github.com/nikoscham/0c5a78922a16111ceef42de54fc631ea">GitHub Gist</a> — fork it
         and replace the URL with your own <code>.msh</code> file to simulate a different geometry.
       </p>
-      <a href="https://codepen.io/FEAScript/pen/ByzVveQ" class="btn-codepen" target="_blank" rel="noopener">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        Run it on CodePen<img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg" alt="External Link Icon" style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px" />
-      </a>
-    </div>
+    </div> -->
 
     <script>
       function copyQuickstartCode() {
@@ -367,7 +457,7 @@
         const btn = document.getElementById("copy-qs-btn");
         navigator.clipboard.writeText(pre.innerText.trim()).then(() => {
           btn.classList.add("copied");
-          btn.querySelector("span").textContent = "Copied!";
+          btn.querySelector("span").textContent = "Copied";
           setTimeout(() => {
             btn.classList.remove("copied");
             btn.querySelector("span").textContent = "Copy";
@@ -379,7 +469,7 @@
     <p class="notice-dev">
       🚧
       <strong>FEAScript is currently under heavy development with new features being added regularly</strong>.
-      Interested in contributing? Check out our
+      <br />Interested in contributing? Check out our
       <a href="https://github.com/FEAScript/FEAScript-core/blob/main/CONTRIBUTING.md"
         >contribution guidelines</a
       >
@@ -579,7 +669,12 @@
       <li>
         <div class="tutorial-card-content">
           <span class="tutorial-name">Advection-Diffusion with Gaussian Source</span>
-          <p class="tutorial-description"><em>1D steady-state scalar transport governed by the advection-diffusion equation with a localized Gaussian source term</em></p>
+          <p class="tutorial-description">
+            <em
+              >1D steady-state scalar transport governed by the advection-diffusion equation with a localized
+              Gaussian source term</em
+            >
+          </p>
           <div class="tutorial-card-badges">
             <a href="https://feascript.com/tutorials/advection-diffusion-1d.html" class="badge badge-basic"
               >Basic HTML</a
@@ -588,7 +683,13 @@
               >CodePen<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
-                style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
             /></a>
             <a
               href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/generalFormPDEScript/advection-diffusion-1d.jsnb"
@@ -596,7 +697,13 @@
               >Scribbler<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
-                style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
             /></a>
           </div>
         </div>
@@ -610,15 +717,24 @@
       <li>
         <div class="tutorial-card-content">
           <span class="tutorial-name">Heat Conduction in a 2D Fin</span>
-          <p class="tutorial-description"><em>2D steady-state heat conduction in a cooling fin with mixed boundary conditions including constant temperature, symmetry, and convective cooling</em></p>
+          <p class="tutorial-description">
+            <em
+              >2D steady-state heat conduction in a cooling fin with mixed boundary conditions including
+              constant temperature, symmetry, and convective cooling</em
+            >
+          </p>
           <div class="tutorial-card-badges">
             <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html" class="badge badge-basic"
               >Basic HTML</a
             >
-            <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html" class="badge badge-mt"
+            <a
+              href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html"
+              class="badge badge-mt"
               >Multi-threaded</a
             >
-            <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html" class="badge badge-gmsh"
+            <a
+              href="https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html"
+              class="badge badge-gmsh"
               >Gmsh mesh</a
             >
             <a
@@ -630,7 +746,13 @@
               >CodePen<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
-                style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
             /></a>
             <a
               href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/heatConductionScript/heat-conduction-2d-fin.jsnb"
@@ -638,7 +760,13 @@
               >Scribbler<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
-                style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
             /></a>
           </div>
         </div>
@@ -652,7 +780,12 @@
       <li>
         <div class="tutorial-card-content">
           <span class="tutorial-name">Heat Conduction Through a Wall</span>
-          <p class="tutorial-description"><em>1D steady-state heat conduction across a wall with convection boundary condition at one end and constant temperature at the other</em></p>
+          <p class="tutorial-description">
+            <em
+              >1D steady-state heat conduction across a wall with convection boundary condition at one end and
+              constant temperature at the other</em
+            >
+          </p>
           <div class="tutorial-card-badges">
             <a href="https://feascript.com/tutorials/heat-conduction-1d-wall.html" class="badge badge-basic"
               >Basic HTML</a
@@ -664,7 +797,13 @@
               >CodePen<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
-                style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
             /></a>
             <a
               href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/heatConductionScript/heat-conduction-1d-wall.jsnb"
@@ -672,7 +811,13 @@
               >Scribbler<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
-                style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
             /></a>
           </div>
         </div>
@@ -686,7 +831,12 @@
       <li>
         <div class="tutorial-card-content">
           <span class="tutorial-name">Creeping Flow on a Lid-Driven 2D Cavity</span>
-          <p class="tutorial-description"><em>Stokes flow in a square 2D cavity driven by a moving lid, with velocity and pressure fields resolved</em></p>
+          <p class="tutorial-description">
+            <em
+              >Stokes flow in a square 2D cavity driven by a moving lid, with velocity and pressure fields
+              resolved</em
+            >
+          </p>
           <div class="tutorial-card-badges">
             <a
               href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow.html"
@@ -702,7 +852,13 @@
               >CodePen<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
-                style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
             /></a>
           </div>
         </div>
@@ -716,19 +872,32 @@
       <li>
         <div class="tutorial-card-content">
           <span class="tutorial-name">Solidification Front Propagation in a 2D Domain</span>
-          <p class="tutorial-description"><em>Transient simulation of a solidification front advancing through a 2D domain using the eikonal equation</em></p>
+          <p class="tutorial-description">
+            <em
+              >Transient simulation of a solidification front advancing through a 2D domain using the eikonal
+              equation</em
+            >
+          </p>
           <div class="tutorial-card-badges">
             <a href="https://feascript.com/tutorials/solidification-front-2d.html" class="badge badge-basic"
               >Basic HTML</a
             >
-            <a href="https://feascript.com/tutorials/solidification-front-2d-worker.html" class="badge badge-mt"
+            <a
+              href="https://feascript.com/tutorials/solidification-front-2d-worker.html"
+              class="badge badge-mt"
               >Multi-threaded</a
             >
             <a href="https://codepen.io/FEAScript/pen/dPMxaLq" class="badge badge-codepen"
               >CodePen<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
-                style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
             /></a>
             <a
               href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/frontPropagationScript/solidification-front-2d.jsnb"
@@ -736,7 +905,13 @@
               >Scribbler<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
                 alt="External Link Icon"
-                style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
             /></a>
           </div>
         </div>

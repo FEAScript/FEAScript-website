@@ -102,7 +102,6 @@ a {
 
 #menu li a:hover {
   color: #333;
-  transform: translateY(-2px);
   cursor: default;
   transition: transform 0.2s;
   display: inline-block;
@@ -364,7 +363,7 @@ mjx-container {
 
 .tutorials-list li:hover {
   box-shadow: 0 5px 18px rgba(0, 0, 0, 0.11);
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
 .tutorial-card-content {
@@ -420,8 +419,9 @@ mjx-container {
 }
 
 .tutorials-list .badge:hover {
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
   cursor: default;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
 /* Badge variants */
@@ -563,7 +563,6 @@ mjx-container {
 
 .btn-codepen:hover {
   background: #35ba5f;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
@@ -609,7 +608,6 @@ mjx-container {
 
 .btn-video-quickstart:hover {
   background: #e60000;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
   color: #fff;
 }
@@ -769,16 +767,6 @@ mjx-container {
   opacity: 0.8;
   transform: scale(1.1);
   transition: all 0.2s ease;
-}
-
-/* Sponsor link styles */
-.sponsor-link {
-  display: inline-block;
-  transition: transform 0.2s;
-}
-
-.sponsor-link:hover {
-  transform: translateY(-2px);
 }
 
 #github-stars {

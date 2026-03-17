@@ -477,9 +477,9 @@ mjx-container {
   justify-content: center;
   gap: 0.5em;
   padding: 8px 16px;
-  margin: -20px -20px 0;
+  margin: -20px 0px 0;
   background: #f4f4f5;
-  border-bottom: 1px solid #e0e0e0;
+  /* border-bottom: 1px solid #e0e0e0; */
   font-size: 0.9em;
   color: #555;
 }
@@ -576,22 +576,14 @@ mjx-container {
   color: #2e7d32;
 }
 
-/* Quick-start actions bar */
-.quickstart-actions {
+.quickstart-overlay-actions {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 14px;
-  max-width: 1000px;
-  margin: 10px 0 1.5em;
-}
-
-.quickstart-note {
-  margin: 0;
-  flex: 1;
-  min-width: 200px;
-  font-size: 0.9em;
-  color: #555;
+  gap: 8px;
+  z-index: 9;
 }
 
 .btn-codepen {
@@ -618,22 +610,12 @@ mjx-container {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
-.quickstart-overlay-actions {
-  position: absolute;
-  bottom: 10px;
-  right: 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  z-index: 9;
-}
-
 .btn-codepen-quickstart {
   padding: 4px 10px;
   font-size: 0.8em;
   border-radius: 6px;
   background: #47cf73;
-  border: 1px solid #3dbb65;
+  border: 1px solid #47cf73;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   color: #111;
 }
@@ -647,7 +629,7 @@ mjx-container {
   font-weight: 600;
   border-radius: 6px;
   background: #ff0000;
-  border: 1px solid #cc0000;
+  border: 1px solid #ff0000;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   color: #fff;
   text-decoration: none;
@@ -659,7 +641,7 @@ mjx-container {
 }
 
 .btn-video-quickstart:hover {
-  background: #e60000;
+  background: #ff0000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
   color: #fff;
 }

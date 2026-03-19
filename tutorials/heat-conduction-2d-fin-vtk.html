@@ -1,0 +1,290 @@
+<!doctype html>
+
+<!--
+  ════════════════════════════════════════════════════════════════
+   FEAScript Website
+   Lightweight Finite Element Simulation in JavaScript
+   Version: 0.3.0 (RC) | https://feascript.com
+   CC BY 4.0 License © 2023–2026 FEAScript
+  ════════════════════════════════════════════════════════════════
+-->
+
+<html>
+  <head>
+    <title>FEAScript: Heat Conduction in a 2D Fin (VTK.js) Tutorial</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="This example demonstrates solving a steady-state heat transfer problem in a 2D domain using the FEAScript library with VTK.js visualization. The problem represents a typical cooling fin scenario."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, 2D heat transfer, vtk.js"
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Import the Math.js library for mathematical operations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+    <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+    <!-- VTK.js import map -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@kitware/vtk.js/": "https://cdn.jsdelivr.net/npm/@kitware/vtk.js@32.12.0/",
+          "gl-matrix": "https://esm.sh/v135/gl-matrix@3.4.3",
+          "d3-scale": "https://esm.sh/v135/d3-scale@4.0.2",
+          "fast-deep-equal": "https://esm.sh/v135/fast-deep-equal@3.1.3",
+          "seedrandom": "https://esm.sh/v135/seedrandom@3.0.5",
+          "spark-md5": "https://esm.sh/v135/spark-md5",
+          "fflate": "https://esm.sh/v135/fflate",
+          "utif": "https://esm.sh/v135/utif",
+          "webworker-promise": "https://esm.sh/v135/webworker-promise",
+          "xmlbuilder2": "https://esm.sh/v135/xmlbuilder2",
+          "globalthis": "data:text/javascript,export default function(){return globalThis}"
+        }
+      }
+    </script>
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
+
+  <body>
+    <h1 class="top">
+      <a href="../index.html">
+        <img
+          src="../assets/feascript-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+      <div class="social-icons-top-right">
+        <ul>
+          <li>
+            <a href="https://blog.feascript.com/" title="FEAScript blog">
+              <img
+                src="../assets/blog-icon-feascript.png"
+                alt="Blog icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+              <img
+                src="../assets/youtube-icon-feascript.svg"
+                alt="YouTube icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+              <img
+                src="../assets/linkedin-icon-feascript.png"
+                alt="LinkedIn icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+              <img
+                src="../assets/discord-icon-feascript.png"
+                alt="Discord icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+              <img
+                src="../assets/github-icon-feascript.png"
+                alt="GitHub icon"
+                style="height: 20px; vertical-align: middle"
+              />
+              <span
+                id="github-stars"
+                style="
+                  font-size: 0.9em;
+                  margin-left: 5px;
+                  vertical-align: middle;
+                  border: 1px solid #ddd;
+                  border-radius: 4px;
+                  padding: 1px 5px;
+                  background-color: #f8f8f8;
+                "
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </h1>
+    <h1>Heat Conduction in a 2D Fin — VTK.js Visualization</h1>
+
+    <div class="highlight-container">
+      <p>
+        This page demonstrates the VTK.js rendering backend for the
+        <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">Heat Conduction in a 2D Fin</a>
+        tutorial. For the full mathematical formulation, boundary condition details, and step-by-step code
+        walkthrough, please refer to the
+        <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">main tutorial</a>.
+      </p>
+    </div>
+
+    <h2>Using VTK.js Instead of Plotly</h2>
+    <p>
+      To use VTK.js for visualization, two changes are needed compared to the
+      <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">Plotly-based tutorial</a>. First,
+      add a VTK.js import map in the <code>&lt;head&gt;</code> section (instead of loading Plotly):
+    </p>
+    <pre class="prettyprint">
+&lt;script type="importmap"&gt;
+{
+  "imports": {
+    "@kitware/vtk.js/": "https://cdn.jsdelivr.net/npm/@kitware/vtk.js@32.12.0/",
+    "gl-matrix": "https://esm.sh/v135/gl-matrix@3.4.3",
+    "d3-scale": "https://esm.sh/v135/d3-scale@4.0.2",
+    "fast-deep-equal": "https://esm.sh/v135/fast-deep-equal@3.1.3",
+    "seedrandom": "https://esm.sh/v135/seedrandom@3.0.5",
+    "spark-md5": "https://esm.sh/v135/spark-md5",
+    "fflate": "https://esm.sh/v135/fflate",
+    "utif": "https://esm.sh/v135/utif",
+    "webworker-promise": "https://esm.sh/v135/webworker-promise",
+    "xmlbuilder2": "https://esm.sh/v135/xmlbuilder2",
+    "globalthis": "data:text/javascript,export default function(){return globalThis}"
+  }
+}
+&lt;/script&gt;</pre
+    >
+    <p>
+      Second, import <code>plotInterpolatedSolutionVtk</code>, <code>createColorScale</code>, and
+      <code>createContourLineOptions</code> from FEAScript instead of <code>plotSolution</code>, and use them
+      to render the results:
+    </p>
+    <pre class="prettyprint">
+import { FEAScriptModel, plotInterpolatedSolutionVtk, createColorScale,
+         createContourLineOptions, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+
+// ...model setup and solve (same as the Plotly tutorial)...
+const result = model.solve();
+
+// Plot results using VTK.js
+await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
+  colorScale: createColorScale({
+    presetName: "Cool to Warm",
+    scalarBarTitle: "Temperature",
+  }),
+  contourLines: createContourLineOptions({
+    enabled: true,
+    numberOfContours: 14,
+    lineWidth: 1.25,
+  }),
+});</pre
+    >
+
+    <h2>Results</h2>
+    <p>
+      The 2D contour plot below shows the computed temperature distribution rendered in real time using
+      FEAScript with VTK.js. The interactive canvas supports pan, zoom, and rotate.
+    </p>
+
+    <div id="resultsCanvas"></div>
+
+    <br />
+
+    <ul id="menu">
+      <li><a href="https://feascript.com/index.html">Home</a></li>
+      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+    </ul>
+
+    <script type="module">
+      // Import FEAScript library from GitHub
+      // import {
+      //   FEAScriptModel,
+      //   plotInterpolatedSolutionVtk,
+      //   createColorScale,
+      //   createContourLineOptions,
+      //   printVersion,
+      // } from "https://core.feascript.com/dist/feascript.esm.js";
+      // Import FEAScript library from a local directory
+      import {
+        FEAScriptModel,
+        plotInterpolatedSolutionVtk,
+        createColorScale,
+        createContourLineOptions,
+        printVersion,
+      } from "../../FEAScript-core/src/index.js";
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        console.log("FEAScript version:", printVersion);
+
+        const model = new FEAScriptModel();
+        model.setModelConfig("heatConductionScript");
+        model.setMeshConfig({
+          meshDimension: "2D",
+          elementOrder: "quadratic",
+          numElementsX: 8,
+          numElementsY: 4,
+          maxX: 4,
+          maxY: 2,
+        });
+
+        model.addBoundaryCondition("0", ["constantTemp", 200]);
+        model.addBoundaryCondition("1", ["symmetry"]);
+        model.addBoundaryCondition("2", ["convection", 1, 20]);
+        model.addBoundaryCondition("3", ["constantTemp", 200]);
+
+        model.setSolverMethod("lusolve");
+        const result = model.solve();
+
+        await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
+          colorScale: createColorScale({
+            presetName: "Cool to Warm",
+            scalarBarTitle: "Temperature",
+          }),
+          contourLines: createContourLineOptions({
+            enabled: true,
+            numberOfContours: 14,
+            lineWidth: 1.25,
+          }),
+        });
+      });
+    </script>
+
+    <footer>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    </footer>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+
+      // Fetch GitHub stars
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
+    </script>
+  </body>
+</html>

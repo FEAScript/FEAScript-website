@@ -216,21 +216,21 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
 
     <script type="module">
       // Import FEAScript library from GitHub
-      // import {
-      //   FEAScriptModel,
-      //   plotInterpolatedSolutionVtk,
-      //   createColorScale,
-      //   createContourLineOptions,
-      //   printVersion,
-      // } from "https://core.feascript.com/dist/feascript.esm.js";
-      // Import FEAScript library from a local directory
       import {
         FEAScriptModel,
         plotInterpolatedSolutionVtk,
         createColorScale,
         createContourLineOptions,
         printVersion,
-      } from "../../FEAScript-core/src/index.js";
+      } from "https://core.feascript.com/dist/feascript.esm.js";
+      // Import FEAScript library from a local directory
+      // import {
+      //   FEAScriptModel,
+      //   plotInterpolatedSolutionVtk,
+      //   createColorScale,
+      //   createContourLineOptions,
+      //   printVersion,
+      // } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {
         console.log("FEAScript version:", printVersion);

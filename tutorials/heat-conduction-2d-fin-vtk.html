@@ -11,7 +11,7 @@
 
 <html>
   <head>
-    <title>FEAScript: Heat Conduction in a 2D Fin (VTK.js) Tutorial</title>
+    <title>FEAScript: Heat Conduction in a 2D Fin Tutorial (VTK.js)</title>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
@@ -136,7 +136,12 @@
         </ul>
       </div>
     </h1>
-    <h1>Heat Conduction in a 2D Fin — VTK.js Visualization</h1>
+    <h1>Heat Conduction in a 2D Fin Tutorial (VTK.js)</h1>
+
+    <ul id="menu">
+      <li><a href="#usingvtkjsinsteadofplotly">Using VTK.js Instead of Plotly</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
 
     <div class="highlight-container">
       <p>
@@ -148,7 +153,7 @@
       </p>
     </div>
 
-    <h2>Using VTK.js Instead of Plotly</h2>
+    <h2 id="usingvtkjsinsteadofplotly">Using VTK.js Instead of Plotly</h2>
     <p>
       To use VTK.js for visualization, two changes are needed compared to the
       <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">Plotly-based tutorial</a>. First,
@@ -199,7 +204,7 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
 });</pre
     >
 
-    <h2>Results</h2>
+    <h2 id="results">Results</h2>
     <p>
       The 2D contour plot below shows the computed temperature distribution rendered in real time using
       FEAScript with VTK.js. The interactive canvas supports pan, zoom, and rotate.

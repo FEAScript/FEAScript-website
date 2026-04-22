@@ -294,13 +294,13 @@
     <script type="module">
       import {
         FEAScriptModel,
-        importGmshQuadTri,
+        importGmshMesh,
         plotInterpolatedSolution,
       } from "https://core.feascript.com/dist/feascript.esm.js";
       // import {
       //   FEAScriptModel,
       //   plotInterpolatedSolution,
-      //   importGmshQuadTri,
+      //   importGmshMesh,
       //   printVersion,
       // } from "../../FEAScript-core/src/index.js";
 
@@ -465,7 +465,7 @@
         const meshContent = await response.text();
 
         const meshFile = new File([meshContent], "rect_with_hole_quad.msh");
-        parsedMesh = await importGmshQuadTri(meshFile);
+        parsedMesh = await importGmshMesh(meshFile);
       }
 
       async function solveAndPlot() {

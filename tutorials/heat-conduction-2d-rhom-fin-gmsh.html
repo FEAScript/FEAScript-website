@@ -165,7 +165,7 @@
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
     // Import FEAScript library
-    import { FEAScriptModel, importGmshQuadTri, plotInterpolatedSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+    import { FEAScriptModel, importGmshMesh, plotInterpolatedSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
   
     window.addEventListener("DOMContentLoaded", async () => {
       // Print FEAScript version in the console
@@ -186,7 +186,7 @@
       model.setModelConfig("heatConductionScript");
   
       // Parse the mesh file
-      const rhom_quad = await importGmshQuadTri(meshFile);
+      const rhom_quad = await importGmshMesh(meshFile);
   
       // Define mesh configuration with the parsed rhom_quad
       model.setMeshConfig({
@@ -302,14 +302,14 @@ Mesh 2;</pre
       // Import FEAScript library from GitHub
       import {
         FEAScriptModel,
-        importGmshQuadTri,
+        importGmshMesh,
         plotInterpolatedSolution,
         printVersion,
       } from "https://core.feascript.com/dist/feascript.esm.js";
       // Import FEAScript library from a local directory
       // import {
       //   FEAScriptModel,
-      //   importGmshQuadTri,
+      //   importGmshMesh,
       //   plotInterpolatedSolution,
       //   printVersion,
       //   logSystem,
@@ -339,7 +339,7 @@ Mesh 2;</pre
         gmshModel.setModelConfig("heatConductionScript");
 
         // Parse the mesh file
-        const rhom_quad = await importGmshQuadTri(meshFile);
+        const rhom_quad = await importGmshMesh(meshFile);
 
         // Define mesh configuration with the parsed rhom_quad
         gmshModel.setMeshConfig({

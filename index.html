@@ -396,7 +396,7 @@
 &lt;body&gt;
   &lt;div id="resultsCanvas"&gt;&lt;/div&gt;
   &lt;script type="module"&gt;
-  import {FEAScriptModel, importGmshQuadTri, plotInterpolatedSolution} from "https://core.feascript.com/dist/feascript.esm.js";
+  import {FEAScriptModel, importGmshMesh, plotInterpolatedSolution} from "https://core.feascript.com/dist/feascript.esm.js";
 
   window.addEventListener("DOMContentLoaded", async () => {
     // Fetch mesh from GitHub Gist (swap the URL for any other hosted .msh file)
@@ -408,7 +408,7 @@
     const model = new FEAScriptModel();
     model.setModelConfig("heatConductionScript");
     model.setMeshConfig({
-      parsedMesh: await importGmshQuadTri(meshFile),
+      parsedMesh: await importGmshMesh(meshFile),
       meshDimension: "2D",
       elementOrder: "quadratic"
     });

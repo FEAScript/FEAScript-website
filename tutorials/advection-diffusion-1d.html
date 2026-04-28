@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <!--
   ════════════════════════════════════════════════════════════════
@@ -31,7 +31,6 @@
     <!-- Import the Plotly.js library for plotting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
     <!-- Import MathJax for writing equations -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script
       id="MathJax-script"
       async
@@ -39,6 +38,18 @@
     ></script>
     <!-- Import the run_prettify.js library for JavaScript code coloring -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <!-- Import map: remap npm bare specifiers used in FEAScript source to CDN ESM builds -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
+          "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
+          "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
+          "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+        }
+      }
+    </script>
   </head>
 
   <!-- Google tag (gtag.js) -->

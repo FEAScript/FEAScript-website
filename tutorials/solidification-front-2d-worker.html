@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <!--
   ════════════════════════════════════════════════════════════════
@@ -31,7 +31,6 @@
     <!-- Import the Plotly.js library for plotting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
     <!-- Import MathJax for writing equations -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script
       id="MathJax-script"
       async
@@ -39,6 +38,18 @@
     ></script>
     <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <!-- Import map: remap npm bare specifiers used in FEAScript source to CDN ESM builds -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
+          "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
+          "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
+          "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+        }
+      }
+    </script>
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -138,19 +149,6 @@
         worker for improved browser responsiveness. For the mathematical formulation and theory, see the
         <a href="https://feascript.com/tutorials/solidification-front-2d.html">basic tutorial</a>.
       </p>
-
-      <p>
-        <strong>⚠️ Important:</strong> Due to security restrictions, this example requires launching the
-        browser with reduced security settings, e.g.:
-      </p>
-      <pre style="background-color: #f8f9fa; padding: 8px; border-radius: 4px; overflow-x: auto">
-start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disable-site-isolation-trials</pre
-      >
-      <p>
-        These flags temporarily disable CORS restrictions that normally block a web worker from loading
-        scripts or data when running from local files. For production applications, proper CORS headers should
-        be configured on your server.
-      </p>
     </div>
 
     <h2 id="webworkerimplementation"><a name="Web Worker Implementation"></a>Web Worker Implementation</h2>
@@ -228,14 +226,10 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
     </ul>
 
     <script type="module">
-      //Import FEAScript library from GitHub
+      // Import FEAScript library from GitHub
       import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
 
-      // KNOWN BUG: The bundled ESM version has issues with Web Workers due to path resolution problems.
-      // Web Workers cannot be properly initialized when importing from the bundled file.
-      //import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
-
-      //Import FEAScript library from a local directory
+      // Import FEAScript library from a local directory
       // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
       window.addEventListener("DOMContentLoaded", async () => {

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <!--
   ════════════════════════════════════════════════════════════════
@@ -31,7 +31,6 @@
     <!-- Import the Plotly.js library for plotting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
     <!-- Import MathJax for writing equations -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script
       id="MathJax-script"
       async
@@ -39,6 +38,18 @@
     ></script>
     <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <!-- Import map: remap npm bare specifiers used in FEAScript source to CDN ESM builds -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
+          "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
+          "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
+          "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+        }
+      }
+    </script>
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -136,33 +147,33 @@
     <div class="highlight-container">
       <p>
         In this tutorial, we solve the steady Stokes flow equations inside a two-dimensional lid-driven
-        cavity. The lid-driven cavity is a classical benchmark problem in computational fluid dynamics
-        where the top wall moves at a constant horizontal velocity while the remaining walls are
-        stationary, driving a recirculating flow inside the domain.
+        cavity. The lid-driven cavity is a classical benchmark problem in computational fluid dynamics where
+        the top wall moves at a constant horizontal velocity while the remaining walls are stationary, driving
+        a recirculating flow inside the domain.
       </p>
     </div>
 
     <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
     <p>
       The steady Stokes equations for an incompressible Newtonian fluid with no body forces are: \(\nabla
-      \cdot \mathbf{u} = 0\) and \(-\mu \nabla^{2} \mathbf{u} + \nabla p = \mathbf{0}\), where
-      \(\mathbf{u} = (u,v)\) is the velocity vector, \(p\) is the pressure and \(\mu\) is the dynamic
-      viscosity. In the FEAScript implementation below, we set the viscosity coefficient to \(\mu = 1.0\).
+      \cdot \mathbf{u} = 0\) and \(-\mu \nabla^{2} \mathbf{u} + \nabla p = \mathbf{0}\), where \(\mathbf{u} =
+      (u,v)\) is the velocity vector, \(p\) is the pressure and \(\mu\) is the dynamic viscosity. In the
+      FEAScript implementation below, we set the viscosity coefficient to \(\mu = 1.0\).
     </p>
 
     <div class="center-image">
       <img src="../assets/stokes-2d-lid-driven.png" alt="2D Stokes flow schematic" width="300" />
       <p class="image-caption">
-        Schematic of the 2D lid-driven cavity: horizontal velocity (u=1) at the top edge and no-slip
-        condition (u=v=0) at the other edges.
+        Schematic of the 2D lid-driven cavity: horizontal velocity (u=1) at the top edge and no-slip condition
+        (u=v=0) at the other edges.
       </p>
     </div>
 
     <p>
       The above schematic illustrates the problem domain and outlines the associated boundary conditions. To
-      satisfy the Ladyzhenskaya&ndash;Babu&scaron;ka&ndash;Brezzi (LBB) inf-sup stability condition,
-      FEAScript uses the Taylor-Hood mixed finite element formulation. In this approach, velocity is
-      discretized with 9-node biquadratic (Q2) elements and pressure with 4-node bilinear (Q1) elements.
+      satisfy the Ladyzhenskaya&ndash;Babu&scaron;ka&ndash;Brezzi (LBB) inf-sup stability condition, FEAScript
+      uses the Taylor-Hood mixed finite element formulation. In this approach, velocity is discretized with
+      9-node biquadratic (Q2) elements and pressure with 4-node bilinear (Q1) elements.
     </p>
 
     <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
@@ -180,8 +191,8 @@
 &lt;/head&gt;</pre
     >
     <p>
-      We should then define the problem parameters, such as the model type, the mesh configuration and
-      the boundary conditions. This is performed using the FEAScript API directly in the HTML file:
+      We should then define the problem parameters, such as the model type, the mesh configuration and the
+      boundary conditions. This is performed using the FEAScript API directly in the HTML file:
     </p>
     <pre class="prettyprint">
 &lt;body&gt;
@@ -241,17 +252,17 @@
     >
     <p>
       In the boundary condition definition, the numbers at the left side (from <code>"0"</code> to
-      <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has
-      assigned numbers to the boundaries, starting from the bottom boundary and proceeding clockwise).
-      The <code>"constantVelocity"</code> condition sets the velocity components \(u\) and \(v\) at the
-      boundary nodes (the second and third arguments respectively).
+      <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has assigned
+      numbers to the boundaries, starting from the bottom boundary and proceeding clockwise). The
+      <code>"constantVelocity"</code> condition sets the velocity components \(u\) and \(v\) at the boundary
+      nodes (the second and third arguments respectively).
     </p>
     <p>
       Since the Stokes solver uses a mixed formulation, the solution vector contains all DOFs packed
-      sequentially: \([u_0, \ldots, u_{N_2-1}, \, v_0, \ldots, v_{N_2-1}, \, p_0, \ldots, p_{N_1-1}]\),
-      where \(N_2\) is the number of velocity nodes (Q2) and \(N_1\) is the number of pressure nodes
-      (Q1). The velocity components are extracted by slicing the solution vector and each field can then
-      be plotted individually using the existing <code>plotSolution</code> function.
+      sequentially: \([u_0, \ldots, u_{N_2-1}, \, v_0, \ldots, v_{N_2-1}, \, p_0, \ldots, p_{N_1-1}]\), where
+      \(N_2\) is the number of velocity nodes (Q2) and \(N_1\) is the number of pressure nodes (Q1). The
+      velocity components are extracted by slicing the solution vector and each field can then be plotted
+      individually using the existing <code>plotSolution</code> function.
     </p>
     <p>
       After solving the case, the results are shown in 2D contour plots. To visualize them, include HTML
@@ -270,8 +281,8 @@
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
       Below are the 2D contour plots of the computed velocity magnitude \(|\mathbf{u}| = \sqrt{u^2+v^2}\),
-      horizontal velocity component \(u\), and vertical velocity component \(v\). These plots are
-      generated in real time using FEAScript.
+      horizontal velocity component \(u\), and vertical velocity component \(v\). These plots are generated in
+      real time using FEAScript.
     </p>
 
     <h3>Velocity Magnitude</h3>
@@ -345,7 +356,7 @@
           model,
           { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
           "contour",
-          "velocityMagnitudeCanvas"
+          "velocityMagnitudeCanvas",
         );
 
         // Plot u-velocity component as a 2D contour plot
@@ -353,7 +364,7 @@
           model,
           { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
           "contour",
-          "uVelocityCanvas"
+          "uVelocityCanvas",
         );
 
         // Plot v-velocity component as a 2D contour plot
@@ -361,7 +372,7 @@
           model,
           { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
           "contour",
-          "vVelocityCanvas"
+          "vVelocityCanvas",
         );
       });
     </script>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <!--
   ════════════════════════════════════════════════════════════════
@@ -31,7 +31,6 @@
     <!-- Import the Plotly.js library for plotting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
     <!-- Import MathJax for writing equations -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script
       id="MathJax-script"
       async
@@ -39,6 +38,18 @@
     ></script>
     <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <!-- Import map: remap npm bare specifiers used in FEAScript source to CDN ESM builds -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
+          "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
+          "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
+          "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+        }
+      }
+    </script>
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -138,24 +149,12 @@
         improved browser responsiveness. For the mathematical formulation and theory, see the
         <a href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow.html">basic tutorial</a>.
       </p>
-
-      <p>
-        <strong>⚠️ Important:</strong> Due to security restrictions, this example requires launching the
-        browser with reduced security settings, e.g.:
-      </p>
-      <pre style="background-color: #f8f9fa; padding: 8px; border-radius: 4px; overflow-x: auto">
-start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disable-site-isolation-trials</pre
-      >
-      <p>
-        These flags temporarily disable CORS restrictions that normally block a web worker from loading
-        scripts or data when running from local files. For production applications, proper CORS headers should
-        be configured on your server.
-      </p>
     </div>
 
     <h2 id="webworkerimplementation"><a name="Web Worker Implementation"></a>Web Worker Implementation</h2>
     <p>
-      The code below shows how to use FEAScript with a web worker. The velocity field is decomposed and plotted as contour plots.
+      The code below shows how to use FEAScript with a web worker. The velocity field is decomposed and
+      plotted as contour plots.
     </p>
 
     <pre class="prettyprint">
@@ -232,8 +231,8 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
     <h2 id="results"><a name="Results"></a>Results</h2>
     <p>
       Below are the 2D contour plots of the computed velocity magnitude \(|\mathbf{u}| = \sqrt{u^2+v^2}\),
-      horizontal velocity component \(u\), and vertical velocity component \(v\). These plots are
-      generated in real time using FEAScript.
+      horizontal velocity component \(u\), and vertical velocity component \(v\). These plots are generated in
+      real time using FEAScript.
     </p>
 
     <div id="loading">
@@ -259,11 +258,14 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
       //Import FEAScript library from GitHub
       import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
 
+      // Import FEAScript library from a local directory
+      // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+
       //Data Layer
-      if (typeof window.dataLayer === 'undefined') {
+      if (typeof window.dataLayer === "undefined") {
         window.dataLayer = [];
       }
-      
+
       window.addEventListener("DOMContentLoaded", async () => {
         // Show loading indicator
         document.getElementById("loading").style.display = "block";
@@ -322,14 +324,26 @@ start chrome --disable-web-security --user-data-dir="C:\tmp\chrome-cors" --disab
         document.getElementById("loading").style.display = "none";
 
         // Plot results
-        plotSolution(modelInfo, { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
-          "contour", "velocityMagnitudeCanvas");
-        
-        plotSolution(modelInfo, { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
-          "contour", "uVelocityCanvas");
+        plotSolution(
+          modelInfo,
+          { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
+          "contour",
+          "velocityMagnitudeCanvas",
+        );
 
-        plotSolution(modelInfo, { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
-          "contour", "vVelocityCanvas");
+        plotSolution(
+          modelInfo,
+          { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
+          "contour",
+          "uVelocityCanvas",
+        );
+
+        plotSolution(
+          modelInfo,
+          { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
+          "contour",
+          "vVelocityCanvas",
+        );
 
         // Terminate the worker
         model.terminate();

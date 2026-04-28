@@ -32,10 +32,15 @@
     <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
-    <!-- VTK.js import map -->
+    <!-- Import map: remap npm bare specifiers used in FEAScript source and VTK.js to CDN ESM builds -->
     <script type="importmap">
       {
         "imports": {
+          "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
+          "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
+          "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
+          "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
           "@kitware/vtk.js/": "https://cdn.jsdelivr.net/npm/@kitware/vtk.js@32.12.0/",
           "gl-matrix": "https://esm.sh/v135/gl-matrix@3.4.3",
           "d3-scale": "https://esm.sh/v135/d3-scale@4.0.2",

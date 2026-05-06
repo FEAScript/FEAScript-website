@@ -395,7 +395,12 @@
 &lt;body&gt;
   &lt;div id="resultsCanvas"&gt;&lt;/div&gt;
   &lt;script type="module"&gt;
-  import {FEAScriptModel, importGmshMesh, plotInterpolatedSolution} from "https://core.feascript.com/dist/feascript.esm.js";
+  // Import FEAScript library
+  import {
+    FEAScriptModel,
+    importGmshMesh,
+    plotInterpolatedSolution,
+  } from "https://core.feascript.com/dist/feascript.esm.js";
 
   window.addEventListener("DOMContentLoaded", async () => {
     // Fetch mesh from GitHub Gist (swap the URL for any other hosted .msh file)
@@ -404,23 +409,27 @@
     );
     const meshFile = new File([await response.text()], "rect_with_hole.msh");
 
+    // Create and configure model
     const model = new FEAScriptModel();
     model.setModelConfig("heatConductionScript");
     model.setMeshConfig({
       parsedMesh: await importGmshMesh(meshFile),
       meshDimension: "2D",
-      elementOrder: "quadratic"
+      elementOrder: "quadratic",
     });
 
-    // Boundary conditions (Gmsh physical group tag - 1)
+    // Apply boundary conditions (Gmsh physical group tag - 1)
     model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom
     model.addBoundaryCondition("1", ["constantTemp", 200]); // Right
     model.addBoundaryCondition("2", ["convection", 1, 20]); // Top
     model.addBoundaryCondition("3", ["symmetry"]);          // Left
     model.addBoundaryCondition("4", ["convection", 1, 20]); // Hole surface
 
+    // Solve
     model.setSolverMethod("lusolve");
     const result = model.solve();
+
+    // Plot results
     plotInterpolatedSolution(model, result, "contour", "resultsCanvas");
   });
   &lt;/script&gt;
@@ -518,7 +527,21 @@
         📈 <strong>Visualization & Post-Processing</strong>
         <ul>
           <li>
-            Interactive line and surface visualization with
+            Interactive rendering with
+            <a href="https://kitware.github.io/vtk-js/">
+              vtk.js<img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+                alt="External Link Icon"
+                style="
+                  width: 16px;
+                  height: 16px;
+                  vertical-align: middle;
+                  margin-left: 2px;
+                  margin-bottom: 4px;
+                "
+              />
+            </a>
+            and
             <a href="https://plotly.com/javascript/">
               Plotly<img
                 src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"

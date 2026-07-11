@@ -8,7 +8,7 @@
  */
 
 /* ─────────────────────────────────────────────────────────────
-   1. RESET & BASE STYLES
+   RESET & BASE STYLES
    ───────────────────────────────────────────────────────────── */
 
 * {
@@ -32,7 +32,7 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   2. TYPOGRAPHY
+   TYPOGRAPHY
    ───────────────────────────────────────────────────────────── */
 
 h1,
@@ -73,7 +73,7 @@ a {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3. LAYOUT & NAVIGATION
+   LAYOUT & NAVIGATION
    ───────────────────────────────────────────────────────────── */
 
 /* Top logo */
@@ -293,7 +293,7 @@ footer {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   4. CONTENT ELEMENTS
+   CONTENT ELEMENTS
    ───────────────────────────────────────────────────────────── */
 
 ul {
@@ -368,8 +368,75 @@ mjx-container {
   margin: 1em 0;
 }
 
+/* Maillist form */
+.maillist-card {
+  max-width: 400px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin: 1em 0;
+}
+
+.maillist-card h2 {
+  margin-top: 0;
+}
+
+.maillist-field label {
+  display: block;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.maillist-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.maillist-row input[type="email"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.2;
+}
+
+.maillist-row input[type="email"]:focus {
+  outline: none;
+  border-color: #aaa;
+  box-shadow: 0 0 0 3px rgba(247, 231, 183, 0.8);
+}
+
+.maillist-button {
+  padding: 10px 14px;
+  border: 1px solid #e0c97f;
+  border-radius: 6px;
+  background: #f7e7b7;
+  color: #333;
+  font-family: inherit;
+  font-size: 100%;
+  cursor: pointer;
+}
+
+.maillist-button:hover {
+  transform: translateY(-1px);
+}
+
+.maillist-responses {
+  margin-top: 10px;
+}
+
+.maillist-honeypot {
+  position: absolute;
+  left: -5000px;
+}
+
 /* ─────────────────────────────────────────────────────────────
-   5. INTERACTIVE COMPONENTS
+   INTERACTIVE COMPONENTS
    ───────────────────────────────────────────────────────────── */
 
 /* Loading spinner */
@@ -515,7 +582,7 @@ mjx-container {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   6. TUTORIALS
+   TUTORIALS
    ───────────────────────────────────────────────────────────── */
 
 .tutorials-list {
@@ -632,7 +699,7 @@ mjx-container {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   7. FEATURES LIST
+   FEATURES LIST
    ───────────────────────────────────────────────────────────── */
 
 .features-list {
@@ -646,10 +713,10 @@ mjx-container {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   8. STUDIO
+   STUDIO
    ───────────────────────────────────────────────────────────── */
 
-/* Waitlist form */
+/* Maillist form */
 .waitlist-card {
   max-width: 400px;
   background: white;
@@ -661,18 +728,6 @@ mjx-container {
 
 .waitlist-card h2 {
   margin-top: 0;
-}
-
-.waitlist-indicates-required {
-  font-size: 90%;
-  color: #555;
-  margin-top: -0.2em;
-  margin-bottom: 0.8em;
-}
-
-.waitlist-card .asterisk {
-  color: #f39c12;
-  font-weight: bold;
 }
 
 .waitlist-field label {
@@ -790,7 +845,7 @@ mjx-container {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   9. MEDIA QUERIES
+   MEDIA QUERIES
    ───────────────────────────────────────────────────────────── */
 
 /* Small screens: up to 500px */
@@ -923,7 +978,7 @@ mjx-container {
   }
 
   #banner img {
-    width: 250px;
+    width: 100%;
   }
 
   h1 {

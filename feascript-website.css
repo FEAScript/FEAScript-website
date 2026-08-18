@@ -718,7 +718,11 @@ mjx-container {
 
 /* Maillist form */
 .waitlist-card {
-  max-width: 400px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  max-width: 1000px;
   background: white;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -726,8 +730,18 @@ mjx-container {
   margin: 1em 0;
 }
 
+.waitlist-text {
+  flex: 1;
+  min-width: 240px;
+}
+
 .waitlist-card h2 {
   margin-top: 0;
+}
+
+.waitlist-card form {
+  flex: 1;
+  min-width: 240px;
 }
 
 .waitlist-field label {

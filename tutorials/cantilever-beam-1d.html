@@ -1,0 +1,419 @@
+<!doctype html>
+
+<!--
+ * ════════════════════════════════════════════════════════════════
+ *  FEAScript Website
+ *  Lightweight Finite Element Simulation in JavaScript
+ *  Version: 0.3.0 (RC) | https://feascript.com
+ *  CC BY 4.0 License © 2023–2026 FEAScript
+ * ════════════════════════════════════════════════════════════════
+-->
+
+<html>
+  <head>
+    <title>FEAScript: Cantilever Beam Under a Tip Load Tutorial</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="This example demonstrates solving a 1D Euler-Bernoulli cantilever beam problem under a tip point load using the FEAScript library, with the finite element solution compared against the classical closed-form analytical solution."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, euler-bernoulli beam, structural mechanics, cantilever beam, analytical solution"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Import the Math.js library for mathematical operations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+    <!-- Import the Plotly.js library for plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+    <!-- Import MathJax for writing equations -->
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Import the run_prettify.js library for JavaScript code coloring -->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <!-- Import map: remap npm bare specifiers used in FEAScript source to CDN ESM builds -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
+          "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
+          "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
+          "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+        }
+      }
+    </script>
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
+
+  <body>
+    <h1 class="top">
+      <a href="../index.html">
+        <img
+          src="../assets/feascript-logo.png"
+          alt="FEAScript Logo"
+          id="responsive-logo"
+          style="vertical-align: middle"
+        />
+      </a>
+      <div class="social-icons-top-right">
+        <ul>
+          <li>
+            <a href="https://blog.feascript.com/" title="FEAScript blog">
+              <img
+                src="../assets/blog-icon-feascript.png"
+                alt="Blog icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
+              <img
+                src="../assets/youtube-icon-feascript.svg"
+                alt="YouTube icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
+              <img
+                src="../assets/linkedin-icon-feascript.png"
+                alt="LinkedIn icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
+              <img
+                src="../assets/discord-icon-feascript.png"
+                alt="Discord icon"
+                style="height: 18px; vertical-align: middle"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
+              <img
+                src="../assets/github-icon-feascript.png"
+                alt="GitHub icon"
+                style="height: 20px; vertical-align: middle"
+              />
+              <span
+                id="github-stars"
+                style="
+                  font-size: 0.9em;
+                  margin-left: 5px;
+                  vertical-align: middle;
+                  border: 1px solid #ddd;
+                  border-radius: 4px;
+                  padding: 1px 5px;
+                  background-color: #f8f8f8;
+                "
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </h1>
+    <h1>Cantilever Beam Under a Tip Load Tutorial</h1>
+
+    <ul id="menu">
+      <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
+      <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
+
+    <div class="highlight-container">
+      <p>
+        In this tutorial, we solve the classical cantilever beam problem using the Euler-Bernoulli beam
+        theory: a beam clamped at one end and free at the other, carrying a concentrated load at the free
+        (tip) end. This is one of the most fundamental problems in structural mechanics, and it has a
+        well-known closed-form analytical solution that we use here to verify the FEAScript finite element
+        result.
+      </p>
+    </div>
+
+    <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
+    <p>
+      The Euler-Bernoulli beam theory describes the bending of slender beams under transverse loading. The
+      governing equation for the transverse deflection \(w(x)\) is the fourth-order equation:
+    </p>
+    <p>\(\frac{d^2}{dx^2}\left(EI(x)\frac{d^2w}{dx^2}\right) = q(x)\)</p>
+    <p>
+      Where \(EI(x)\) is the bending stiffness (product of the Young's modulus and the second moment of area
+      of the cross-section) and \(q(x)\) is the distributed transverse load. In this example, we consider a
+      cantilever beam of length \(L = 4\ \text{m}\) and constant bending stiffness \(EI = 1.0\times10^5\),
+      clamped at \(x=0\) (\(w(0) = 0\) and \(\theta(0) = dw/dx|_{x=0} = 0\)) and free at \(x=L\), where a
+      concentrated tip load \(P = -1000\) is applied. Since there is no distributed load along the span
+      (\(q(x) = 0\)), the beam bends solely due to the point load applied at its free end.
+    </p>
+    <p>For this problem, the deflection admits the classical closed-form analytical solution:</p>
+    <p>\(w(x) = \frac{P}{6EI}\left(3Lx^2 - x^3\right)\)</p>
+    <p>with the corresponding rotation:</p>
+    <p>\(\theta(x) = \frac{dw}{dx} = \frac{P}{2EI}\left(2Lx - x^2\right)\)</p>
+    <p>
+      giving a maximum tip deflection \(w(L) = PL^3/(3EI)\) and tip rotation \(\theta(L) = PL^2/(2EI)\). We
+      use this analytical solution below to verify the finite element result computed by FEAScript.<sup
+        >1</sup
+      >
+    </p>
+    <p>
+      Since the governing equation is fourth-order, both the deflection \(w\) and the rotation \(\theta\) must
+      be continuous across element boundaries. FEAScript uses cubic Hermite shape functions for the beam
+      field, so each node carries 2 degrees of freedom, ordered as \([w_0, \theta_0, w_1, \theta_1, \ldots]\)
+      in the solution vector. Because the analytical solution itself is a cubic polynomial in \(x\), cubic
+      Hermite elements represent it exactly, even on a coarse mesh.
+    </p>
+
+    <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
+    <p>
+      Below is a demonstration of how to use the FEAScript library to solve this cantilever beam problem in
+      your web browser. You only need a simple HTML page to run this example where the following code snippets
+      should be included. First, load the required external libraries:
+    </p>
+    <pre class="prettyprint">
+&lt;head&gt;
+  &lt;!-- ...head region... --&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js">&lt;/script&gt;
+  &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js">&lt;/script&gt;
+  &lt;!-- ...rest of head region... --&gt;
+&lt;/head&gt;</pre
+    >
+    <p>
+      We should then define the problem parameters, such as the solver type, the mesh configuration, and the
+      boundary conditions. This is performed using JavaScript objects directly in the HTML file:
+    </p>
+    <pre class="prettyprint">
+&lt;body&gt;
+  &lt;!-- ...body region... --&gt;
+  &lt;script type="module"&gt;
+    // Import FEAScript library
+    import { FEAScriptModel, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+
+    window.addEventListener("DOMContentLoaded", (event) => {
+      // Print FEAScript version in the console
+      printVersion();
+
+      // Beam and load parameters
+      const beamLength = 4; // m
+      const bendingStiffness = 1.0e5; // EI
+      const tipLoad = -1000; // Downward point load at the free end
+
+      // Create and configure model
+      const model = new FEAScriptModel();
+      model.setModelConfig("eulerBernoulliBeamScript", {
+        coefficientFunctions: {
+          EI: (x) => bendingStiffness,
+        },
+      });
+
+      // Define mesh configuration
+      model.setMeshConfig({
+        meshDimension: "1D",
+        elementOrder: "linear",
+        numElementsX: 4,
+        maxX: beamLength,
+      });
+
+      // Define boundary conditions
+      model.addBoundaryCondition("1", [["fixed"]]); // Clamped support at x=0
+      model.addBoundaryCondition("5", [["force", tipLoad]]); // Tip point load at x=L (last node)
+
+      // Solve
+      model.setSolverMethod("lusolve");
+      const result = model.solve();
+
+      // Extract the deflection field from the solution vector
+      // DOF layout per node: [w, theta]
+      const totalNodesX = model._eulerBernoulliBeamMetadata.totalNodesX;
+      const flatSolution = result.solutionVector.map((entry) => (Array.isArray(entry) ? entry[0] : entry));
+      const femDeflection = [];
+      for (let i = 0; i < totalNodesX; i++) {
+        femDeflection.push(flatSolution[2 * i]);
+      }
+      const femNodesX = result.nodesCoordinates.nodesXCoordinates;
+    });
+  &lt;/script&gt;
+  &lt;!-- ...rest of body region... --&gt;
+&lt;/body&gt;</pre
+    >
+    <p>
+      In the boundary condition definition, the numbers at the left side (<code>"1"</code> and
+      <code>"5"</code>) refer to the 1-based global node number, since the tip point load is applied directly
+      at the last node of the beam mesh (node 5, at \(x=L\), for a 4-element mesh). The clamped support at
+      node 1 fixes both the deflection and the rotation (\(w=0\), \(\theta=0\)).
+    </p>
+    <p>
+      Since the beam solver packs \(w\) and \(\theta\) together at each node, the deflection field is
+      extracted from the solution vector by taking every other entry.
+    </p>
+
+    <h2 id="results"><a name="Results"></a>Results</h2>
+
+    <p>
+      Below is the 1D line plot comparing the FEAScript finite element solution with the closed-form
+      analytical solution \(w(x) = \frac{P}{6EI}\left(3Lx^2 - x^3\right)\). This plot is generated in real
+      time using FEAScript.
+    </p>
+
+    <div id="resultsCanvas"></div>
+
+    <p>
+      The FEAScript nodal values coincide with the analytical curve, since cubic Hermite elements represent
+      the exact cubic deflection shape of this problem, even with a coarse mesh. The tip deflection is \(w(L)
+      = PL^3/(3EI)\).
+    </p>
+
+    <ul id="menu">
+      <li><a href="https://feascript.com/index.html">Home</a></li>
+      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+    </ul>
+
+    <script type="module">
+      // Import FEAScript library from GitHub
+      import { FEAScriptModel, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+      // Import FEAScript library from a local directory
+      // import { FEAScriptModel, printVersion } from "../../FEAScript-core/src/index.js";
+
+      window.addEventListener("DOMContentLoaded", () => {
+        // Print FEAScript version
+        console.log("FEAScript version:", printVersion);
+
+        // Beam and load parameters
+        const beamLength = 4; // m
+        const bendingStiffness = 1.0e5; // EI
+        const tipLoad = -1000; // Downward point load at the free end
+
+        // Create a new FEAScript model
+        const model = new FEAScriptModel();
+
+        // Set solver configuration with coefficient functions
+        model.setModelConfig("eulerBernoulliBeamScript", {
+          coefficientFunctions: {
+            EI: (x) => bendingStiffness,
+          },
+        });
+
+        // Define mesh configuration
+        model.setMeshConfig({
+          meshDimension: "1D",
+          elementOrder: "linear",
+          numElementsX: 4,
+          maxX: beamLength,
+        });
+
+        // Define boundary conditions
+        model.addBoundaryCondition("1", [["fixed"]]); // Clamped support at x=0
+        model.addBoundaryCondition("5", [["force", tipLoad]]); // Tip point load at x=L (last node)
+
+        // Set solver method
+        model.setSolverMethod("lusolve");
+
+        // Solve the problem and get the solution
+        const result = model.solve();
+
+        // Extract the deflection field from the solution vector
+        // DOF layout per node: [w, theta]
+        const totalNodesX = model._eulerBernoulliBeamMetadata.totalNodesX;
+        const flatSolution = result.solutionVector.map((entry) => (Array.isArray(entry) ? entry[0] : entry));
+        const femDeflection = [];
+        for (let i = 0; i < totalNodesX; i++) {
+          femDeflection.push(flatSolution[2 * i]);
+        }
+        const femNodesX = result.nodesCoordinates.nodesXCoordinates;
+
+        // Closed-form analytical solution w(x) = P/(6EI) * (3*L*x^2 - x^3)
+        const numAnalyticalPoints = 100;
+        const analyticalNodesX = Array.from(
+          { length: numAnalyticalPoints },
+          (_, i) => (i / (numAnalyticalPoints - 1)) * beamLength,
+        );
+        const analyticalDeflection = analyticalNodesX.map(
+          (x) => (tipLoad / (6 * bendingStiffness)) * (3 * beamLength * x ** 2 - x ** 3),
+        );
+
+        // Plot the FEAScript solution against the analytical solution
+        const femTrace = {
+          x: femNodesX,
+          y: femDeflection,
+          mode: "markers",
+          type: "scatter",
+          marker: { color: "rgb(219, 64, 82)", size: 8 },
+          name: "FEAScript (FEM)",
+        };
+        const analyticalTrace = {
+          x: analyticalNodesX,
+          y: analyticalDeflection,
+          mode: "lines",
+          type: "scatter",
+          line: { color: "rgb(31, 119, 180)", width: 2, dash: "dash" },
+          name: "Analytical solution",
+        };
+
+        const maxWindowWidth = Math.min(window.innerWidth, 700);
+        const plotWidth = Math.min(maxWindowWidth, 600);
+        const layout = {
+          title: "Cantilever beam deflection",
+          width: plotWidth,
+          height: 350,
+          xaxis: { title: "x (m)" },
+          yaxis: { title: "Deflection w (m)" },
+          margin: { l: 70, r: 50, t: 50, b: 50 },
+        };
+
+        Plotly.newPlot("resultsCanvas", [femTrace, analyticalTrace], layout, { responsive: true });
+      });
+    </script>
+
+    <p>
+      <small
+        ><sup>1</sup>J.M. Gere and B.J. Goodno, <em>Mechanics of Materials</em>, 8th ed., Cengage Learning,
+        2012.</small
+      >
+    </p>
+
+    <footer>
+      <p>
+        Contact:
+        <a href="mailto:info@feascript.com">info@feascript.com</a>
+      </p>
+      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+    </footer>
+    <script>
+      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+
+      // Fetch GitHub stars
+      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
+        .then((response) => response.json())
+        .then((data) => {
+          const starCount = data.stargazers_count;
+          const starsElement = document.getElementById("github-stars");
+          if (starsElement && starCount) {
+            starsElement.innerHTML = `★ ${starCount}`;
+          }
+        })
+        .catch((error) => console.error("Error fetching GitHub stars:", error));
+    </script>
+  </body>
+</html>

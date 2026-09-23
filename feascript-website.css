@@ -143,6 +143,24 @@ a {
   text-decoration: none;
 }
 
+.announcement-bar .event-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 2px 10px;
+  background: #3b5f59ff;
+  color: #fff !important;
+  font-weight: bold;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.announcement-bar .event-cta:hover {
+  background: #3b5f59ff;
+  text-decoration: none;
+}
+
 /* Navigation menu */
 #menu {
   list-style: none;

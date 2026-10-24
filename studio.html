@@ -9,11 +9,12 @@
  * ════════════════════════════════════════════════════════════════
 -->
 
-<html>
+<html lang="en" class="site">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FEAScript Studio</title>
     <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
       content="FEAScript Studio is a browser-based environment for creating and managing engineering applications powered by FEAScript"
@@ -22,11 +23,26 @@
       name="keywords"
       content="finite elements, fem, galerkin, cfd, computational mechanics, javascript, FEAScript Studio, engineering applications, browser-based simulation, cloud"
     />
-    <meta name="viewport" content="width=device-width" />
 
-    <!-- Link to the CSS files -->
+    <script>
+      // Apply stored theme before first paint and enable JS-only styles
+      (function () {
+        var d = document.documentElement;
+        d.className += " js";
+        try {
+          var t = localStorage.getItem("feascript-theme");
+          if (t === "light" || t === "dark") d.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="feascript-website.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -42,221 +58,264 @@
   </script>
 
   <body>
-    <div class="announcement-bar">
-      <span class="version-label">Latest release</span>
-      <a href="https://github.com/FEAScript/FEAScript-core/releases/tag/0.2.0"
-        ><img
-          src="https://img.shields.io/github/v/release/FEAScript/FEAScript-core?logo=github"
-          alt="GitHub release badge"
-      /></a>
-      <a href="https://www.npmjs.com/package/feascript"
-        ><img src="https://img.shields.io/npm/v/feascript" alt="npm version badge"
-      /></a>
-    </div>
+    <a class="skip-link" href="#main">Skip to content</a>
 
-    <h1 class="top">
-      <a href="studio.html">
-        <img
-          src="./assets/feascript-studio-logo.png"
-          alt="FEAScript Logo"
-          id="responsive-logo"
-          style="vertical-align: middle"
-        />
-      </a>
-      <div class="social-icons-top-right">
-        <ul>
-          <li>
-            <a href="https://blog.feascript.com/" title="FEAScript blog">
-              <img
-                src="./assets/blog-icon-feascript.png"
-                alt="Blog icon"
-                style="height: 18px; vertical-align: middle"
+    <header class="site-nav">
+      <div class="nav-inner">
+        <div class="nav-group">
+          <a class="nav-brand" href="index.html">
+            <svg viewBox="14 79 242 242" aria-hidden="true">
+              <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+            </svg>
+            <span
+              >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+            ></span>
+          </a>
+          <nav class="nav-links label" aria-label="Main">
+            <a class="nav-link" href="index.html#whyusefeascript"><span>Why FEAScript</span></a>
+            <a class="nav-link" href="index.html#howtousefeascript"><span>How to use</span></a>
+            <a class="nav-link" href="index.html#features"><span>Features</span></a>
+            <a class="nav-link" href="index.html#tutorials"><span>Tutorials</span></a>
+            <a class="nav-link" href="index.html#documentation"><span>Documentation</span></a>
+            <a class="nav-link" href="index.html#licensing"><span>Licensing</span></a>
+            <a class="nav-link" href="studio.html"><span>Studio</span></a>
+          </nav>
+        </div>
+
+        <div class="nav-group">
+          <a
+            class="nav-icon nav-github"
+            href="https://github.com/FEAScript/FEAScript-core"
+            aria-label="FEAScript on GitHub"
+            title="FEAScript on GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
               />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.youtube.com/@FEAScript" title="FEAScript YouTube">
-              <img
-                src="./assets/youtube-icon-feascript.svg"
-                alt="YouTube icon"
-                style="height: 18px; vertical-align: middle"
+            </svg>
+            <span id="github-stars" class="label"></span>
+          </a>
+          <button
+            id="theme-toggle"
+            class="nav-icon theme-toggle"
+            type="button"
+            aria-label="Toggle colour theme"
+          >
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
               />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com/company/feascript/" title="FEAScript LinkedIn">
-              <img
-                src="./assets/linkedin-icon-feascript.png"
-                alt="LinkedIn icon"
-                style="height: 18px; vertical-align: middle"
+            </svg>
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
               />
-            </a>
-          </li>
-          <li>
-            <a href="https://discord.gg/3DVjNcuW4f" title="FEAScript Discord">
-              <img
-                src="./assets/discord-icon-feascript.png"
-                alt="Discord icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/FEAScript/FEAScript-core" title="FEAScript GitHub">
-              <img
-                src="./assets/github-icon-feascript.png"
-                alt="GitHub icon"
-                style="height: 20px; vertical-align: middle"
-              />
-              <span
-                id="github-stars"
-                style="
-                  font-size: 0.9em;
-                  margin-left: 5px;
-                  vertical-align: middle;
-                  border: 1px solid #ddd;
-                  border-radius: 4px;
-                  padding: 1px 5px;
-                  background-color: #f8f8f8;
-                "
-              ></span>
-            </a>
-          </li>
-        </ul>
+            </svg>
+          </button>
+          <a class="nav-cta" href="index.html#howtousefeascript">Get started</a>
+          <button
+            id="nav-burger"
+            class="nav-icon nav-burger"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
       </div>
-    </h1>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+        <a href="index.html#whyusefeascript">Why use FEAScript</a>
+        <a href="index.html#howtousefeascript">How to use FEAScript</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#tutorials">Tutorials</a>
+        <a href="index.html#documentation">Documentation</a>
+        <a href="index.html#licensing">Licensing</a>
+        <a href="studio.html">FEAScript Studio</a>
+      </nav>
+    </header>
 
-    <h1>FEAScript Studio: Turn FEAScript Models into Web Applications</h1>
-    <div class="highlight-container">
-      <p>
-        <img
-          src="./assets/favicon.ico"
-          alt="FEAScript Icon"
-          style="vertical-align: middle; margin-right: 5px; height: 1em; width: auto"
-        /><strong>FEAScript Studio</strong> is a browser-based environment for creating and managing
-        engineering applications powered by FEAScript. In particular, with FEAScript Studio you will be able
-        to turn FEAScript models into focused applications with controlled inputs and interactive simulation
-        results.
-      </p>
-    </div>
-
-    <p class="notice-dev">
-      🚧 <strong>FEAScript Studio is currently under development</strong> and planned to be released in late
-      2026. <strong>Join the waitlist</strong> below to receive updates, suggest engineering workflows and
-      participate in early testing.
-    </p>
-
-    <div style="height: 0.5em"></div>
-
-    <div id="waitlist" class="waitlist-card" aria-label="FEAScript Studio waitlist">
-      <div class="waitlist-text">
-        <h2>Join the Waitlist</h2>
-        <p class="waitlist-disclosure">
-          By joining the waitlist, you will also be subscribed to our mailing list to receive project updates
-          and news
-        </p>
-      </div>
-
-      <form
-        action="https://feascript.us10.list-manage.com/subscribe/post?u=83b4dec50b84e136c2e82c6a4&amp;id=4aa4a60f27&amp;f_id=009362e3f0"
-        method="post"
-        id="mc-embedded-subscribe-form"
-        name="mc-embedded-subscribe-form"
-        target="_blank"
-      >
-        <div class="waitlist-field">
-          <label for="mce-EMAIL">Email Address</label>
-          <div class="waitlist-row">
-            <input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" required value="" />
-            <input
-              type="submit"
-              name="subscribe"
-              id="mc-embedded-subscribe"
-              class="waitlist-button"
-              value="Subscribe"
-            />
+    <main id="main">
+      <section class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p data-doc-bar>FEAScript Studio</p>
           </div>
-        </div>
 
-        <div id="mce-responses" class="waitlist-responses" aria-live="polite">
-          <div class="response" id="mce-error-response" style="display: none"></div>
-          <div class="response" id="mce-success-response" style="display: none"></div>
-        </div>
+          <div class="section-head doc-head">
+            <h1>Turn FEAScript models into <span class="accent">web applications.</span></h1>
+            <p>
+              FEAScript Studio is a browser-based environment for creating and managing engineering
+              applications powered by FEAScript. With FEAScript Studio you will be able to turn FEAScript
+              models into focused applications with controlled inputs and interactive simulation results.
+            </p>
+          </div>
 
-        <!-- Anti-bot protection -->
-        <div class="waitlist-honeypot" aria-hidden="true">
-          <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
-        </div>
-      </form>
-    </div>
+          <div class="doc">
+            <p class="highlight-container">
+              <span class="tag">In development</span>
+              <strong>FEAScript Studio is currently under development</strong> and planned to be released in
+              late 2026. Join the waitlist below to receive updates, suggest engineering workflows and
+              participate in early testing.
+            </p>
 
-    <br />
+            <h2 id="waitlist">Join the waitlist</h2>
+            <p>
+              By joining the waitlist, you will also be subscribed to our mailing list to receive project
+              updates and news.
+            </p>
 
-    <div class="studio-layout">
-      <div class="container">
-        <div class="left-panel">
-          <div class="text-content">
-            <h1>Key Capabilities</h1>
-            <ul class="features-list">
+            <form
+              class="maillist-form"
+              action="https://feascript.us10.list-manage.com/subscribe/post?u=83b4dec50b84e136c2e82c6a4&amp;id=4aa4a60f27&amp;f_id=009362e3f0"
+              method="post"
+              id="mc-embedded-subscribe-form"
+              name="mc-embedded-subscribe-form"
+              target="_blank"
+            >
+              <label class="label" for="mce-EMAIL">Email address</label>
+              <div class="maillist-row">
+                <input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" required value="" />
+                <input
+                  type="submit"
+                  name="subscribe"
+                  id="mc-embedded-subscribe"
+                  class="btn btn-solid"
+                  value="Subscribe"
+                />
+              </div>
+
+              <div id="mce-responses" aria-live="polite">
+                <div class="response" id="mce-error-response" style="display: none"></div>
+                <div class="response" id="mce-success-response" style="display: none"></div>
+              </div>
+
+              <!-- Anti-bot protection -->
+              <div class="maillist-honeypot" aria-hidden="true">
+                <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
+              </div>
+            </form>
+
+            <h2>Key capabilities</h2>
+            <ul>
               <li>
-                <strong>🎯 Focused Engineering Applications</strong>
-                <p>Turn FEAScript models into purpose-specific web applications</p>
+                <strong>Focused engineering applications.</strong> Turn FEAScript models into purpose-specific
+                web applications.
               </li>
               <li>
-                <strong>🌐 Browser-Based Simulation</strong>
-                <p>
-                  Run supported calculations without requiring the application user to install any desktop
-                  software
-                </p>
+                <strong>Browser-based simulation.</strong> Run supported calculations without requiring the
+                application user to install any desktop software.
               </li>
               <li>
-                <strong>🎛️ Controlled Inputs and Outputs</strong>
-                <p>Choose which model parameters users can change and which results they receive</p>
+                <strong>Controlled inputs and outputs.</strong> Choose which model parameters users can
+                change and which results they receive.
               </li>
               <li>
-                <strong>📊 Interactive Results</strong>
-                <p>
-                  Present numerical outputs and simulation visualizations through clear, application-specific
-                  interfaces
-                </p>
+                <strong>Interactive results.</strong> Present numerical outputs and simulation visualizations
+                through clear, application-specific interfaces.
               </li>
               <li>
-                <strong>🔗 Sharing and Embedding</strong>
-                <p>Publish supported applications through a web link or embed them into another website</p>
+                <strong>Sharing and embedding.</strong> Publish supported applications through a web link or
+                embed them into another website.
               </li>
               <li>
-                <strong>📝 JavaScript Access</strong>
-                <p>Use FEAScript Core directly for advanced model and application development</p>
+                <strong>JavaScript access.</strong> Use FEAScript Core directly for advanced model and
+                application development.
               </li>
             </ul>
           </div>
         </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="section-frame">
+        <div class="grid">
+          <div class="cell footer-brand">
+            <a class="footer-wordmark" href="index.html">
+              <svg viewBox="14 79 242 242" aria-hidden="true">
+                <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+              </svg>
+              <span
+                >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
+            </a>
+            <p>A lightweight finite element simulation library for JavaScript.</p>
+            <a class="mail label" href="mailto:info@feascript.com">info@feascript.com</a>
+          </div>
+
+          <nav class="cell footer-col" aria-label="Site">
+            <p class="label text-faint">FEAScript</p>
+            <ul>
+              <li><a href="index.html#howtousefeascript">Get started</a></li>
+              <li><a href="index.html#features">Features</a></li>
+              <li><a href="index.html#tutorials">Tutorials</a></li>
+              <li><a href="studio.html">FEAScript Studio</a></li>
+            </ul>
+          </nav>
+
+          <nav class="cell footer-col" aria-label="Resources">
+            <p class="label text-faint">Resources</p>
+            <ul>
+              <li><a href="https://blog.feascript.com/">Blog</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-documentation">Documentation</a></li>
+              <li><a href="https://www.npmjs.com/package/feascript">npm</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
+            </ul>
+          </nav>
+
+          <nav class="cell footer-col" aria-label="Community">
+            <p class="label text-faint">Community</p>
+            <ul>
+              <li><a href="https://github.com/FEAScript/FEAScript-core">GitHub</a></li>
+              <li><a href="https://discord.gg/3DVjNcuW4f">Discord</a></li>
+              <li><a href="https://www.youtube.com/@FEAScript">YouTube</a></li>
+              <li><a href="https://www.linkedin.com/company/feascript/">LinkedIn</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="footer-bottom label">
+          <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+          <p>Core: MIT license · Website: CC BY 4.0</p>
+        </div>
       </div>
-    </div>
-
-    <br />
-
-    <footer>
-      <p>
-        Contact:
-        <a href="mailto:info@feascript.com">info@feascript.com</a>
-      </p>
-      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
     </footer>
-    <script>
-      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
 
-      // Fetch GitHub stars
-      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-        .then((response) => response.json())
-        .then((data) => {
-          const starCount = data.stargazers_count;
-          const starsElement = document.getElementById("github-stars");
-          if (starsElement && starCount) {
-            starsElement.innerHTML = `★ ${starCount}`;
-          }
-        })
-        .catch((error) => console.error("Error fetching GitHub stars:", error));
-    </script>
+    <script src="feascript-website.js"></script>
   </body>
 </html>

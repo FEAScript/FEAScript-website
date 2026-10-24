@@ -9,11 +9,12 @@
  * ════════════════════════════════════════════════════════════════
 -->
 
-<html>
+<html lang="en" class="site">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FEAScript: A JavaScript Finite Element Simulation Library</title>
     <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
       content="FEAScript is an open-source JavaScript library for finite element simulations in both browser-based and server-side environments for physics, engineering and computational mechanics."
@@ -22,12 +23,26 @@
       name="keywords"
       content="finite elements, fem, galerkin, cfd, computational mechanics, javascript"
     />
-    <meta name="viewport" content="width=device-width" />
-    <!-- Link to the CSS files -->
+
+    <script>
+      // Apply stored theme before first paint and enable JS-only styles
+      (function () {
+        var d = document.documentElement;
+        d.className += " js";
+        try {
+          var t = localStorage.getItem("feascript-theme");
+          if (t === "light" || t === "dark") d.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="feascript-website.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-    <!-- Import the run_prettify.js library for JavaScript code coloring *** Deprecated library *** -->
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -43,8 +58,10 @@
   </script>
 
   <body>
-    <div class="announcement-bar">
-      <span class="version-label">Latest release</span>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="announce label">
+      <span>Latest release</span>
       <a href="https://github.com/FEAScript/FEAScript-core/releases/tag/0.2.0"
         ><img
           src="https://img.shields.io/github/v/release/FEAScript/FEAScript-core?logo=github"
@@ -53,407 +70,360 @@
       <a href="https://www.npmjs.com/package/feascript"
         ><img src="https://img.shields.io/npm/v/feascript" alt="npm version badge"
       /></a>
-      <span class="version-sep">·</span>
-      <a href="studio.html" class="studio-cta">Get Early Access to FEAScript Studio</a>
-      <span class="version-sep">·</span>
-      <a
-        href="https://hacktoberfest.com/fests/?q=greece&fest=01a0a62f-3c0a-bda6-8aee-fa2f9b2c2f09"
-        class="event-cta"
-        >Join us at the Hacktoberfest Meetup in Athens</a
-      >
+      <a href="studio.html">Get early access to FEAScript Studio</a>
     </div>
 
-    <h1 class="top">
-      <a href="index.html">
-        <img
-          src="./assets/feascript-logo.png"
-          alt="FEAScript Logo"
-          id="responsive-logo"
-          style="vertical-align: middle"
-        />
-      </a>
-      <div class="social-icons-top-right">
-        <ul>
-          <li>
-            <a href="https://blog.feascript.com/" title="Blog">
-              <img
-                src="./assets/blog-icon-feascript.png"
-                alt="Blog Icon"
-                style="height: 18px; vertical-align: middle"
+    <!-- ───────────── NAVIGATION ───────────── -->
+    <header class="site-nav">
+      <div class="nav-inner">
+        <div class="nav-group">
+          <a class="nav-brand" href="index.html">
+            <svg viewBox="14 79 242 242" aria-hidden="true">
+              <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+            </svg>
+            <span
+              >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+            ></span>
+          </a>
+          <nav class="nav-links label" aria-label="Main">
+            <a class="nav-link" href="#whyusefeascript"><span>Why FEAScript</span></a>
+            <a class="nav-link" href="#howtousefeascript"><span>How to use</span></a>
+            <a class="nav-link" href="#features"><span>Features</span></a>
+            <a class="nav-link" href="#tutorials"><span>Tutorials</span></a>
+            <a class="nav-link" href="#documentation"><span>Documentation</span></a>
+            <a class="nav-link" href="#licensing"><span>Licensing</span></a>
+            <a class="nav-link" href="studio.html"><span>Studio</span></a>
+          </nav>
+        </div>
+
+        <div class="nav-group">
+          <a
+            class="nav-icon nav-github"
+            href="https://github.com/FEAScript/FEAScript-core"
+            aria-label="FEAScript on GitHub"
+            title="FEAScript on GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
               />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.youtube.com/@FEAScript" title="YouTube">
-              <img
-                src="./assets/youtube-icon-feascript.svg"
-                alt="YouTube Icon"
-                style="height: 18px; vertical-align: middle"
+            </svg>
+            <span id="github-stars" class="label"></span>
+          </a>
+          <button
+            id="theme-toggle"
+            class="nav-icon theme-toggle"
+            type="button"
+            aria-label="Toggle colour theme"
+          >
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
               />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com/company/feascript/" title="LinkedIn">
-              <img
-                src="./assets/linkedin-icon-feascript.png"
-                alt="LinkedIn Icon"
-                style="height: 18px; vertical-align: middle"
+            </svg>
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
               />
-            </a>
-          </li>
-          <li>
-            <a href="https://discord.gg/3DVjNcuW4f" title="Discord">
-              <img
-                src="./assets/discord-icon-feascript.png"
-                alt="Discord Icon"
-                style="height: 18px; vertical-align: middle"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/FEAScript/FEAScript-core/issues" title="Support">
-              <img
-                src="./assets/technical-support-icon-feascript.png"
-                alt="Support Icon"
-                style="height: 23px; vertical-align: middle; margin-top: 2px"
-              />
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/FEAScript/FEAScript-core" title="GitHub">
-              <img
-                src="./assets/github-icon-feascript.png"
-                alt="GitHub Icon"
-                style="height: 20px; vertical-align: middle"
-              />
-              <span
-                id="github-stars"
-                style="
-                  font-size: 0.9em;
-                  margin-left: 5px;
-                  vertical-align: middle;
-                  border: 1px solid #ddd;
-                  border-radius: 4px;
-                  padding: 1px 5px;
-                  background-color: #f8f8f8;
-                "
-              ></span>
-            </a>
-          </li>
-          <li>
-            <button id="hamburger" aria-label="Menu">
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-          </li>
-        </ul>
+            </svg>
+          </button>
+          <a class="nav-cta" href="#howtousefeascript">Get started</a>
+          <button
+            id="nav-burger"
+            class="nav-icon nav-burger"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
       </div>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+        <a href="#whyusefeascript">Why use FEAScript</a>
+        <a href="#howtousefeascript">How to use FEAScript</a>
+        <a href="#features">Features</a>
+        <a href="#tutorials">Tutorials</a>
+        <a href="#documentation">Documentation</a>
+        <a href="#licensing">Licensing</a>
+        <a href="studio.html">FEAScript Studio</a>
+      </nav>
+    </header>
 
-      <div id="mobile-menu" aria-hidden="true">
-        <ul>
-          <li><a href="#whyusefeascript">Why Use FEAScript</a></li>
-          <li><a href="#howtousefeascript">How to Use FEAScript</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#tutorials">Tutorials</a></li>
-          <li><a href="#documentation">Documentation</a></li>
-          <li><a href="#licensing">Licensing</a></li>
-        </ul>
-      </div>
-    </h1>
+    <main id="main">
+      <!-- ───────────── HERO ───────────── -->
+      <section class="hero">
+        <div class="hero-inner">
+          <canvas id="mesh-canvas" aria-hidden="true"></canvas>
 
-    <div id="banner">
-      <img
-        src="./assets/cold-plate-logo-results-and-mesh.png"
-        alt="Results of heat conduction around the FEAScript logo"
-        loading="lazy"
-      />
-      <p class="image-caption">
-        Heat conduction around the FEAScript logo (mesh generated by Gmsh, solved with FEAScript)
-      </p>
+          <div class="hero-content">
+            <div class="wordmark-wrap">
+              <div class="wordmark" role="img" aria-label="FEAScript">
+                <svg viewBox="14 79 242 242" aria-hidden="true">
+                  <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+                </svg>
+                <span aria-hidden="true"
+                  >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                    <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                    <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+                ></span>
+              </div>
+            </div>
 
-      <div id="maillist" class="maillist-card" aria-label="FEAScript maillist">
-        <h2>Join the mailing list</h2>
-        <p
-          class="waitlist-disclosure"
-          style="font-size: 0.9em; color: #666; margin-top: -5px; margin-bottom: 15px"
-        >
-          Receive project updates and news
-        </p>
+            <h1>A JavaScript finite element library, <span class="accent">for the web.</span></h1>
+            <p class="hero-lede">
+              FEAScript enables engineering simulations across both browser-based and server-side environments
+              without the overhead of traditional desktop software.
+            </p>
 
-        <form
-          action="https://feascript.us10.list-manage.com/subscribe/post?u=83b4dec50b84e136c2e82c6a4&amp;id=4aa4a60f27&amp;f_id=009362e3f0"
-          method="post"
-          id="mc-embedded-subscribe-form"
-          name="mc-embedded-subscribe-form"
-          target="_blank"
-        >
-          <div class="maillist-field">
-            <label for="mce-EMAIL">Email Address</label>
-            <div class="maillist-row">
-              <input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" required value="" />
-              <input
-                type="submit"
-                name="subscribe"
-                id="mc-embedded-subscribe"
-                class="maillist-button"
-                value="Subscribe"
-              />
+            <div class="cmd">
+              <span class="cmd-prompt" aria-hidden="true">$</span>
+              <code>npm install feascript</code>
+              <button
+                class="cmd-copy"
+                type="button"
+                data-copy="npm install feascript"
+                aria-label="Copy command"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+
+            <div class="hero-links label">
+              <a href="#howtousefeascript">Get started</a>
+              <a href="https://github.com/FEAScript/FEAScript-core">View on GitHub</a>
+            </div>
+
+            <div class="hero-meta label">
+              <span>MIT licensed</span>
+              <span>Browser and Node.js</span>
+              <a href="studio.html">Try FEAScript Studio</a>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div id="mce-responses" class="maillist-responses" aria-live="polite">
-            <div class="response" id="mce-error-response" style="display: none"></div>
-            <div class="response" id="mce-success-response" style="display: none"></div>
-          </div>
-
-          <div class="maillist-honeypot" aria-hidden="true">
-            <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
-          </div>
-        </form>
+      <div class="marquee label" aria-label="Capabilities">
+        <ul class="marquee-track">
+          <li data-physics="heat">Heat conduction</li>
+          <li data-physics="flow">Creeping flow</li>
+          <li data-physics="front">Front propagation</li>
+          <li data-physics="structure">Euler-Bernoulli beams</li>
+          <li>General form PDEs</li>
+          <li>Gmsh mesh import</li>
+          <li>Web workers</li>
+          <li>WebGPU Jacobi solver</li>
+          <li>Plotly &amp; vtk.js</li>
+          <li>Linear &amp; quadratic elements</li>
+        </ul>
+        <ul class="marquee-track" aria-hidden="true">
+          <li data-physics="heat">Heat conduction</li>
+          <li data-physics="flow">Creeping flow</li>
+          <li data-physics="front">Front propagation</li>
+          <li data-physics="structure">Euler-Bernoulli beams</li>
+          <li>General form PDEs</li>
+          <li>Gmsh mesh import</li>
+          <li>Web workers</li>
+          <li>WebGPU Jacobi solver</li>
+          <li>Plotly &amp; vtk.js</li>
+          <li>Linear &amp; quadratic elements</li>
+        </ul>
       </div>
 
-      <a href="https://hacktoberfest.com/fests/?q=greece&fest=01a0a62f-3c0a-bda6-8aee-fa2f9b2c2f09">
-        <img
-          src="./assets/FEAScript_Workshop_2026_2.png"
-          alt="Hacktoberfest x FEAScript Meetup banner"
-          loading="lazy"
-      /></a>
-    </div>
+      <!-- ───────────── OUR GOAL ───────────── -->
+      <section id="ourgoal" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>Our goal</p>
+          </div>
 
-    <h1>A JavaScript Finite Element Simulation Library</h1>
+          <div class="section-head eq-head">
+            <h2 data-reveal>The most powerful JavaScript <span class="accent">API for FEM.</span></h2>
+            <p data-reveal>
+              We are closing the gap between complex computational mechanics and the accessibility of the web,
+              empowering developers to build professional-grade simulation tools that work on any device,
+              anywhere.
+            </p>
 
-    <ul id="menu">
-      <li><a href="#whyusefeascript">Why Use FEAScript</a></li>
-      <li><a href="#howtousefeascript">How to Use FEAScript</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#tutorials">Tutorials</a></li>
-      <li><a href="#documentation">Documentation</a></li>
-      <li><a href="#licensing">Licensing</a></li>
-    </ul>
+            <div class="eq" aria-hidden="true">
+              <span class="eq-1">&minus;&nabla;&middot;(k&nabla;T) = Q</span>
+              <span class="eq-2">Ku = F</span>
+              <span class="eq-3">&nabla;&middot;u = 0</span>
+              <span class="eq-4">&mu;&nabla;&sup2;u &minus; &nabla;p = f</span>
+              <span class="eq-5">|&nabla;&phi;| = 1</span>
+              <span class="eq-6">u &asymp; &Sigma; N&#7522;u&#7522;</span>
+              <span class="eq-7">EI d&#8308;w/dx&#8308; = q</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const hamburger = document.getElementById("hamburger");
-        const mobileMenu = document.getElementById("mobile-menu");
+      <!-- ───────────── 01 WHY ───────────── -->
+      <section id="whyusefeascript" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>Why use FEAScript</p>
+          </div>
 
-        // Keep ARIA state in sync
-        hamburger.setAttribute("aria-expanded", "false");
+          <div class="section-head">
+            <h2 data-reveal>Engineering simulation, <span class="accent">without the barriers.</span></h2>
+          </div>
 
-        hamburger.addEventListener("click", (ev) => {
-          ev.stopPropagation();
-          const opened = mobileMenu.classList.toggle("open");
-          hamburger.setAttribute("aria-expanded", opened ? "true" : "false");
-        });
+          <div class="grid grid-3">
+            <article class="cell cell-pad" data-reveal>
+              <h3>No installation</h3>
+              <p class="desc">
+                Engineers hate installs and FEAScript runs directly in the browser without any installation.
+              </p>
+            </article>
+            <article class="cell cell-pad" data-reveal>
+              <h3>Portability</h3>
+              <p class="desc">
+                Works everywhere JavaScript runs (Windows, macOS and Linux systems that use x64, IA-32, or ARM
+                processors).
+              </p>
+            </article>
+            <article class="cell cell-pad" data-reveal>
+              <h3>Open-source</h3>
+              <p class="desc">
+                The core library of FEAScript is open-source, removing the high cost barrier of traditional
+                FEA software.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
 
-        // Close menu when clicking any link inside
-        document.querySelectorAll("#mobile-menu a").forEach((link) => {
-          link.addEventListener("click", () => {
-            mobileMenu.classList.remove("open");
-            hamburger.setAttribute("aria-expanded", "false");
-          });
-        });
+      <!-- ───────────── 02 HOW TO USE ───────────── -->
+      <section id="howtousefeascript" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>How to use FEAScript</p>
+          </div>
 
-        // Close menu if clicking outside
-        document.addEventListener("click", (ev) => {
-          if (!mobileMenu.contains(ev.target) && !hamburger.contains(ev.target)) {
-            if (mobileMenu.classList.contains("open")) {
-              mobileMenu.classList.remove("open");
-              hamburger.setAttribute("aria-expanded", "false");
-            }
-          }
-        });
-      });
-    </script>
+          <div class="section-head">
+            <h2 data-reveal>Run a simulation with <span class="accent">a few lines.</span></h2>
+            <p class="prose" data-reveal>
+              You can run simulations with FEAScript by calling its functions from JavaScript (the FEAScript
+              API). The API offers full programmatic control and works across multiple environments, including
+              the browser (simple HTML pages and online JavaScript playgrounds, e.g.
+              <a href="https://codepen.io/">CodePen</a> and <a href="https://scribbler.live/">Scribbler</a>)
+              and server-side runtimes such as <a href="https://nodejs.org/en">Node.js</a>.
+            </p>
+          </div>
 
-    <div class="highlight-container">
-      <p>
-        <strong
-          ><img
-            src="./assets/favicon.ico"
-            alt="FEAScript Icon"
-            style="vertical-align: middle; margin-right: 5px; height: 1em; width: auto"
-          />FEAScript is a finite element simulation library developed in JavaScript</strong
-        >. It enables engineering simulations across both browser-based and server-side environments without
-        the overhead of traditional desktop software. <br />🎯
-        <strong>Our goal is to provide the most powerful JavaScript API for FEM</strong>. We are closing the
-        gap between complex computational mechanics and the accessibility of the web, empowering developers to
-        build professional-grade simulation tools that work on any device, anywhere.
-      </p>
-    </div>
-
-    <div style="margin-top: 0.5em"></div>
-    <h2 id="whyusefeascript"><a name="Why Use FEAScript"></a>Why Use FEAScript</h2>
-
-    <ul>
-      <li>
-        <strong>No installation:</strong> Engineers hate installs and FEAScript runs directly in the browser
-        without any installation.
-      </li>
-      <li>
-        <strong>Portability:</strong> Works everywhere JavaScript runs (Windows, macOS and Linux systems that
-        use x64, IA-32, or ARM processors).
-      </li>
-      <li>
-        <strong>Open-source:</strong> The core library of FEAScript is open-source, removing the high cost
-        barrier of traditional FEA software.
-      </li>
-    </ul>
-
-    <div style="margin-top: 1em"></div>
-    <p class="blue-label" style="margin-bottom: 0">POWERED BY FEASCRIPT</p>
-    <div class="blue-box" style="margin-top: 5px">
-      <p style="display: flex; align-items: center">
-        <img
-          src="assets/better-building-logo.png"
-          alt="BetterBuilding Logo"
-          style="height: 30px; margin-right: 10px; transform: translateY(-1px)"
-        />
-        <span>
-          <a href="https://betterbuilding.io/"
-            >Better Building<img
-              src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-              alt="External Link Icon"
-              style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
-          /></a>
-          integrated FEAScript to power their online
-          <a
-            href="https://docs.betterbuilding.io/sign-up-and-plans/news-and-updates/2025/introducing-our-free-heat-transfer-simulator"
-          >
-            Heat Transfer Simulator<img
-              src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-              alt="External Link Icon"
-              style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
-          /></a>
-          for architects and engineers.
-        </span>
-      </p>
-    </div>
-
-    <div style="margin-top: 0.5em"></div>
-    <h2 id="howtousefeascript"><a name="Getting Started"></a>How to Use FEAScript</h2>
-
-    <p>
-      You can run simulations with FEAScript by calling its functions from JavaScript (the FEAScript API). The
-      API offers full programmatic control and works across multiple environments, including the browser
-      (simple HTML pages and online JavaScript playgrounds, e.g.
-      <a href="https://codepen.io/"
-        >CodePen<img
-          src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-          alt="External Link Icon"
-          style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
-      /></a>
-      and
-      <a href="https://scribbler.live/"
-        >Scribbler<img
-          src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-          alt="External Link Icon"
-          style="
-            width: 16px;
-            height: 16px;
-            vertical-align: middle;
-            margin-left: 2px;
-            margin-bottom: 4px;
-          " /></a
-      >) and server-side runtimes such as
-      <a href="https://nodejs.org/en"
-        >Node.js<img
-          src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-          alt="External Link Icon"
-          style="
-            width: 16px;
-            height: 16px;
-            vertical-align: middle;
-            margin-left: 2px;
-            margin-bottom: 4px;
-          " /></a
-      >.
-    </p>
-
-    <p class="blue-label" style="margin-bottom: 0">QUICK START</p>
-    <div class="blue-box" style="margin-top: 5px">
-      <p>
-        The example below demonstrates a simulation workflow: steady-state heat conduction in a 2D rectangular
-        fin with a circular hole, solved using a Gmsh-generated mesh. Create an HTML file with the code below
-        to run the simulation. See the <a href="#tutorials">tutorials section</a> for more examples.
-      </p>
-    </div>
-
-    <div class="code-block-wrapper">
-      <button class="copy-code-btn" id="copy-qs-btn" title="Copy code" onclick="copyQuickstartCode()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-        </svg>
-        <span>Copy</span>
-      </button>
-      <div class="quickstart-overlay-actions">
-        <a
-          href="https://www.youtube.com/watch?v=35_aqDGPq50"
-          class="btn-video-quickstart"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <rect x="2" y="5" width="20" height="14" rx="4" ry="4"></rect>
-            <polygon points="10 9 16 12 10 15 10 9"></polygon>
-          </svg>
-          Watch tutorial<img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-            alt="External Link Icon"
-            style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px"
-          />
-        </a>
-        <a
-          href="https://codepen.io/FEAScript/pen/ByzVveQ"
-          class="btn-codepen btn-codepen-quickstart"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <polygon points="5 3 19 12 5 21 5 3"></polygon>
-          </svg>
-          Run on CodePen<img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-            alt="External Link Icon"
-            style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px"
-          />
-        </a>
-      </div>
-      <pre class="prettyprint" id="quickstart-code">
+          <div class="grid">
+            <p class="cell cell-note prose">
+              The example below demonstrates a simulation workflow: steady-state heat conduction in a 2D
+              rectangular fin with a circular hole, solved using a Gmsh-generated mesh. Create an HTML file
+              with the code below to run the simulation. See the
+              <a href="#tutorials">tutorials section</a> for more examples.
+            </p>
+            <div class="cell quickstart" data-reveal>
+              <div class="code-block">
+                <div class="code-bar label">
+                  <span class="file">index.html</span>
+                  <div class="code-actions">
+                    <button class="code-btn" id="copy-qs-btn" type="button" title="Copy code">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                      <span>Copy</span>
+                    </button>
+                    <a
+                      class="code-btn code-btn-video"
+                      href="https://www.youtube.com/watch?v=35_aqDGPq50"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <rect x="2" y="5" width="20" height="14" rx="4" ry="4"></rect>
+                        <polygon points="10 9 16 12 10 15 10 9"></polygon>
+                      </svg>
+                      Watch tutorial
+                    </a>
+                    <a
+                      class="code-btn code-btn-codepen"
+                      href="https://codepen.io/FEAScript/pen/ByzVveQ"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                      </svg>
+                      Run on CodePen
+                    </a>
+                  </div>
+                </div>
+                <pre id="quickstart-code">
 &lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
@@ -504,605 +474,537 @@
   &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</pre
-      >
-    </div>
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <script>
-      function copyQuickstartCode() {
-        const pre = document.getElementById("quickstart-code");
-        const btn = document.getElementById("copy-qs-btn");
-        navigator.clipboard.writeText(pre.innerText.trim()).then(() => {
-          btn.classList.add("copied");
-          btn.querySelector("span").textContent = "Copied";
-          setTimeout(() => {
-            btn.classList.remove("copied");
-            btn.querySelector("span").textContent = "Copy";
-          }, 2000);
-        });
-      }
-    </script>
+      <!-- ───────────── 03 FEATURES ───────────── -->
+      <section id="features" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>Features</p>
+          </div>
 
-    <div style="margin-top: 0.5em"></div>
-    <h2 id="features"><a name="Features"></a>Features</h2>
+          <div class="section-head">
+            <h2 data-reveal>Everything you need, <span class="accent">in the browser.</span></h2>
+            <p data-reveal>
+              From physics and meshing to solvers and visualization, the following list highlights the key
+              FEAScript features.
+            </p>
+          </div>
 
-    <p>The following list highlights key FEAScript features:</p>
-    <ul class="features-list">
-      <li>
-        🧠 <strong>Physical Modeling</strong>
-        <ul>
-          <li>Creeping (Stokes) flow</li>
-          <li>Euler-Bernoulli beam bending</li>
-          <li>Front propagation</li>
-          <li>Heat conduction</li>
-        </ul>
-      </li>
-      <li>
-        📐 <strong>Geometry and Meshing</strong>
-        <ul>
-          <li>Simple mesh generation (1D & 2D domains)</li>
-          <li>
-            Unstructured mesh import from
-            <a href="https://gmsh.info/"
-              >Gmsh<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-            (<code>.msh</code> file format)
-          </li>
-        </ul>
-      </li>
-      <li>
-        ⚙️ <strong>Numerical Methods</strong>
-        <ul>
-          <li>General form PDE (linear & nonlinear)</li>
-          <li>
-            Linear system solvers:
+          <div class="grid grid-3">
+            <article class="cell cell-pad" data-reveal>
+              <h3>Physical modeling</h3>
+              <ul class="feature-list">
+                <li data-physics="flow">Creeping (Stokes) flow</li>
+                <li data-physics="structure">Euler-Bernoulli beam bending</li>
+                <li data-physics="front">Front propagation</li>
+                <li data-physics="heat">Heat conduction</li>
+              </ul>
+            </article>
+
+            <article class="cell cell-pad" data-reveal>
+              <h3>Geometry and meshing</h3>
+              <ul class="feature-list">
+                <li>Simple mesh generation (1D &amp; 2D domains)</li>
+                <li>
+                  Unstructured mesh import from <a href="https://gmsh.info/">Gmsh</a> (<code>.msh</code> file
+                  format)
+                </li>
+              </ul>
+            </article>
+
+            <article class="cell cell-pad" data-reveal>
+              <h3>Numerical methods</h3>
+              <ul class="feature-list">
+                <li>General form PDE (linear &amp; nonlinear)</li>
+                <li>
+                  Linear system solvers:
+                  <ul>
+                    <li>Frontal</li>
+                    <li>Jacobi (CPU &amp; WebGPU versions)</li>
+                    <li>LU (via <a href="https://mathjs.org/">math.js</a>)</li>
+                  </ul>
+                </li>
+                <li>Newton-Raphson method for nonlinear systems</li>
+              </ul>
+            </article>
+
+            <article class="cell cell-pad" data-reveal>
+              <h3>Performance &amp; parallelization</h3>
+              <ul class="feature-list">
+                <li>Web worker support for multi-threaded computation</li>
+              </ul>
+            </article>
+
+            <article class="cell cell-pad" data-reveal>
+              <h3>Visualization &amp; post-processing</h3>
+              <ul class="feature-list">
+                <li>
+                  Interactive rendering with <a href="https://kitware.github.io/vtk-js/">vtk.js</a> and
+                  <a href="https://plotly.com/javascript/">Plotly</a>
+                </li>
+              </ul>
+            </article>
+
+            <article class="cell cell-pad" data-reveal>
+              <h3>Platform &amp; deployment</h3>
+              <ul class="feature-list">
+                <li>
+                  Browser runtime (<a href="https://core.feascript.com/dist/feascript.esm.js"
+                    >hosted ESM build</a
+                  >
+                  /
+                  <a href="https://cdn.jsdelivr.net/gh/FEAScript/FEAScript-core/dist/feascript.esm.js"
+                    >JSDelivr CDN</a
+                  >)
+                </li>
+                <li>
+                  Interactive JavaScript playgrounds (e.g.
+                  <a href="https://codepen.io/FEAScript">CodePen</a> and
+                  <a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
+                    >Scribbler</a
+                  >)
+                </li>
+                <li>Server-side runtime (<a href="https://www.npmjs.com/package/feascript">npm</a>)</li>
+              </ul>
+            </article>
+
+            <p class="cell cell-note prose" style="grid-column: 1 / -1">
+              <span class="tag">In development</span>
+              <strong
+                >FEAScript is currently under heavy development with new features being added
+                regularly.</strong
+              >
+              See the roadmap for the next major release:
+              <a href="https://github.com/orgs/FEAScript/discussions/72">0.3.0</a>.
+              <a href="https://github.com/sponsors/FEAScript">Donations</a> help accelerate the next
+              generation of FEAScript's solvers, performance, documentation and tutorials. Interested in
+              contributing? Check out our
+              <a href="https://github.com/FEAScript/FEAScript-core/blob/main/CONTRIBUTING.md"
+                >contribution guidelines</a
+              >
+              to get started.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── 04 TUTORIALS ───────────── -->
+      <section id="tutorials" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>Tutorials</p>
+          </div>
+
+          <div class="section-head">
+            <h2 data-reveal>Learn by <span class="accent">running.</span></h2>
+            <p class="prose" data-reveal>
+              These tutorials provide a step-by-step introduction to FEAScript. They show how to integrate
+              finite element simulations into your own websites and applications or to run them in interactive
+              JavaScript playgrounds such as <a href="https://codepen.io/FEAScript">CodePen</a> and
+              <a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
+                >Scribbler</a
+              >. Each tutorial includes different variations that demonstrate the same physical problem under
+              different configurations, ranging from simple examples to advanced setups using external meshes
+              or multiple threads.
+            </p>
+          </div>
+
+          <div class="grid grid-2">
+            <article class="cell tutorial" data-physics="general" data-reveal>
+              <img
+                class="tutorial-img"
+                src="./assets/advection-diffusion-1d-results.png"
+                alt="Advection-diffusion with Gaussian source results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">General-form PDE</p>
+                <h3>Advection-Diffusion with Gaussian Source</h3>
+                <p>
+                  1D steady-state scalar transport governed by the advection-diffusion equation with a
+                  localized Gaussian source term
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/advection-diffusion-1d.html"
+                    >Basic HTML</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/azNbeJw">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/generalFormPDEScript/advection-diffusion-1d.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="structure" data-reveal>
+              <img
+                class="tutorial-img"
+                src="./assets/cantilever-beam-1d-results.png"
+                alt="Cantilever beam under a tip load results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Structural mechanics</p>
+                <h3>Cantilever Beam Under a Tip Load</h3>
+                <p>
+                  1D Euler-Bernoulli cantilever beam bending under a concentrated tip load, with the finite
+                  element solution verified against the classical analytical solution
+                </p>
+                <div class="badges">
+                  <a class="badge badge-basic" href="https://feascript.com/tutorials/cantilever-beam-1d.html"
+                    >Basic HTML</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="flow" data-reveal>
+              <img
+                class="tutorial-img"
+                src="./assets/lid-driven-cavity-2d-stokes-u-results.png"
+                alt="Creeping flow on a lid-driven 2D cavity results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Creeping flow</p>
+                <h3>Creeping Flow on a Lid-Driven 2D Cavity</h3>
+                <p>
+                  Stokes flow in a square 2D cavity driven by a moving lid, with velocity and pressure fields
+                  resolved
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow.html"
+                    >Basic HTML</a
+                  >
+                  <a
+                    class="badge badge-mt"
+                    href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow-worker.html"
+                    >Multi-threaded</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/XJKGmRz">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/creepingFlowScript/lid-driven-cavity-2d-creeping-flow.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="heat" data-reveal>
+              <img
+                class="tutorial-img"
+                src="./assets/heat-conduction-2d-fin-results.png"
+                alt="Heat conduction in a 2D fin results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Heat conduction</p>
+                <h3>Heat Conduction in a 2D Fin</h3>
+                <p>
+                  2D steady-state heat conduction in a cooling fin with mixed boundary conditions including
+                  constant temperature, symmetry, and convective cooling
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/heat-conduction-2d-fin.html"
+                    >Basic HTML</a
+                  >
+                  <a
+                    class="badge badge-mt"
+                    href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html"
+                    >Multi-threaded</a
+                  >
+                  <a
+                    class="badge badge-gmsh"
+                    href="https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html"
+                    >Gmsh mesh</a
+                  >
+                  <a
+                    class="badge badge-gmsh"
+                    href="https://feascript.com/tutorials/heat-conduction-2d-rhom-fin-gmsh.html"
+                    >Rhomboid fin (Gmsh mesh)</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/WbrzwPG">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/heatConductionScript/heat-conduction-2d-fin.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="heat" data-reveal>
+              <img
+                class="tutorial-img"
+                src="./assets/heat-conduction-1d-wall-results.png"
+                alt="Heat conduction through a wall results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Heat conduction</p>
+                <h3>Heat Conduction Through a Wall</h3>
+                <p>
+                  1D steady-state heat conduction across a wall with convection boundary condition at one end
+                  and constant temperature at the other
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/heat-conduction-1d-wall.html"
+                    >Basic HTML</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/ZYQrqJK">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/heatConductionScript/heat-conduction-1d-wall.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="front" data-reveal>
+              <img
+                class="tutorial-img"
+                src="./assets/solidification-front-2d-results.png"
+                alt="Solidification front propagation results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Front propagation</p>
+                <h3>Solidification Front Propagation in a 2D Domain</h3>
+                <p>
+                  Transient simulation of a solidification front advancing through a 2D domain using the
+                  eikonal equation
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/solidification-front-2d.html"
+                    >Basic HTML</a
+                  >
+                  <a
+                    class="badge badge-mt"
+                    href="https://feascript.com/tutorials/solidification-front-2d-worker.html"
+                    >Multi-threaded</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/dPMxaLq">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/frontPropagationScript/solidification-front-2d.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <p class="cell cell-note prose" style="grid-column: 1 / -1">
+              Please report any feedback or issues with the above tutorials to the
+              <a href="https://github.com/FEAScript/FEAScript-core/issues">FEAScript support</a>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── POWERED BY FEASCRIPT ───────────── -->
+      <section id="poweredby" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>Powered by FEAScript</p>
+          </div>
+
+          <div class="section-head">
+            <h2 data-reveal>Built with <span class="accent">FEAScript.</span></h2>
+          </div>
+
+          <div class="grid">
+            <article class="cell cell-pad" data-reveal>
+              <div class="logo-row">
+                <img src="assets/better-building-logo.png" alt="BetterBuilding Logo" />
+                <p class="text-muted" style="max-width: 46rem">
+                  <a class="link" href="https://betterbuilding.io/">Better Building</a> integrated FEAScript
+                  to power their online
+                  <a
+                    class="link"
+                    href="https://docs.betterbuilding.io/sign-up-and-plans/news-and-updates/2025/introducing-our-free-heat-transfer-simulator"
+                    >Heat Transfer Simulator</a
+                  >
+                  for architects and engineers.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── 05 DOCUMENTATION / LICENSING / SUPPORT ───────────── -->
+      <section id="documentation" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>Resources</p>
+          </div>
+
+          <div class="section-head">
+            <h2 data-reveal>Open, documented, <span class="accent">and growing.</span></h2>
+          </div>
+
+          <div class="grid grid-3">
+            <article class="cell cell-pad" data-reveal>
+              <h3>Documentation</h3>
+              <p class="desc prose" style="margin-top: 1rem">
+                The <a href="https://github.com/FEAScript/FEAScript-documentation">documentation</a> for
+                FEAScript is currently under development. In the meantime, for information on the numerical
+                methods used in FEAScript and other technical resources, please visit our
+                <a href="https://blog.feascript.com">blog</a>.
+              </p>
+            </article>
+
+            <article id="licensing" class="cell cell-pad" data-reveal>
+              <h3>Licensing</h3>
+              <p class="desc prose" style="margin-top: 1rem">
+                The core library of FEAScript is distributed under the terms of the
+                <a href="https://github.com/FEAScript/FEAScript-core/blob/main/LICENSE">MIT license</a>.
+              </p>
+            </article>
+
+            <article class="cell cell-pad" data-reveal>
+              <h3>Help FEAScript grow</h3>
+              <p class="desc prose" style="margin-top: 1rem">
+                If you find FEAScript useful, please consider
+                <strong>supporting its development with a donation</strong>. Your support helps fund new
+                features, performance improvements, documentation and tutorials.
+              </p>
+              <div class="inline-media">
+                <a href="https://github.com/sponsors/FEAScript"
+                  ><img
+                    src="https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?logo=githubsponsors&logoColor=white"
+                    alt="GitHub Sponsors"
+                /></a>
+                <a href="https://liberapay.com/FEAScript/donate"
+                  ><img
+                    src="https://img.shields.io/badge/Donate-Liberapay-F6C915?logo=liberapay&logoColor=black"
+                    alt="Donate on Liberapay"
+                /></a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── MAILING LIST ───────────── -->
+      <section id="maillist" class="section">
+        <div class="section-frame">
+          <div class="cta">
+            <p class="label text-faint">Stay in the loop</p>
+            <h2 data-reveal>Join the <span class="accent">mailing list.</span></h2>
+            <p class="lede">Receive project updates and news.</p>
+
+            <form
+              class="maillist-form"
+              action="https://feascript.us10.list-manage.com/subscribe/post?u=83b4dec50b84e136c2e82c6a4&amp;id=4aa4a60f27&amp;f_id=009362e3f0"
+              method="post"
+              id="mc-embedded-subscribe-form"
+              name="mc-embedded-subscribe-form"
+              target="_blank"
+            >
+              <label class="label" for="mce-EMAIL">Email address</label>
+              <div class="maillist-row">
+                <input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" required value="" />
+                <input
+                  type="submit"
+                  name="subscribe"
+                  id="mc-embedded-subscribe"
+                  class="btn btn-solid"
+                  value="Subscribe"
+                />
+              </div>
+
+              <div id="mce-responses" aria-live="polite">
+                <div class="response" id="mce-error-response" style="display: none"></div>
+                <div class="response" id="mce-success-response" style="display: none"></div>
+              </div>
+
+              <div class="maillist-honeypot" aria-hidden="true">
+                <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ───────────── FOOTER ───────────── -->
+    <footer class="footer">
+      <div class="section-frame">
+        <div class="grid">
+          <div class="cell footer-brand">
+            <a class="footer-wordmark" href="index.html">
+              <svg viewBox="14 79 242 242" aria-hidden="true">
+                <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+              </svg>
+              <span
+                >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
+            </a>
+            <p>A lightweight finite element simulation library for JavaScript.</p>
+            <a class="mail label" href="mailto:info@feascript.com">info@feascript.com</a>
+          </div>
+
+          <nav class="cell footer-col" aria-label="Site">
+            <p class="label text-faint">FEAScript</p>
             <ul>
-              <li>Frontal</li>
-              <li>Jacobi (CPU & WebGPU versions)</li>
-              <li>
-                LU (via
-                <a href="https://mathjs.org/"
-                  >math.js<img
-                    src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                    alt="External Link Icon"
-                    style="
-                      width: 16px;
-                      height: 16px;
-                      vertical-align: middle;
-                      margin-left: 2px;
-                      margin-bottom: 4px;
-                    " /></a
-                >)
-              </li>
+              <li><a href="#howtousefeascript">Get started</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#tutorials">Tutorials</a></li>
+              <li><a href="studio.html">FEAScript Studio</a></li>
             </ul>
-          </li>
-          <li>Newton-Raphson method for nonlinear systems</li>
-        </ul>
-      </li>
-      <li>
-        📊 <strong>Performance & Parallelization</strong>
-        <ul>
-          <li>Web worker support for multi-threaded computation</li>
-        </ul>
-      </li>
-      <li>
-        📈 <strong>Visualization & Post-Processing</strong>
-        <ul>
-          <li>
-            Interactive rendering with
-            <a href="https://kitware.github.io/vtk-js/">
-              vtk.js<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-              />
-            </a>
-            and
-            <a href="https://plotly.com/javascript/">
-              Plotly<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-              />
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li>
-        🚀 <strong>Platform & Deployment</strong>
-        <ul>
-          <li>
-            Browser runtime (<a href="https://core.feascript.com/dist/feascript.esm.js">hosted ESM build</a> /
-            <a href="https://cdn.jsdelivr.net/gh/FEAScript/FEAScript-core/dist/feascript.esm.js"
-              >JSDelivr CDN<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                " /></a
-            >)
-          </li>
-          <li>
-            Interactive JavaScript playgrounds (e.g.
-            <a href="https://codepen.io/FEAScript"
-              >CodePen<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-            and
-            <a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
-              >Scribbler<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                " /></a
-            >)
-          </li>
-          <li>
-            Server-side runtime (<a href="https://www.npmjs.com/package/feascript"
-              >npm<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                " /></a
-            >)
-          </li>
-        </ul>
-      </li>
-    </ul>
+          </nav>
 
-    <p class="notice-dev">
-      🚧
-      <strong>FEAScript is currently under heavy development with new features being added regularly</strong>.
-      See the roadmap for the next major release:
-      <a href="https://github.com/orgs/FEAScript/discussions/72">0.3.0</a>.
-      <br />
-      <a href="https://github.com/sponsors/FEAScript">Donations</a> help accelerate the next generation of
-      FEAScript's solvers, performance, documentation and tutorials. <br />Interested in contributing? Check
-      out our
-      <a href="https://github.com/FEAScript/FEAScript-core/blob/main/CONTRIBUTING.md"
-        >contribution guidelines</a
-      >
-      to get started.
-    </p>
+          <nav class="cell footer-col" aria-label="Resources">
+            <p class="label text-faint">Resources</p>
+            <ul>
+              <li><a href="https://blog.feascript.com/">Blog</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-documentation">Documentation</a></li>
+              <li><a href="https://www.npmjs.com/package/feascript">npm</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
+            </ul>
+          </nav>
 
-    <div style="margin-top: 0.5em"></div>
-    <h2 id="tutorials"><a name="Tutorials"></a>Tutorials</h2>
-    <p>
-      Below you can explore tutorials that provide a step-by-step introduction to FEAScript. These tutorials
-      show how to integrate finite element simulations into your own websites and applications or to run them
-      in interactive JavaScript playgrounds such as
-      <a href="https://codepen.io/FEAScript"
-        >CodePen<img
-          src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-          alt="External Link Icon"
-          style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
-      /></a>
-      and
-      <a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
-        >Scribbler<img
-          src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-          alt="External Link Icon"
-          style="
-            width: 16px;
-            height: 16px;
-            vertical-align: middle;
-            margin-left: 2px;
-            margin-bottom: 4px;
-          " /></a
-      >. Each tutorial include different variations that demonstrate the same physical problem under different
-      configurations, ranging from simple examples to advanced setups using external meshes or multiple
-      threads.
-    </p>
-
-    <ul class="tutorials-list">
-      <li>
-        <div class="tutorial-card-content">
-          <span class="tutorial-name">Advection-Diffusion with Gaussian Source</span>
-          <p class="tutorial-description">
-            <em
-              >1D steady-state scalar transport governed by the advection-diffusion equation with a localized
-              Gaussian source term</em
-            >
-          </p>
-          <div class="tutorial-card-badges">
-            <a href="https://feascript.com/tutorials/advection-diffusion-1d.html" class="badge badge-basic"
-              >Basic HTML</a
-            >
-            <a href="https://codepen.io/FEAScript/pen/azNbeJw" class="badge badge-codepen"
-              >CodePen<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-            <a
-              href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/generalFormPDEScript/advection-diffusion-1d.jsnb"
-              class="badge badge-scribbler"
-              >Scribbler<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-          </div>
+          <nav class="cell footer-col" aria-label="Community">
+            <p class="label text-faint">Community</p>
+            <ul>
+              <li><a href="https://github.com/FEAScript/FEAScript-core">GitHub</a></li>
+              <li><a href="https://discord.gg/3DVjNcuW4f">Discord</a></li>
+              <li><a href="https://www.youtube.com/@FEAScript">YouTube</a></li>
+              <li><a href="https://www.linkedin.com/company/feascript/">LinkedIn</a></li>
+            </ul>
+          </nav>
         </div>
-        <img
-          class="tutorial-card-image"
-          src="./assets/advection-diffusion-1d-results.png"
-          alt="Advection-diffusion with Gaussian source results"
-          loading="lazy"
-        />
-      </li>
-      <li>
-        <div class="tutorial-card-content">
-          <span class="tutorial-name">Cantilever Beam Under a Tip Load</span>
-          <p class="tutorial-description">
-            <em
-              >1D Euler-Bernoulli cantilever beam bending under a concentrated tip load, with the finite
-              element solution verified against the classical analytical solution</em
-            >
-          </p>
-          <div class="tutorial-card-badges">
-            <a href="https://feascript.com/tutorials/cantilever-beam-1d.html" class="badge badge-basic"
-              >Basic HTML</a
-            >
-          </div>
-        </div>
-        <img
-          class="tutorial-card-image"
-          src="./assets/cantilever-beam-1d-results.png"
-          alt="Cantilever beam under a tip load results"
-          loading="lazy"
-        />
-      </li>
-      <li>
-        <div class="tutorial-card-content">
-          <span class="tutorial-name">Creeping Flow on a Lid-Driven 2D Cavity</span>
-          <p class="tutorial-description">
-            <em
-              >Stokes flow in a square 2D cavity driven by a moving lid, with velocity and pressure fields
-              resolved</em
-            >
-          </p>
-          <div class="tutorial-card-badges">
-            <a
-              href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow.html"
-              class="badge badge-basic"
-              >Basic HTML</a
-            >
-            <a
-              href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow-worker.html"
-              class="badge badge-mt"
-              >Multi-threaded</a
-            >
-            <a href="https://codepen.io/FEAScript/pen/XJKGmRz" class="badge badge-codepen"
-              >CodePen<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-            <a
-              href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/creepingFlowScript/lid-driven-cavity-2d-creeping-flow.jsnb"
-              class="badge badge-scribbler"
-              >Scribbler<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-          </div>
-        </div>
-        <img
-          class="tutorial-card-image"
-          src="./assets/lid-driven-cavity-2d-stokes-u-results.png"
-          alt="Creeping flow on a lid-driven 2D cavity results"
-          loading="lazy"
-        />
-      </li>
-      <li>
-        <div class="tutorial-card-content">
-          <span class="tutorial-name">Heat Conduction in a 2D Fin</span>
-          <p class="tutorial-description">
-            <em
-              >2D steady-state heat conduction in a cooling fin with mixed boundary conditions including
-              constant temperature, symmetry, and convective cooling</em
-            >
-          </p>
-          <div class="tutorial-card-badges">
-            <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html" class="badge badge-basic"
-              >Basic HTML</a
-            >
-            <a
-              href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html"
-              class="badge badge-mt"
-              >Multi-threaded</a
-            >
-            <a
-              href="https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html"
-              class="badge badge-gmsh"
-              >Gmsh mesh</a
-            >
-            <a
-              href="https://feascript.com/tutorials/heat-conduction-2d-rhom-fin-gmsh.html"
-              class="badge badge-gmsh"
-              >Rhomboid fin (Gmsh mesh)</a
-            >
-            <a href="https://codepen.io/FEAScript/pen/WbrzwPG" class="badge badge-codepen"
-              >CodePen<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-            <a
-              href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/heatConductionScript/heat-conduction-2d-fin.jsnb"
-              class="badge badge-scribbler"
-              >Scribbler<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-          </div>
-        </div>
-        <img
-          class="tutorial-card-image"
-          src="./assets/heat-conduction-2d-fin-results.png"
-          alt="Heat conduction in a 2D fin results"
-          loading="lazy"
-        />
-      </li>
-      <li>
-        <div class="tutorial-card-content">
-          <span class="tutorial-name">Heat Conduction Through a Wall</span>
-          <p class="tutorial-description">
-            <em
-              >1D steady-state heat conduction across a wall with convection boundary condition at one end and
-              constant temperature at the other</em
-            >
-          </p>
-          <div class="tutorial-card-badges">
-            <a href="https://feascript.com/tutorials/heat-conduction-1d-wall.html" class="badge badge-basic"
-              >Basic HTML</a
-            >
-            <!-- <a href="https://feascript.com/tutorials/heat-conduction-1d-wall-platform.html" class="badge badge-visual"
-              >Visual editor</a
-            > -->
-            <a href="https://codepen.io/FEAScript/pen/ZYQrqJK" class="badge badge-codepen"
-              >CodePen<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-            <a
-              href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/heatConductionScript/heat-conduction-1d-wall.jsnb"
-              class="badge badge-scribbler"
-              >Scribbler<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-          </div>
-        </div>
-        <img
-          class="tutorial-card-image"
-          src="./assets/heat-conduction-1d-wall-results.png"
-          alt="Heat conduction through a wall results"
-          loading="lazy"
-        />
-      </li>
-      <li>
-        <div class="tutorial-card-content">
-          <span class="tutorial-name">Solidification Front Propagation in a 2D Domain</span>
-          <p class="tutorial-description">
-            <em
-              >Transient simulation of a solidification front advancing through a 2D domain using the eikonal
-              equation</em
-            >
-          </p>
-          <div class="tutorial-card-badges">
-            <a href="https://feascript.com/tutorials/solidification-front-2d.html" class="badge badge-basic"
-              >Basic HTML</a
-            >
-            <a
-              href="https://feascript.com/tutorials/solidification-front-2d-worker.html"
-              class="badge badge-mt"
-              >Multi-threaded</a
-            >
-            <a href="https://codepen.io/FEAScript/pen/dPMxaLq" class="badge badge-codepen"
-              >CodePen<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-            <a
-              href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/frontPropagationScript/solidification-front-2d.jsnb"
-              class="badge badge-scribbler"
-              >Scribbler<img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-                alt="External Link Icon"
-                style="
-                  width: 16px;
-                  height: 16px;
-                  vertical-align: middle;
-                  margin-left: 2px;
-                  margin-bottom: 4px;
-                "
-            /></a>
-          </div>
-        </div>
-        <img
-          class="tutorial-card-image"
-          src="./assets/solidification-front-2d-results.png"
-          alt="Solidification front propagation results"
-          loading="lazy"
-        />
-      </li>
-    </ul>
 
-    <p>
-      Please report any feedback or issues with the above tutorials to the
-      <a href="https://github.com/FEAScript/FEAScript-core/issues">FEAScript support</a>.
-    </p>
-
-    <p class="blue-label" style="margin-bottom: 0">HELP FEASCRIPT GROW</p>
-    <div class="blue-box" style="margin-top: 5px">
-      <p>
-        💖 If you find FEAScript useful, please consider <b>supporting its development with a donation</b>.
-        Your support helps fund new features, performance improvements, documentation and tutorials:
-        <a href="https://github.com/sponsors/FEAScript"
-          ><img
-            src="https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?logo=githubsponsors&logoColor=white"
-            alt="GitHub Sponsors"
-            style="height: 20px; vertical-align: middle; margin-left: 4px"
-        /></a>
-        <a href="https://liberapay.com/FEAScript/donate"
-          ><img
-            src="https://img.shields.io/badge/Donate-Liberapay-F6C915?logo=liberapay&logoColor=black"
-            alt="Donate on Liberapay"
-            style="height: 20px; vertical-align: middle; margin-left: 4px"
-        /></a>
-      </p>
-      <p>
-        📨 You can also join the <b>FEAScript mailing list</b> to receive project updates and news:
-        <a href="https://mailchi.mp/e29600955ffe/join-the-mailing-list"
-          >Subscribe here<img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-            alt="External Link Icon"
-            style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
-        /></a>
-      </p>
-    </div>
-
-    <h2 id="documentation"><a name="Documentation"></a>Documentation</h2>
-    <p>
-      The <a href="https://github.com/FEAScript/FEAScript-documentation">documentation</a> for FEAScript is
-      currently under development. In the meantime, for information on the numerical methods used in FEAScript
-      and other technical resources, please visit our <a href="https://blog.feascript.com">blog</a>.
-    </p>
-
-    <h2 id="licensing"><a name="Licensing"></a>Licensing</h2>
-    <p>
-      The core library of FEAScript is distributed under the terms of the
-      <a href="https://github.com/FEAScript/FEAScript-core/blob/main/LICENSE">MIT license</a>. This website is
-      licensed under the
-      <a href="https://github.com/FEAScript/FEAScript-website/blob/main/LICENSE"
-        >Creative Commons Attribution 4.0 License</a
-      >.
-    </p>
-    <footer>
-      <p>
-        Contact:
-        <a href="mailto:info@feascript.com">info@feascript.com</a>
-      </p>
-      <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+        <div class="footer-bottom label">
+          <p>&#169; 2023-<span id="currentYear"></span> FEAScript</p>
+          <p>Core: MIT license · Website: CC BY 4.0</p>
+        </div>
+      </div>
     </footer>
-    <script>
-      // Update copyright year
-      document.getElementById("currentYear").innerHTML = new Date().getFullYear();
 
-      // Fetch GitHub stars
-      fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
-        .then((response) => response.json())
-        .then((data) => {
-          const starCount = data.stargazers_count;
-          const starsElement = document.getElementById("github-stars");
-          if (starsElement && starCount) {
-            starsElement.innerHTML = `★ ${starCount}`;
-          }
-        })
-        .catch((error) => console.error("Error fetching GitHub stars:", error));
-    </script>
+    <script src="feascript-website.js"></script>
   </body>
 </html>

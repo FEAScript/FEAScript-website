@@ -1,7 +1,7 @@
 /*
  * ════════════════════════════════════════════════════════════════
  *  FEAScript Website - home page behaviour
- *  Lightweight Finite Element Simulation in JavaScript
+ *  Finite Element Simulation in JavaScript
  *  https://feascript.com
  *  CC BY 4.0 License © 2023–2026 FEAScript
  * ════════════════════════════════════════════════════════════════
@@ -81,6 +81,9 @@
         current = heading.textContent.trim();
       }
       if (docBar.textContent !== current) docBar.textContent = current;
+      const bar = docBar.closest(".eyebrow");
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.setProperty("--read", max > 0 ? Math.min(1, window.scrollY / max).toFixed(3) : 0);
     };
     window.addEventListener("scroll", updateDocBar, { passive: true });
     updateDocBar();

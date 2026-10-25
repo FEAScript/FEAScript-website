@@ -194,67 +194,72 @@
           </div>
 
           <div class="section-head doc-head">
-            <h1>Creeping Flow in a 2D Lid-Driven Cavity Tutorial</h1>
+            <h1>Creeping Flow in a <span class="accent">2D Lid-Driven Cavity Tutorial</span></h1>
           </div>
 
           <div class="doc">
+            <ul id="menu">
+              <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
+              <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
+              <li><a href="#results">Results</a></li>
+            </ul>
 
-    <ul id="menu">
-      <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
-      <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
+            <div class="highlight-container">
+              <p>
+                In this tutorial, we solve the steady Stokes flow equations inside a two-dimensional
+                lid-driven cavity. The lid-driven cavity is a classical benchmark problem in computational
+                fluid dynamics where the top wall moves at a constant horizontal velocity while the remaining
+                walls are stationary, driving a recirculating flow inside the domain.
+              </p>
+            </div>
 
-    <div class="highlight-container">
-      <p>
-        In this tutorial, we solve the steady Stokes flow equations inside a two-dimensional lid-driven
-        cavity. The lid-driven cavity is a classical benchmark problem in computational fluid dynamics where
-        the top wall moves at a constant horizontal velocity while the remaining walls are stationary, driving
-        a recirculating flow inside the domain.
-      </p>
-    </div>
+            <h2 id="mathematicalformulation">
+              <a name="Mathematical formulation"></a>Mathematical <span class="accent">Formulation</span>
+            </h2>
+            <p>
+              The steady Stokes equations for an incompressible Newtonian fluid with no body forces are:
+              \(\nabla \cdot \mathbf{u} = 0\) and \(-\mu \nabla^{2} \mathbf{u} + \nabla p = \mathbf{0}\),
+              where \(\mathbf{u} = (u,v)\) is the velocity vector, \(p\) is the pressure and \(\mu\) is the
+              dynamic viscosity. In the FEAScript implementation below, we set the viscosity coefficient to
+              \(\mu = 1.0\).
+            </p>
 
-    <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
-    <p>
-      The steady Stokes equations for an incompressible Newtonian fluid with no body forces are: \(\nabla
-      \cdot \mathbf{u} = 0\) and \(-\mu \nabla^{2} \mathbf{u} + \nabla p = \mathbf{0}\), where \(\mathbf{u} =
-      (u,v)\) is the velocity vector, \(p\) is the pressure and \(\mu\) is the dynamic viscosity. In the
-      FEAScript implementation below, we set the viscosity coefficient to \(\mu = 1.0\).
-    </p>
+            <div class="center-image">
+              <img src="../assets/stokes-2d-lid-driven.png" alt="2D Stokes flow schematic" width="300" />
+              <p class="image-caption">
+                Schematic of the 2D lid-driven cavity: horizontal velocity (u=1) at the top edge and no-slip
+                condition (u=v=0) at the other edges.
+              </p>
+            </div>
 
-    <div class="center-image">
-      <img src="../assets/stokes-2d-lid-driven.png" alt="2D Stokes flow schematic" width="300" />
-      <p class="image-caption">
-        Schematic of the 2D lid-driven cavity: horizontal velocity (u=1) at the top edge and no-slip condition
-        (u=v=0) at the other edges.
-      </p>
-    </div>
+            <p>
+              The above schematic illustrates the problem domain and outlines the associated boundary
+              conditions. To satisfy the Ladyzhenskaya&ndash;Babu&scaron;ka&ndash;Brezzi (LBB) inf-sup
+              stability condition, FEAScript uses the Taylor-Hood mixed finite element formulation. In this
+              approach, velocity is discretized with 9-node biquadratic (Q2) elements and pressure with 4-node
+              bilinear (Q1) elements.
+            </p>
 
-    <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. To
-      satisfy the Ladyzhenskaya&ndash;Babu&scaron;ka&ndash;Brezzi (LBB) inf-sup stability condition, FEAScript
-      uses the Taylor-Hood mixed finite element formulation. In this approach, velocity is discretized with
-      9-node biquadratic (Q2) elements and pressure with 4-node bilinear (Q1) elements.
-    </p>
-
-    <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
-    <p>
-      Below is a demonstration of how to use the FEAScript library to solve the Stokes lid-driven cavity
-      problem in your web browser. You only need a simple HTML page to run this example where the following
-      code snippets should be included. First, load the required external libraries:
-    </p>
-    <pre class="prettyprint">
+            <h2 id="solvingwithfeascript">
+              <a name="Solving with FEAScript"></a>Solving with <span class="accent">FEAScript</span>
+            </h2>
+            <p>
+              Below is a demonstration of how to use the FEAScript library to solve the Stokes lid-driven
+              cavity problem in your web browser. You only need a simple HTML page to run this example where
+              the following code snippets should be included. First, load the required external libraries:
+            </p>
+            <pre class="prettyprint">
 &lt;head&gt;
   &lt;!-- ...head region... --&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"&gt;&lt;/script&gt;
   &lt;!-- ...rest of head region... --&gt;
 &lt;/head&gt;</pre
-    >
-    <p>
-      We should then define the problem parameters, such as the model type, the mesh configuration and the
-      boundary conditions. This is performed using the FEAScript API directly in the HTML file:
-    </p>
-    <pre class="prettyprint">
+            >
+            <p>
+              We should then define the problem parameters, such as the model type, the mesh configuration and
+              the boundary conditions. This is performed using the FEAScript API directly in the HTML file:
+            </p>
+            <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -309,26 +314,27 @@
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
-    >
-    <p>
-      In the boundary condition definition, the numbers at the left side (from <code>"0"</code> to
-      <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has assigned
-      numbers to the boundaries, starting from the bottom boundary and proceeding clockwise). The
-      <code>"constantVelocity"</code> condition sets the velocity components \(u\) and \(v\) at the boundary
-      nodes (the second and third arguments respectively).
-    </p>
-    <p>
-      Since the Stokes solver uses a mixed formulation, the solution vector contains all DOFs packed
-      sequentially: \([u_0, \ldots, u_{N_2-1}, \, v_0, \ldots, v_{N_2-1}, \, p_0, \ldots, p_{N_1-1}]\), where
-      \(N_2\) is the number of velocity nodes (Q2) and \(N_1\) is the number of pressure nodes (Q1). The
-      velocity components are extracted by slicing the solution vector and each field can then be plotted
-      individually using the existing <code>plotSolution</code> function.
-    </p>
-    <p>
-      After solving the case, the results are shown in 2D contour plots. To visualize them, include HTML
-      containers where the plots will render:
-    </p>
-    <pre class="prettyprint">
+            >
+            <p>
+              In the boundary condition definition, the numbers at the left side (from <code>"0"</code> to
+              <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has
+              assigned numbers to the boundaries, starting from the bottom boundary and proceeding clockwise).
+              The <code>"constantVelocity"</code> condition sets the velocity components \(u\) and \(v\) at
+              the boundary nodes (the second and third arguments respectively).
+            </p>
+            <p>
+              Since the Stokes solver uses a mixed formulation, the solution vector contains all DOFs packed
+              sequentially: \([u_0, \ldots, u_{N_2-1}, \, v_0, \ldots, v_{N_2-1}, \, p_0, \ldots,
+              p_{N_1-1}]\), where \(N_2\) is the number of velocity nodes (Q2) and \(N_1\) is the number of
+              pressure nodes (Q1). The velocity components are extracted by slicing the solution vector and
+              each field can then be plotted individually using the existing
+              <code>plotSolution</code> function.
+            </p>
+            <p>
+              After solving the case, the results are shown in 2D contour plots. To visualize them, include
+              HTML containers where the plots will render:
+            </p>
+            <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;div id="velocityMagnitudeCanvas"&gt;&lt;/div&gt;
@@ -336,108 +342,109 @@
   &lt;div id="vVelocityCanvas"&gt;&lt;/div&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
-    >
+            >
 
-    <h2 id="results"><a name="Results"></a>Results</h2>
-    <p>
-      Below are the 2D contour plots of the computed velocity magnitude \(|\mathbf{u}| = \sqrt{u^2+v^2}\),
-      horizontal velocity component \(u\), and vertical velocity component \(v\). These plots are generated in
-      real time using FEAScript.
-    </p>
+            <h2 id="results"><a name="Results"></a><span class="accent">Results</span></h2>
+            <p>
+              Below are the 2D contour plots of the computed velocity magnitude \(|\mathbf{u}| =
+              \sqrt{u^2+v^2}\), horizontal velocity component \(u\), and vertical velocity component \(v\).
+              These plots are generated in real time using FEAScript.
+            </p>
 
-    <h3>Velocity Magnitude</h3>
-    <div id="velocityMagnitudeCanvas"></div>
+            <h3>Velocity Magnitude</h3>
+            <div id="velocityMagnitudeCanvas"></div>
 
-    <h3>Horizontal Velocity (\(u\))</h3>
-    <div id="uVelocityCanvas"></div>
+            <h3>Horizontal Velocity (\(u\))</h3>
+            <div id="uVelocityCanvas"></div>
 
-    <h3>Vertical Velocity (\(v\))</h3>
-    <div id="vVelocityCanvas"></div>
+            <h3>Vertical Velocity (\(v\))</h3>
+            <div id="vVelocityCanvas"></div>
 
-    <br />
+            <br />
 
-    <ul id="menu">
-      <li><a href="https://feascript.com/index.html">Home</a></li>
-      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-    </ul>
+            <ul id="menu">
+              <li><a href="https://feascript.com/index.html">Home</a></li>
+              <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+            </ul>
 
-    <script type="module">
-      // Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        plotSolution,
-        printVersion,
-      } from "https://core.feascript.com/dist/feascript.esm.js";
-      // Import FEAScript library from a local directory
-      // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+            <script type="module">
+              // Import FEAScript library from GitHub
+              import {
+                FEAScriptModel,
+                plotSolution,
+                printVersion,
+              } from "https://core.feascript.com/dist/feascript.esm.js";
+              // Import FEAScript library from a local directory
+              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
-      window.addEventListener("DOMContentLoaded", () => {
-        // Print FEAScript version
-        console.log("FEAScript version:", printVersion);
+              window.addEventListener("DOMContentLoaded", () => {
+                // Print FEAScript version
+                console.log("FEAScript version:", printVersion);
 
-        // Create a new FEAScript model
-        const model = new FEAScriptModel();
+                // Create a new FEAScript model
+                const model = new FEAScriptModel();
 
-        // Set model configuration
-        model.setModelConfig("creepingFlowScript");
+                // Set model configuration
+                model.setModelConfig("creepingFlowScript");
 
-        // Define mesh configuration
-        model.setMeshConfig({
-          meshDimension: "2D",
-          elementOrder: "quadratic",
-          numElementsX: 12,
-          numElementsY: 6,
-          maxX: 4,
-          maxY: 2,
-        });
+                // Define mesh configuration
+                model.setMeshConfig({
+                  meshDimension: "2D",
+                  elementOrder: "quadratic",
+                  numElementsX: 12,
+                  numElementsY: 6,
+                  maxX: 4,
+                  maxY: 2,
+                });
 
-        // Define boundary conditions
-        model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom wall (no-slip)
-        model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left wall (no-slip)
-        model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Top lid (moving)
-        model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right wall (no-slip)
+                // Define boundary conditions
+                model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom wall (no-slip)
+                model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left wall (no-slip)
+                model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Top lid (moving)
+                model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right wall (no-slip)
 
-        // Set solver method
-        model.setSolverMethod("lusolve");
+                // Set solver method
+                model.setSolverMethod("lusolve");
 
-        // Solve the problem and get the solution
-        const result = model.solve();
+                // Solve the problem and get the solution
+                const result = model.solve();
 
-        // Extract velocity and pressure fields from the solution vector
-        // DOF layout: [u₀…u_{N₂−1}, v₀…v_{N₂−1}, p₀…p_{N₁−1}]
-        const totalNodesVelocity = model._creepingFlowMetadata.totalNodesVelocity;
-        const solutionVector = result.solutionVector;
-        const uVelocity = solutionVector.slice(0, totalNodesVelocity);
-        const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
-        const velocityMagnitude = uVelocity.map((u, i) => Math.sqrt(u * u + vVelocity[i] * vVelocity[i]));
+                // Extract velocity and pressure fields from the solution vector
+                // DOF layout: [u₀…u_{N₂−1}, v₀…v_{N₂−1}, p₀…p_{N₁−1}]
+                const totalNodesVelocity = model._creepingFlowMetadata.totalNodesVelocity;
+                const solutionVector = result.solutionVector;
+                const uVelocity = solutionVector.slice(0, totalNodesVelocity);
+                const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
+                const velocityMagnitude = uVelocity.map((u, i) =>
+                  Math.sqrt(u * u + vVelocity[i] * vVelocity[i]),
+                );
 
-        // Plot velocity magnitude as a 2D contour plot
-        plotSolution(
-          model,
-          { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
-          "contour",
-          "velocityMagnitudeCanvas",
-        );
+                // Plot velocity magnitude as a 2D contour plot
+                plotSolution(
+                  model,
+                  { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
+                  "contour",
+                  "velocityMagnitudeCanvas",
+                );
 
-        // Plot u-velocity component as a 2D contour plot
-        plotSolution(
-          model,
-          { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
-          "contour",
-          "uVelocityCanvas",
-        );
+                // Plot u-velocity component as a 2D contour plot
+                plotSolution(
+                  model,
+                  { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
+                  "contour",
+                  "uVelocityCanvas",
+                );
 
-        // Plot v-velocity component as a 2D contour plot
-        plotSolution(
-          model,
-          { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
-          "contour",
-          "vVelocityCanvas",
-        );
-      });
-    </script>
-
-    </div>
+                // Plot v-velocity component as a 2D contour plot
+                plotSolution(
+                  model,
+                  { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
+                  "contour",
+                  "vVelocityCanvas",
+                );
+              });
+            </script>
+          </div>
         </div>
       </section>
     </main>
@@ -452,12 +459,13 @@
               </svg>
               <span
                 >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
-                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
-                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
-              ></span
-              >
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
             </a>
-            <p class="footer-tagline">Finite element simulation in JavaScript, for the browser and Node.js.</p>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
             <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
           </div>
           <nav class="footer-col" aria-label="Product">
@@ -474,7 +482,7 @@
               <li><a href="../index.html#tutorials">Tutorials</a></li>
               <li><a href="https://github.com/FEAScript/FEAScript-documentation">Documentation</a></li>
               <li><a href="https://blog.feascript.com/">Blog</a></li>
-              <li><a href="mailto:info@feascript.com?subject=FEAScript%20support">Support</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
             </ul>
           </nav>
           <nav class="footer-col" aria-label="Community">
@@ -493,6 +501,6 @@
         </div>
       </div>
     </footer>
-  <script src="../feascript-website.js"></script>
+    <script src="../feascript-website.js"></script>
   </body>
 </html>

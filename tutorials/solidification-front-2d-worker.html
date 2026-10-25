@@ -194,32 +194,37 @@
           </div>
 
           <div class="section-head doc-head">
-            <h1>Solidification Front Propagation in a 2D Domain Tutorial (Multi-threaded)</h1>
+            <h1>
+              Solidification Front Propagation in a 2D Domain Tutorial
+              <span class="accent">(Multi-threaded)</span>
+            </h1>
           </div>
 
           <div class="doc">
+            <ul id="menu">
+              <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
+              <li><a href="#results">Results</a></li>
+            </ul>
 
-    <ul id="menu">
-      <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
+            <div class="highlight-container">
+              <p>
+                This page demonstrates solving the solidification front propagation problem using FEAScript in
+                a web worker for improved browser responsiveness. For the mathematical formulation and theory,
+                see the
+                <a href="https://feascript.com/tutorials/solidification-front-2d.html">basic tutorial</a>.
+              </p>
+            </div>
 
-    <div class="highlight-container">
-      <p>
-        This page demonstrates solving the solidification front propagation problem using FEAScript in a web
-        worker for improved browser responsiveness. For the mathematical formulation and theory, see the
-        <a href="https://feascript.com/tutorials/solidification-front-2d.html">basic tutorial</a>.
-      </p>
-    </div>
+            <h2 id="webworkerimplementation">
+              <a name="Web Worker Implementation"></a>Web Worker <span class="accent">Implementation</span>
+            </h2>
+            <p>
+              The code below shows how to use FEAScript with a web worker to solve the eikonal equation for
+              front propagation. This approach moves the computation to a separate thread, preventing the UI
+              from freezing during complex calculations. The solution is plotted as a 2D contour.
+            </p>
 
-    <h2 id="webworkerimplementation"><a name="Web Worker Implementation"></a>Web Worker Implementation</h2>
-    <p>
-      The code below shows how to use FEAScript with a web worker to solve the eikonal equation for front
-      propagation. This approach moves the computation to a separate thread, preventing the UI from freezing
-      during complex calculations. The solution is plotted as a 2D contour.
-    </p>
-
-    <pre class="prettyprint">
+            <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -267,92 +272,95 @@
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
-    >
+            >
 
-    <h2 id="results"><a name="Results"></a>Results</h2>
-    <p>
-      Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
-      time of the front at each position. This plot is generated in real time using FEAScript.
-    </p>
+            <h2 id="results"><a name="Results"></a><span class="accent">Results</span></h2>
+            <p>
+              Below is the 2D contour plot of the computed front propagation. The contour values represent the
+              arrival time of the front at each position. This plot is generated in real time using FEAScript.
+            </p>
 
-    <div id="loading">
-      <div class="spinner"></div>
-      Solving...
-    </div>
-    <div id="resultsCanvas"></div>
+            <div id="loading">
+              <div class="spinner"></div>
+              Solving...
+            </div>
+            <div id="resultsCanvas"></div>
 
-    <ul id="menu">
-      <li><a href="https://feascript.com/index.html">Home</a></li>
-      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-    </ul>
+            <ul id="menu">
+              <li><a href="https://feascript.com/index.html">Home</a></li>
+              <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+            </ul>
 
-    <script type="module">
-      // Import FEAScript library from GitHub
-      import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
+            <script type="module">
+              // Import FEAScript library from GitHub
+              import {
+                FEAScriptWorker,
+                plotSolution,
+                printVersion,
+              } from "https://core.feascript.com/src/index.js";
 
-      // Import FEAScript library from a local directory
-      // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+              // Import FEAScript library from a local directory
+              // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
-      window.addEventListener("DOMContentLoaded", async () => {
-        document.getElementById("resultsCanvas").style.display = "block";
+              window.addEventListener("DOMContentLoaded", async () => {
+                document.getElementById("resultsCanvas").style.display = "block";
 
-        // Show loading indicator
-        document.getElementById("loading").style.display = "block";
+                // Show loading indicator
+                document.getElementById("loading").style.display = "block";
 
-        // Print FEAScript version
-        console.log("FEAScript version:", printVersion);
+                // Print FEAScript version
+                console.log("FEAScript version:", printVersion);
 
-        // Create a new FEAScriptWorker instance
-        const model = new FEAScriptWorker();
+                // Create a new FEAScriptWorker instance
+                const model = new FEAScriptWorker();
 
-        try {
-          // Ensure the worker is ready
-          await model.ping();
+                try {
+                  // Ensure the worker is ready
+                  await model.ping();
 
-          // Set solver configuration
-          await model.setModelConfig("frontPropagationScript");
+                  // Set solver configuration
+                  await model.setModelConfig("frontPropagationScript");
 
-          // Define mesh configuration
-          await model.setMeshConfig({
-            meshDimension: "2D",
-            elementOrder: "quadratic",
-            numElementsX: 12,
-            numElementsY: 8,
-            maxX: 4,
-            maxY: 2,
-          });
+                  // Define mesh configuration
+                  await model.setMeshConfig({
+                    meshDimension: "2D",
+                    elementOrder: "quadratic",
+                    numElementsX: 12,
+                    numElementsY: 8,
+                    maxX: 4,
+                    maxY: 2,
+                  });
 
-          // Define boundary conditions
-          await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
-          await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-          await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-          await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
+                  // Define boundary conditions
+                  await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
+                  await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+                  await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+                  await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
-          // Set solver method
-          await model.setSolverMethod("lusolve");
+                  // Set solver method
+                  await model.setSolverMethod("lusolve");
 
-          // Solve the problem and get the solution
-          const result = await model.solve();
+                  // Solve the problem and get the solution
+                  const result = await model.solve();
 
-          // Get model info for plotting
-          const modelInfo = await model.getModelInfo();
+                  // Get model info for plotting
+                  const modelInfo = await model.getModelInfo();
 
-          // Plot the solution as a 2D contour plot
-          plotSolution(modelInfo, result, "contour", "resultsCanvas");
-        } catch (error) {
-          console.error("Error in worker execution:", error);
-          alert("Error executing the solver. Check console for details.");
-        } finally {
-          // Hide loading indicator
-          document.getElementById("loading").style.display = "none";
+                  // Plot the solution as a 2D contour plot
+                  plotSolution(modelInfo, result, "contour", "resultsCanvas");
+                } catch (error) {
+                  console.error("Error in worker execution:", error);
+                  alert("Error executing the solver. Check console for details.");
+                } finally {
+                  // Hide loading indicator
+                  document.getElementById("loading").style.display = "none";
 
-          // Terminate the worker
-          model.terminate();
-        }
-      });
-    </script>
-
-    </div>
+                  // Terminate the worker
+                  model.terminate();
+                }
+              });
+            </script>
+          </div>
         </div>
       </section>
     </main>
@@ -367,12 +375,13 @@
               </svg>
               <span
                 >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
-                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
-                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
-              ></span
-              >
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
             </a>
-            <p class="footer-tagline">Finite element simulation in JavaScript, for the browser and Node.js.</p>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
             <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
           </div>
           <nav class="footer-col" aria-label="Product">
@@ -389,7 +398,7 @@
               <li><a href="../index.html#tutorials">Tutorials</a></li>
               <li><a href="https://github.com/FEAScript/FEAScript-documentation">Documentation</a></li>
               <li><a href="https://blog.feascript.com/">Blog</a></li>
-              <li><a href="mailto:info@feascript.com?subject=FEAScript%20support">Support</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
             </ul>
           </nav>
           <nav class="footer-col" aria-label="Community">
@@ -408,6 +417,6 @@
         </div>
       </div>
     </footer>
-  <script src="../feascript-website.js"></script>
+    <script src="../feascript-website.js"></script>
   </body>
 </html>

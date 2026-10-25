@@ -194,45 +194,53 @@
           </div>
 
           <div class="section-head doc-head">
-            <h1>Heat Conduction in a 2D Rhomboid Fin Tutorial (Gmsh Mesh)</h1>
+            <h1>Heat Conduction in a 2D Rhomboid Fin Tutorial <span class="accent">(Gmsh Mesh)</span></h1>
           </div>
 
           <div class="doc">
+            <ul id="menu">
+              <li><a href="#gmshfileimport">Gmsh File Import</a></li>
+              <li>
+                <a href="#gmshgeofile">Example Gmsh <code>.geo</code> File</a>
+              </li>
+              <li><a href="#generatedmesh">Generated Mesh</a></li>
+              <li><a href="#results">Results</a></li>
+            </ul>
 
-    <ul id="menu">
-      <li><a href="#gmshfileimport">Gmsh File Import</a></li>
-      <li>
-        <a href="#gmshgeofile">Example Gmsh <code>.geo</code> File</a>
-      </li>
-      <li><a href="#generatedmesh">Generated Mesh</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
+            <div class="highlight-container">
+              <p>
+                This page demonstrates solving the 2D heat conduction fin problem using a Gmsh-generated mesh.
+                It is a variation of the
+                <a href="heat-conduction-2d-fin-gmsh.html">rectangular fin tutorial</a>, but applied to a
+                rhomboidal domain.
+                <a href="https://gmsh.info/">
+                  Gmsh
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
+                    alt="External Link Icon"
+                    style="
+                      width: 16px;
+                      height: 16px;
+                      vertical-align: middle;
+                      margin-left: 2px;
+                      margin-bottom: 4px;
+                    "
+                /></a>
+                is a powerful mesh generation tool that can create complex geometries and meshes for finite
+                element analysis. For the mathematical formulation and theory, see the
+                <a href="heat-conduction-2d-fin.html">basic tutorial</a>.
+              </p>
+            </div>
 
-    <div class="highlight-container">
-      <p>
-        This page demonstrates solving the 2D heat conduction fin problem using a Gmsh-generated mesh. It is a
-        variation of the <a href="heat-conduction-2d-fin-gmsh.html">rectangular fin tutorial</a>, but applied
-        to a rhomboidal domain.
-        <a href="https://gmsh.info/">
-          Gmsh
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/44/Icon_External_Link.svg"
-            alt="External Link Icon"
-            style="width: 16px; height: 16px; vertical-align: middle; margin-left: 2px; margin-bottom: 4px"
-        /></a>
-        is a powerful mesh generation tool that can create complex geometries and meshes for finite element
-        analysis. For the mathematical formulation and theory, see the
-        <a href="heat-conduction-2d-fin.html">basic tutorial</a>.
-      </p>
-    </div>
+            <h2 id="gmshfileimport">
+              <a name="gmshfileimport"></a>Gmsh File <span class="accent">Import</span>
+            </h2>
+            <p>
+              This example demonstrates how to import a Gmsh-generated mesh (<code>.msh</code> file format)
+              and solve a heat conduction problem.
+            </p>
 
-    <h2 id="gmshfileimport"><a name="gmshfileimport"></a>Gmsh File Import</h2>
-    <p>
-      This example demonstrates how to import a Gmsh-generated mesh (<code>.msh</code> file format) and solve
-      a heat conduction problem.
-    </p>
-
-    <pre class="prettyprint">
+            <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -283,20 +291,21 @@
   &lt;/script&gt;
   &lt;!-- ... rest of body region... --&gt;
 &lt;/body&gt;</pre
-    >
+            >
 
-    <p>
-      For details on the Gmsh workflow, physical groups, and boundary condition mapping, please refer to the
-      <a href="heat-conduction-2d-fin-gmsh.html#gmshfileimport">rectangular fin tutorial</a>.
-    </p>
+            <p>
+              For details on the Gmsh workflow, physical groups, and boundary condition mapping, please refer
+              to the
+              <a href="heat-conduction-2d-fin-gmsh.html#gmshfileimport">rectangular fin tutorial</a>.
+            </p>
 
-    <h3 id="gmshgeofile"><a name="gmshgeofile"></a>Example Gmsh <code>.geo</code> File</h3>
-    <p>
-      Below is the <code>rhom.geo</code> file used in this tutorial. It defines a 4 m × 2 m rectangular domain
-      with physical lines for each boundary edge:
-    </p>
+            <h3 id="gmshgeofile"><a name="gmshgeofile"></a>Example Gmsh <code>.geo</code> File</h3>
+            <p>
+              Below is the <code>rhom.geo</code> file used in this tutorial. It defines a 4 m × 2 m
+              rectangular domain with physical lines for each boundary edge:
+            </p>
 
-    <pre class="prettyprint">
+            <pre class="prettyprint">
 // 2D Rhomboid: 4m (base width) x 2m (height)
 
 lc = 0.7; // Characteristic length
@@ -332,113 +341,112 @@ Physical Surface("domain") = {1};
 Recombine Surface{1}; // Turn triangle elements into quadrilaterals
 Mesh.ElementOrder = 2; // Set quadratic elements 
 Mesh 2;</pre
-    >
+            >
 
-    <p>
-      To generate a mesh file from this <code>.geo</code> script, you would run:
-      <code>gmsh rhom.geo -2</code> in your terminal.
-    </p>
+            <p>
+              To generate a mesh file from this <code>.geo</code> script, you would run:
+              <code>gmsh rhom.geo -2</code> in your terminal.
+            </p>
 
-    <h2 id="generatedmesh"><a name="generatedmesh"></a>Generated Mesh</h2>
-    <p>
-      Below is a visualization of the quadrilateral mesh generated with Gmsh. The mesh consists of 24
-      elements.
-    </p>
+            <h2 id="generatedmesh"><a name="generatedmesh"></a>Generated <span class="accent">Mesh</span></h2>
+            <p>
+              Below is a visualization of the quadrilateral mesh generated with Gmsh. The mesh consists of 24
+              elements.
+            </p>
 
-    <div class="center-image">
-      <img
-        src="../assets/gmsh_rhom_quad.png"
-        alt="Quadrilateral mesh generated by Gmsh"
-        style="max-width: 40%; height: auto"
-      />
-      <p class="image-caption">
-        Quadrilateral mesh (<code>rhom_quad.msh</code>) generated using the
-        <code>rhom.geo</code> script with Gmsh
-      </p>
-    </div>
+            <div class="center-image">
+              <img
+                src="../assets/gmsh_rhom_quad.png"
+                alt="Quadrilateral mesh generated by Gmsh"
+                style="max-width: 40%; height: auto"
+              />
+              <p class="image-caption">
+                Quadrilateral mesh (<code>rhom_quad.msh</code>) generated using the
+                <code>rhom.geo</code> script with Gmsh
+              </p>
+            </div>
 
-    <h2 id="results"><a name="results"></a>Results</h2>
-    <p>
-      Below is the 2D contour plot of the computed temperature distribution. This plot is generated in real
-      time using FEAScript.
-    </p>
+            <h2 id="results"><a name="results"></a><span class="accent">Results</span></h2>
+            <p>
+              Below is the 2D contour plot of the computed temperature distribution. This plot is generated in
+              real time using FEAScript.
+            </p>
 
-    <div id="resultsCanvas"></div>
+            <div id="resultsCanvas"></div>
 
-    <ul id="menu">
-      <li><a href="https://feascript.com/index.html">Home</a></li>
-      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-    </ul>
+            <ul id="menu">
+              <li><a href="https://feascript.com/index.html">Home</a></li>
+              <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+            </ul>
 
-    <script type="module">
-      // Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        importGmshMesh,
-        plotInterpolatedSolution,
-        printVersion,
-      } from "https://core.feascript.com/dist/feascript.esm.js";
-      // Import FEAScript library from a local directory
-      // import {
-      //   FEAScriptModel,
-      //   importGmshMesh,
-      //   plotInterpolatedSolution,
-      //   printVersion,
-      //   logSystem,
-      // } from "../../FEAScript-core/src/index.js";
+            <script type="module">
+              // Import FEAScript library from GitHub
+              import {
+                FEAScriptModel,
+                importGmshMesh,
+                plotInterpolatedSolution,
+                printVersion,
+              } from "https://core.feascript.com/dist/feascript.esm.js";
+              // Import FEAScript library from a local directory
+              // import {
+              //   FEAScriptModel,
+              //   importGmshMesh,
+              //   plotInterpolatedSolution,
+              //   printVersion,
+              //   logSystem,
+              // } from "../../FEAScript-core/src/index.js";
 
-      window.addEventListener("DOMContentLoaded", async () => {
-        // Enable debug logging mode
-        //logSystem("debug");
+              window.addEventListener("DOMContentLoaded", async () => {
+                // Enable debug logging mode
+                //logSystem("debug");
 
-        // Print FEAScript version in the console
-        console.log("FEAScript version:", printVersion);
+                // Print FEAScript version in the console
+                console.log("FEAScript version:", printVersion);
 
-        // Fetch the mesh file
-        const response = await fetch("./rhom_quad.msh"); // .msh version 4.1 is currently supported
-        if (!response.ok) {
-          throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
-        }
-        const meshContent = await response.text();
+                // Fetch the mesh file
+                const response = await fetch("./rhom_quad.msh"); // .msh version 4.1 is currently supported
+                if (!response.ok) {
+                  throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
+                }
+                const meshContent = await response.text();
 
-        // Create a File object with the actual content
-        const meshFile = new File([meshContent], "rhom_quad.msh");
+                // Create a File object with the actual content
+                const meshFile = new File([meshContent], "rhom_quad.msh");
 
-        // Create a new FEAScript model
-        const gmshModel = new FEAScriptModel();
+                // Create a new FEAScript model
+                const gmshModel = new FEAScriptModel();
 
-        // Set solver configuration
-        gmshModel.setModelConfig("heatConductionScript");
+                // Set solver configuration
+                gmshModel.setModelConfig("heatConductionScript");
 
-        // Parse the mesh file
-        const rhom_quad = await importGmshMesh(meshFile);
+                // Parse the mesh file
+                const rhom_quad = await importGmshMesh(meshFile);
 
-        // Define mesh configuration with the parsed rhom_quad
-        gmshModel.setMeshConfig({
-          parsedMesh: rhom_quad,
-          meshDimension: "2D",
-          elementOrder: "quadratic",
-        });
+                // Define mesh configuration with the parsed rhom_quad
+                gmshModel.setMeshConfig({
+                  parsedMesh: rhom_quad,
+                  meshDimension: "2D",
+                  elementOrder: "quadratic",
+                });
 
-        // Define boundary conditions using Gmsh physical group tags
-        gmshModel.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
-        gmshModel.addBoundaryCondition("1", ["constantTemp", 200]); // Right boundary
-        gmshModel.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-        gmshModel.addBoundaryCondition("3", ["symmetry"]); // Left boundary
+                // Define boundary conditions using Gmsh physical group tags
+                gmshModel.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
+                gmshModel.addBoundaryCondition("1", ["constantTemp", 200]); // Right boundary
+                gmshModel.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
+                gmshModel.addBoundaryCondition("3", ["symmetry"]); // Left boundary
 
-        // Set solver method
-        //model.setSolverMethod("jacobi");
-        gmshModel.setSolverMethod("lusolve");
+                // Set solver method
+                //model.setSolverMethod("jacobi");
+                gmshModel.setSolverMethod("lusolve");
 
-        // Solve the problem and get the solution
-        const result = gmshModel.solve();
+                // Solve the problem and get the solution
+                const result = gmshModel.solve();
 
-        // Plot the Gmsh solution
-        plotInterpolatedSolution(gmshModel, result, "contour", "resultsCanvas");
-      });
-    </script>
-
-    </div>
+                // Plot the Gmsh solution
+                plotInterpolatedSolution(gmshModel, result, "contour", "resultsCanvas");
+              });
+            </script>
+          </div>
         </div>
       </section>
     </main>
@@ -453,12 +461,13 @@ Mesh 2;</pre
               </svg>
               <span
                 >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
-                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
-                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
-              ></span
-              >
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
             </a>
-            <p class="footer-tagline">Finite element simulation in JavaScript, for the browser and Node.js.</p>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
             <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
           </div>
           <nav class="footer-col" aria-label="Product">
@@ -475,7 +484,7 @@ Mesh 2;</pre
               <li><a href="../index.html#tutorials">Tutorials</a></li>
               <li><a href="https://github.com/FEAScript/FEAScript-documentation">Documentation</a></li>
               <li><a href="https://blog.feascript.com/">Blog</a></li>
-              <li><a href="mailto:info@feascript.com?subject=FEAScript%20support">Support</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
             </ul>
           </nav>
           <nav class="footer-col" aria-label="Community">
@@ -494,6 +503,6 @@ Mesh 2;</pre
         </div>
       </div>
     </footer>
-  <script src="../feascript-website.js"></script>
+    <script src="../feascript-website.js"></script>
   </body>
 </html>

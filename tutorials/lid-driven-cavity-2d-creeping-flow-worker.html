@@ -194,31 +194,37 @@
           </div>
 
           <div class="section-head doc-head">
-            <h1>Creeping Flow in a 2D Lid-Driven Cavity Tutorial (Multi-threaded)</h1>
+            <h1>
+              Creeping Flow in a 2D Lid-Driven Cavity Tutorial <span class="accent">(Multi-threaded)</span>
+            </h1>
           </div>
 
           <div class="doc">
+            <ul id="menu">
+              <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
+              <li><a href="#results">Results</a></li>
+            </ul>
 
-    <ul id="menu">
-      <li><a href="#webworkerimplementation">Web Worker Implementation</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
+            <div class="highlight-container">
+              <p>
+                This page demonstrates solving the 2D lid-driven cavity problem using FEAScript in a web
+                worker for improved browser responsiveness. For the mathematical formulation and theory, see
+                the
+                <a href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow.html"
+                  >basic tutorial</a
+                >.
+              </p>
+            </div>
 
-    <div class="highlight-container">
-      <p>
-        This page demonstrates solving the 2D lid-driven cavity problem using FEAScript in a web worker for
-        improved browser responsiveness. For the mathematical formulation and theory, see the
-        <a href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow.html">basic tutorial</a>.
-      </p>
-    </div>
+            <h2 id="webworkerimplementation">
+              <a name="Web Worker Implementation"></a>Web Worker <span class="accent">Implementation</span>
+            </h2>
+            <p>
+              The code below shows how to use FEAScript with a web worker. The velocity field is decomposed
+              and plotted as contour plots.
+            </p>
 
-    <h2 id="webworkerimplementation"><a name="Web Worker Implementation"></a>Web Worker Implementation</h2>
-    <p>
-      The code below shows how to use FEAScript with a web worker. The velocity field is decomposed and
-      plotted as contour plots.
-    </p>
-
-    <pre class="prettyprint">
+            <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -287,131 +293,136 @@
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
-    >
+            >
 
-    <h2 id="results"><a name="Results"></a>Results</h2>
-    <p>
-      Below are the 2D contour plots of the computed velocity magnitude \(|\mathbf{u}| = \sqrt{u^2+v^2}\),
-      horizontal velocity component \(u\), and vertical velocity component \(v\). These plots are generated in
-      real time using FEAScript.
-    </p>
+            <h2 id="results"><a name="Results"></a><span class="accent">Results</span></h2>
+            <p>
+              Below are the 2D contour plots of the computed velocity magnitude \(|\mathbf{u}| =
+              \sqrt{u^2+v^2}\), horizontal velocity component \(u\), and vertical velocity component \(v\).
+              These plots are generated in real time using FEAScript.
+            </p>
 
-    <div id="loading">
-      <div class="spinner"></div>
-      Solving...
-    </div>
+            <div id="loading">
+              <div class="spinner"></div>
+              Solving...
+            </div>
 
-    <h3>Velocity Magnitude</h3>
-    <div id="velocityMagnitudeCanvas"></div>
+            <h3>Velocity Magnitude</h3>
+            <div id="velocityMagnitudeCanvas"></div>
 
-    <h3>Horizontal Velocity (\(u\))</h3>
-    <div id="uVelocityCanvas"></div>
+            <h3>Horizontal Velocity (\(u\))</h3>
+            <div id="uVelocityCanvas"></div>
 
-    <h3>Vertical Velocity (\(v\))</h3>
-    <div id="vVelocityCanvas"></div>
+            <h3>Vertical Velocity (\(v\))</h3>
+            <div id="vVelocityCanvas"></div>
 
-    <ul id="menu">
-      <li><a href="https://feascript.com/index.html">Home</a></li>
-      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-    </ul>
+            <ul id="menu">
+              <li><a href="https://feascript.com/index.html">Home</a></li>
+              <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+            </ul>
 
-    <script type="module">
-      //Import FEAScript library from GitHub
-      import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
+            <script type="module">
+              //Import FEAScript library from GitHub
+              import {
+                FEAScriptWorker,
+                plotSolution,
+                printVersion,
+              } from "https://core.feascript.com/src/index.js";
 
-      // Import FEAScript library from a local directory
-      // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+              // Import FEAScript library from a local directory
+              // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
-      //Data Layer
-      if (typeof window.dataLayer === "undefined") {
-        window.dataLayer = [];
-      }
+              //Data Layer
+              if (typeof window.dataLayer === "undefined") {
+                window.dataLayer = [];
+              }
 
-      window.addEventListener("DOMContentLoaded", async () => {
-        // Show loading indicator
-        document.getElementById("loading").style.display = "block";
+              window.addEventListener("DOMContentLoaded", async () => {
+                // Show loading indicator
+                document.getElementById("loading").style.display = "block";
 
-        // Print FEAScript version
-        console.log("FEAScript version:", printVersion);
+                // Print FEAScript version
+                console.log("FEAScript version:", printVersion);
 
-        // Create a new FEAScriptWorker instance
-        const model = new FEAScriptWorker();
+                // Create a new FEAScriptWorker instance
+                const model = new FEAScriptWorker();
 
-        // Ensure the worker is ready
-        await model.ping();
+                // Ensure the worker is ready
+                await model.ping();
 
-        // Set solver configuration
-        await model.setModelConfig("creepingFlowScript");
+                // Set solver configuration
+                await model.setModelConfig("creepingFlowScript");
 
-        // Define mesh configuration
-        const numElementsX = 12;
-        const numElementsY = 6;
-        await model.setMeshConfig({
-          meshDimension: "2D",
-          elementOrder: "quadratic",
-          numElementsX: numElementsX,
-          numElementsY: numElementsY,
-          maxX: 4,
-          maxY: 2,
-        });
+                // Define mesh configuration
+                const numElementsX = 12;
+                const numElementsY = 6;
+                await model.setMeshConfig({
+                  meshDimension: "2D",
+                  elementOrder: "quadratic",
+                  numElementsX: numElementsX,
+                  numElementsY: numElementsY,
+                  maxX: 4,
+                  maxY: 2,
+                });
 
-        // Define boundary conditions
-        await model.addBoundaryCondition("0", ["constantVelocity", 0, 0]);
-        await model.addBoundaryCondition("1", ["constantVelocity", 0, 0]);
-        await model.addBoundaryCondition("2", ["constantVelocity", 1, 0]);
-        await model.addBoundaryCondition("3", ["constantVelocity", 0, 0]);
+                // Define boundary conditions
+                await model.addBoundaryCondition("0", ["constantVelocity", 0, 0]);
+                await model.addBoundaryCondition("1", ["constantVelocity", 0, 0]);
+                await model.addBoundaryCondition("2", ["constantVelocity", 1, 0]);
+                await model.addBoundaryCondition("3", ["constantVelocity", 0, 0]);
 
-        // Set solver method
-        await model.setSolverMethod("lusolve");
+                // Set solver method
+                await model.setSolverMethod("lusolve");
 
-        // Solve the problem and get the solution
-        const result = await model.solve();
+                // Solve the problem and get the solution
+                const result = await model.solve();
 
-        // Calculate totalNodesVelocity manually as it is not exposed by worker getModelInfo
-        const nodesX = 2 * numElementsX + 1;
-        const nodesY = 2 * numElementsY + 1;
-        const totalNodesVelocity = nodesX * nodesY;
+                // Calculate totalNodesVelocity manually as it is not exposed by worker getModelInfo
+                const nodesX = 2 * numElementsX + 1;
+                const nodesY = 2 * numElementsY + 1;
+                const totalNodesVelocity = nodesX * nodesY;
 
-        // Extract velocity and pressure fields from the solution vector
-        const solutionVector = result.solutionVector;
-        const uVelocity = solutionVector.slice(0, totalNodesVelocity);
-        const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
-        const velocityMagnitude = uVelocity.map((u, i) => Math.sqrt(u * u + vVelocity[i] * vVelocity[i]));
+                // Extract velocity and pressure fields from the solution vector
+                const solutionVector = result.solutionVector;
+                const uVelocity = solutionVector.slice(0, totalNodesVelocity);
+                const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
+                const velocityMagnitude = uVelocity.map((u, i) =>
+                  Math.sqrt(u * u + vVelocity[i] * vVelocity[i]),
+                );
 
-        // Get model info for plotting
-        const modelInfo = await model.getModelInfo();
+                // Get model info for plotting
+                const modelInfo = await model.getModelInfo();
 
-        // Hide loading indicator
-        document.getElementById("loading").style.display = "none";
+                // Hide loading indicator
+                document.getElementById("loading").style.display = "none";
 
-        // Plot results
-        plotSolution(
-          modelInfo,
-          { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
-          "contour",
-          "velocityMagnitudeCanvas",
-        );
+                // Plot results
+                plotSolution(
+                  modelInfo,
+                  { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
+                  "contour",
+                  "velocityMagnitudeCanvas",
+                );
 
-        plotSolution(
-          modelInfo,
-          { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
-          "contour",
-          "uVelocityCanvas",
-        );
+                plotSolution(
+                  modelInfo,
+                  { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
+                  "contour",
+                  "uVelocityCanvas",
+                );
 
-        plotSolution(
-          modelInfo,
-          { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
-          "contour",
-          "vVelocityCanvas",
-        );
+                plotSolution(
+                  modelInfo,
+                  { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
+                  "contour",
+                  "vVelocityCanvas",
+                );
 
-        // Terminate the worker
-        model.terminate();
-      });
-    </script>
-
-    </div>
+                // Terminate the worker
+                model.terminate();
+              });
+            </script>
+          </div>
         </div>
       </section>
     </main>
@@ -426,12 +437,13 @@
               </svg>
               <span
                 >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
-                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
-                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
-              ></span
-              >
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
             </a>
-            <p class="footer-tagline">Finite element simulation in JavaScript, for the browser and Node.js.</p>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
             <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
           </div>
           <nav class="footer-col" aria-label="Product">
@@ -448,7 +460,7 @@
               <li><a href="../index.html#tutorials">Tutorials</a></li>
               <li><a href="https://github.com/FEAScript/FEAScript-documentation">Documentation</a></li>
               <li><a href="https://blog.feascript.com/">Blog</a></li>
-              <li><a href="mailto:info@feascript.com?subject=FEAScript%20support">Support</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
             </ul>
           </nav>
           <nav class="footer-col" aria-label="Community">
@@ -467,6 +479,6 @@
         </div>
       </div>
     </footer>
-  <script src="../feascript-website.js"></script>
+    <script src="../feascript-website.js"></script>
   </body>
 </html>

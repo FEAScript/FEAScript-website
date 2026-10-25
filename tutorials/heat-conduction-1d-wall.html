@@ -194,69 +194,78 @@
           </div>
 
           <div class="section-head doc-head">
-            <h1>Heat Conduction Through a Wall Tutorial</h1>
+            <h1>Heat Conduction <span class="accent">Through a Wall Tutorial</span></h1>
           </div>
 
           <div class="doc">
+            <ul id="menu">
+              <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
+              <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
+              <li><a href="#results">Results</a></li>
+            </ul>
 
-    <ul id="menu">
-      <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
-      <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
+            <div class="highlight-container">
+              <p>
+                In this tutorial, we study steady-state heat flow through a wall. We can simplify this problem
+                to one dimension, considering that the wall's width and height are much larger than its
+                thickness, and the temperature varies only across the thickness direction.
+              </p>
+            </div>
 
-    <div class="highlight-container">
-      <p>
-        In this tutorial, we study steady-state heat flow through a wall. We can simplify this problem to one
-        dimension, considering that the wall's width and height are much larger than its thickness, and the
-        temperature varies only across the thickness direction.
-      </p>
-    </div>
+            <h2 id="mathematicalformulation">
+              <a name="Mathematical formulation"></a>Mathematical <span class="accent">Formulation</span>
+            </h2>
+            <p>
+              Steady heat conduction in one dimension is described by the Laplace equation:
+              \(\frac{d^2T}{dx^2} = 0\), where \(T\) denotes the temperature values. The above is used to find
+              the temperature distribution within common engineering components like house walls.
+            </p>
 
-    <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
-    <p>
-      Steady heat conduction in one dimension is described by the Laplace equation: \(\frac{d^2T}{dx^2} = 0\),
-      where \(T\) denotes the temperature values. The above is used to find the temperature distribution
-      within common engineering components like house walls.
-    </p>
+            <div class="center-image">
+              <img
+                src="../assets/heat-conduction-1d-wall.png"
+                alt="1D heat conduction schematic"
+                width="100"
+              />
+              <p class="image-caption">
+                Schematic of the 1D wall showing convection at x = 0 and prescribed temperature at x = W
+              </p>
+            </div>
 
-    <div class="center-image">
-      <img src="../assets/heat-conduction-1d-wall.png" alt="1D heat conduction schematic" width="100" />
-      <p class="image-caption">
-        Schematic of the 1D wall showing convection at x = 0 and prescribed temperature at x = W
-      </p>
-    </div>
+            <p>
+              The above schematic illustrates the problem domain and outlines the associated boundary
+              conditions. The objective is to determine the temperature distribution within the wall itself.
+              In this problem, a convection boundary condition, implemented as Robin-type, is applied at the
+              inner side of the wall (\(x = 0\)). The latter is expressed as
+              \(\frac{dT}{dx}|_{x=0}=-{\frac{h}{k}}(T-T_{in})\), where \(h\) is the heat transfer coefficient,
+              \(k\) the thermal conductivity, and \(T_{in}\) is the internal temperature of the house (room
+              temperature). We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_{in}\) = 25
+              &deg;C. At the outer side of the wall (\(x = W\), where \(W\) = 0.15 m, is the width of the
+              wall), we apply a constant temperature (\(T_0\) = 5 &deg;C) boundary condition, representing the
+              outdoor temperature, implemented as Dirichlet-type in the finite element code.
+            </p>
 
-    <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. The
-      objective is to determine the temperature distribution within the wall itself. In this problem, a
-      convection boundary condition, implemented as Robin-type, is applied at the inner side of the wall (\(x
-      = 0\)). The latter is expressed as \(\frac{dT}{dx}|_{x=0}=-{\frac{h}{k}}(T-T_{in})\), where \(h\) is the
-      heat transfer coefficient, \(k\) the thermal conductivity, and \(T_{in}\) is the internal temperature of
-      the house (room temperature). We assume here that \({\frac{h}{k}}\) = 1 m<sup>-1</sup> and \(T_{in}\) =
-      25 &deg;C. At the outer side of the wall (\(x = W\), where \(W\) = 0.15 m, is the width of the wall), we
-      apply a constant temperature (\(T_0\) = 5 &deg;C) boundary condition, representing the outdoor
-      temperature, implemented as Dirichlet-type in the finite element code.
-    </p>
-
-    <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
-    <p>
-      Below is a demonstration of how to use the FEAScript library to solve this stationary heat transfer
-      problem in your web browser. You only need a simple HTML page to run this example where the following
-      code snippets should be included. First, load the required external libraries:
-    </p>
-    <pre class="prettyprint">
+            <h2 id="solvingwithfeascript">
+              <a name="Solving with FEAScript"></a>Solving with <span class="accent">FEAScript</span>
+            </h2>
+            <p>
+              Below is a demonstration of how to use the FEAScript library to solve this stationary heat
+              transfer problem in your web browser. You only need a simple HTML page to run this example where
+              the following code snippets should be included. First, load the required external libraries:
+            </p>
+            <pre class="prettyprint">
 &lt;head&gt;
   &lt;!-- ...head region... --&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js">&lt;/script&gt;
   &lt;!-- ...rest of head region... --&gt;
 &lt;/head&gt;</pre
-    >
-    <p>
-      We should then define the problem parameters, such as the solver type, the geometry configuration, and
-      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
-    </p>
-    <pre class="prettyprint">
+            >
+            <p>
+              We should then define the problem parameters, such as the solver type, the geometry
+              configuration, and the boundary conditions. This is performed using JavaScript objects directly
+              in the HTML file:
+            </p>
+            <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -292,89 +301,91 @@
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
-    >
+            >
 
-    <p>
-      After solving the case, the results appear as a line plot. To visualize it, include an HTML container
-      where the plot will render:
-    </p>
-    <pre class="prettyprint">
+            <p>
+              After solving the case, the results appear as a line plot. To visualize it, include an HTML
+              container where the plot will render:
+            </p>
+            <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;div id="resultsCanvas">&lt;/div&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
-    >
-    <p>
-      The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
-      as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
-    </p>
+            >
+            <p>
+              The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id
+              is passed as an argument to the <code>plotSolution</code> function to specify the target div for
+              the plot.
+            </p>
 
-    <h2 id="results"><a name="Results"></a>Results</h2>
+            <h2 id="results"><a name="Results"></a><span class="accent">Results</span></h2>
 
-    <p>
-      Below is the 1D line plot of the computed temperature distribution along the wall thickness. This plot
-      is generated in real time using FEAScript. You can find a Node.js implementation of this tutorial in the
-      <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/heatConductionScript/heatConduction1DWall"
-        >example directory</a
-      >.
-    </p>
+            <p>
+              Below is the 1D line plot of the computed temperature distribution along the wall thickness.
+              This plot is generated in real time using FEAScript. You can find a Node.js implementation of
+              this tutorial in the
+              <a
+                href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/heatConductionScript/heatConduction1DWall"
+                >example directory</a
+              >.
+            </p>
 
-    <!-- Container element where the solution plot will be rendered -->
-    <div id="resultsCanvas"></div>
+            <!-- Container element where the solution plot will be rendered -->
+            <div id="resultsCanvas"></div>
 
-    <ul id="menu">
-      <li><a href="https://feascript.com/index.html">Home</a></li>
-      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-    </ul>
+            <ul id="menu">
+              <li><a href="https://feascript.com/index.html">Home</a></li>
+              <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+            </ul>
 
-    <script type="module">
-      // Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        plotSolution,
-        printVersion,
-      } from "https://core.feascript.com/dist/feascript.esm.js";
-      // Import FEAScript library from a local directory
-      // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+            <script type="module">
+              // Import FEAScript library from GitHub
+              import {
+                FEAScriptModel,
+                plotSolution,
+                printVersion,
+              } from "https://core.feascript.com/dist/feascript.esm.js";
+              // Import FEAScript library from a local directory
+              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
-      window.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("resultsCanvas").style.display = "block";
+              window.addEventListener("DOMContentLoaded", () => {
+                document.getElementById("resultsCanvas").style.display = "block";
 
-        // Print FEAScript version
-        console.log("FEAScript version:", printVersion);
+                // Print FEAScript version
+                console.log("FEAScript version:", printVersion);
 
-        // Create a new FEAScript model
-        const model = new FEAScriptModel();
+                // Create a new FEAScript model
+                const model = new FEAScriptModel();
 
-        // Set solver configuration
-        model.setModelConfig("heatConductionScript");
+                // Set solver configuration
+                model.setModelConfig("heatConductionScript");
 
-        // Define mesh configuration
-        model.setMeshConfig({
-          meshDimension: "1D",
-          elementOrder: "linear",
-          numElementsX: 10,
-          maxX: 0.15,
-        });
+                // Define mesh configuration
+                model.setMeshConfig({
+                  meshDimension: "1D",
+                  elementOrder: "linear",
+                  numElementsX: 10,
+                  maxX: 0.15,
+                });
 
-        // Define boundary conditions
-        model.addBoundaryCondition("0", ["convection", 1, 25]);
-        //model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
-        model.addBoundaryCondition("1", ["constantTemp", 5]);
+                // Define boundary conditions
+                model.addBoundaryCondition("0", ["convection", 1, 25]);
+                //model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
+                model.addBoundaryCondition("1", ["constantTemp", 5]);
 
-        // Set solver method
-        model.setSolverMethod("lusolve");
+                // Set solver method
+                model.setSolverMethod("lusolve");
 
-        // Solve the problem and get the solution
-        const result = model.solve();
+                // Solve the problem and get the solution
+                const result = model.solve();
 
-        // Plot the solution as a 1D line plot
-        plotSolution(model, result, "line", "resultsCanvas");
-      });
-    </script>
-    </div>
+                // Plot the solution as a 1D line plot
+                plotSolution(model, result, "line", "resultsCanvas");
+              });
+            </script>
+          </div>
         </div>
       </section>
     </main>
@@ -389,12 +400,13 @@
               </svg>
               <span
                 >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
-                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
-                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
-              ></span
-              >
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
             </a>
-            <p class="footer-tagline">Finite element simulation in JavaScript, for the browser and Node.js.</p>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
             <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
           </div>
           <nav class="footer-col" aria-label="Product">
@@ -411,7 +423,7 @@
               <li><a href="../index.html#tutorials">Tutorials</a></li>
               <li><a href="https://github.com/FEAScript/FEAScript-documentation">Documentation</a></li>
               <li><a href="https://blog.feascript.com/">Blog</a></li>
-              <li><a href="mailto:info@feascript.com?subject=FEAScript%20support">Support</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
             </ul>
           </nav>
           <nav class="footer-col" aria-label="Community">
@@ -430,6 +442,6 @@
         </div>
       </div>
     </footer>
-  <script src="../feascript-website.js"></script>
+    <script src="../feascript-website.js"></script>
   </body>
 </html>

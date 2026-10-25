@@ -194,89 +194,96 @@
           </div>
 
           <div class="section-head doc-head">
-            <h1>Solidification Front Propagation in a 2D Domain Tutorial</h1>
+            <h1>Solidification Front Propagation in <span class="accent">a 2D Domain Tutorial</span></h1>
           </div>
 
           <div class="doc">
+            <ul id="menu">
+              <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
+              <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
+              <li><a href="#results">Results</a></li>
+            </ul>
 
-    <ul id="menu">
-      <li><a href="#mathematicalformulation">Mathematical Formulation</a></li>
-      <li><a href="#solvingwithfeascript">Solving with FEAScript</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
+            <div class="highlight-container">
+              <p>
+                In this tutorial, we address a solidification front propagation problem in a 2D domain. This
+                is a typical interface tracking problem, used to simulate how a solidification front moves
+                through a medium, such as metal cooling or crystal growth.
+              </p>
+            </div>
 
-    <div class="highlight-container">
-      <p>
-        In this tutorial, we address a solidification front propagation problem in a 2D domain. This is a
-        typical interface tracking problem, used to simulate how a solidification front moves through a
-        medium, such as metal cooling or crystal growth.
-      </p>
-    </div>
+            <h2 id="mathematicalformulation">
+              <a name="Mathematical formulation"></a>Mathematical <span class="accent">Formulation</span>
+            </h2>
+            <p>
+              The propagation of a solidification front can be modeled using the eikonal equation that in its
+              general form is given by: \(|\nabla \phi(x,y)| = \frac{1}{F(x,y)}\). In the above, \(\phi(x,y)\)
+              is the arrival time of the front at point (x,y), and \(F(x,y)\) is the local speed of front
+              propagation. This speed can vary spatially based on factors such as temperature gradients,
+              material properties, or crystallographic orientation. For this example, we simplify the problem
+              by using a constant front propagation speed of 1 m/s throughout the domain, which reduces the
+              equation to: \(|\nabla \phi(x,y)| = 1\). It's worth noting, however, that actual solidification
+              speeds in real materials typically range from micrometers per second to centimeters per second
+              for most metals and alloys. Only specialized rapid solidification processes might achieve speeds
+              approaching or exceeding 1 m/s. For more detailed background on the eikonal equation and its
+              mathematical properties, please see our
+              <a href="https://blog.feascript.com/tutorial/2025/06/15/eikonal-equation.html">blog post</a>.
+            </p>
 
-    <h2 id="mathematicalformulation"><a name="Mathematical formulation"></a>Mathematical Formulation</h2>
-    <p>
-      The propagation of a solidification front can be modeled using the eikonal equation that in its general
-      form is given by: \(|\nabla \phi(x,y)| = \frac{1}{F(x,y)}\). In the above, \(\phi(x,y)\) is the arrival
-      time of the front at point (x,y), and \(F(x,y)\) is the local speed of front propagation. This speed can
-      vary spatially based on factors such as temperature gradients, material properties, or crystallographic
-      orientation. For this example, we simplify the problem by using a constant front propagation speed of 1
-      m/s throughout the domain, which reduces the equation to: \(|\nabla \phi(x,y)| = 1\). It's worth noting,
-      however, that actual solidification speeds in real materials typically range from micrometers per second
-      to centimeters per second for most metals and alloys. Only specialized rapid solidification processes
-      might achieve speeds approaching or exceeding 1 m/s. For more detailed background on the eikonal
-      equation and its mathematical properties, please see our
-      <a href="https://blog.feascript.com/tutorial/2025/06/15/eikonal-equation.html">blog post</a>.
-    </p>
+            <div class="center-image">
+              <img
+                src="../assets/solidification-front-2d.png"
+                alt="Schematic of 2D solidification front domain"
+                width="300"
+              />
+              <p class="image-caption">
+                Schematic of the 2D solidification front propagation domain: constant value (0) at bottom,
+                left, and right edges indicating initial solidification fronts, and zero gradient at the top
+                edge allowing free propagation
+              </p>
+            </div>
 
-    <div class="center-image">
-      <img
-        src="../assets/solidification-front-2d.png"
-        alt="Schematic of 2D solidification front domain"
-        width="300"
-      />
-      <p class="image-caption">
-        Schematic of the 2D solidification front propagation domain: constant value (0) at bottom, left, and
-        right edges indicating initial solidification fronts, and zero gradient at the top edge allowing free
-        propagation
-      </p>
-    </div>
+            <p>
+              The above schematic illustrates the problem domain and outlines the associated boundary
+              conditions. In this model, we consider a square domain where solidification begins
+              simultaneously from three sides (bottom, left, and right boundaries), which are all maintained
+              at a constant value of zero (representing the initial front position). This configuration
+              simulates a common scenario in casting or directional solidification processes, where a molten
+              material is contained within a mold and begins to solidify from the cooled walls. The top
+              boundary has a zero gradient condition, allowing the front to propagate freely in that
+              direction.
+            </p>
+            <p>
+              The eikonal equation is nonlinear, making it challenging to solve directly. Due to convergence
+              difficulties, a viscous term elimination technique is employed. According to this approach, a
+              viscous term \(\varepsilon(\nabla^2\phi)\) is added to the equation, resulting in: \(|\nabla
+              \phi(x,y)| + \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical
+              diffusion that ensures the solution remains smooth throughout the domain. The solution of this
+              modified equation converges to the solution of the original eikonal equation as \(\varepsilon
+              \rightarrow 0\).
+            </p>
 
-    <p>
-      The above schematic illustrates the problem domain and outlines the associated boundary conditions. In
-      this model, we consider a square domain where solidification begins simultaneously from three sides
-      (bottom, left, and right boundaries), which are all maintained at a constant value of zero (representing
-      the initial front position). This configuration simulates a common scenario in casting or directional
-      solidification processes, where a molten material is contained within a mold and begins to solidify from
-      the cooled walls. The top boundary has a zero gradient condition, allowing the front to propagate freely
-      in that direction.
-    </p>
-    <p>
-      The eikonal equation is nonlinear, making it challenging to solve directly. Due to convergence
-      difficulties, a viscous term elimination technique is employed. According to this approach, a viscous
-      term \(\varepsilon(\nabla^2\phi)\) is added to the equation, resulting in: \(|\nabla \phi(x,y)| +
-      \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical diffusion that
-      ensures the solution remains smooth throughout the domain. The solution of this modified equation
-      converges to the solution of the original eikonal equation as \(\varepsilon \rightarrow 0\).
-    </p>
-
-    <h2 id="solvingwithfeascript"><a name="Solving with FEAScript"></a>Solving with FEAScript</h2>
-    <p>
-      Below is a demonstration of how to use the FEAScript library to solve this front propagation problem in
-      your web browser. You only need a simple HTML page to run this example where the following code snippets
-      should be included. First, load the required external libraries:
-    </p>
-    <pre class="prettyprint">
+            <h2 id="solvingwithfeascript">
+              <a name="Solving with FEAScript"></a>Solving with <span class="accent">FEAScript</span>
+            </h2>
+            <p>
+              Below is a demonstration of how to use the FEAScript library to solve this front propagation
+              problem in your web browser. You only need a simple HTML page to run this example where the
+              following code snippets should be included. First, load the required external libraries:
+            </p>
+            <pre class="prettyprint">
 &lt;head&gt;
   &lt;!-- ...head region... --&gt;
   &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js">&lt;/script&gt;
   &lt;!-- ...rest of head region... --&gt;
 &lt;/head&gt;</pre
-    >
-    <p>
-      We should then define the problem parameters, such as the solver type, the geometry configuration, and
-      the boundary conditions. This is performed using JavaScript objects directly in the HTML file:
-    </p>
-    <pre class="prettyprint">
+            >
+            <p>
+              We should then define the problem parameters, such as the solver type, the geometry
+              configuration, and the boundary conditions. This is performed using JavaScript objects directly
+              in the HTML file:
+            </p>
+            <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
@@ -316,110 +323,110 @@
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
-    >
-    <p>
-      After solving the case, the results are demonstrated in a 2D contour plot. To visualize it, include an
-      HTML container where the plot will render:
-    </p>
-    <pre class="prettyprint">
+            >
+            <p>
+              After solving the case, the results are demonstrated in a 2D contour plot. To visualize it,
+              include an HTML container where the plot will render:
+            </p>
+            <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;div id="resultsCanvas">&lt;/div&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
-    >
-    <p>
-      The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id is passed
-      as an argument to the <code>plotSolution</code> function to specify the target div for the plot.
-    </p>
+            >
+            <p>
+              The <code>"resultsCanvas"</code> is the id of the div where the plot will be rendered. This id
+              is passed as an argument to the <code>plotSolution</code> function to specify the target div for
+              the plot.
+            </p>
 
-    <h2 id="results"><a name="Results"></a>Results</h2>
-    <p>
-      Below is the 2D contour plot of the computed front propagation. The contour values represent the arrival
-      time of the front at each position. This plot is generated in real time using FEAScript.
-      <b
-        >Please note that you may need to wait a few moments for the solution to be calculated and plotted
-        since the eikonal equation is solved iteratively with the Newton-Raphson method directly in your
-        browser.</b
-      >
-      You can find a Node.js implementation of this tutorial in the
-      <a
-        href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/frontPropagationScript/solidificationFront2D"
-        >example directory</a
-      >.
-    </p>
+            <h2 id="results"><a name="Results"></a><span class="accent">Results</span></h2>
+            <p>
+              Below is the 2D contour plot of the computed front propagation. The contour values represent the
+              arrival time of the front at each position. This plot is generated in real time using FEAScript.
+              <b
+                >Please note that you may need to wait a few moments for the solution to be calculated and
+                plotted since the eikonal equation is solved iteratively with the Newton-Raphson method
+                directly in your browser.</b
+              >
+              You can find a Node.js implementation of this tutorial in the
+              <a
+                href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/frontPropagationScript/solidificationFront2D"
+                >example directory</a
+              >.
+            </p>
 
-    <!-- Container element where the solution plot will be rendered -->
-    <div id="resultsCanvas"></div>
+            <!-- Container element where the solution plot will be rendered -->
+            <div id="resultsCanvas"></div>
 
-    <br />
+            <br />
 
-    <!-- Link to the worker-based implementation -->
-    <p>
-      See also
-      <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html">here</a>
-      for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness.
-    </p>
+            <!-- Link to the worker-based implementation -->
+            <p>
+              See also
+              <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html">here</a>
+              for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness.
+            </p>
 
-    <ul id="menu">
-      <li><a href="https://feascript.com/index.html">Home</a></li>
-      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-    </ul>
+            <ul id="menu">
+              <li><a href="https://feascript.com/index.html">Home</a></li>
+              <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+            </ul>
 
-    <script type="module">
-      // Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        plotSolution,
-        printVersion,
-      } from "https://core.feascript.com/dist/feascript.esm.js";
-      // } from "https://core.feascript.com/src/index.js";
-      // Import FEAScript library from a local directory
-      // } from "../../FEAScript-core/dist/feascript.esm.js";
-      // } from "../../FEAScript-core/src/index.js";
+            <script type="module">
+              // Import FEAScript library from GitHub
+              import {
+                FEAScriptModel,
+                plotSolution,
+                printVersion,
+              } from "https://core.feascript.com/dist/feascript.esm.js";
+              // } from "https://core.feascript.com/src/index.js";
+              // Import FEAScript library from a local directory
+              // } from "../../FEAScript-core/dist/feascript.esm.js";
+              // } from "../../FEAScript-core/src/index.js";
 
-      window.addEventListener("DOMContentLoaded", () => {
-        // Enable debug logging mode
-        // logSystem("debug");
+              window.addEventListener("DOMContentLoaded", () => {
+                // Enable debug logging mode
+                // logSystem("debug");
 
-        // Print FEAScript version
-        console.log("FEAScript version:", printVersion);
+                // Print FEAScript version
+                console.log("FEAScript version:", printVersion);
 
-        // Create a new FEAScript model
-        const model = new FEAScriptModel();
+                // Create a new FEAScript model
+                const model = new FEAScriptModel();
 
-        // Set solver configuration
-        model.setModelConfig("frontPropagationScript");
+                // Set solver configuration
+                model.setModelConfig("frontPropagationScript");
 
-        // Define mesh configuration
-        model.setMeshConfig({
-          meshDimension: "2D",
-          elementOrder: "quadratic",
-          numElementsX: 12,
-          numElementsY: 8,
-          maxX: 4,
-          maxY: 2,
-        });
+                // Define mesh configuration
+                model.setMeshConfig({
+                  meshDimension: "2D",
+                  elementOrder: "quadratic",
+                  numElementsX: 12,
+                  numElementsY: 8,
+                  maxX: 4,
+                  maxY: 2,
+                });
 
-        // Define boundary conditions
-        model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
-        model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-        model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-        model.addBoundaryCondition("3", ["constantValue", 0]); // Right
+                // Define boundary conditions
+                model.addBoundaryCondition("0", ["constantValue", 0]); // Βottom
+                model.addBoundaryCondition("1", ["constantValue", 0]); // Left
+                model.addBoundaryCondition("2", ["zeroGradient"]); // Top
+                model.addBoundaryCondition("3", ["constantValue", 0]); // Right
 
-        // Set solver method
-        model.setSolverMethod("lusolve");
-        // model.setSolverMethod("frontal");
+                // Set solver method
+                model.setSolverMethod("lusolve");
+                // model.setSolverMethod("frontal");
 
-        // Solve the problem and get the solution
-        const result = model.solve();
+                // Solve the problem and get the solution
+                const result = model.solve();
 
-        // Plot the solution as a 2D contour plot
-        plotSolution(model, result, "contour", "resultsCanvas");
-      });
-    </script>
-
-    </div>
+                // Plot the solution as a 2D contour plot
+                plotSolution(model, result, "contour", "resultsCanvas");
+              });
+            </script>
+          </div>
         </div>
       </section>
     </main>
@@ -434,12 +441,13 @@
               </svg>
               <span
                 >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
-                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
-                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
-              ></span
-              >
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
             </a>
-            <p class="footer-tagline">Finite element simulation in JavaScript, for the browser and Node.js.</p>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
             <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
           </div>
           <nav class="footer-col" aria-label="Product">
@@ -456,7 +464,7 @@
               <li><a href="../index.html#tutorials">Tutorials</a></li>
               <li><a href="https://github.com/FEAScript/FEAScript-documentation">Documentation</a></li>
               <li><a href="https://blog.feascript.com/">Blog</a></li>
-              <li><a href="mailto:info@feascript.com?subject=FEAScript%20support">Support</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
             </ul>
           </nav>
           <nav class="footer-col" aria-label="Community">
@@ -475,6 +483,6 @@
         </div>
       </div>
     </footer>
-  <script src="../feascript-website.js"></script>
+    <script src="../feascript-website.js"></script>
   </body>
 </html>

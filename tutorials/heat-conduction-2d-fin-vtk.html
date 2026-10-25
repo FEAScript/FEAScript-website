@@ -199,33 +199,35 @@
           </div>
 
           <div class="section-head doc-head">
-            <h1>Heat Conduction in a 2D Fin Tutorial (VTK.js)</h1>
+            <h1>Heat Conduction in a 2D Fin Tutorial <span class="accent">(VTK.js)</span></h1>
           </div>
 
           <div class="doc">
+            <ul id="menu">
+              <li><a href="#usingvtkjsinsteadofplotly">Using VTK.js Instead of Plotly</a></li>
+              <li><a href="#results">Results</a></li>
+            </ul>
 
-    <ul id="menu">
-      <li><a href="#usingvtkjsinsteadofplotly">Using VTK.js Instead of Plotly</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
+            <div class="highlight-container">
+              <p>
+                This page demonstrates the VTK.js rendering backend for the
+                <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html"
+                  >Heat Conduction in a 2D Fin</a
+                >
+                tutorial. For the full mathematical formulation, boundary condition details, and step-by-step
+                code walkthrough, please refer to the
+                <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">main tutorial</a>.
+              </p>
+            </div>
 
-    <div class="highlight-container">
-      <p>
-        This page demonstrates the VTK.js rendering backend for the
-        <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">Heat Conduction in a 2D Fin</a>
-        tutorial. For the full mathematical formulation, boundary condition details, and step-by-step code
-        walkthrough, please refer to the
-        <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">main tutorial</a>.
-      </p>
-    </div>
-
-    <h2 id="usingvtkjsinsteadofplotly">Using VTK.js Instead of Plotly</h2>
-    <p>
-      To use VTK.js for visualization, two changes are needed compared to the
-      <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">Plotly-based tutorial</a>. First,
-      add a VTK.js import map in the <code>&lt;head&gt;</code> section (instead of loading Plotly):
-    </p>
-    <pre class="prettyprint">
+            <h2 id="usingvtkjsinsteadofplotly">Using VTK.js <span class="accent">Instead of Plotly</span></h2>
+            <p>
+              To use VTK.js for visualization, two changes are needed compared to the
+              <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">Plotly-based tutorial</a>.
+              First, add a VTK.js import map in the <code>&lt;head&gt;</code> section (instead of loading
+              Plotly):
+            </p>
+            <pre class="prettyprint">
 &lt;script type="importmap"&gt;
 {
   "imports": {
@@ -243,13 +245,13 @@
   }
 }
 &lt;/script&gt;</pre
-    >
-    <p>
-      Second, import <code>plotInterpolatedSolutionVtk</code>, <code>createColorScale</code>, and
-      <code>createContourLineOptions</code> from FEAScript instead of <code>plotSolution</code>, and use them
-      to render the results:
-    </p>
-    <pre class="prettyprint">
+            >
+            <p>
+              Second, import <code>plotInterpolatedSolutionVtk</code>, <code>createColorScale</code>, and
+              <code>createContourLineOptions</code> from FEAScript instead of <code>plotSolution</code>, and
+              use them to render the results:
+            </p>
+            <pre class="prettyprint">
 import { FEAScriptModel, plotInterpolatedSolutionVtk, createColorScale, createContourLineOptions, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
 
 // ...model setup and solve (same as the Plotly tutorial)...
@@ -267,78 +269,77 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
     lineWidth: 1.25,
   }),
 });</pre
-    >
+            >
 
-    <h2 id="results">Results</h2>
-    <p>
-      The 2D contour plot below shows the computed temperature distribution rendered in real time using
-      FEAScript with VTK.js. The interactive canvas supports pan, zoom, and rotate.
-    </p>
+            <h2 id="results"><span class="accent">Results</span></h2>
+            <p>
+              The 2D contour plot below shows the computed temperature distribution rendered in real time
+              using FEAScript with VTK.js. The interactive canvas supports pan, zoom, and rotate.
+            </p>
 
-    <div id="resultsCanvas"></div>
+            <div id="resultsCanvas"></div>
 
-    <br />
+            <br />
 
-    <ul id="menu">
-      <li><a href="https://feascript.com/index.html">Home</a></li>
-      <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
-    </ul>
+            <ul id="menu">
+              <li><a href="https://feascript.com/index.html">Home</a></li>
+              <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>
+            </ul>
 
-    <script type="module">
-      // Import FEAScript library from GitHub
-      import {
-        FEAScriptModel,
-        plotInterpolatedSolutionVtk,
-        createColorScale,
-        createContourLineOptions,
-        printVersion,
-      } from "https://core.feascript.com/dist/feascript.esm.js";
-      // Import FEAScript library from a local directory
-      // import {
-      //   FEAScriptModel,
-      //   plotInterpolatedSolutionVtk,
-      //   createColorScale,
-      //   createContourLineOptions,
-      //   printVersion,
-      // } from "../../FEAScript-core/src/index.js";
+            <script type="module">
+              // Import FEAScript library from GitHub
+              import {
+                FEAScriptModel,
+                plotInterpolatedSolutionVtk,
+                createColorScale,
+                createContourLineOptions,
+                printVersion,
+              } from "https://core.feascript.com/dist/feascript.esm.js";
+              // Import FEAScript library from a local directory
+              // import {
+              //   FEAScriptModel,
+              //   plotInterpolatedSolutionVtk,
+              //   createColorScale,
+              //   createContourLineOptions,
+              //   printVersion,
+              // } from "../../FEAScript-core/src/index.js";
 
-      window.addEventListener("DOMContentLoaded", async () => {
-        console.log("FEAScript version:", printVersion);
+              window.addEventListener("DOMContentLoaded", async () => {
+                console.log("FEAScript version:", printVersion);
 
-        const model = new FEAScriptModel();
-        model.setModelConfig("heatConductionScript");
-        model.setMeshConfig({
-          meshDimension: "2D",
-          elementOrder: "quadratic",
-          numElementsX: 8,
-          numElementsY: 4,
-          maxX: 4,
-          maxY: 2,
-        });
+                const model = new FEAScriptModel();
+                model.setModelConfig("heatConductionScript");
+                model.setMeshConfig({
+                  meshDimension: "2D",
+                  elementOrder: "quadratic",
+                  numElementsX: 8,
+                  numElementsY: 4,
+                  maxX: 4,
+                  maxY: 2,
+                });
 
-        model.addBoundaryCondition("0", ["constantTemp", 200]);
-        model.addBoundaryCondition("1", ["symmetry"]);
-        model.addBoundaryCondition("2", ["convection", 1, 20]);
-        model.addBoundaryCondition("3", ["constantTemp", 200]);
+                model.addBoundaryCondition("0", ["constantTemp", 200]);
+                model.addBoundaryCondition("1", ["symmetry"]);
+                model.addBoundaryCondition("2", ["convection", 1, 20]);
+                model.addBoundaryCondition("3", ["constantTemp", 200]);
 
-        model.setSolverMethod("lusolve");
-        const result = model.solve();
+                model.setSolverMethod("lusolve");
+                const result = model.solve();
 
-        await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
-          colorScale: createColorScale({
-            presetName: "Cool to Warm",
-            scalarBarTitle: "Temperature",
-          }),
-          contourLines: createContourLineOptions({
-            enabled: true,
-            numberOfContours: 14,
-            lineWidth: 1.25,
-          }),
-        });
-      });
-    </script>
-
-    </div>
+                await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
+                  colorScale: createColorScale({
+                    presetName: "Cool to Warm",
+                    scalarBarTitle: "Temperature",
+                  }),
+                  contourLines: createContourLineOptions({
+                    enabled: true,
+                    numberOfContours: 14,
+                    lineWidth: 1.25,
+                  }),
+                });
+              });
+            </script>
+          </div>
         </div>
       </section>
     </main>
@@ -353,12 +354,13 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
               </svg>
               <span
                 >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
-                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
-                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
-              ></span
-              >
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
             </a>
-            <p class="footer-tagline">Finite element simulation in JavaScript, for the browser and Node.js.</p>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
             <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
           </div>
           <nav class="footer-col" aria-label="Product">
@@ -375,7 +377,7 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
               <li><a href="../index.html#tutorials">Tutorials</a></li>
               <li><a href="https://github.com/FEAScript/FEAScript-documentation">Documentation</a></li>
               <li><a href="https://blog.feascript.com/">Blog</a></li>
-              <li><a href="mailto:info@feascript.com?subject=FEAScript%20support">Support</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
             </ul>
           </nav>
           <nav class="footer-col" aria-label="Community">
@@ -394,6 +396,6 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
         </div>
       </div>
     </footer>
-  <script src="../feascript-website.js"></script>
+    <script src="../feascript-website.js"></script>
   </body>
 </html>

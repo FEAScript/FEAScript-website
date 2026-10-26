@@ -7,15 +7,7 @@
  *  https://feascript.com
  *  CC BY 4.0 License © 2023–2026 FEAScript
  * ════════════════════════════════════════════════════════════════
- *
- *  Pages with <html class="site"> use the SITE sections. The Studio visual
- *  editor loads this file too and uses the LEGACY section.
  */
-
-/* ─────────────────────────────────────────────────────────────
-   LEGACY: Studio visual editor (blockly-interface.html loads this file)
-   (every selector is scoped away from <html class="site">)
-   ───────────────────────────────────────────────────────────── */
 
 :where(html:not(.site)) * {
   margin: 0;
@@ -1213,6 +1205,35 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   font-size: 0.78rem;
   line-height: 1.65;
   white-space: pre;
+}
+
+.tok-tag {
+  color: #7cb7ff;
+}
+
+.tok-attr {
+  color: #9cdcfe;
+}
+
+.tok-str {
+  color: #ce9178;
+}
+
+.tok-kw {
+  color: #c586c0;
+}
+
+.tok-fn {
+  color: #e6c230;
+}
+
+.tok-num {
+  color: #b5cea8;
+}
+
+.tok-comment {
+  color: #7f8c7a;
+  font-style: italic;
 }
 
 /* ─────────────────────────────────────────────────────────────

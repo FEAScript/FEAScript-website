@@ -70,7 +70,7 @@
 
   // Show the current section title in the sticky bar of document pages
   const docBar = document.querySelector("[data-doc-bar]");
-  const docHeadings = [...document.querySelectorAll(".doc h2")];
+  const docHeadings = [...document.querySelectorAll('.doc h2, .doc [role="heading"][aria-level="2"]')];
   if (docBar && docHeadings.length) {
     const initialTitle = docBar.textContent;
     const updateDocBar = () => {

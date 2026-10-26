@@ -1671,6 +1671,16 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   margin-top: 1rem;
 }
 
+.doc .eyebrow {
+  position: static;
+  margin: 3rem 0 0;
+  scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+
+.doc .eyebrow[aria-level="3"] {
+  margin-top: 2rem;
+}
+
 .doc h2 {
   margin-top: 3rem;
   padding-top: 1.5rem;

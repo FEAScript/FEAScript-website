@@ -108,35 +108,38 @@
   const copyButton = document.getElementById("copy-qs-btn");
   const codeBlock = document.getElementById("quickstart-code");
 
-  // Syntax highlighting (HTML + JavaScript); copying still uses the plain text
-  if (codeBlock) {
-    const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const wrap = (cls, s) => `<span class="tok-${cls}">${esc(s)}</span>`;
-    const highlightTag = (tag) => {
-      const m = tag.match(/^(<\/?)([^\s>/]+)([\s\S]*?)(\/?>)$/);
-      if (!m) return wrap("tag", tag);
-      const attrs = m[3].replace(/([\w:-]+)(=)?("[^"]*")?|(\s+)/g, (_, name, eq, val, space) =>
-        space ? space : wrap("attr", name) + (eq ? esc(eq) : "") + (val ? wrap("str", val) : ""),
-      );
-      return wrap("tag", m[1] + m[2]) + attrs + wrap("tag", m[4]);
-    };
-    const tokens =
-      /(<\/?[A-Za-z!][^>]*>)|(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\.)*`)|\b(import|from|const|let|var|async|await|new|return|function)\b|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_$][\w$]*)(?=\()/g;
+  // Syntax highlighting (HTML + JavaScript) for the quick-start and tutorial code blocks;
+  // copying still uses the plain text
+  const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const wrap = (cls, s) => `<span class="tok-${cls}">${esc(s)}</span>`;
+  const highlightTag = (tag) => {
+    const m = tag.match(/^(<\/?)([^\s>/]+)([\s\S]*?)(\/?>)$/);
+    if (!m) return wrap("tag", tag);
+    const attrs = m[3].replace(/([\w:-]+)(=)?("[^"]*")?|(\s+)/g, (_, name, eq, val, space) =>
+      space ? space : wrap("attr", name) + (eq ? esc(eq) : "") + (val ? wrap("str", val) : ""),
+    );
+    return wrap("tag", m[1] + m[2]) + attrs + wrap("tag", m[4]);
+  };
+  const tokens =
+    /(<!--[\s\S]*?-->|\/\/[^\n]*|\/\*[\s\S]*?\*\/)|(<\/?[A-Za-z!][^>]*>)|("(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\.)*`)|\b(import|export|from|const|let|var|async|await|new|return|function|if|else|for|while|of|true|false|null|undefined)\b|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_$][\w$]*)(?=\()/g;
+  const highlight = (block) => {
     let out = "";
     let last = 0;
-    const source = codeBlock.textContent;
+    const source = block.textContent;
     for (const m of source.matchAll(tokens)) {
       out += esc(source.slice(last, m.index));
-      if (m[1]) out += highlightTag(m[1]);
-      else if (m[2]) out += wrap("comment", m[2]);
+      if (m[1]) out += wrap("comment", m[1]);
+      else if (m[2]) out += highlightTag(m[2]);
       else if (m[3]) out += wrap("str", m[3]);
       else if (m[4]) out += wrap("kw", m[4]);
       else if (m[5]) out += wrap("num", m[5]);
       else out += wrap("fn", m[6]);
       last = m.index + m[0].length;
     }
-    codeBlock.innerHTML = out + esc(source.slice(last));
-  }
+    block.innerHTML = out + esc(source.slice(last));
+  };
+  if (codeBlock) highlight(codeBlock);
+  document.querySelectorAll(".doc pre.prettyprint").forEach(highlight);
 
   if (copyButton && codeBlock) {
     copyButton.addEventListener("click", () => {

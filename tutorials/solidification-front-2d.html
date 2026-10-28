@@ -243,10 +243,13 @@
               The eikonal equation is nonlinear, making it challenging to solve directly. Due to convergence
               difficulties, a viscous term elimination technique is employed. According to this approach, a
               viscous term \(\varepsilon(\nabla^2\phi)\) is added to the equation, resulting in: \(|\nabla
-              \phi(x,y)| + \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical
+              \phi(x,y)| - \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical
               diffusion that ensures the solution remains smooth throughout the domain. The solution of this
               modified equation converges to the solution of the original eikonal equation as \(\varepsilon
-              \rightarrow 0\).
+              \rightarrow 0\). In FEAScript, \(\varepsilon\) is reduced gradually over a few continuation
+              steps, each solved with the Newton-Raphson method starting from the previous solution. Its final
+              value is small and scales with the element size, so that it vanishes as the mesh is refined while
+              keeping the solution stable on coarse meshes.
             </p>
 
             <div class="eyebrow label" id="solvingwithfeascript" role="heading" aria-level="2">

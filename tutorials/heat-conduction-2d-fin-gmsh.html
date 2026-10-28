@@ -375,6 +375,14 @@ Mesh 2;</pre
               can be imported into FEAScript.
             </p>
 
+            <p>
+              FEAScript also supports triangular elements. To use them, remove the
+              <code>Recombine Surface{1};</code> line so that Gmsh keeps the triangles, and set
+              <code>Mesh.ElementOrder</code> to <code>1</code> or <code>2</code> to match the
+              <code>elementOrder</code> (<code>"linear"</code> or <code>"quadratic"</code>) in the FEAScript
+              mesh configuration.
+            </p>
+
             <div class="eyebrow label" id="generatedmesh" role="heading" aria-level="2">
               <p><a name="generatedmesh"></a>Generated mesh</p>
             </div>

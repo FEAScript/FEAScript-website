@@ -254,7 +254,6 @@
       model.setMeshConfig({
         parsedMesh: rect_quad,
         meshDimension: "2D",
-        elementOrder: "quadratic",
       });
   
       // Apply boundary conditions using Gmsh physical group tags
@@ -377,10 +376,10 @@ Mesh 2;</pre
 
             <p>
               FEAScript also supports triangular elements. To use them, remove the
-              <code>Recombine Surface{1};</code> line so that Gmsh keeps the triangles, and set
-              <code>Mesh.ElementOrder</code> to <code>1</code> or <code>2</code> to match the
-              <code>elementOrder</code> (<code>"linear"</code> or <code>"quadratic"</code>) in the FEAScript
-              mesh configuration.
+              <code>Recombine Surface{1};</code> line so that Gmsh keeps the triangles. Set
+              <code>Mesh.ElementOrder</code> to <code>1</code> for linear or <code>2</code> for quadratic
+              elements; FEAScript detects the element order from the imported mesh, so there is no need to
+              set <code>elementOrder</code> in the mesh configuration.
             </p>
 
             <div class="eyebrow label" id="generatedmesh" role="heading" aria-level="2">
@@ -480,7 +479,6 @@ Mesh 2;</pre
                 gmshModel.setMeshConfig({
                   parsedMesh: rect_quad,
                   meshDimension: "2D",
-                  elementOrder: "quadratic",
                 });
 
                 // Define boundary conditions using Gmsh physical group tags

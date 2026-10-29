@@ -427,7 +427,6 @@
     model.setMeshConfig({
       parsedMesh: await importGmshMesh(meshFile),
       meshDimension: "2D",
-      elementOrder: "quadratic",
     });
 
     // Apply boundary conditions (Gmsh physical group tag - 1)

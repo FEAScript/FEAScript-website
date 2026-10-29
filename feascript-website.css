@@ -523,26 +523,33 @@ html.site {
   color: var(--invert-fg);
 }
 
-/* The Studio link leads to a different page, so it is set apart in gold */
-.nav-link[href$="studio.html"] {
+/* Links that lead to a different page (Docs, Studio) are set apart in gold */
+.nav-link-out {
   color: var(--gold-ink);
 }
 
-.nav-link[href$="studio.html"] span {
+.nav-link-out span {
   border: 1px solid var(--gold);
 }
 
-.nav-link[href$="studio.html"] span::after {
+/* A thin divider separates the in-page links from the links to other pages */
+.nav-link:not(.nav-link-out) + .nav-link-out {
+  margin-left: 0.5rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--line);
+}
+
+.nav-link-out span::after {
   content: " \2197";
 }
 
-.nav-link[href$="studio.html"]:hover span {
+.nav-link-out:hover span {
   border-color: var(--gold);
   background: var(--gold);
   color: #1d1d1d;
 }
 
-.mobile-nav a[href$="studio.html"] {
+.mobile-nav a.nav-link-out {
   color: var(--gold-ink);
   font-weight: 500;
 }
@@ -668,7 +675,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   color: var(--ink-strong);
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1200px) {
   .nav-links {
     display: flex;
   }

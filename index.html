@@ -43,6 +43,36 @@
       rel="stylesheet"
     />
     <link href="feascript-website.css" rel="stylesheet" type="text/css" />
+
+    <!-- Site name, logo and official profiles for search engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://feascript.com/#website",
+            "url": "https://feascript.com/",
+            "name": "FEAScript",
+            "publisher": { "@id": "https://feascript.com/#organization" }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://feascript.com/#organization",
+            "name": "FEAScript",
+            "url": "https://feascript.com/",
+            "logo": "https://feascript.com/assets/feascript-logo.png",
+            "email": "info@feascript.com",
+            "sameAs": [
+              "https://github.com/FEAScript",
+              "https://www.youtube.com/@FEAScript",
+              "https://www.linkedin.com/company/feascript/",
+              "https://www.npmjs.com/package/feascript"
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -92,9 +122,9 @@
             <a class="nav-link" href="#howtousefeascript"><span>How to use</span></a>
             <a class="nav-link" href="#features"><span>Features</span></a>
             <a class="nav-link" href="#tutorials"><span>Tutorials</span></a>
-            <a class="nav-link" href="#documentation"><span>Documentation</span></a>
             <a class="nav-link" href="#licensing"><span>Licensing</span></a>
-            <a class="nav-link" href="studio.html"><span>Studio</span></a>
+            <a class="nav-link nav-link-out" href="https://docs.feascript.com"><span>Documentation</span></a>
+            <a class="nav-link nav-link-out" href="studio.html"><span>Studio</span></a>
           </nav>
         </div>
 
@@ -175,9 +205,9 @@
         <a href="#howtousefeascript">How to use FEAScript</a>
         <a href="#features">Features</a>
         <a href="#tutorials">Tutorials</a>
-        <a href="#documentation">Documentation</a>
         <a href="#licensing">Licensing</a>
-        <a href="studio.html">FEAScript Studio</a>
+        <a class="nav-link-out" href="https://docs.feascript.com">Documentation</a>
+        <a class="nav-link-out" href="studio.html">FEAScript Studio</a>
       </nav>
     </header>
 

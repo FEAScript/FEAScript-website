@@ -426,7 +426,6 @@
     model.setModelConfig("heatConductionScript");
     model.setMeshConfig({
       parsedMesh: await importGmshMesh(meshFile),
-      meshDimension: "2D",
     });
 
     // Apply boundary conditions (Gmsh physical group tag - 1)

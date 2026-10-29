@@ -221,8 +221,8 @@
             </ul>
 
             <script type="module">
-              import { FEAScriptModel, plotSolution } from "https://core.feascript.com/dist/feascript.esm.js";
-              // import { FEAScriptModel, plotSolution } from "../../FEAScript-core/src/index.js"; // Use this when running locally
+              import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js"; // Use this when running locally
 
               function runSpeedTest(selectedSolver) {
                 const numElementsX = parseInt(document.getElementById("numElementsX").value);
@@ -263,6 +263,9 @@
 
                 plotSolution(model, result, "contour", "resultsCanvas");
               }
+
+              // Print FEAScript version
+              console.log("FEAScript version:", printVersion);
 
               runSpeedTest(document.getElementById("solverSelect").value);
 

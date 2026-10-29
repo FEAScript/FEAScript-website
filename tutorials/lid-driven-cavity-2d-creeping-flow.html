@@ -211,7 +211,7 @@
             </p>
 
             <div class="center-image">
-              <img src="../assets/stokes-2d-lid-driven.png" alt="2D Stokes flow schematic" width="300" />
+              <img src="../assets/stokes-2d-lid-driven.png" alt="2D Stokes flow schematic" width="480" />
               <p class="image-caption">
                 Schematic of the 2D lid-driven cavity: horizontal velocity (u=1) at the top edge and no-slip
                 condition (u=v=0) at the other edges.
@@ -254,7 +254,7 @@
 
     window.addEventListener("DOMContentLoaded", (event) => {
       // Print FEAScript version in the console
-      printVersion();
+      console.log("FEAScript version:", printVersion);
 
       // Create and configure model
       const model = new FEAScriptModel();

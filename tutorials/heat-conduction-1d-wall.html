@@ -211,7 +211,7 @@
               <img
                 src="../assets/heat-conduction-1d-wall.png"
                 alt="1D heat conduction schematic"
-                width="100"
+                width="400"
               />
               <p class="image-caption">
                 Schematic of the 1D wall showing convection at x = 0 and prescribed temperature at x = W
@@ -260,7 +260,7 @@
     
     window.addEventListener("DOMContentLoaded", (event) => {
       // Print FEAScript version in the console
-      printVersion();
+      console.log("FEAScript version:", printVersion);
 
       // Create and configure model
       const model = new FEAScriptModel();
@@ -274,7 +274,7 @@
 
       // Apply boundary conditions
       model.addBoundaryCondition("0", ["convection", 1, 25]); // Left boundary
-      model.addBoundaryCondition("1", ["constantTemp", 5]); // Right boundary
+      model.addBoundaryCondition("1", ["constantTemperature", 5]); // Right boundary
 
       // Solve
       model.setSolverMethod("lusolve");
@@ -360,8 +360,8 @@
 
                 // Define boundary conditions
                 model.addBoundaryCondition("0", ["convection", 1, 25]);
-                //model.addBoundaryCondition("0", ["constantTemp", 25]); // Temporary BC for testing
-                model.addBoundaryCondition("1", ["constantTemp", 5]);
+                //model.addBoundaryCondition("0", ["constantTemperature", 25]); // Temporary BC for testing
+                model.addBoundaryCondition("1", ["constantTemperature", 5]);
 
                 // Set solver method
                 model.setSolverMethod("lusolve");

@@ -1,235 +1,51 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
-   version="1.1"
-   id="svg5"
-   xml:space="preserve"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="heat-conduction-1d-wall.svg"
-   inkscape:export-filename="/home/nikoscham/Documents/feascript_repo/FEAScript-website/assets/heat-conduction-1d-wall.png"
-   inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300"><metadata
-     id="metadata54"><rdf:RDF><cc:Work
-         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><sodipodi:namedview
-     id="namedview7"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="0.74564394"
-     inkscape:cx="278.28295"
-     inkscape:cy="533.09626"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1-7" /><defs
-     id="defs2"><rect
-       x="791.26238"
-       y="663.85573"
-       width="455.98171"
-       height="411.72466"
-       id="rect11" /><pattern
-       inkscape:collect="always"
-       xlink:href="#Strips1_1.5"
-       preserveAspectRatio="xMidYMid"
-       id="pattern9"
-       patternTransform="rotate(-60,-8.8715117,32.398167)"
-       x="0"
-       y="0" /><pattern
-       inkscape:collect="always"
-       patternUnits="userSpaceOnUse"
-       width="2.5"
-       height="1"
-       patternTransform="translate(0,0) scale(2,2)"
-       preserveAspectRatio="xMidYMid"
-       id="Strips1_1.5"
-       style="fill:#000000"
-       inkscape:stockid="Stripes 02 (2:3)"
-       inkscape:isstock="true"
-       inkscape:label="Stripes 02 (2:3)">
-      <rect
-   style="stroke:none"
-   x="0"
-   y="-0.5"
-   width="1"
-   height="2"
-   id="rect140" />
-    </pattern><clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath27"><rect
-         style="fill:none;stroke:#000000;stroke-width:0.999999;stroke-linecap:butt;stroke-linejoin:bevel;paint-order:stroke markers fill;stop-color:#000000"
-         id="rect28-6"
-         width="46.160622"
-         height="39.922417"
-         x="86.574379"
-         y="420.06253" /></clipPath><marker
-       inkscape:stockid="Arrow1Mstart"
-       orient="auto"
-       refY="0.0"
-       refX="0.0"
-       id="Arrow1Mstart"
-       style="overflow:visible"
-       inkscape:isstock="true"><path
-         id="path839"
-         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
-         transform="scale(0.4) translate(10,0)" /></marker><marker
-       inkscape:stockid="Arrow1Mend"
-       orient="auto"
-       refY="0.0"
-       refX="0.0"
-       id="Arrow1Mend"
-       style="overflow:visible;"
-       inkscape:isstock="true"><path
-         id="path842"
-         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
-         transform="scale(0.4) rotate(180) translate(10,0)" /></marker><marker
-       inkscape:stockid="Arrow1Mstart"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="Arrow1Mstart-3"
-       style="overflow:visible"
-       inkscape:isstock="true"><path
-         inkscape:connector-curvature="0"
-         id="path839-6"
-         d="M 0,0 5,-5 -12.5,0 5,5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
-         transform="matrix(0.4,0,0,0.4,4,0)" /></marker><marker
-       inkscape:stockid="Arrow1Mend"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="Arrow1Mend-7"
-       style="overflow:visible"
-       inkscape:isstock="true"><path
-         inkscape:connector-curvature="0"
-         id="path842-5"
-         d="M 0,0 5,-5 -12.5,0 5,5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
-         transform="matrix(-0.4,0,0,-0.4,-4,0)" /></marker></defs><g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"><g
-       inkscape:label="Layer 1"
-       id="layer1-7"
-       transform="translate(-78.533478,21.767513)"><rect
-   style="opacity:1;fill:url(#pattern9);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="rect10"
-   width="34.166561"
-   height="99.5214"
-   x="172.31946"
-   y="53.972698"
-   inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300" /><path
-   style="fill:none;stroke:#000000;stroke-width:0.60000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.8, 1.8;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#Arrow1Mstart);marker-end:url(#Arrow1Mend)"
-   d="m 172.71407,159.31496 h 33.77195"
-   id="path831"
-   inkscape:connector-curvature="0"
-   inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300" /><flowRoot
-   xml:space="preserve"
-   id="flowRoot2850"
-   style="font-style:normal;font-weight:normal;font-size:33.33330154px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-   transform="matrix(0.26458333,0,0,0.26458333,34.695056,-51.806747)"
-   inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300"><flowRegion
-     id="flowRegion2852"><rect
-       id="rect2854"
-       width="270"
-       height="135.71428"
-       x="527.14288"
-       y="806.80542" /></flowRegion><flowPara
-     id="flowPara2856"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.33330154px;font-family:sans-serif;-inkscape-font-specification:sans-serif">0.15 m</flowPara></flowRoot><flowRoot
-   xml:space="preserve"
-   id="flowRoot3083"
-   style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"><flowRegion
-     id="flowRegion3085"><rect
-       id="rect3087"
-       width="715.71429"
-       height="334.28571"
-       x="367.14285"
-       y="192.51968" /></flowRegion><flowPara
-     id="flowPara3089" /></flowRoot><flowRoot
-   xml:space="preserve"
-   id="flowRoot2850-6-0-5"
-   style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none"
-   transform="matrix(0,0.26458333,-0.26458333,0,383.92352,-89.318615)"
-   inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300"><flowRegion
-     style="stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none"
-     id="flowRegion2852-2-2-9"><rect
-       style="stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect2854-6-3-2"
-       width="605.71429"
-       height="68.571434"
-       x="527.14288"
-       y="806.80542" /></flowRegion><flowPara
-     id="flowPara2856-1-7-2"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.33333206px;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none">Convection (T<flowSpan
-   style="font-size:64.99999762%;baseline-shift:sub"
-   id="flowSpan921">in</flowSpan> = 25 °C)</flowPara></flowRoot><g
-   id="g921"
-   style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
-   transform="translate(-11,-0.18075814)"><flowRoot
-     inkscape:export-ydpi="300"
-     inkscape:export-xdpi="300"
-     transform="matrix(0,0.26458333,-0.26458333,0,445.18821,-84.6967)"
-     style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none"
-     id="flowRoot2850-6-0-5-4"
-     xml:space="preserve"><flowRegion
-       id="flowRegion2852-2-2-9-8"
-       style="stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none"><rect
-         y="806.80542"
-         x="527.14288"
-         height="68.571434"
-         width="605.71429"
-         id="rect2854-6-3-2-3"
-         style="stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none" /></flowRegion><flowPara
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.33333206px;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:3.77952766;stroke-miterlimit:4;stroke-dasharray:none"
-       id="flowPara2856-1-7-2-0">Constant T (T<flowSpan
-   style="font-size:64.99999762%;baseline-shift:sub"
-   id="flowSpan919">0</flowSpan> = 5 °C)</flowPara></flowRoot></g><text
-   xml:space="preserve"
-   transform="matrix(0.26458333,0,0,0.26458333,78.533478,-21.767513)"
-   id="text10"
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.3333px;font-family:Calibri;-inkscape-font-specification:Calibri;white-space:pre;shape-inside:url(#rect11);display:inline;opacity:1;fill:#000000;stroke-width:2.26772;stroke-dasharray:6.80316, 6.80316;stroke-dashoffset:0" />
-
-
-<flowRoot
-   xml:space="preserve"
-   id="flowRoot2850-6-0-5-9"
-   style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-   transform="matrix(0.26458333,0,0,0.26458333,39.173151,-172.27478)"
-   inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300"><flowRegion
-     id="flowRegion2852-2-2-9-1"><rect
-       id="rect2854-6-3-2-6"
-       width="605.71429"
-       height="68.571434"
-       x="527.14288"
-       y="806.80542" /></flowRegion><flowPara
-     id="flowPara2856-1-7-2-04"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;font-family:sans-serif;-inkscape-font-specification:sans-serif">Wall</flowPara></flowRoot></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 330" width="560" height="330" font-family="sans-serif" font-size="15" fill="#000">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
+    </marker>
+  </defs>
+  <rect width="560" height="330" fill="#fff"/>
+  <clipPath id="wall"><rect x="210" y="50" width="140" height="180"/></clipPath>
+  <g clip-path="url(#wall)" stroke="#000" stroke-width="1">
+    <line x1="10" y1="230" x2="190" y2="50"/>
+    <line x1="24" y1="230" x2="204" y2="50"/>
+    <line x1="38" y1="230" x2="218" y2="50"/>
+    <line x1="52" y1="230" x2="232" y2="50"/>
+    <line x1="66" y1="230" x2="246" y2="50"/>
+    <line x1="80" y1="230" x2="260" y2="50"/>
+    <line x1="94" y1="230" x2="274" y2="50"/>
+    <line x1="108" y1="230" x2="288" y2="50"/>
+    <line x1="122" y1="230" x2="302" y2="50"/>
+    <line x1="136" y1="230" x2="316" y2="50"/>
+    <line x1="150" y1="230" x2="330" y2="50"/>
+    <line x1="164" y1="230" x2="344" y2="50"/>
+    <line x1="178" y1="230" x2="358" y2="50"/>
+    <line x1="192" y1="230" x2="372" y2="50"/>
+    <line x1="206" y1="230" x2="386" y2="50"/>
+    <line x1="220" y1="230" x2="400" y2="50"/>
+    <line x1="234" y1="230" x2="414" y2="50"/>
+    <line x1="248" y1="230" x2="428" y2="50"/>
+    <line x1="262" y1="230" x2="442" y2="50"/>
+    <line x1="276" y1="230" x2="456" y2="50"/>
+    <line x1="290" y1="230" x2="470" y2="50"/>
+    <line x1="304" y1="230" x2="484" y2="50"/>
+    <line x1="318" y1="230" x2="498" y2="50"/>
+    <line x1="332" y1="230" x2="512" y2="50"/>
+    <line x1="346" y1="230" x2="526" y2="50"/>
+    <line x1="360" y1="230" x2="540" y2="50"/>
+  </g>
+  <rect x="210" y="50" width="140" height="180" fill="none" stroke="#000" stroke-width="2"/>
+  <text x="194" y="120" font-size="15" fill="#000" text-anchor="end">Convection</text>
+  <text x="194" y="142" font-size="15" fill="#000" text-anchor="end"><tspan font-style="italic">h</tspan> = 1 W/(m²·K)</text>
+  <text x="194" y="164" font-size="15" fill="#000" text-anchor="end"><tspan font-style="italic">T</tspan><tspan dy="4" font-size="11">∞</tspan><tspan dy="-4"> = 25 °C</tspan></text>
+  <text x="194" y="184" font-size="12" fill="#666" text-anchor="end">boundary "0"</text>
+  <text x="366" y="130" font-size="15" fill="#000" text-anchor="start">Constant temperature</text>
+  <text x="366" y="152" font-size="15" fill="#000" text-anchor="start"><tspan font-style="italic">T</tspan> = 5 °C</text>
+  <text x="366" y="172" font-size="12" fill="#666" text-anchor="start">boundary "1"</text>
+  <line x1="210" y1="260" x2="350" y2="260" stroke="#000" stroke-width="1" stroke-dasharray="4 3" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="280.0" y="280" text-anchor="middle">0.15 m</text>
+  <line x1="210" y1="310" x2="260" y2="310" stroke="#000" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="268" y="315" font-size="15" fill="#000" text-anchor="start"><tspan font-style="italic">x</tspan></text>
+  <circle cx="210" cy="310" r="3"/>
+  <text x="210" y="330" font-size="13" fill="#000" text-anchor="middle"><tspan font-style="italic">x</tspan> = 0</text>
+</svg>

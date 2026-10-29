@@ -211,7 +211,7 @@
               <img
                 src="../assets/heat-conduction-2d-fin.png"
                 alt="2D fin heat conduction schematic"
-                width="300"
+                width="480"
               />
               <p class="image-caption">
                 Schematic of the 2D cooling fin: constant temperature (200&nbsp;°C) at bottom and right edges,
@@ -260,7 +260,7 @@
     
     window.addEventListener("DOMContentLoaded", (event) => {
       // Print FEAScript version in the console
-      printVersion();
+      console.log("FEAScript version:", printVersion);
 
       // Create and configure model
       const model = new FEAScriptModel();
@@ -275,10 +275,10 @@
       });
 
       // Apply boundary conditions
-      model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
+      model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
       model.addBoundaryCondition("1", ["symmetry"]); // Left boundary
       model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-      model.addBoundaryCondition("3", ["constantTemp", 200]); // Right boundary
+      model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right boundary
 
       // Solve
       model.setSolverMethod("lusolve");
@@ -296,10 +296,10 @@
               In the boundary condition definition, the numbers at the left side (from <code>"0"</code> to
               <code>"3"</code>) indicate the boundaries of the geometry (the mesh generator of FEAScript has
               assigned numbers to the boundaries, starting from the bottom boundary and proceeding clockwise).
-              The <code>"constantTemp"</code> condition sets a constant temperature value. The
+              The <code>"constantTemperature"</code> condition sets a constant temperature value. The
               <code>"symmetry"</code> boundary condition represents a zero-flux type. Finally, the
               <code>"convection"</code> condition describes a convective heat transfer scenario. In addition,
-              the second argument of the <code>"constantTemp"</code> boundary condition corresponds to the
+              the second argument of the <code>"constantTemperature"</code> boundary condition corresponds to the
               constant temperature value. For a <code>"convection"</code> boundary condition, the second
               argument represents the \({\frac{h}{k}}\) value, and the third argument indicates the external
               temperature \(T_0\).
@@ -383,10 +383,10 @@
                 });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("0", ["constantTemp", 200]);
+                model.addBoundaryCondition("0", ["constantTemperature", 200]);
                 model.addBoundaryCondition("1", ["symmetry"]);
                 model.addBoundaryCondition("2", ["convection", 1, 20]);
-                model.addBoundaryCondition("3", ["constantTemp", 200]);
+                model.addBoundaryCondition("3", ["constantTemperature", 200]);
 
                 // Set solver method
                 // model.setSolverMethod("jacobi");

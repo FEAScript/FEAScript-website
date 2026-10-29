@@ -203,12 +203,12 @@
             </div>
             <p>
               The propagation of a solidification front can be modeled using the eikonal equation that in its
-              general form is given by: \(|\nabla \phi(x,y)| = \frac{1}{F(x,y)}\). In the above, \(\phi(x,y)\)
+              general form is given by: \(|\nabla u(x,y)| = \frac{1}{F(x,y)}\). In the above, \(u(x,y)\)
               is the arrival time of the front at point (x,y), and \(F(x,y)\) is the local speed of front
               propagation. This speed can vary spatially based on factors such as temperature gradients,
               material properties, or crystallographic orientation. For this example, we simplify the problem
               by using a constant front propagation speed of 1 m/s throughout the domain, which reduces the
-              equation to: \(|\nabla \phi(x,y)| = 1\). It's worth noting, however, that actual solidification
+              equation to: \(|\nabla u(x,y)| = 1\). It's worth noting, however, that actual solidification
               speeds in real materials typically range from micrometers per second to centimeters per second
               for most metals and alloys. Only specialized rapid solidification processes might achieve speeds
               approaching or exceeding 1 m/s. For more detailed background on the eikonal equation and its
@@ -220,7 +220,7 @@
               <img
                 src="../assets/solidification-front-2d.png"
                 alt="Schematic of 2D solidification front domain"
-                width="300"
+                width="480"
               />
               <p class="image-caption">
                 Schematic of the 2D solidification front propagation domain: constant value (0) at bottom,
@@ -242,8 +242,8 @@
             <p>
               The eikonal equation is nonlinear, making it challenging to solve directly. Due to convergence
               difficulties, a viscous term elimination technique is employed. According to this approach, a
-              viscous term \(\varepsilon(\nabla^2\phi)\) is added to the equation, resulting in: \(|\nabla
-              \phi(x,y)| - \varepsilon(\nabla^2\phi) = 1\). This viscous term essentially introduces numerical
+              viscous term \(\varepsilon(\nabla^2u)\) is added to the equation, resulting in: \(|\nabla
+              u(x,y)| - \varepsilon(\nabla^2u) = 1\). This viscous term essentially introduces numerical
               diffusion that ensures the solution remains smooth throughout the domain. The solution of this
               modified equation converges to the solution of the original eikonal equation as \(\varepsilon
               \rightarrow 0\). In FEAScript, \(\varepsilon\) is reduced gradually over a few continuation
@@ -281,7 +281,7 @@
     
     window.addEventListener("DOMContentLoaded", (event) => {
       // Print FEAScript version in the console
-      printVersion();
+      console.log("FEAScript version:", printVersion);
 
       // Create and configure model
       const model = new FEAScriptModel();

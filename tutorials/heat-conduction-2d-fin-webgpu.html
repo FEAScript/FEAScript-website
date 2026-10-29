@@ -205,7 +205,7 @@
   
   window.addEventListener("DOMContentLoaded", async () =&gt; {
       // Print FEAScript version in the console
-      printVersion();
+      console.log("FEAScript version:", printVersion);
 
     // Create and configure model
     const model = new FEAScriptModel();
@@ -220,10 +220,10 @@
     });
 
     // Apply boundary conditions
-    model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
+    model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
     model.addBoundaryCondition("1", ["symmetry"]); // Left boundary
     model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-    model.addBoundaryCondition("3", ["constantTemp", 200]); // Right boundary
+    model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right boundary
 
     // Set solver method to use the GPU-accelerated Jacobi solver
     model.setSolverMethod("jacobi-gpu");
@@ -287,10 +287,10 @@
                   maxY: 2,
                 });
 
-                model.addBoundaryCondition("0", ["constantTemp", 200]);
+                model.addBoundaryCondition("0", ["constantTemperature", 200]);
                 model.addBoundaryCondition("1", ["symmetry"]);
                 model.addBoundaryCondition("2", ["convection", 1, 20]);
-                model.addBoundaryCondition("3", ["constantTemp", 200]);
+                model.addBoundaryCondition("3", ["constantTemperature", 200]);
 
                 model.setSolverMethod("jacobi-gpu");
 

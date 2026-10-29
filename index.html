@@ -363,7 +363,9 @@
               The example below demonstrates a simulation workflow: steady-state heat conduction in a 2D
               rectangular fin with a circular hole, solved using a Gmsh-generated mesh. Create an HTML file
               with the code below to run the simulation. See the
-              <a href="#tutorials">tutorials section</a> for more examples.
+              <a href="#tutorials">tutorials section</a> for more examples, and the
+              <a href="https://docs.feascript.com">documentation</a> for every model, option and function of
+              the API.
             </p>
             <div class="cell quickstart" data-reveal>
               <div class="code-block">
@@ -459,8 +461,8 @@
     });
 
     // Apply boundary conditions (Gmsh physical group tag - 1)
-    model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom
-    model.addBoundaryCondition("1", ["constantTemp", 200]); // Right
+    model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom
+    model.addBoundaryCondition("1", ["constantTemperature", 200]); // Right
     model.addBoundaryCondition("2", ["convection", 1, 20]); // Top
     model.addBoundaryCondition("3", ["symmetry"]);          // Left
     model.addBoundaryCondition("4", ["convection", 1, 20]); // Hole surface
@@ -612,7 +614,8 @@
                 >Scribbler</a
               >. Each tutorial includes different variations that demonstrate the same physical problem under
               different configurations, ranging from simple examples to advanced setups using external meshes
-              or multiple threads.
+              or multiple threads. For the equations and options behind each example, see the
+              <a href="https://docs.feascript.com">documentation</a>.
             </p>
           </div>
 
@@ -868,10 +871,10 @@
             <article class="cell cell-pad" data-reveal>
               <h3>Documentation</h3>
               <p class="desc prose" style="margin-top: 1rem">
-                The <a href="https://docs.feascript.com">documentation</a> for FEAScript is currently under
-                development and is growing steadily. For information on the numerical methods used in
-                FEAScript and other technical resources, please also visit our
-                <a href="https://blog.feascript.com">blog</a>.
+                The <a href="https://docs.feascript.com">FEAScript documentation</a> covers installation, a
+                first simulation, the finite element formulation, meshes, boundary conditions and solvers, every
+                physical model with its equations, and the full API reference. For more background on the
+                numerical methods, please also visit our <a href="https://blog.feascript.com">blog</a>.
               </p>
             </article>
 

@@ -234,7 +234,7 @@
   
     window.addEventListener("DOMContentLoaded", async () => {
       // Print FEAScript version in the console
-      printVersion();
+      console.log("FEAScript version:", printVersion);
   
       // Fetch the mesh file
       const response = await fetch("./rhom_quad.msh"); // .msh version 4.1 is currently supported
@@ -259,8 +259,8 @@
       });
   
       // Apply boundary conditions using Gmsh physical group tags
-      model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
-      model.addBoundaryCondition("1", ["constantTemp", 200]); // Right boundary
+      model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
+      model.addBoundaryCondition("1", ["constantTemperature", 200]); // Right boundary
       model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
       model.addBoundaryCondition("3", ["symmetry"]); // Left boundary
   
@@ -417,8 +417,8 @@ Mesh 2;</pre
                 });
 
                 // Define boundary conditions using Gmsh physical group tags
-                gmshModel.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
-                gmshModel.addBoundaryCondition("1", ["constantTemp", 200]); // Right boundary
+                gmshModel.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
+                gmshModel.addBoundaryCondition("1", ["constantTemperature", 200]); // Right boundary
                 gmshModel.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
                 gmshModel.addBoundaryCondition("3", ["symmetry"]); // Left boundary
 

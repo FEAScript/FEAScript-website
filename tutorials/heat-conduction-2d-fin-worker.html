@@ -214,7 +214,7 @@
     
     window.addEventListener("DOMContentLoaded", async () =&gt; {
       // Print FEAScript version in the console
-      printVersion();
+      console.log("FEAScript version:", printVersion);
   
       // Create a new FEAScriptWorker instance
       const model = new FEAScriptWorker();
@@ -234,10 +234,10 @@
       });
   
       // Apply boundary conditions
-      await model.addBoundaryCondition("0", ["constantTemp", 200]); // Bottom boundary
+      await model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
       await model.addBoundaryCondition("1", ["symmetry"]); // Left boundary
       await model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-      await model.addBoundaryCondition("3", ["constantTemp", 200]); // Right boundary
+      await model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right boundary
   
       // Solve
       await model.setSolverMethod("lusolve");
@@ -312,10 +312,10 @@
                 });
 
                 // Define boundary conditions
-                await model.addBoundaryCondition("0", ["constantTemp", 200]);
+                await model.addBoundaryCondition("0", ["constantTemperature", 200]);
                 await model.addBoundaryCondition("1", ["symmetry"]);
                 await model.addBoundaryCondition("2", ["convection", 1, 20]);
-                await model.addBoundaryCondition("3", ["constantTemp", 200]);
+                await model.addBoundaryCondition("3", ["constantTemperature", 200]);
 
                 // Set solver method
                 await model.setSolverMethod("lusolve");

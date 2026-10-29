@@ -219,7 +219,7 @@
             </p>
 
             <div class="center-image">
-              <img src="../assets/cantilever-beam-1d.png" alt="Cantilever beam schematic" width="300" />
+              <img src="../assets/cantilever-beam-1d.png" alt="Cantilever beam schematic" width="460" />
               <p class="image-caption">
                 Schematic of the cantilever beam: clamped support at x=0 (w=0, &theta;=0) and a downward tip
                 point load P at x=L
@@ -273,7 +273,7 @@
 
     window.addEventListener("DOMContentLoaded", (event) => {
       // Print FEAScript version in the console
-      printVersion();
+      console.log("FEAScript version:", printVersion);
 
       // Beam and load parameters
       const beamLength = 4; // m

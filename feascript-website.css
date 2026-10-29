@@ -1806,6 +1806,16 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   background: #fff;
 }
 
+/* Tutorial schematics: line art without a frame, inverted in dark mode */
+.doc .center-image img.schematic {
+  border: none;
+  background: none;
+}
+
+html[data-theme="dark"] .doc .center-image img.schematic {
+  filter: invert(0.88);
+}
+
 .doc .image-caption {
   margin: 0.5rem auto 0;
   font-size: 0.8125rem;

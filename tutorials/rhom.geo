@@ -18,14 +18,14 @@ Line(4) = {4, 1}; // left
 Line Loop(1) = {1, 2, 3, 4};
 Plane Surface(1) = {1};
 
-// Physical Lines
-Physical Line("bottom") = {1};
-Physical Line("right")  = {2};
-Physical Line("top")    = {3};
-Physical Line("left")   = {4};
+// Physical Lines, tagged bottom, left, top, right (the side order of FEAScript structured meshes)
+Physical Line("bottom", 1) = {1}; // FEAScript boundary "0"
+Physical Line("left", 2)   = {4}; // FEAScript boundary "1"
+Physical Line("top", 3)    = {3}; // FEAScript boundary "2"
+Physical Line("right", 4)  = {2}; // FEAScript boundary "3"
 
 // Physical Surface
-Physical Surface("domain") = {1};
+Physical Surface("domain", 5) = {1};
 
 // Generate 2D mesh
 Recombine Surface{1}; // Turns triangle mesh into quads

@@ -249,16 +249,20 @@
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
-    // Import FEAScript library
-    import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+    import {
+      FEAScriptModel,
+      plotSolution,
+      printVersion,
+    } from "https://core.feascript.com/dist/feascript.esm.js";
 
-    window.addEventListener("DOMContentLoaded", (event) => {
-      // Print FEAScript version in the console
+    window.addEventListener("DOMContentLoaded", () =&gt; {
       console.log("FEAScript version:", printVersion);
 
-      // Create and configure model
+      // 1. Create the model and select the physics
       const model = new FEAScriptModel();
       model.setModelConfig("creepingFlowScript");
+
+      // 2. Define the mesh (creeping flow needs quadratic elements)
       model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
@@ -268,34 +272,27 @@
         maxY: 2,
       });
 
-      // Apply boundary conditions
-      model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom boundary
-      model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left boundary
-      model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Top boundary
-      model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right boundary
+      // 3. Apply the boundary conditions
+      model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom wall
+      model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left wall
+      model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Moving lid
+      model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right wall
 
-      // Solve
+      // 4. Solve
       model.setSolverMethod("lusolve");
       const result = model.solve();
 
-      // Extract velocity and pressure fields from the solution vector
-      const totalNodesVelocity = model._creepingFlowMetadata.totalNodesVelocity;
-      const solutionVector = result.solutionVector;
-      const uVelocity = solutionVector.slice(0, totalNodesVelocity);
-      const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
-      const velocityMagnitude = uVelocity.map((u, i) => Math.sqrt(u * u + vVelocity[i] * vVelocity[i]));
+      // 5. Extract and plot the velocity
+      // The solution holds [u, v] at every node, followed by the pressure at the corner nodes
+      const { solutionVector, nodesCoordinates } = result;
+      const totalNodes = nodesCoordinates.nodesXCoordinates.length;
+      const uVelocity = solutionVector.slice(0, totalNodes);
+      const vVelocity = solutionVector.slice(totalNodes, 2 * totalNodes);
+      const velocityMagnitude = uVelocity.map((u, i) =&gt; Math.hypot(u, vVelocity[i]));
 
-      // Plot velocity magnitude as a contour
-      plotSolution(model, { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
-        "contour", "velocityMagnitudeCanvas");
-
-      // Plot u-velocity component as a contour
-      plotSolution(model, { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
-        "contour", "uVelocityCanvas");
-
-      // Plot v-velocity component as a contour
-      plotSolution(model, { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
-        "contour", "vVelocityCanvas");
+      plotSolution(model, { solutionVector: velocityMagnitude, nodesCoordinates }, "contour", "velocityMagnitudeCanvas");
+      plotSolution(model, { solutionVector: uVelocity, nodesCoordinates }, "contour", "uVelocityCanvas");
+      plotSolution(model, { solutionVector: vVelocity, nodesCoordinates }, "contour", "vVelocityCanvas");
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;

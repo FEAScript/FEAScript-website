@@ -104,6 +104,23 @@
     });
   });
 
+  // Copy buttons that copy the text of another element, named in data-copy-target
+  document.querySelectorAll("[data-copy-target]").forEach((button) => {
+    const target = document.getElementById(button.dataset.copyTarget);
+    if (!target) return;
+    button.addEventListener("click", () => {
+      navigator.clipboard.writeText(target.innerText.trim()).then(() => {
+        const label = button.querySelector("span");
+        button.classList.add("copied");
+        label.textContent = "Copied";
+        setTimeout(() => {
+          button.classList.remove("copied");
+          label.textContent = "Copy";
+        }, 2000);
+      });
+    });
+  });
+
   // Copy the quick-start code
   const copyButton = document.getElementById("copy-qs-btn");
   const codeBlock = document.getElementById("quickstart-code");

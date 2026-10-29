@@ -438,38 +438,39 @@
 &lt;/head&gt;
 &lt;body&gt;
   &lt;div id="resultsCanvas"&gt;&lt;/div&gt;
+
   &lt;script type="module"&gt;
-  // Import FEAScript library
-  import {
-    FEAScriptModel,
-    importGmshMesh,
-    plotInterpolatedSolution,
-  } from "https://core.feascript.com/dist/feascript.esm.js";
+    import {
+      FEAScriptModel,
+      importGmshMesh,
+      plotInterpolatedSolution,
+    } from "https://core.feascript.com/dist/feascript.esm.js";
 
-  window.addEventListener("DOMContentLoaded", async () => {
-    // Fetch the Gmsh mesh from feascript.com (swap the URL for any other hosted .msh file)
-    const response = await fetch("https://feascript.com/tutorials/rect_with_hole.msh");
-    const meshFile = new File([await response.text()], "rect_with_hole.msh");
+    window.addEventListener("DOMContentLoaded", async () =&gt; {
+      // 1. Create the model and select the physics
+      const model = new FEAScriptModel();
+      model.setModelConfig("heatConductionScript");
 
-    // Create and configure model
-    const model = new FEAScriptModel();
-    model.setModelConfig("heatConductionScript");
-    model.setMeshConfig({ parsedMesh: await importGmshMesh(meshFile) });
+      // 2. Load the Gmsh mesh (any hosted .msh file works)
+      const response = await fetch("https://feascript.com/tutorials/rect_with_hole.msh");
+      const meshFile = new File([await response.text()], "rect_with_hole.msh");
+      const mesh = await importGmshMesh(meshFile);
+      model.setMeshConfig({ parsedMesh: mesh });
 
-    // Apply boundary conditions (Gmsh physical group tag - 1)
-    model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom
-    model.addBoundaryCondition("1", ["symmetry"]);                 // Left
-    model.addBoundaryCondition("2", ["convection", 1, 20]);        // Top
-    model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right
-    model.addBoundaryCondition("4", ["convection", 1, 20]);        // Hole surface
+      // 3. Apply the boundary conditions (key = Gmsh physical group tag - 1)
+      model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom
+      model.addBoundaryCondition("1", ["symmetry"]);                 // Left
+      model.addBoundaryCondition("2", ["convection", 1, 20]);        // Top
+      model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right
+      model.addBoundaryCondition("4", ["convection", 1, 20]);        // Hole
 
-    // Solve
-    model.setSolverMethod("lusolve");
-    const result = model.solve();
+      // 4. Solve
+      model.setSolverMethod("lusolve");
+      const result = model.solve();
 
-    // Plot results
-    plotInterpolatedSolution(model, result, "contour", "resultsCanvas");
-  });
+      // 5. Plot the results
+      plotInterpolatedSolution(model, result, "contour", "resultsCanvas");
+    });
   &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</pre

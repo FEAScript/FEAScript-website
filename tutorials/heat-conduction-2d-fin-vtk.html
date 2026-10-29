@@ -239,12 +239,18 @@
               use them to render the results:
             </p>
             <pre class="prettyprint">
-import { FEAScriptModel, plotInterpolatedSolutionVtk, createColorScale, createContourLineOptions, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+import {
+  FEAScriptModel,
+  plotInterpolatedSolutionVtk,
+  createColorScale,
+  createContourLineOptions,
+  printVersion,
+} from "https://core.feascript.com/dist/feascript.esm.js";
 
-// ...model setup and solve (same as the Plotly tutorial)...
+// Steps 1-4 (model, mesh, boundary conditions, solve) are the same as in the Plotly tutorial
 const result = model.solve();
 
-// Plot results using VTK.js
+// 5. Plot the results with VTK.js
 await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
   colorScale: createColorScale({
     presetName: "Cool to Warm",

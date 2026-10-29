@@ -213,66 +213,54 @@
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
-    // Import FEAScript library
-    import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
-    
+    import {
+      FEAScriptWorker,
+      plotSolution,
+      printVersion,
+    } from "https://core.feascript.com/src/index.js";
+
     window.addEventListener("DOMContentLoaded", async () =&gt; {
-      // Print FEAScript version in the console
       console.log("FEAScript version:", printVersion);
-  
-      // Create a new FEAScriptWorker instance
+
+      // 1. Create the model in a web worker and select the physics
       const model = new FEAScriptWorker();
-  
-      // Ensure the worker is ready
-      await model.ping();
-  
-      // Configure model
+      await model.ping(); // Wait until the worker is ready
       await model.setModelConfig("creepingFlowScript");
-      // Mesh parameters
-      const numElementsX = 12;
-      const numElementsY = 6;
+
+      // 2. Define the mesh (creeping flow needs quadratic elements)
       await model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
-        numElementsX: numElementsX,
-        numElementsY: numElementsY,
+        numElementsX: 12,
+        numElementsY: 6,
         maxX: 4,
         maxY: 2,
       });
-  
-      // Apply boundary conditions
-      await model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom boundary
-      await model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left boundary
-      await model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Top boundary
-      await model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right boundary
-  
-      // Solve
+
+      // 3. Apply the boundary conditions
+      await model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom wall
+      await model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left wall
+      await model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Moving lid
+      await model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right wall
+
+      // 4. Solve
       await model.setSolverMethod("lusolve");
       const result = await model.solve();
-  
-      // Calculate total velocity nodes for quadratic elements
-      const nodesX = 2 * numElementsX + 1;
-      const nodesY = 2 * numElementsY + 1;
-      const totalNodesVelocity = nodesX * nodesY;
 
-      // Extract solution components
-      const solutionVector = result.solutionVector;
-      const uVelocity = solutionVector.slice(0, totalNodesVelocity);
-      const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
-      const velocityMagnitude = uVelocity.map((u, i) => Math.sqrt(u * u + vVelocity[i] * vVelocity[i]));
+      // 5. Extract and plot the velocity
+      // The solution holds [u, v] at every node, followed by the pressure at the corner nodes
+      const { solutionVector, nodesCoordinates } = result;
+      const totalNodes = nodesCoordinates.nodesXCoordinates.length;
+      const uVelocity = solutionVector.slice(0, totalNodes);
+      const vVelocity = solutionVector.slice(totalNodes, 2 * totalNodes);
+      const velocityMagnitude = uVelocity.map((u, i) =&gt; Math.hypot(u, vVelocity[i]));
 
-      // Get model info for plotting
       const modelInfo = await model.getModelInfo();
+      plotSolution(modelInfo, { solutionVector: velocityMagnitude, nodesCoordinates }, "contour", "velocityMagnitudeCanvas");
+      plotSolution(modelInfo, { solutionVector: uVelocity, nodesCoordinates }, "contour", "uVelocityCanvas");
+      plotSolution(modelInfo, { solutionVector: vVelocity, nodesCoordinates }, "contour", "vVelocityCanvas");
 
-      // Plot results
-      plotSolution(modelInfo, { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
-        "contour", "velocityMagnitudeCanvas");
-      plotSolution(modelInfo, { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
-        "contour", "uVelocityCanvas");
-      plotSolution(modelInfo, { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
-        "contour", "vVelocityCanvas");
-  
-      // Terminate the worker
+      // 6. Terminate the worker
       model.terminate();
     });
   &lt;/script&gt;

@@ -1775,6 +1775,16 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   white-space: pre;
 }
 
+/* Code listings with a file bar and a copy button (same look as the quick-start block) */
+.doc .code-block {
+  margin-top: 1rem;
+}
+
+.doc .code-block pre {
+  margin-top: 0;
+  border: none;
+}
+
 .doc pre code {
   padding: 0;
   background: none;

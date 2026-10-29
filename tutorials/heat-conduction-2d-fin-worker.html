@@ -209,21 +209,21 @@
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
-    // Import FEAScript library
-    import { FEAScriptWorker, plotSolution, printVersion } from "https://core.feascript.com/src/index.js";
-    
+    import {
+      FEAScriptWorker,
+      plotSolution,
+      printVersion,
+    } from "https://core.feascript.com/src/index.js";
+
     window.addEventListener("DOMContentLoaded", async () =&gt; {
-      // Print FEAScript version in the console
       console.log("FEAScript version:", printVersion);
-  
-      // Create a new FEAScriptWorker instance
+
+      // 1. Create the model in a web worker and select the physics
       const model = new FEAScriptWorker();
-  
-      // Ensure the worker is ready
-      await model.ping();
-  
-      // Configure model
+      await model.ping(); // Wait until the worker is ready
       await model.setModelConfig("heatConductionScript");
+
+      // 2. Define the mesh
       await model.setMeshConfig({
         meshDimension: "2D",
         elementOrder: "quadratic",
@@ -232,22 +232,22 @@
         maxX: 4,
         maxY: 2,
       });
-  
-      // Apply boundary conditions
-      await model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
-      await model.addBoundaryCondition("1", ["symmetry"]); // Left boundary
-      await model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-      await model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right boundary
-  
-      // Solve
+
+      // 3. Apply the boundary conditions
+      await model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom
+      await model.addBoundaryCondition("1", ["symmetry"]);                 // Left
+      await model.addBoundaryCondition("2", ["convection", 1, 20]);        // Top
+      await model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right
+
+      // 4. Solve
       await model.setSolverMethod("lusolve");
       const result = await model.solve();
-  
-      // Plot results
-      const modelInfo = await model.getModelInfo(); // Get model info for plotting
+
+      // 5. Plot the results
+      const modelInfo = await model.getModelInfo();
       plotSolution(modelInfo, result, "contour", "resultsCanvas");
-  
-      // Terminate the worker
+
+      // 6. Terminate the worker
       model.terminate();
     });
   &lt;/script&gt;

@@ -226,50 +226,44 @@
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
-    // Import FEAScript library
-    import { FEAScriptModel, importGmshMesh, plotInterpolatedSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
-  
-    window.addEventListener("DOMContentLoaded", async () => {
-      // Print FEAScript version in the console
+    import {
+      FEAScriptModel,
+      importGmshMesh,
+      plotInterpolatedSolution,
+      printVersion,
+    } from "https://core.feascript.com/dist/feascript.esm.js";
+
+    window.addEventListener("DOMContentLoaded", async () =&gt; {
       console.log("FEAScript version:", printVersion);
-  
-      // Fetch the mesh file
-      const response = await fetch("./rect_quad.msh"); // .msh version 4.1 is currently supported
-      if (!response.ok) {
-        throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
-      }
-      const meshContent = await response.text();
-  
-      // Create a File object with the actual content
-      const meshFile = new File([meshContent], "rect_quad.msh");
-  
-      // Create and configure model
+
+      // 1. Create the model and select the physics
       const model = new FEAScriptModel();
       model.setModelConfig("heatConductionScript");
-  
-      // Parse the mesh file
-      const rect_quad = await importGmshMesh(meshFile);
-  
-      // Define mesh configuration with the parsed rect_quad
-      model.setMeshConfig({
-        parsedMesh: rect_quad,
-      });
-  
-      // Apply boundary conditions using Gmsh physical group tags
-      model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
-      model.addBoundaryCondition("1", ["symmetry"]); // Left boundary
-      model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-      model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right boundary
-  
-      // Solve
+
+      // 2. Load the Gmsh mesh (.msh format version 4.1)
+      const response = await fetch("./rect_quad.msh");
+      if (!response.ok) {
+        throw new Error(`Failed to load the mesh file: ${response.status} ${response.statusText}`);
+      }
+      const meshFile = new File([await response.text()], "rect_quad.msh");
+      const mesh = await importGmshMesh(meshFile);
+      model.setMeshConfig({ parsedMesh: mesh });
+
+      // 3. Apply the boundary conditions (key = Gmsh physical group tag - 1)
+      model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom
+      model.addBoundaryCondition("1", ["symmetry"]);                 // Left
+      model.addBoundaryCondition("2", ["convection", 1, 20]);        // Top
+      model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right
+
+      // 4. Solve
       model.setSolverMethod("lusolve");
       const result = model.solve();
-  
-      // Plot results
+
+      // 5. Plot the results
       plotInterpolatedSolution(model, result, "contour", "resultsCanvas");
     });
   &lt;/script&gt;
-  &lt;!-- ... rest of body region... --&gt;
+  &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
             >
 
@@ -305,44 +299,64 @@
             </div>
             <p>
               Below is the <code>rect.geo</code> file used in this tutorial. It defines a 4 m × 2 m
-              rectangular domain with physical lines for each boundary edge:
+              rectangular domain with a physical line for each boundary edge:
             </p>
 
-            <pre class="prettyprint">
-// 2D Rectangle: 4m (width) x 2m (height)
+            <div class="code-block">
+              <div class="code-bar label">
+                <span class="file">rect.geo</span>
+                <div class="code-actions">
+                  <button class="code-btn" type="button" title="Copy code" data-copy-target="rect-geo">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </div>
+              <pre class="prettyprint" id="rect-geo">
+// 2D rectangle: 4 m (width) x 2 m (height)
+// Generate the mesh with: gmsh rect.geo -2 -format msh41 -o rect_quad.msh
 
+// 1. Mesh size
 lc = 0.7; // Characteristic length
 
-// Points (x, y, z, mesh size)
+// 2. Points (x, y, z, mesh size)
 Point(1) = {0, 0, 0, lc}; // Bottom left
 Point(2) = {4, 0, 0, lc}; // Bottom right
 Point(3) = {4, 2, 0, lc}; // Top right
 Point(4) = {0, 2, 0, lc}; // Top left
 
-// Lines
-Line(1) = {1, 2}; // Bottom boundary
-Line(2) = {2, 3}; // Right boundary
-Line(3) = {3, 4}; // Top boundary
-Line(4) = {4, 1}; // Left boundary
+// 3. Lines and surface
+Line(1) = {1, 2};            // Bottom
+Line(2) = {2, 3};            // Right
+Line(3) = {3, 4};            // Top
+Line(4) = {4, 1};            // Left
+Line Loop(1) = {1, 2, 3, 4}; // Closed boundary
+Plane Surface(1) = {1};      // Domain
 
-// Line Loop and Surface
-Line Loop(1) = {1, 2, 3, 4};
-Plane Surface(1) = {1};
+// 4. Physical groups, tagged bottom, left, top, right (the side order of FEAScript structured meshes)
+Physical Line("bottom", 1) = {1};    // FEAScript boundary "0"
+Physical Line("left", 2)   = {4};    // FEAScript boundary "1"
+Physical Line("top", 3)    = {3};    // FEAScript boundary "2"
+Physical Line("right", 4)  = {2};    // FEAScript boundary "3"
+Physical Surface("domain", 5) = {1}; // Domain
 
-// Physical Lines, tagged bottom, left, top, right (the side order of FEAScript structured meshes)
-Physical Line("bottom", 1) = {1}; // FEAScript boundary "0"
-Physical Line("left", 2)   = {4}; // FEAScript boundary "1"
-Physical Line("top", 3)    = {3}; // FEAScript boundary "2"
-Physical Line("right", 4)  = {2}; // FEAScript boundary "3"
-
-// Physical Surface
-Physical Surface("domain", 5) = {1};
-
-// Generate 2D mesh
-Recombine Surface{1}; // Turn triangle elements into quadrilaterals
-Mesh.ElementOrder = 2; // Set quadratic elements 
+// 5. Mesh
+Recombine Surface{1};  // Quadrilaterals instead of triangles
+Mesh.ElementOrder = 2; // Quadratic elements
 Mesh 2;</pre
-            >
+              >
+            </div>
 
             <p>
               Note how the physical line tags in the <code>.geo</code> file correspond to the boundary
@@ -371,7 +385,7 @@ Mesh 2;</pre
 
             <p>
               To generate a mesh file from this <code>.geo</code> script, you would run:
-              <code>gmsh rect.geo -2</code> in your terminal, which creates a <code>rect.msh</code> file that
+              <code>gmsh rect.geo -2 -format msh41 -o rect_quad.msh</code> in your terminal, which creates the <code>rect_quad.msh</code> file that
               can be imported into FEAScript.
             </p>
 

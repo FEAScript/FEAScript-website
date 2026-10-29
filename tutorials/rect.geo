@@ -1,41 +1,31 @@
-// 2D Rectangle: 4m (width) x 2m (height)
-// Use the command "gmsh rect.geo -2" to generate the mesh
+// 2D rectangle: 4 m (width) x 2 m (height)
+// Generate the mesh with: gmsh rect.geo -2 -format msh41 -o rect_quad.msh
 
+// 1. Mesh size
 lc = 0.7; // Characteristic length
-// Points (x, y, z, mesh size)
+
+// 2. Points (x, y, z, mesh size)
 Point(1) = {0, 0, 0, lc}; // Bottom left
 Point(2) = {4, 0, 0, lc}; // Bottom right
 Point(3) = {4, 2, 0, lc}; // Top right
 Point(4) = {0, 2, 0, lc}; // Top left
 
-// Lines
-Line(1) = {1, 2}; // bottom
-Line(2) = {2, 3}; // right
-Line(3) = {3, 4}; // top
-Line(4) = {4, 1}; // left
+// 3. Lines and surface
+Line(1) = {1, 2};            // Bottom
+Line(2) = {2, 3};            // Right
+Line(3) = {3, 4};            // Top
+Line(4) = {4, 1};            // Left
+Line Loop(1) = {1, 2, 3, 4}; // Closed boundary
+Plane Surface(1) = {1};      // Domain
 
-// Line Loop and Surface
-Line Loop(1) = {1, 2, 3, 4};
-Plane Surface(1) = {1};
+// 4. Physical groups, tagged bottom, left, top, right (the side order of FEAScript structured meshes)
+Physical Line("bottom", 1) = {1};    // FEAScript boundary "0"
+Physical Line("left", 2)   = {4};    // FEAScript boundary "1"
+Physical Line("top", 3)    = {3};    // FEAScript boundary "2"
+Physical Line("right", 4)  = {2};    // FEAScript boundary "3"
+Physical Surface("domain", 5) = {1}; // Domain
 
-// Physical Lines, tagged bottom, left, top, right (the side order of FEAScript structured meshes)
-Physical Line("bottom", 1) = {1}; // FEAScript boundary "0"
-Physical Line("left", 2)   = {4}; // FEAScript boundary "1"
-Physical Line("top", 3)    = {3}; // FEAScript boundary "2"
-Physical Line("right", 4)  = {2}; // FEAScript boundary "3"
-
-// Physical Surface
-Physical Surface("domain", 5) = {1};
-
-// Create structured mesh
-//Transfinite Curve{1} = 20;
-//Transfinite Curve{2} = 10;
-//Transfinite Curve{3} = 20;
-//Transfinite Curve{4} = 10;
-//Transfinite Surface{1};
-
-// Generate 2D mesh
-Recombine Surface{1}; // Turns triangle mesh into quads
-Mesh.ElementOrder = 2; // Set quadratic elements 
+// 5. Mesh
+Recombine Surface{1};  // Quadrilaterals instead of triangles
+Mesh.ElementOrder = 2; // Quadratic elements
 Mesh 2;
-

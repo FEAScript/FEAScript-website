@@ -268,27 +268,28 @@
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
-    // Import FEAScript library
-    import { FEAScriptModel, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+    import {
+      FEAScriptModel,
+      printVersion,
+    } from "https://core.feascript.com/dist/feascript.esm.js";
 
-    window.addEventListener("DOMContentLoaded", (event) => {
-      // Print FEAScript version in the console
+    window.addEventListener("DOMContentLoaded", () =&gt; {
       console.log("FEAScript version:", printVersion);
 
       // Beam and load parameters
-      const beamLength = 4; // m
+      const beamLength = 4;           // m
       const bendingStiffness = 1.0e5; // EI
-      const tipLoad = -1000; // Downward point load at the free end
+      const tipLoad = -1000;          // Downward point load at the free end
 
-      // Create and configure model
+      // 1. Create the model and select the physics
       const model = new FEAScriptModel();
       model.setModelConfig("eulerBernoulliBeamScript", {
         coefficientFunctions: {
-          EI: (x) => bendingStiffness,
+          EI: (x) =&gt; bendingStiffness,
         },
       });
 
-      // Define mesh configuration
+      // 2. Define the mesh
       model.setMeshConfig({
         meshDimension: "1D",
         elementOrder: "linear",
@@ -296,19 +297,16 @@
         maxX: beamLength,
       });
 
-      // Define boundary conditions
-      model.addBoundaryCondition("1", [["fixed"]]); // Clamped support at x=0
-      model.addBoundaryCondition("5", [["force", tipLoad]]); // Tip point load at x=L (last node)
+      // 3. Apply the boundary conditions (keyed by node number)
+      model.addBoundaryCondition("1", [["fixed"]]);          // Clamped support at x = 0
+      model.addBoundaryCondition("5", [["force", tipLoad]]); // Tip load at x = L (last node)
 
-      // Solve
+      // 4. Solve
       model.setSolverMethod("lusolve");
       const result = model.solve();
 
-      // Extract the deflection field from the solution vector
-      // DOF layout per node: [w, theta]
-      const totalNodesX = model._eulerBernoulliBeamMetadata.totalNodesX;
-      const solutionVector = result.solutionVector;
-      const femDeflection = Array.from({ length: totalNodesX }, (_, i) => solutionVector[2 * i]);
+      // 5. Extract the deflection (the solution has two values per node: [w, theta])
+      const femDeflection = result.solutionVector.filter((_, i) =&gt; i % 2 === 0);
       const femNodesX = result.nodesCoordinates.nodesXCoordinates;
     });
   &lt;/script&gt;

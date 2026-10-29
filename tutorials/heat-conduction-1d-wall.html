@@ -256,16 +256,20 @@
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
-    // Import FEAScript library
-    import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
-    
-    window.addEventListener("DOMContentLoaded", (event) => {
-      // Print FEAScript version in the console
+    import {
+      FEAScriptModel,
+      plotSolution,
+      printVersion,
+    } from "https://core.feascript.com/dist/feascript.esm.js";
+
+    window.addEventListener("DOMContentLoaded", () =&gt; {
       console.log("FEAScript version:", printVersion);
 
-      // Create and configure model
+      // 1. Create the model and select the physics
       const model = new FEAScriptModel();
       model.setModelConfig("heatConductionScript");
+
+      // 2. Define the mesh
       model.setMeshConfig({
         meshDimension: "1D",
         elementOrder: "linear",
@@ -273,17 +277,16 @@
         maxX: 0.15,
       });
 
-      // Apply boundary conditions
-      model.addBoundaryCondition("0", ["convection", 1, 25]); // Left boundary
-      model.addBoundaryCondition("1", ["constantTemperature", 5]); // Right boundary
+      // 3. Apply the boundary conditions
+      model.addBoundaryCondition("0", ["convection", 1, 25]);      // Left
+      model.addBoundaryCondition("1", ["constantTemperature", 5]); // Right
 
-      // Solve
+      // 4. Solve
       model.setSolverMethod("lusolve");
       const result = model.solve();
 
-      // Plot results
+      // 5. Plot the results
       plotSolution(model, result, "line", "resultsCanvas");
-      
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;

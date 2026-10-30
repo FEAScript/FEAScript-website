@@ -1938,6 +1938,11 @@ html[data-theme="dark"] .doc .center-image img.schematic {
   margin-top: 1.5rem;
 }
 
+.doc .maillist-row input[type="email"] {
+  height: 3rem;
+  padding: 0 1rem;
+}
+
 /* ─────────────────────────────────────────────────────────────
    MOTION
    ───────────────────────────────────────────────────────────── */

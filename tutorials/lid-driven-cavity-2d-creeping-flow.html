@@ -282,17 +282,10 @@
       model.setSolverMethod("lusolve");
       const result = model.solve();
 
-      // 5. Extract and plot the velocity
-      // The solution holds [u, v] at every node, followed by the pressure at the corner nodes
-      const { solutionVector, nodesCoordinates } = result;
-      const totalNodes = nodesCoordinates.nodesXCoordinates.length;
-      const uVelocity = solutionVector.slice(0, totalNodes);
-      const vVelocity = solutionVector.slice(totalNodes, 2 * totalNodes);
-      const velocityMagnitude = uVelocity.map((u, i) =&gt; Math.hypot(u, vVelocity[i]));
-
-      plotSolution(model, { solutionVector: velocityMagnitude, nodesCoordinates }, "contour", "velocityMagnitudeCanvas");
-      plotSolution(model, { solutionVector: uVelocity, nodesCoordinates }, "contour", "uVelocityCanvas");
-      plotSolution(model, { solutionVector: vVelocity, nodesCoordinates }, "contour", "vVelocityCanvas");
+      // 5. Plot the results
+      plotSolution(model, result, "contour", "velocityMagnitudeCanvas");
+      plotSolution(model, result, "contour", "uVelocityCanvas", { field: "u" });
+      plotSolution(model, result, "contour", "vVelocityCanvas", { field: "v" });
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
@@ -306,12 +299,11 @@
               the boundary nodes (the second and third arguments respectively).
             </p>
             <p>
-              Since the Stokes solver uses a mixed formulation, the solution vector contains all DOFs packed
-              sequentially: \([u_0, \ldots, u_{N_2-1}, \, v_0, \ldots, v_{N_2-1}, \, p_0, \ldots,
-              p_{N_1-1}]\), where \(N_2\) is the number of velocity nodes (Q2) and \(N_1\) is the number of
-              pressure nodes (Q1). The velocity components are extracted by slicing the solution vector and
-              each field can then be plotted individually using the existing
-              <code>plotSolution</code> function.
+              Since the Stokes solver uses a mixed formulation, the result of <code>solve()</code> also
+              contains the named fields <code>velocityMagnitude</code>, <code>u</code>, <code>v</code> and
+              <code>p</code>, each with one value per mesh node (the pressure, solved at the corner nodes, is
+              interpolated linearly to the remaining nodes). <code>plotSolution</code> plots the velocity
+              magnitude by default, and any other field with the <code>field</code> option.
             </p>
             <p>
               After solving the case, the results are shown in 2D contour plots. To visualize them, include
@@ -400,39 +392,10 @@
                 // Solve the problem and get the solution
                 const result = model.solve();
 
-                // Extract velocity and pressure fields from the solution vector
-                // DOF layout: [u₀…u_{N₂−1}, v₀…v_{N₂−1}, p₀…p_{N₁−1}]
-                const totalNodesVelocity = model._creepingFlowMetadata.totalNodesVelocity;
-                const solutionVector = result.solutionVector;
-                const uVelocity = solutionVector.slice(0, totalNodesVelocity);
-                const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
-                const velocityMagnitude = uVelocity.map((u, i) =>
-                  Math.sqrt(u * u + vVelocity[i] * vVelocity[i]),
-                );
-
-                // Plot velocity magnitude as a 2D contour plot
-                plotSolution(
-                  model,
-                  { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
-                  "contour",
-                  "velocityMagnitudeCanvas",
-                );
-
-                // Plot u-velocity component as a 2D contour plot
-                plotSolution(
-                  model,
-                  { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
-                  "contour",
-                  "uVelocityCanvas",
-                );
-
-                // Plot v-velocity component as a 2D contour plot
-                plotSolution(
-                  model,
-                  { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
-                  "contour",
-                  "vVelocityCanvas",
-                );
+                // Plot the velocity magnitude and the velocity components as 2D contour plots
+                plotSolution(model, result, "contour", "velocityMagnitudeCanvas");
+                plotSolution(model, result, "contour", "uVelocityCanvas", { field: "u" });
+                plotSolution(model, result, "contour", "vVelocityCanvas", { field: "v" });
               });
             </script>
           </div>

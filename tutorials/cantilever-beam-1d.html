@@ -270,6 +270,7 @@
   &lt;script type="module"&gt;
     import {
       FEAScriptModel,
+      plotSolution,
       printVersion,
     } from "https://core.feascript.com/dist/feascript.esm.js";
 
@@ -305,9 +306,8 @@
       model.setSolverMethod("lusolve");
       const result = model.solve();
 
-      // 5. Extract the deflection (the solution has two values per node: [w, theta])
-      const femDeflection = result.solutionVector.filter((_, i) =&gt; i % 2 === 0);
-      const femNodesX = result.nodesCoordinates.nodesXCoordinates;
+      // 5. Plot the deflection
+      plotSolution(model, result, "line", "resultsCanvas");
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
@@ -320,8 +320,10 @@
               clamped support at node 1 fixes both the deflection and the rotation (\(w=0\), \(\theta=0\)).
             </p>
             <p>
-              Since the beam solver packs \(w\) and \(\theta\) together at each node, the deflection field is
-              extracted from the solution vector by taking every other entry.
+              The beam solver has two unknowns at each node, the deflection \(w\) and the rotation
+              \(\theta\). The result of <code>solve()</code> contains both as the named fields
+              <code>w</code> and <code>theta</code>. <code>plotSolution</code> plots the deflection by default,
+              and the rotation with the <code>{ field: "theta" }</code> option.
             </p>
 
             <div class="eyebrow label" id="results" role="heading" aria-level="2">
@@ -349,9 +351,13 @@
 
             <script type="module">
               // Import FEAScript library from GitHub
-              import { FEAScriptModel, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
+              import {
+                FEAScriptModel,
+                plotSolution,
+                printVersion,
+              } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
-              // import { FEAScriptModel, printVersion } from "../../FEAScript-core/src/index.js";
+              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
 
               window.addEventListener("DOMContentLoaded", () => {
                 // Print FEAScript version
@@ -390,12 +396,8 @@
                 // Solve the problem and get the solution
                 const result = model.solve();
 
-                // Extract the deflection field from the solution vector
-                // DOF layout per node: [w, theta]
-                const totalNodesX = model._eulerBernoulliBeamMetadata.totalNodesX;
-                const solutionVector = result.solutionVector;
-                const femDeflection = Array.from({ length: totalNodesX }, (_, i) => solutionVector[2 * i]);
-                const femNodesX = result.nodesCoordinates.nodesXCoordinates;
+                // Plot the deflection
+                plotSolution(model, result, "line", "resultsCanvas");
 
                 // Closed-form analytical solution w(x) = P/(6EI) * (3*L*x^2 - x^3)
                 const numAnalyticalPoints = 100;
@@ -407,36 +409,15 @@
                   (x) => (tipLoad / (6 * bendingStiffness)) * (3 * beamLength * x ** 2 - x ** 3),
                 );
 
-                // Plot the FEAScript solution against the analytical solution
-                const femTrace = {
-                  x: femNodesX,
-                  y: femDeflection,
-                  mode: "markers",
-                  type: "scatter",
-                  marker: { color: "rgb(219, 64, 82)", size: 8 },
-                  name: "FEAScript (FEM)",
-                };
-                const analyticalTrace = {
+                // Add the analytical solution to the plot for comparison
+                Plotly.addTraces("resultsCanvas", {
                   x: analyticalNodesX,
                   y: analyticalDeflection,
                   mode: "lines",
                   type: "scatter",
                   line: { color: "rgb(31, 119, 180)", width: 2, dash: "dash" },
                   name: "Analytical solution",
-                };
-
-                const maxWindowWidth = Math.min(window.innerWidth, 700);
-                const plotWidth = Math.min(maxWindowWidth, 600);
-                const layout = {
-                  title: "Cantilever beam deflection",
-                  width: plotWidth,
-                  height: 350,
-                  xaxis: { title: "x (m)" },
-                  yaxis: { title: "Deflection w (m)" },
-                  margin: { l: 70, r: 50, t: 50, b: 50 },
-                };
-
-                Plotly.newPlot("resultsCanvas", [femTrace, analyticalTrace], layout, { responsive: true });
+                });
               });
             </script>
 

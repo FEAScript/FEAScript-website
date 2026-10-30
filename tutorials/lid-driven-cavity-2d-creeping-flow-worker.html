@@ -247,18 +247,11 @@
       await model.setSolverMethod("lusolve");
       const result = await model.solve();
 
-      // 5. Extract and plot the velocity
-      // The solution holds [u, v] at every node, followed by the pressure at the corner nodes
-      const { solutionVector, nodesCoordinates } = result;
-      const totalNodes = nodesCoordinates.nodesXCoordinates.length;
-      const uVelocity = solutionVector.slice(0, totalNodes);
-      const vVelocity = solutionVector.slice(totalNodes, 2 * totalNodes);
-      const velocityMagnitude = uVelocity.map((u, i) =&gt; Math.hypot(u, vVelocity[i]));
-
+      // 5. Plot the results
       const modelInfo = await model.getModelInfo();
-      plotSolution(modelInfo, { solutionVector: velocityMagnitude, nodesCoordinates }, "contour", "velocityMagnitudeCanvas");
-      plotSolution(modelInfo, { solutionVector: uVelocity, nodesCoordinates }, "contour", "uVelocityCanvas");
-      plotSolution(modelInfo, { solutionVector: vVelocity, nodesCoordinates }, "contour", "vVelocityCanvas");
+      plotSolution(modelInfo, result, "contour", "velocityMagnitudeCanvas");
+      plotSolution(modelInfo, result, "contour", "uVelocityCanvas", { field: "u" });
+      plotSolution(modelInfo, result, "contour", "vVelocityCanvas", { field: "v" });
 
       // 6. Terminate the worker
       model.terminate();
@@ -358,19 +351,6 @@
                 // Solve the problem and get the solution
                 const result = await model.solve();
 
-                // Calculate totalNodesVelocity manually as it is not exposed by worker getModelInfo
-                const nodesX = 2 * numElementsX + 1;
-                const nodesY = 2 * numElementsY + 1;
-                const totalNodesVelocity = nodesX * nodesY;
-
-                // Extract velocity and pressure fields from the solution vector
-                const solutionVector = result.solutionVector;
-                const uVelocity = solutionVector.slice(0, totalNodesVelocity);
-                const vVelocity = solutionVector.slice(totalNodesVelocity, 2 * totalNodesVelocity);
-                const velocityMagnitude = uVelocity.map((u, i) =>
-                  Math.sqrt(u * u + vVelocity[i] * vVelocity[i]),
-                );
-
                 // Get model info for plotting
                 const modelInfo = await model.getModelInfo();
 
@@ -378,26 +358,9 @@
                 document.getElementById("loading").style.display = "none";
 
                 // Plot results
-                plotSolution(
-                  modelInfo,
-                  { solutionVector: velocityMagnitude, nodesCoordinates: result.nodesCoordinates },
-                  "contour",
-                  "velocityMagnitudeCanvas",
-                );
-
-                plotSolution(
-                  modelInfo,
-                  { solutionVector: uVelocity, nodesCoordinates: result.nodesCoordinates },
-                  "contour",
-                  "uVelocityCanvas",
-                );
-
-                plotSolution(
-                  modelInfo,
-                  { solutionVector: vVelocity, nodesCoordinates: result.nodesCoordinates },
-                  "contour",
-                  "vVelocityCanvas",
-                );
+                plotSolution(modelInfo, result, "contour", "velocityMagnitudeCanvas");
+                plotSolution(modelInfo, result, "contour", "uVelocityCanvas", { field: "u" });
+                plotSolution(modelInfo, result, "contour", "vVelocityCanvas", { field: "v" });
 
                 // Terminate the worker
                 model.terminate();

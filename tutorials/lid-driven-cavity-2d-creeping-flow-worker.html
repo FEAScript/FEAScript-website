@@ -225,7 +225,11 @@
       // 1. Create the model in a web worker and select the physics
       const model = new FEAScriptWorker();
       await model.ping(); // Wait until the worker is ready
-      await model.setModelConfig("creepingFlowScript");
+      await model.setModelConfig("creepingFlowScript", {
+        coefficientFunctions: {
+          viscosity: 1, // μ
+        },
+      });
 
       // 2. Define the mesh (creeping flow needs quadratic elements)
       await model.setMeshConfig({
@@ -325,7 +329,11 @@
                 await model.ping();
 
                 // Set solver configuration
-                await model.setModelConfig("creepingFlowScript");
+                await model.setModelConfig("creepingFlowScript", {
+                  coefficientFunctions: {
+                    viscosity: 1, // μ
+                  },
+                });
 
                 // Define mesh configuration
                 const numElementsX = 12;

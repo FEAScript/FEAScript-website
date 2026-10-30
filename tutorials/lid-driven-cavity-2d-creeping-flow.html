@@ -207,7 +207,8 @@
               \(\nabla \cdot \mathbf{u} = 0\) and \(-\mu \nabla^{2} \mathbf{u} + \nabla p = \mathbf{0}\),
               where \(\mathbf{u} = (u,v)\) is the velocity vector, \(p\) is the pressure and \(\mu\) is the
               dynamic viscosity. In the FEAScript implementation below, we set the viscosity coefficient to
-              \(\mu = 1.0\).
+              \(\mu = 1.0\) with the <code>viscosity</code> coefficient of the model (a number, or a function of
+              \(x\) and \(y\) for a varying viscosity).
             </p>
 
             <div class="center-image">
@@ -260,7 +261,11 @@
 
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("creepingFlowScript");
+      model.setModelConfig("creepingFlowScript", {
+        coefficientFunctions: {
+          viscosity: 1, // μ
+        },
+      });
 
       // 2. Define the mesh (creeping flow needs quadratic elements)
       model.setMeshConfig({
@@ -368,7 +373,11 @@
                 const model = new FEAScriptModel();
 
                 // Set model configuration
-                model.setModelConfig("creepingFlowScript");
+                model.setModelConfig("creepingFlowScript", {
+                  coefficientFunctions: {
+                    viscosity: 1, // μ
+                  },
+                });
 
                 // Define mesh configuration
                 model.setMeshConfig({

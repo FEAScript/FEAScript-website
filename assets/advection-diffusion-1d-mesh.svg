@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 240" width="580" height="240" font-family="sans-serif" font-size="15" fill="#000">
+  <!-- Advection-diffusion in 1D: 20 quadratic elements, 41 nodes -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
+    </marker>
+  </defs>
+  <line x1="80" y1="120" x2="500" y2="120" stroke="#000" stroke-width="2"/>
+  <circle cx="90.5" cy="120" r="2"/>
+  <circle cx="111.5" cy="120" r="2"/>
+  <circle cx="132.5" cy="120" r="2"/>
+  <circle cx="153.5" cy="120" r="2"/>
+  <circle cx="174.5" cy="120" r="2"/>
+  <circle cx="195.5" cy="120" r="2"/>
+  <circle cx="216.5" cy="120" r="2"/>
+  <circle cx="237.5" cy="120" r="2"/>
+  <circle cx="258.5" cy="120" r="2"/>
+  <circle cx="279.5" cy="120" r="2"/>
+  <circle cx="300.5" cy="120" r="2"/>
+  <circle cx="321.5" cy="120" r="2"/>
+  <circle cx="342.5" cy="120" r="2"/>
+  <circle cx="363.5" cy="120" r="2"/>
+  <circle cx="384.5" cy="120" r="2"/>
+  <circle cx="405.5" cy="120" r="2"/>
+  <circle cx="426.5" cy="120" r="2"/>
+  <circle cx="447.5" cy="120" r="2"/>
+  <circle cx="468.5" cy="120" r="2"/>
+  <circle cx="489.5" cy="120" r="2"/>
+  <circle cx="80" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="101" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="122" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="143" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="164" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="185" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="206" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="227" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="248" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="269" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="290" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="311" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="332" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="353" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="374" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="395" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="416" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="437" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="458" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="479" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <circle cx="500" cy="120" r="4" fill="#fff" stroke="#000" stroke-width="1.5"/>
+  <text x="80" y="94" text-anchor="middle"><tspan font-style="italic">u</tspan>(0) = 1</text>
+  <text x="80" y="76" font-size="12" fill="#666" text-anchor="middle">boundary "0"</text>
+  <text x="500" y="94" text-anchor="middle">d<tspan font-style="italic">u</tspan>/d<tspan font-style="italic">x</tspan> = 0</text>
+  <text x="500" y="76" font-size="12" fill="#666" text-anchor="middle">boundary "1"</text>
+  <line x1="80" y1="155" x2="500" y2="155" stroke="#000" stroke-width="1" stroke-dasharray="4 3" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="290" y="175" text-anchor="middle">1</text>
+  <circle cx="80" cy="215" r="3"/>
+  <line x1="80" y1="215" x2="130" y2="215" stroke="#000" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="138" y="220"><tspan font-style="italic">x</tspan></text>
+  <text x="80" y="233" font-size="12" text-anchor="middle"><tspan font-style="italic">x</tspan> = 0</text>
+</svg>

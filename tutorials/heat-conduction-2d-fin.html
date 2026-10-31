@@ -308,6 +308,23 @@
               argument represents the \({\frac{h}{k}}\) value, and the third argument indicates the external
               temperature \(T_0\).
             </p>
+
+            <p>
+              The mesh defined in step 2 has 8 × 4 quadratic elements. The figure also shows the boundary numbering used in the boundary conditions:
+            </p>
+
+            <div class="center-image">
+              <img
+                class="schematic"
+                src="../assets/heat-conduction-2d-fin-mesh.svg"
+                alt="2D fin mesh with 8 × 4 quadratic elements"
+                width="580"
+              />
+              <p class="image-caption">
+                Mesh of the 2D fin: 8 × 4 quadratic quadrilaterals (17 × 9 nodes), generated internally by FEAScript, with the boundary numbering
+              </p>
+            </div>
+
             <p>
               After solving the case, the results are shown in a 2D contour plot. To visualize it, include an
               HTML container where the plot will render:

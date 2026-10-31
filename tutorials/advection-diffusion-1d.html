@@ -231,6 +231,18 @@
               (spreading) and advection (directed transport) will determine how the solution behaves.
             </p>
 
+            <div class="center-image">
+              <img
+                class="schematic"
+                src="../assets/advection-diffusion-1d.svg"
+                alt="1D advection-diffusion schematic"
+                width="580"
+              />
+              <p class="image-caption">
+                Schematic of the 1D domain: fixed value u(0) = 1 at the left end, zero gradient at the right end, and a Gaussian source centered at x = 0.5
+              </p>
+            </div>
+
             <div class="eyebrow label" id="solvingwithfeascript" role="heading" aria-level="2">
               <p><a name="Solving with FEAScript"></a>Solving with FEAScript</p>
             </div>
@@ -298,6 +310,23 @@
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre
             >
+
+            <p>
+              The mesh defined in step 2 divides the domain into 20 quadratic elements:
+            </p>
+
+            <div class="center-image">
+              <img
+                class="schematic"
+                src="../assets/advection-diffusion-1d-mesh.svg"
+                alt="1D mesh with 20 quadratic elements"
+                width="580"
+              />
+              <p class="image-caption">
+                Mesh of the domain: 20 quadratic elements (41 nodes); open circles are the element end nodes, dots the midside nodes
+              </p>
+            </div>
+
 
             <p>
               After solving the case, the results appear as a line plot. To visualize it, include an HTML

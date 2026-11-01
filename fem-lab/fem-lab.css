@@ -1,0 +1,294 @@
+/*
+ * ════════════════════════════════════════════════════════════════
+ *  FEAScript FEM Lab · fem-lab.css
+ *  The website's look, with a playful pixel accent
+ * ════════════════════════════════════════════════════════════════
+ */
+
+:root {
+  --font-pixel: "Jersey 10", "Roboto Mono", monospace;
+  --outline: #1d1d1d;
+}
+
+html[data-theme="dark"] {
+  --outline: #0b0b0e;
+}
+
+/* ─── Hero ─── */
+.lab-wordmark {
+  gap: 0.12em;
+}
+
+.wordmark > svg.lab-tri {
+  width: 0.92em;
+  height: 0.9em;
+  margin-right: 0.08em;
+  overflow: visible;
+}
+
+/* Tri comes alive: a little hop and a blink */
+.lab-tri .tri-up {
+  animation: triHop 1.6s steps(1) infinite;
+}
+
+.lab-tri .tri-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: triBlink 4.2s steps(1) infinite;
+}
+
+@keyframes triHop {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes triBlink {
+  0%,
+  92%,
+  100% {
+    transform: none;
+  }
+  94% {
+    transform: scaleY(0.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-tri .tri-up,
+  .lab-tri .tri-eyes {
+    animation: none;
+  }
+}
+
+/* The feet stay visible on the dark theme */
+html[data-theme="dark"] .lab-tri .tri-feet {
+  fill: #e6e3da;
+}
+
+.lab-word {
+  margin-left: 0.22em;
+  color: var(--gold-ink);
+}
+
+.lab-pixel-tag {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+
+.lab-pixel-tag span {
+  padding: 0.05rem 0.55rem;
+  font-family: var(--font-pixel);
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  border: 3px solid var(--outline);
+  box-shadow: 3px 3px 0 var(--outline);
+  animation: hop 2.4s steps(2) infinite;
+}
+
+.lab-pixel-tag span:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.lab-pixel-tag span:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+.lab-pixel-tag span:nth-child(4) {
+  animation-delay: 0.9s;
+}
+
+@keyframes hop {
+  0%,
+  80%,
+  100% {
+    transform: none;
+  }
+  90% {
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-pixel-tag span {
+    animation: none;
+  }
+}
+
+.b-heat {
+  background: #c8003f;
+}
+
+.b-flow {
+  background: #0086d4;
+}
+
+.b-structure {
+  background: #00a86b;
+}
+
+.b-front {
+  background: #d4aa00;
+  color: #1d1d1d !important;
+}
+
+/* ─── Game and blocks cards ─── */
+.lab-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.lab-shot {
+  display: block;
+  margin: 1.5rem 1.5rem 0;
+  border: 3px solid var(--outline);
+  box-shadow: 5px 5px 0 var(--outline);
+  background: #181818;
+  overflow: hidden;
+  transition: transform 0.15s steps(3);
+}
+
+.lab-shot:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--phys, var(--gold));
+}
+
+.lab-shot img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: top left;
+  image-rendering: pixelated;
+}
+
+.lab-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .lab-shot {
+    margin: 2rem 2rem 0;
+  }
+
+  .lab-card-body {
+    padding: 1.75rem 2rem 2rem;
+  }
+}
+
+.lab-kind {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+.lab-kind span {
+  padding: 0 0.45rem;
+  font-family: var(--font-pixel);
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  color: #fff;
+  background: var(--phys);
+  border: 2px solid var(--outline);
+}
+
+.lab-card h3 {
+  margin-top: 0.7rem;
+  font-family: var(--font-pixel);
+  font-size: 2.4rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--ink-strong);
+  text-shadow: 3px 3px 0 color-mix(in srgb, var(--phys) 45%, transparent);
+}
+
+.lab-card-body > p:not(.lab-kind) {
+  margin-top: 0.8rem;
+  color: var(--muted);
+}
+
+.lab-list {
+  margin: 1rem 0 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.lab-list li {
+  position: relative;
+  padding-left: 1.4rem;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.lab-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 0.55rem;
+  height: 0.55rem;
+  background: var(--phys);
+  box-shadow: 2px 2px 0 var(--outline);
+}
+
+.lab-btn {
+  margin-top: auto;
+  padding: 0.45rem 1.1rem;
+  font-family: var(--font-pixel);
+  font-size: 1.45rem;
+  letter-spacing: 0.03em;
+  color: #fff;
+  border: 3px solid var(--outline);
+  box-shadow:
+    inset -3px -3px 0 rgba(0, 0, 0, 0.25),
+    inset 3px 3px 0 rgba(255, 255, 255, 0.3),
+    4px 4px 0 var(--outline);
+}
+
+.lab-btn.heat {
+  background: #c8003f;
+}
+
+.lab-btn.flow {
+  background: #0086d4;
+}
+
+.lab-btn:hover {
+  filter: brightness(1.1);
+}
+
+.lab-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--outline);
+}
+
+/* ─── Ideas ─── */
+.lab-idea {
+  box-shadow: inset 0 4px 0 var(--phys);
+}
+
+.lab-eq {
+  font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.6rem;
+  color: color-mix(in srgb, var(--phys) 75%, var(--ink));
+}

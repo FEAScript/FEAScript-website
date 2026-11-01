@@ -10,10 +10,14 @@
  */
 "use strict";
 
+// FEAScript release the game is built against. Pinned so that a push to FEAScript-core cannot
+// change the game; bump it on purpose and replay the shifts and interludes.
+const FEASCRIPT_VERSION = "0.3.1";
+
 // FEAScript builds (documented CDN URLs); the first one that loads wins
 const FEASCRIPT_URLS = [
-  "https://core.feascript.com/dist/feascript.esm.js",
-  "https://cdn.jsdelivr.net/gh/FEAScript/FEAScript-core/dist/feascript.esm.js",
+  `https://cdn.jsdelivr.net/npm/feascript@${FEASCRIPT_VERSION}/dist/feascript.esm.js`,
+  `https://cdn.jsdelivr.net/gh/FEAScript/FEAScript-core@${FEASCRIPT_VERSION}/dist/feascript.esm.js`,
 ];
 
 // Plotly is only needed by FEAScript's plotSolution in the optional monitor panel

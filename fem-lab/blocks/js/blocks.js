@@ -453,7 +453,7 @@ const BLOCK_INFO = {
     title: "Solve it!",
     words:
       "Now the magic. FEAScript writes one equation for every node of your mesh, all linked together. It puts them in one giant table, <b>K · T = F</b>, and solves them all at once. LU and frontal are two ways of doing that exactly.",
-    fun: "A plate with 8 × 4 curvy pieces already has 153 equations. A computer solves them in a few milliseconds.",
+    fun: "A plate with 8 × 4 curvy pieces already has 153 equations. A computer solves them in well under a second.",
   },
   fem_show: {
     term: "T",

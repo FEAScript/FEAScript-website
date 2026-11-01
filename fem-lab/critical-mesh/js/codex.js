@@ -8,8 +8,8 @@
  */
 "use strict";
 
-// Equations are drawn in the pixel maths font (MATH5 in art.js). Markup: {k} is a term the panel can
-// light up, {phi|φ} a term with its own label, _{air} a subscript; everything else is plain maths
+// Equations are plain text in the UI font. Markup: {k} is a term the panel can light up,
+// {phi|φ} a term with its own label, _{air} a subscript; everything else is plain maths
 const EQ = {
   heat: "−∇·({k}∇{T}) = {Q}",
   beam: "d²/dx²({EI}d²{w}/dx²) = {q}",
@@ -18,22 +18,21 @@ const EQ = {
 };
 const TERM_COL = { k: "#5aa2ec", T: "#f7e7b7", Q: "#ff5c8d", EI: "#2fcf93", w: "#f7e7b7", q: "#ff5c8d", phi: "#f7e7b7", u: "#f7e7b7", p: "#2fcf93" };
 
-function eqHtml(markup, { scale = 0, color = "#c9c6bd" } = {}) {
-  const plain = markup.replace(/(?<!_)\{([^}|]+)(?:\|([^}]+))?\}/g, (m, a, b) => b || a).replace(/_\{([^}]+)\}/g, "$1");
-  const sc = scale || (plain.length > 26 ? 2 : 3);
-  const img = (str, col) => {
-    const r = mathRun(str, col, sc);
-    return `<img src="${r.src}" width="${r.w}" height="${r.h}" alt="">`;
-  };
+function eqHtml(markup, { color = "" } = {}) {
+  const text = (str) =>
+    str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/_\{([^}]+)\}/g, "<sub>$1</sub>");
   let html = "";
   let last = 0;
   for (const m of markup.matchAll(/(?<!_)\{([^}|]+)(?:\|([^}]+))?\}/g)) {
-    if (m.index > last) html += img(markup.slice(last, m.index), color);
-    html += `<span class="term" data-term="${m[1]}">${img(m[2] || m[1], TERM_COL[m[1]] || "#f7e7b7")}</span>`;
+    html += text(markup.slice(last, m.index));
+    html += `<span class="term" data-term="${m[1]}" style="color:${TERM_COL[m[1]] || "#f7e7b7"}">${m[2] || m[1]}</span>`;
     last = m.index + m[0].length;
   }
-  if (last < markup.length) html += img(markup.slice(last), color);
-  return `<span class="pxeq" role="img" aria-label="${plain}">${html}</span>`;
+  html += text(markup.slice(last));
+  return `<span class="eq"${color ? ` style="color:${color}"` : ""}>${html}</span>`;
 }
 
 // ─── Field Notes ───
@@ -336,7 +335,7 @@ const Codex = {
   // Boundary conditions of the current shift, written as equations
   renderEdges() {
     const bc = G.bc;
-    const small = { scale: 2, color: "#e6e3da" };
+    const small = { color: "#e6e3da" };
     const side = (open) =>
       open ? `<span data-edge="vent">${eqHtml(`−k∂T/∂n = ${H_VENT}(T − ${bc.airT})`, small)}</span>` : `<span data-edge="side">${eqHtml("∂T/∂n = 0", small)}</span>`;
     $("eqEdges").innerHTML = `
@@ -349,7 +348,7 @@ const Codex = {
 
   renderFem(r) {
     if (!r) return;
-    $("eqFem").innerHTML = `<span data-edge="fem">${eqHtml("K·T = F", { scale: 2, color: "#e6c230" })}</span> · <b>${r.nodes}</b> unknowns${Physics.unstructured ? " (Gmsh)" : ""} · solved in <b>${r.ms.toFixed(0)} ms</b>`;
+    $("eqFem").innerHTML = `<span data-edge="fem">${eqHtml("K·T = F", { color: "#e6c230" })}</span> · <b>${r.nodes}</b> unknowns${Physics.unstructured ? " (Gmsh)" : ""} · solved in <b>${r.ms.toFixed(0)} ms</b>`;
     this.pulse("fem", "gold");
   },
 
@@ -386,9 +385,9 @@ const Codex = {
     $("eqProbe").innerHTML = `
       <div class="probe-where">under your ${where} · (${p.x.toFixed(1)}, ${p.y.toFixed(1)}) m</div>
       <div class="probe-vals">
-        <span data-term="T"><i>${eqHtml("{T}", { scale: 2 })}</i>${T.toFixed(1)} °C</span>
-        <span data-term="k" class="${mat}"><i>${eqHtml("{k}", { scale: 2 })}</i>${k.toFixed(2)} <small>${mat}</small></span>
-        <span data-term="Q" class="${q > 0 ? "on" : ""}"><i>${eqHtml("{Q}", { scale: 2 })}</i>${q.toFixed(0)}</span>
+        <span data-term="T"><i>${eqHtml("{T}")}</i>${T.toFixed(1)} °C</span>
+        <span data-term="k" class="${mat}"><i>${eqHtml("{k}")}</i>${k.toFixed(2)} <small>${mat}</small></span>
+        <span data-term="Q" class="${q > 0 ? "on" : ""}"><i>${eqHtml("{Q}")}</i>${q.toFixed(0)}</span>
       </div>`;
   },
 
@@ -405,5 +404,5 @@ const Codex = {
 function labEquationHtml(type) {
   const eq = { gantry: EQ.beam, pour: EQ.front, pump: EQ.flow }[type];
   const note = { gantry: "beam", pour: "front", pump: "flow" }[type];
-  return `<div class="eq-big small">${eqHtml(eq, { scale: type === "pour" ? 3 : 2 })}</div><button type="button" class="eq-more" data-open-note="${note}">FIELD NOTE ▸</button>`;
+  return `<div class="eq-big small">${eqHtml(eq)}</div><button type="button" class="eq-more" data-open-note="${note}">FIELD NOTE ▸</button>`;
 }

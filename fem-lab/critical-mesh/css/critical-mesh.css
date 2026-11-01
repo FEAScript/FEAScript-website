@@ -1483,20 +1483,20 @@ table.scores tr.me td {
 /* ─────────────────────────────────────────────────────────────
    THE EQUATION (live panel) + FIELD NOTES
    ───────────────────────────────────────────────────────────── */
-:root {
-  --font-math: "STIX Two Math", "Cambria Math", "Latin Modern Math", "Times New Roman", serif;
-}
-
 details.eq-panel summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
   font-family: var(--font-pixel);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--muted);
   letter-spacing: 0.06em;
   list-style: none;
+}
+
+details.eq-panel summary:hover {
+  color: var(--ink);
 }
 
 details.eq-panel summary::-webkit-details-marker {
@@ -1517,7 +1517,7 @@ details.eq-panel summary .eq-more {
 }
 
 .eq-wrap {
-  padding: 0.7rem 0.9rem;
+  padding: 0.4rem 0.7rem;
 }
 
 .eq-body {
@@ -1569,17 +1569,20 @@ details.eq-panel summary .eq-more {
   margin: 0.55rem 0 0.35rem;
   padding: 0.55rem 0.4rem;
   text-align: center;
-  font-family: var(--font-math);
-  font-style: italic;
-  font-size: 1.55rem;
-  line-height: 1.25;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.3;
   color: var(--ink-strong);
   background: #141418;
   border: 2px solid var(--outline);
 }
 
 .eq-big.small {
-  font-size: 1.2rem;
+  font-size: 0.95rem;
+}
+
+.eq sub {
+  font-size: 0.65em;
 }
 
 .eq-big .op {
@@ -1643,8 +1646,9 @@ details.eq-panel summary .eq-more {
 }
 
 .probe-vals i {
-  font-family: var(--font-math);
-  font-size: 1rem;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 0.9rem;
   margin-right: 0.3rem;
 }
 
@@ -1713,9 +1717,8 @@ details.eq-panel summary .eq-more {
 }
 
 .eq-fem [data-edge="fem"] {
-  font-family: var(--font-math);
-  font-style: italic;
-  font-size: 0.95rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
   color: var(--gold-ink);
 }
 
@@ -1909,7 +1912,7 @@ details.eq-panel summary .eq-more {
 }
 
 .note-page .eq-big {
-  font-size: 1.4rem;
+  font-size: 1.15rem;
 }
 
 .note-game,
@@ -1995,38 +1998,11 @@ details.eq-panel summary .eq-more {
   color: var(--gold-ink) !important;
 }
 
-/* Pixel maths: equations drawn in the MATH5 pixel font */
-.pxeq {
-  display: inline-flex;
-  align-items: flex-end;
-  vertical-align: middle;
-}
-
-.pxeq img {
-  display: block;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
-
-.eq-big {
-  font-size: 0;
-  line-height: 0;
-  padding: 0.7rem 0.4rem;
-}
-
-.probe-vals i {
-  display: inline-flex;
-  vertical-align: middle;
-  margin-right: 0.4rem;
-}
-
 .eq-edges [data-edge] {
   display: block;
   margin-top: 0.15rem;
-}
-
-.eq-fem [data-edge="fem"] {
-  font-size: 0;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
 }
 
 .brand .brand-sep {

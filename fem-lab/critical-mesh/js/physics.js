@@ -30,6 +30,49 @@ async function loadFEAScript() {
 // lusolve may return a nested vector [[v0], [v1], ...]
 const flatten = (vec) => Array.from(vec, (v) => (Array.isArray(v) ? v[0] : v));
 
+// Quadratic quadrilateral (Gmsh order: 4 corners, 4 mid-sides, centre) at natural coordinates (ξ, η)
+const QUAD9_NODES = [[-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [1, 0], [0, 1], [-1, 0], [0, 0]];
+const lagrange2 = (a, s) => (a === 0 ? 1 - s * s : 0.5 * s * (s + a));
+const lagrange2d = (a, s) => (a === 0 ? -2 * s : s + 0.5 * a);
+function quad9Shape(xi, eta) {
+  return QUAD9_NODES.map(([a, b]) => [
+    lagrange2(a, xi) * lagrange2(b, eta),
+    lagrange2d(a, xi) * lagrange2(b, eta),
+    lagrange2(a, xi) * lagrange2d(b, eta),
+  ]);
+}
+
+// Shape-function weights [[node, N], ...] of point (x, y) in a 9-node element, or null if it lies outside.
+// Newton iterations invert the isoparametric map x(ξ, η).
+function quad9Weights(el, X, Y, x, y) {
+  let xi = 0;
+  let eta = 0;
+  for (let it = 0; it < 20; it++) {
+    const N = quad9Shape(xi, eta);
+    let fx = -x, fy = -y, xXi = 0, xEta = 0, yXi = 0, yEta = 0;
+    N.forEach(([n, dXi, dEta], k) => {
+      const px = X[el[k]];
+      const py = Y[el[k]];
+      fx += n * px;
+      fy += n * py;
+      xXi += dXi * px;
+      xEta += dEta * px;
+      yXi += dXi * py;
+      yEta += dEta * py;
+    });
+    const det = xXi * yEta - xEta * yXi;
+    if (!det) return null;
+    const dxi = (yEta * fx - xEta * fy) / det;
+    const deta = (xXi * fy - yXi * fx) / det;
+    xi -= dxi;
+    eta -= deta;
+    if (Math.abs(dxi) + Math.abs(deta) < 1e-12) break;
+  }
+  const tol = 1e-9;
+  if (!(Math.abs(xi) <= 1 + tol && Math.abs(eta) <= 1 + tol)) return null;
+  return quad9Shape(xi, eta).map(([n], k) => [el[k], n]);
+}
+
 // Map nodal values of a structured quadratic mesh onto an (ni × nj) grid, x-major
 function nodalGrid(X, Y, values, maxX, maxY, ni, nj, fill = 0) {
   const grid = new Float64Array(ni * nj).fill(fill);
@@ -83,7 +126,15 @@ const Physics = {
     const parsedMesh = await FEA.importGmshMesh(new File([MESH_PLATE_BYPASS], "plate-bypass.msh"));
     const X = parsedMesh.nodesXCoordinates;
     const Y = parsedMesh.nodesYCoordinates;
-    // Inverse-distance weights from the 4 nearest mesh nodes to every grid point outside the pipe
+    // Every grid point outside the pipe gets the 9 shape-function weights of the element that holds it,
+    // so the picture is the FEM field itself. Gmsh node order, 1-based, read before solve() reorders it.
+    const elements = parsedMesh.nodalNumbering.quadElements.map((el) => el.map((n) => n - 1));
+    const boxes = elements.map((el) => {
+      const xs = el.map((n) => X[n]);
+      const ys = el.map((n) => Y[n]);
+      const pad = 0.05 * (Math.max(...xs) - Math.min(...xs) + Math.max(...ys) - Math.min(...ys)); // curved edges
+      return [Math.min(...xs) - pad, Math.max(...xs) + pad, Math.min(...ys) - pad, Math.max(...ys) + pad];
+    });
     const map = [];
     for (let i = 0; i < NI; i++)
       for (let j = 0; j < NJ; j++) {
@@ -93,6 +144,17 @@ const Physics = {
           map.push(null);
           continue;
         }
+        let weights = null;
+        for (let e = 0; e < elements.length && !weights; e++) {
+          const [x0, x1, y0, y1] = boxes[e];
+          if (x >= x0 && x <= x1 && y >= y0 && y <= y1) weights = quad9Weights(elements[e], X, Y, x, y);
+        }
+        if (weights) {
+          map.push(weights);
+          continue;
+        }
+        // Not inside any element (a grid point in the sliver between the pipe circle and its curved mesh edge):
+        // inverse-distance weights from the 4 nearest nodes
         const near = [];
         for (let n = 0; n < X.length; n++) {
           const d = (X[n] - x) ** 2 + (Y[n] - y) ** 2;
@@ -198,11 +260,7 @@ const Physics = {
     const t0 = performance.now();
     const result = model.solve();
     const ms = performance.now() - t0;
-    const n = elements + 1;
-    // Newer builds return named fields; otherwise the layout is [w0, θ0, w1, θ1, ...]
-    const sol = flatten(result.solutionVector);
-    const w = result.fields?.w ? flatten(result.fields.w) : Array.from({ length: n }, (_, i) => sol[2 * i]);
-    return { w, ms };
+    return { w: flatten(result.fields.w), ms };
   },
 
   // ─── Eikonal front: the casting ───
@@ -237,18 +295,8 @@ const Physics = {
     const result = model.solve();
     const ms = performance.now() - t0;
     const { nodesXCoordinates: X, nodesYCoordinates: Y } = result.nodesCoordinates;
-    let u;
-    let v;
-    if (result.fields?.u) {
-      u = flatten(result.fields.u);
-      v = flatten(result.fields.v);
-    } else {
-      // Older builds: velocity unknowns first, [u..., v..., p...]
-      const sol = flatten(result.solutionVector);
-      const N = model._creepingFlowMetadata?.totalNodesVelocity ?? X.length;
-      u = sol.slice(0, N);
-      v = sol.slice(N, 2 * N);
-    }
+    const u = flatten(result.fields.u);
+    const v = flatten(result.fields.v);
     const ni = 2 * nx + 1;
     const nj = 2 * ny + 1;
     const speed = u.map((ui, i) => Math.hypot(ui, v[i]));

@@ -17,7 +17,7 @@ const store = (() => {
     notes: [], // unlocked Field Notes
     lastInitials: "ENG",
     scores: { easy: [], normal: [], hard: [] },
-    settings: { sound: true, difficulty: "normal", view: "bands", mesh: false, eqOpen: true },
+    settings: { sound: true, difficulty: "normal", view: "bands", mesh: false, equationOpen: false },
   };
   try {
     const s = JSON.parse(localStorage.getItem(STORE_KEY)) || {};

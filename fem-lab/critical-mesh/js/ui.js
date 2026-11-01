@@ -707,8 +707,8 @@ function startStep(i, { skipStory = false } = {}) {
 
 function afterSetup() {
   drawDie($("die"), 0, { tint: "#6b6f78" });
-  $("eqMain").innerHTML = eqHtml(EQ.heat, { scale: 3 });
-  $("eqPanel").open = store.settings.eqOpen;
+  $("eqMain").innerHTML = eqHtml(EQ.heat);
+  $("eqPanel").open = store.settings.equationOpen;
   Codex.renderEdges();
   Codex.renderFem(G.field);
   Codex.unlock("heat");

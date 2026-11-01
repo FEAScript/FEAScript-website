@@ -1944,6 +1944,131 @@ html[data-theme="dark"] .doc .center-image img.schematic {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   404 PAGE (Tri, the FEM Lab robot, with the "oops" face)
+   ───────────────────────────────────────────────────────────── */
+
+.not-found {
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - 20rem);
+  padding: 5rem 1.5rem;
+}
+
+.nf-inner {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  max-width: 54rem;
+  margin: 0 auto;
+}
+
+.nf-tri {
+  flex: 0 0 auto;
+  width: 11rem;
+  height: auto;
+  overflow: visible;
+}
+
+.nf-tri .tri-up {
+  animation: nfTriHop 1.6s steps(1) infinite;
+}
+
+.nf-tri .tri-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nfTriBlink 4.2s steps(1) infinite;
+}
+
+html[data-theme="dark"] .nf-tri .tri-feet {
+  fill: #e6e3da;
+}
+
+@keyframes nfTriHop {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes nfTriBlink {
+  0%,
+  92%,
+  100% {
+    transform: none;
+  }
+  94% {
+    transform: scaleY(0.15);
+  }
+}
+
+.nf-code {
+  margin: 0 0 0.75rem;
+  color: var(--gold-ink);
+}
+
+.not-found h1 {
+  margin: 0 0 1rem;
+  color: var(--ink-strong);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.nf-lead {
+  margin: 0 0 1.75rem;
+  max-width: 36rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.nf-lead code {
+  word-break: break-all;
+}
+
+.nf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.nf-more {
+  margin: 1.5rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.nf-more a {
+  color: var(--gold-ink);
+}
+
+@media (max-width: 700px) {
+  .not-found {
+    padding: 3rem 1.25rem;
+  }
+
+  .nf-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .nf-tri {
+    width: 7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-tri .tri-up,
+  .nf-tri .tri-eyes {
+    animation: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
    MOTION
    ───────────────────────────────────────────────────────────── */
 

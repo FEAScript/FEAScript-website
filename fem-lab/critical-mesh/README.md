@@ -12,7 +12,7 @@ Open `index.html` directly in a browser (double-click, `file://`), or serve the 
 python3 -m http.server   # then open http://localhost:8000/fem-lab/critical-mesh/
 ```
 
-It needs an internet connection: FEAScript is loaded from its CDN, and Plotly is loaded only when the FEAScript monitor panel is opened.
+It needs an internet connection: FEAScript is loaded from its CDN (pinned to a release by `FEASCRIPT_VERSION` in `js/config.js`), and Plotly is loaded only when the FEAScript monitor panel is opened.
 
 ## Modes
 
@@ -61,6 +61,7 @@ js/codex.js            the live equation panel and the Field Notes
 js/ui.js               screens, HUD, story player, map, modals
 js/main.js             input and boot
 meshes/plate-bypass.geo / .msh   source and output of the shift 8 Gmsh mesh
+meshes/build-meshes.mjs          copies the .msh into js/meshes.js
 ```
 
 The files are plain JavaScript with no build step. They are loaded as classic `<script>` tags, which (unlike ES modules) also work on `file://`, and they share their top-level declarations. FEAScript is an ES module, so `js/physics.js` loads it with a dynamic `import()`.
@@ -71,7 +72,12 @@ To regenerate the Gmsh mesh:
 gmsh meshes/plate-bypass.geo -2 -format msh41 -o meshes/plate-bypass.msh
 ```
 
-Then paste the `.msh` text into `MESH_PLATE_BYPASS` in `js/meshes.js`.
+Then copy it into `js/meshes.js` (embedded as text so the game also runs on `file://`):
+
+```bash
+node meshes/build-meshes.mjs          # rewrite MESH_PLATE_BYPASS from the .msh
+node meshes/build-meshes.mjs --check  # fail if js/meshes.js and the .msh differ
+```
 
 ## Controls
 

@@ -16,7 +16,7 @@ blocks/             FEM Blocks, a no-code block editor with missions for young l
 
 Pixel-art Blockly blocks build a heat-conduction, creeping-flow or front-propagation (eikonal) model: a shape (bar or plate), a material (k), heaters (Q), edge conditions, and the solve and show steps. Run executes the generated FEAScript code, which is shown in the Code tab.
 
-- **Missions**: ten missions (`js/missions.js`), each about one idea: a straight-line profile, a source term, 2D conduction, insulated edges, conductivity, convective cooling, mesh refinement, a lid-driven cavity and a freezing front (eikonal), plus a sandbox. Each goal is checked on the real FEAScript result.
+- **Missions**: nine missions (`js/missions.js`), each about one idea: a straight-line profile, a source term, 2D conduction, insulated edges, conductivity, convective cooling, mesh refinement, a lid-driven cavity and a freezing front (eikonal), plus a sandbox. Each goal is checked on the real FEAScript result.
 - **Picture and Code**: the result as pixel art, and the FEAScript code the blocks write. Clicking a block lights up its lines of code.
 - **The math**: first the governing equation, with the term the clicked block controls highlighted and explained in plain words; then how the run was solved (mesh, nodes, the sparsity pattern of K, the solve time).
 
@@ -29,4 +29,4 @@ js/results.js    pixel heat maps, bar graphs, flow tracers, the animated front, 
 js/app.js        workspace, running, missions, The math tab, Tri, save/open, theme
 ```
 
-Blockly 12 (Apache 2.0) and FEAScript load from CDNs. Progress is kept in `localStorage` (`femBlocks.v1`). Both apps also work from `file://`.
+Blockly 12 (Apache 2.0) and FEAScript load from CDNs. FEAScript is pinned to a release (`FEASCRIPT_VERSION` in `js/app.js` and `critical-mesh/js/config.js`); bump it on purpose and replay the missions and shifts. Progress is kept in `localStorage` (`femBlocks.v1`). Both apps also work from `file://`.

@@ -8,9 +8,12 @@
 
 const $ = (id) => document.getElementById(id);
 
+// FEAScript release the missions are built against. Pinned so that a push to FEAScript-core cannot
+// change them; bump it on purpose and replay every mission.
+const FEASCRIPT_VERSION = "0.3.1";
 const FEASCRIPT_URLS = [
-  "https://core.feascript.com/dist/feascript.esm.js",
-  "https://cdn.jsdelivr.net/gh/FEAScript/FEAScript-core/dist/feascript.esm.js",
+  `https://cdn.jsdelivr.net/npm/feascript@${FEASCRIPT_VERSION}/dist/feascript.esm.js`,
+  `https://cdn.jsdelivr.net/gh/FEAScript/FEAScript-core@${FEASCRIPT_VERSION}/dist/feascript.esm.js`,
 ];
 
 // ─── Progress, kept in this browser ───

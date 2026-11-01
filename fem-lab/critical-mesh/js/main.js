@@ -48,7 +48,7 @@ function wireBoard() {
   $("monitor").addEventListener("toggle", drawMonitor);
   $("notesBtn").addEventListener("click", () => Codex.open());
   $("eqPanel").addEventListener("toggle", () => {
-    store.settings.eqOpen = $("eqPanel").open;
+    store.settings.equationOpen = $("eqPanel").open;
     saveStore();
   });
   // Click a term or an edge of the live equation to read its Field Note

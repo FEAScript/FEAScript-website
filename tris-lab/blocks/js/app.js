@@ -121,7 +121,9 @@ function toast(html, cls = "") {
 let FEA = null;
 let workspace = null;
 let lastRes = null;
-let mission = Math.min(store.mission, MISSIONS.length - 1);
+// A link can open a mission by its id (?mission=pieces), e.g. from the tutorials; otherwise resume the last one
+const linkedMission = MISSIONS.findIndex((m) => m.id === new URLSearchParams(location.search).get("mission"));
+let mission = linkedMission >= 0 ? linkedMission : Math.min(store.mission, MISSIONS.length - 1);
 let showingHint = false;
 let probeHistory = [];
 
@@ -144,16 +146,18 @@ function renderMissionText() {
   $("btnHint").textContent = showingHint ? "◀ Back" : "💡 Hint";
 }
 
-function openMission(i, { fresh = false } = {}) {
-  if (workspace) saveWorkspace();
+function openMission(i, { fresh = false, saveCurrent = true } = {}) {
+  // Not on the first open: the workspace is still empty, and saving it would wipe the mission's blocks
+  if (workspace && saveCurrent) saveWorkspace();
   mission = i;
   store.mission = i;
   saveStore();
   showingHint = false;
   probeHistory = [];
   const m = MISSIONS[i];
+  // An empty save (e.g. one wiped by older versions on load) falls back to the starting blocks
   const saved = !fresh && store.saved[m.id];
-  loadWorkspace(saved || m.start());
+  loadWorkspace(saved?.blocks?.blocks?.length ? saved : m.start());
   lastRes = null;
   Results.clear();
   $("femExplain").innerHTML = femExplainHtml(null);
@@ -530,7 +534,7 @@ async function boot() {
     }
   });
 
-  openMission(mission);
+  openMission(mission, { saveCurrent: false });
 
   FEA = await loadFEAScript();
   if (!FEA) {

@@ -346,6 +346,21 @@
             </p>
 
             <!-- Container element where the solution plot will be rendered -->
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  Standard Galerkin stays oscillation-free only while the element Péclet number
+                  \(\mathrm{Pe}_h = |B|\,h/(2A)\) is below about 1. Here \(h = 0.05\), so
+                  \(\mathrm{Pe}_h = 0.25\). FEAScript has no upwind (SUPG) stabilisation, so if you
+                  raise \(|B|\), refine the mesh with it: at \(B = -100\) you need \(h < 0.02\),
+                  i.e. more than 50 elements.
+                  Docs: <a href="https://docs.feascript.com/models/general-form-pde#linear-advectiondiffusion">Advection–diffusion</a>.
+                </p>
+              </div>
+            </aside>
+
             <div class="eyebrow label" id="results" role="heading" aria-level="2">
               <p><a name="Results"></a>Results</p>
             </div>

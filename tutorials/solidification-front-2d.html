@@ -351,6 +351,20 @@
               the plot.
             </p>
 
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  The final viscous term is \(\varepsilon = \max(0.01,\ 0.1\,h)\), with \(h\) the
+                  node spacing: here \(h \approx 0.14\), so \(\varepsilon \approx 0.014\). Refining
+                  lowers \(\varepsilon\) only down to \(h = 0.1\); below that the 0.01 floor takes
+                  over and the regularisation error stops shrinking.
+                  Docs: <a href="https://docs.feascript.com/models/front-propagation#solution-procedure">Solution procedure</a>.
+                </p>
+              </div>
+            </aside>
+
             <div class="eyebrow label" id="results" role="heading" aria-level="2">
               <p><a name="Results"></a>Results</p>
             </div>
@@ -380,6 +394,21 @@
               <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-worker.html">here</a>
               for a tutorial using FEAScript in a separate thread (web worker) for improved responsiveness.
             </p>
+
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip</p>
+                <p>
+                  For a unit speed, the exact arrival time is the distance to the nearest cooled
+                  wall, \(u = \min(x,\ 4 - x,\ y)\): a maximum of 2 at \((2, 2)\), with kinks along
+                  \(y = x\) and \(y = 4 - x\) where the fronts meet. Those kinks are where the
+                  viscous term smooths the solution most. Try it in FEM Blocks: <a
+                  href="../tris-lab/blocks/?mission=freeze">Last to freeze</a>.
+                  Docs: <a href="https://docs.feascript.com/models/front-propagation#results">Front propagation results</a>.
+                </p>
+              </div>
+            </aside>
 
             <ul id="menu">
               <li><a href="https://feascript.com/index.html">FEAScript Website</a></li>

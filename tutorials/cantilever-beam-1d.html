@@ -326,6 +326,23 @@
               and the rotation with the <code>{ field: "theta" }</code> option.
             </p>
 
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  Point loads and supports are keyed by node, so a load must sit on a node: a
+                  mid-span load needs an even <code>numElementsX</code>. With constant \(EI\) and no
+                  foundation term, Hermite elements give exact nodal \(w\) and \(\theta\) for a
+                  uniform \(q\) too, but the exact deflection is then quartic, so values between
+                  nodes, and the moment \(EI\,w''\) (linear per element, discontinuous across
+                  nodes), are only approximate. Recover moment and shear from equilibrium rather
+                  than by differentiating \(w\).
+                  Docs: <a href="https://docs.feascript.com/models/euler-bernoulli-beam#cubic-hermite-elements">Cubic Hermite elements</a>.
+                </p>
+              </div>
+            </aside>
+
             <div class="eyebrow label" id="results" role="heading" aria-level="2">
               <p><a name="Results"></a>Results</p>
             </div>

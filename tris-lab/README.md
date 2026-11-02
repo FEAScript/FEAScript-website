@@ -2,7 +2,7 @@
 
 # Tri's Lab
 
-Playful, browser-only ways to meet the finite element method. Every result is a real FEAScript solve. Nothing here is linked from the main website yet.
+Playful, browser-only ways to meet the finite element method. Every result is a real FEAScript solve. The tutorials link here from their "Tri's tip" callouts (`assets/tri-tip.svg` in the website root), and to single FEM Blocks missions with `blocks/?mission=<id>` (ids in `blocks/js/missions.js`).
 
 ```
 index.html          the Tri's Lab page

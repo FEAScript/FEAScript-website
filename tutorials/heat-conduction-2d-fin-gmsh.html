@@ -386,6 +386,20 @@ Mesh 2;</pre
               configuration.
             </p>
 
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  Keep the <code>Physical Surface</code> line. Once any physical group is defined,
+                  Gmsh saves only the elements that belong to one, so without it the
+                  <code>.msh</code> file contains the boundary lines but no 2D elements to solve on
+                  (unless <code>Mesh.SaveAll = 1</code>).
+                  Docs: <a href="https://docs.feascript.com/fundamentals/mesh#boundaries-of-a-gmsh-mesh">Boundaries of a Gmsh mesh</a>.
+                </p>
+              </div>
+            </aside>
+
             <div class="eyebrow label" id="generatedmesh" role="heading" aria-level="2">
               <p><a name="generatedmesh"></a>Generated mesh</p>
             </div>

@@ -294,6 +294,20 @@
             </div>
             <div id="vVelocityCanvas"></div>
 
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  The viscosity can be a function <code>(x, y) =&gt; …</code>. In a worker it is sent as source code and
+                  rebuilt there, so it must be self-contained: inline the numbers instead of referencing variables
+                  defined around it, and wrap built-ins (<code>(x, y) =&gt; Math.exp(-x)</code>, not
+                  <code>Math.exp</code> itself).
+                  Docs: <a href="https://docs.feascript.com/api/web-worker#limitations">Web worker limitations</a>.
+                </p>
+              </div>
+            </aside>
+
             <ul id="menu">
               <li><a href="https://feascript.com/index.html">FEAScript Website</a></li>
               <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>

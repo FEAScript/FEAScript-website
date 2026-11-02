@@ -341,6 +341,22 @@
 &lt;/body&gt;</pre
             >
 
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  With velocity prescribed on every wall, the pressure is fixed only up to a
+                  constant, so FEAScript pins \(p = 0\) at the first pressure node. Read pressure
+                  differences, not absolute values. At the two top corners the velocity jumps from 1
+                  to 0, and no-slip wins on the corner nodes so that the lid does not leak. The
+                  pressure is singular there, and its peak grows as you refine instead of
+                  converging.
+                  Docs: <a href="https://docs.feascript.com/models/creeping-flow#pressure-level">Pressure level</a>.
+                </p>
+              </div>
+            </aside>
+
             <div class="eyebrow label" id="results" role="heading" aria-level="2">
               <p><a name="Results"></a>Results</p>
             </div>
@@ -366,6 +382,21 @@
             <div id="vVelocityCanvas"></div>
 
             <br />
+
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip</p>
+                <p>
+                  Stokes flow has no inertia, so the solution is mirror-symmetric about \(x = 2\):
+                  \(u\) symmetric and \(v\) antisymmetric. That makes a quick correctness check, and
+                  any fore-aft asymmetry you see in a Navier-Stokes solution is the effect of
+                  inertia. Try the same cavity in FEM Blocks: <a
+                  href="../tris-lab/blocks/?mission=honey">Stir the honey</a>.
+                  Docs: <a href="https://docs.feascript.com/models/creeping-flow#results">Creeping flow results</a>.
+                </p>
+              </div>
+            </aside>
 
             <ul id="menu">
               <li><a href="https://feascript.com/index.html">FEAScript Website</a></li>

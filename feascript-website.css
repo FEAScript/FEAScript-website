@@ -1817,6 +1817,47 @@ h2 .accent {
   max-width: none;
 }
 
+/* Tri's tip: a short practical aside from Tri, the robot of Tri's Lab */
+.doc .tri-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--line-strong);
+  border-left: 3px solid var(--gold);
+}
+
+/* Pale badge in both themes, so Tri's dark outline and feet stay visible */
+.doc .tri-tip-avatar {
+  flex: 0 0 auto;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0.35rem;
+  border-radius: 0.5rem;
+  background: #f7e7b7;
+  image-rendering: pixelated;
+}
+
+.doc .tri-tip-label {
+  margin: 0 0 0.25rem;
+  color: var(--gold-ink);
+}
+
+.doc .tri-tip-who {
+  margin-left: 0.5rem;
+  color: var(--muted);
+}
+
+.doc .tri-tip-who:hover {
+  color: var(--gold-ink);
+}
+
+.doc .tri-tip p:last-child {
+  margin-bottom: 0;
+  max-width: none;
+}
+
 .doc .center-image {
   margin-top: 1.5rem;
   text-align: center;

@@ -215,6 +215,22 @@
             <!-- div to display the solving time -->
             <div id="timeDisplay" style="margin-top: 1em"></div>
 
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  The time shown covers the whole <code>model.solve()</code>: mesh generation,
+                  assembly and the linear solve. For the split, open the console: FEAScript logs
+                  <code>systemSolving</code> (the linear solve only) and
+                  <code>totalSolvingTime</code>. Run each case twice; the first run includes JIT
+                  warm-up. The frontal solver never forms the global matrix, so its memory grows
+                  with the front width, not the matrix size.
+                  Docs: <a href="https://docs.feascript.com/fundamentals/solvers">Solvers</a>.
+                </p>
+              </div>
+            </aside>
+
             <ul id="menu">
               <li><a href="https://feascript.com/index.html">FEAScript Website</a></li>
               <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>

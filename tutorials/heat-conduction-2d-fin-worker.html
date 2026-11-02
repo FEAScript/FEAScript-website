@@ -269,6 +269,22 @@
             </div>
             <div id="resultsCanvas"></div>
 
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  A worker keeps the page responsive, but it does not make the solve faster: the
+                  same single-threaded solver runs on another thread, and the result is copied back
+                  by structured clone. Functions in the model options (coefficient functions) are
+                  sent as source code and rebuilt in the worker, so they must be self-contained:
+                  <code>(x) =&gt; 1e5</code> works, <code>(x) =&gt; EI</code> with <code>EI</code>
+                  defined outside does not.
+                  Docs: <a href="https://docs.feascript.com/api/web-worker#limitations">Web worker limitations</a>.
+                </p>
+              </div>
+            </aside>
+
             <ul id="menu">
               <li><a href="https://feascript.com/index.html">FEAScript Website</a></li>
               <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>

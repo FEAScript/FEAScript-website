@@ -276,6 +276,21 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
 
             <br />
 
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  <code>plotInterpolatedSolutionVtk</code> evaluates the elements' own shape
+                  functions on a grid of 50 points per unit length (200 × 100 here), so quadratic
+                  elements show curved contours inside each element. Because the density is per unit
+                  length, the units of the geometry matter: a 4 mm fin modelled with <code>maxX:
+                  0.004</code> gets a 2-point grid. Scale the model, or use millimetres.
+                  Docs: <a href="https://docs.feascript.com/api/visualization#vtkjs">vtk.js plotting</a>.
+                </p>
+              </div>
+            </aside>
+
             <ul id="menu">
               <li><a href="https://feascript.com/index.html">FEAScript Website</a></li>
               <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>

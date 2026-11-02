@@ -273,6 +273,20 @@
             </div>
             <div id="resultsCanvas"></div>
 
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="../tris-lab/#tri">Who is Tri?</a></p>
+                <p>
+                  A Newton step that does not converge is logged, not thrown: <code>await
+                  model.solve()</code> still resolves, with the last iterate. Before trusting the
+                  plot, check the console for <code>Front propagation did not converge</code>. The
+                  worker logs to the same devtools console.
+                  Docs: <a href="https://docs.feascript.com/models/front-propagation#solution-procedure">Solution procedure</a>.
+                </p>
+              </div>
+            </aside>
+
             <ul id="menu">
               <li><a href="https://feascript.com/index.html">FEAScript Website</a></li>
               <li><a href="https://feascript.com/#tutorials">All Tutorials</a></li>

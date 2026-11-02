@@ -2,17 +2,17 @@
 
 A pixel-art, push-your-luck game about heat conduction. Every simulation in the game is solved by [FEAScript](https://feascript.com).
 
-Athens, 2089. The city runs on the Heatworks: a 4 m × 2 m slab of alloy (the Plate) covered in thermo-cells. You are the new night engineer. Roll a die for each cell's power, walk onto the Plate and mount the cell, then watch FEAScript solve the temperature field. Deliver the quota before the hottest point passes the critical limit.
+Nodessa, 2089. The city runs on the Heatworks: a 40 m × 20 m slab of alloy (the Plate) covered in thermo-cells. You are the new night engineer. Roll a die for each cell's power, walk onto the Plate and mount the cell, then watch FEAScript solve the temperature field. Deliver the quota before the hottest point passes the critical limit.
 
 ## Run it
 
 Open `index.html` directly in a browser (double-click, `file://`), or serve the folder:
 
 ```bash
-python3 -m http.server   # then open http://localhost:8000/fem-lab/critical-mesh/
+python3 -m http.server   # then open http://localhost:8000/tris-lab/critical-mesh/
 ```
 
-It needs an internet connection: FEAScript is loaded from its CDN (pinned to a release by `FEASCRIPT_VERSION` in `js/config.js`), and Plotly is loaded only when the FEAScript monitor panel is opened.
+It needs an internet connection: FEAScript is loaded from its CDN (pinned to a release by `FEASCRIPT_VERSION` in `js/config.js`).
 
 ## Modes
 
@@ -23,7 +23,7 @@ It needs an internet connection: FEAScript is loaded from its CDN (pinned to a r
 
 | Where | FEAScript model | What is solved |
 |---|---|---|
-| Every shift | `heatConductionScript` | −∇·(k ∇T) = Q on 32 × 16 quadratic elements. Q(x, y) comes from the mounted cells; k(x, y) from the alloy, cracks (15 % k) and copper inlays (k = 10). Bottom edge: coolant (fixed temperature). Top edge: convection (h = 1). Sides: insulated, or convective after a side vent is opened. |
+| Every shift | `heatConductionScript` | −∇·(k ∇T) = Q on 32 × 16 quadratic elements. Q(x, y) comes from the mounted cells; k(x, y) from the alloy, cracks (15 % k) and copper inlays (k = 10). Bottom edge: coolant (fixed temperature). Top edge: convection (h = 0.1 on the 40 m Plate). Sides: insulated, or convective after a side vent is opened. |
 | Shift 8 | `heatConductionScript` + `importGmshMesh` | The same equation on a non-rectangular plate: a Gmsh mesh with a coolant bypass pipe (a 5th boundary) through it. |
 | The Gantry | `eulerBernoulliBeamScript` | A cantilever catwalk with a corroded section (lower EI(x)) and self-weight q(x). 17 load cases, one for each position the engineer can stand on. Place two props so the sag stays under 4 cm. |
 | Cold Pour | `frontPropagationScript` | The eikonal equation \|∇φ\| = 1 gives the freezing time φ. Choose which mould walls to chill so the riser freezes last. |
@@ -62,7 +62,11 @@ js/ui.js               screens, HUD, story player, map, modals
 js/main.js             input and boot
 meshes/plate-bypass.geo / .msh   source and output of the shift 8 Gmsh mesh
 meshes/build-meshes.mjs          copies the .msh into js/meshes.js
+meshes/mould-l.geo               an L-shaped Cold Pour mould, not used yet (see below)
+meshes/check-pour.mjs            solves every Cold Pour chill setup on a Gmsh mould
 ```
+
+The Plate is 40 m × 20 m in the story, but the game and the solver work in units of 10 m (a 4 × 2 model). Everything the player sees is converted in `js/config.js`: lengths ×10, heat sources ÷100 and convection coefficients ÷10. That is the same heat equation on the bigger plate, so k and every temperature are unchanged.
 
 The files are plain JavaScript with no build step. They are loaded as classic `<script>` tags, which (unlike ES modules) also work on `file://`, and they share their top-level declarations. FEAScript is an ES module, so `js/physics.js` loads it with a dynamic `import()`.
 
@@ -79,6 +83,14 @@ node meshes/build-meshes.mjs          # rewrite MESH_PLATE_BYPASS from the .msh
 node meshes/build-meshes.mjs --check  # fail if js/meshes.js and the .msh differ
 ```
 
+The Cold Pour mould is a plain rectangle because FEAScript's eikonal solver (`frontPropagationScript`, checked with 0.3.1 and 0.4.0-rc) does not converge for every chill setup on other shapes. `meshes/mould-l.geo` is a harder, L-shaped mould for when it does: 22 of its 41 setups (up to three chilled walls) fail today. To check a FEAScript build against it:
+
+```bash
+cd meshes
+gmsh mould-l.geo -2 -format msh41 -o mould-l.msh
+node check-pour.mjs path/to/feascript.mjs mould-l.msh   # exit code 1 while any setup fails
+```
+
 ## Controls
 
-<kbd>WASD</kbd> / arrows walk · <kbd>Space</kbd> / <kbd>E</kbd> mount or weld · click to walk there and act · <kbd>R</kbd> roll · <kbd>B</kbd> bank or deliver · <kbd>1</kbd>–<kbd>6</kbd> tools · <kbd>Esc</kbd> cancel · <kbd>V</kbd> bands/glow · <kbd>G</kbd> mesh overlay · <kbd>N</kbd> field notes · <kbd>M</kbd> sound
+<kbd>WASD</kbd> / arrows walk · <kbd>Space</kbd> / <kbd>E</kbd> mount or weld · click to walk there and act · <kbd>R</kbd> roll · <kbd>B</kbd> bank or deliver · <kbd>1</kbd>–<kbd>6</kbd> tools · <kbd>Esc</kbd> cancel · <kbd>G</kbd> mesh overlay · <kbd>N</kbd> field notes · <kbd>M</kbd> sound

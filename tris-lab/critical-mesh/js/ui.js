@@ -9,6 +9,10 @@
 // ─── Screens and layout ───
 function show(screenId) {
   document.querySelectorAll(".screen").forEach((s) => s.classList.toggle("active", s.id === screenId));
+  // Top bar: back to where you came from (shifts and interludes), and the mesh view (shifts)
+  $("menuBtn").classList.toggle("hidden", screenId !== "scr-game" && screenId !== "scr-lab");
+  $("menuBtn").textContent = screenId === "scr-game" && G.mode !== "campaign" ? "≡ TITLE" : "≡ MAP";
+  $("meshBtn").classList.toggle("hidden", screenId !== "scr-game");
   if (screenId === "scr-game") requestAnimationFrame(() => fitCanvas($("board"), $("boardWrap")));
   if (screenId === "scr-lab") requestAnimationFrame(() => fitCanvas($("lab"), $("labWrap")));
   KEYS.clear();
@@ -34,7 +38,8 @@ function boardCoords(evt) {
   return { x, y, inside: x >= 0 && x <= PLATE.maxX && y >= 0 && y <= PLATE.maxY };
 }
 
-function message(html, face = "eleni") {
+// Plate status, rules and warnings come from MESH unless another speaker is given (Tri only explains physics)
+function message(html, face = "mesh") {
   $("msg").innerHTML = html;
   paintSprite($("msgFace"), SPEAKERS[face]?.sprite || face);
 }
@@ -74,28 +79,64 @@ function updateLevelHead() {
   }
 }
 
+// Output gauge: green fill up to the output, a tick per star target (1, 2 and 3 stars above it)
+function renderOutputGauge(out) {
+  const top = Math.ceil(G.starsAt[G.starsAt.length - 1] * 1.15);
+  const at = (mw) => Math.min(1, mw / top);
+  const c = $("outBar");
+  const g = c.getContext("2d");
+  const W = c.width;
+  g.fillStyle = "#0e0e12";
+  g.fillRect(0, 0, W, 9);
+  g.fillStyle = "#1b1f2e";
+  g.fillRect(1, 1, W - 2, 7);
+  const n = Math.round(at(out) * (W - 2));
+  for (let i = 0; i < n; i++) {
+    g.fillStyle = i % 4 === 0 ? "#1f9e70" : "#2fcf93";
+    g.fillRect(1 + i, 1, 1, 7);
+  }
+  g.fillStyle = "rgba(255,255,255,0.35)";
+  g.fillRect(1, 2, n, 1);
+  for (const s of G.starsAt) {
+    g.fillStyle = out >= s ? "#f7d54a" : "#fdfaf2";
+    g.fillRect(Math.round(1 + at(s) * (W - 2)) - 1, 0, 1, 9);
+  }
+  $("outMaxLbl").textContent = `${top} MW`;
+
+  const key = `${G.starsAt.join(",")}|${G.starsAt.filter((s) => out >= s).length}`;
+  const stars = $("outStars");
+  if (stars.dataset.key === key) return;
+  stars.dataset.key = key;
+  stars.innerHTML = G.starsAt
+    .map(
+      (s, i) =>
+        `<span class="${out >= s ? "on" : ""}" style="left:${(at(s) * 100).toFixed(1)}%">` +
+        `<i class="row">${`<canvas class="px" data-s="${out >= s ? "star" : "starOff"}"></canvas>`.repeat(i + 1)}</i><b>${s}</b></span>`,
+    )
+    .join("");
+  stars.querySelectorAll("canvas[data-s]").forEach((cv) => paintSprite(cv, cv.dataset.s));
+}
+
 function updateHUD() {
   const t = (G.maxT - T_AMB) / (G.limit - T_AMB);
   $("turn").textContent = G.turn;
   $("rollVal").textContent = G.lastRoll ?? "–";
-  $("qNext").textContent = G.carrying ? `${G.carrying * G.qPerPip} (${G.carrying} pip${G.carrying > 1 ? "s" : ""})` : "–";
+  $("qNext").textContent = G.carrying ? `Q = ${showQ(G.carrying * G.qPerPip)} (${G.carrying} pip${G.carrying > 1 ? "s" : ""})` : "–";
   const mt = $("maxT");
   mt.textContent = `${G.maxT.toFixed(1)} °C`;
   mt.className = t > 0.85 ? "hot" : t > 0.6 ? "warm" : "";
-  $("limit").textContent = `${G.limit} °C`;
   $("limitLbl").textContent = `limit ${G.limit} °C`;
   $("alarm").className = `alarm ${t > 0.85 ? "hot" : t > 0.6 ? "warm" : ""}`;
 
   const campaign = G.mode === "campaign";
-  $("targetRow").classList.toggle("hidden", !campaign);
+  $("bestRow").classList.toggle("hidden", campaign);
+  $("outGauge").classList.toggle("hidden", !campaign);
   if (campaign) {
     const out = output();
     $("scoreLbl").textContent = "Output";
     $("score").textContent = `${out} MW`;
     $("score").className = out >= G.target ? "good" : "";
-    $("target").textContent = `${G.target} MW · ★ ${G.starsAt.join(" / ")}`;
-    $("bestLbl").textContent = "Best stars";
-    $("best").textContent = "★".repeat(store.stars[G.step] || 0) || "–";
+    renderOutputGauge(out);
   } else {
     $("scoreLbl").textContent = "Score (cells placed)";
     $("score").textContent = G.placed;
@@ -138,8 +179,7 @@ function updateHUD() {
   $("toolHelp").innerHTML = G.armed
     ? TOOL_INFO[G.armed].help
     : `Tools don't use up a turn. Hotkeys <kbd>1</kbd>–<kbd>${Math.max(1, nTools)}</kbd>, <kbd>Esc</kbd> cancels.`;
-  $("viewBtn").innerHTML = `${store.settings.view === "bands" ? "BANDS" : "GLOW"} <kbd>V</kbd>`;
-  $("meshBtn").innerHTML = `MESH ${store.settings.mesh ? "ON" : "OFF"} <kbd>G</kbd>`;
+  $("meshBtn").textContent = `${store.settings.mesh ? "HIDE" : "SHOW"} MESH`;
   $("diffChip").textContent = DIFFICULTY[store.settings.difficulty].label;
 }
 
@@ -207,60 +247,6 @@ function drawSuitGauge() {
   $("feetT").className = (Engineer.feetT - T_AMB) / (G.limit - T_AMB) > ENGINEER.safeBand ? "hot" : "";
 }
 
-// ─── FEAScript monitor: plotSolution output (Plotly loaded on demand) ───
-let monitorTimer = null;
-let plotlyLoading = null;
-function loadPlotly() {
-  if (window.Plotly) return Promise.resolve();
-  if (!plotlyLoading)
-    plotlyLoading = new Promise((resolve, reject) => {
-      const s = document.createElement("script");
-      s.src = PLOTLY_URL;
-      s.onload = resolve;
-      s.onerror = reject;
-      document.head.appendChild(s);
-    });
-  return plotlyLoading;
-}
-function scheduleMonitor() {
-  clearTimeout(monitorTimer);
-  monitorTimer = setTimeout(drawMonitor, 120);
-}
-async function drawMonitor() {
-  if (!$("monitor").open || !Physics.lastResult) return;
-  try {
-    await loadPlotly();
-    const div = $("monitorPlot");
-    // Gmsh meshes need the interpolated plot (masked to the true geometry, hole included)
-    const plot = Physics.unstructured ? FEA.plotInterpolatedSolution : FEA.plotSolution;
-    plot(Physics.model, Physics.lastResult, "contour", "monitorPlot");
-    const w = div.clientWidth || 290;
-    Plotly.relayout(div, {
-      width: w,
-      height: Math.round(w * 0.5) + 30,
-      title: { text: "" },
-      paper_bgcolor: "#222222",
-      plot_bgcolor: "#222222",
-      font: { color: "#a9a69c", family: "Roboto Mono", size: 9 },
-      margin: { l: 26, r: 4, t: 6, b: 22 },
-      "xaxis.title.text": "",
-      "yaxis.title.text": "",
-      "xaxis.gridcolor": "#333",
-      "yaxis.gridcolor": "#333",
-    });
-    Plotly.restyle(div, {
-      colorscale: [HEAT_HEX.slice(0, 12).map((c, i) => [i / 11, c])],
-      zmin: T_AMB,
-      zmax: G.limit,
-      zauto: false,
-      showscale: false,
-    });
-  } catch (e) {
-    console.warn("FEAScript monitor plot failed:", e);
-    $("monitorPlot").textContent = "Plotly could not be loaded (offline?).";
-  }
-}
-
 // ─── Modals ───
 function openModal(html, wire = {}) {
   $("modalCard").innerHTML = html;
@@ -288,7 +274,6 @@ function statsHtml(extra = []) {
   const avg = G.solveMs.length ? G.solveMs.reduce((a, b) => a + b, 0) / G.solveMs.length : 0;
   const rows = [
     ["Cells mounted", G.placed],
-    ["Turns", G.turn],
     ["Peak temperature", `${G.peakT.toFixed(1)} °C`],
     ["Critical limit", `${G.limit} °C`],
     ["Hearts left", `${Math.max(0, Engineer.hearts)} / ${Engineer.maxHearts}`],
@@ -334,7 +319,7 @@ function endShiftWin() {
      <p>Delivered <b>${out} MW</b> (quota ${G.target} MW).</p>
      ${starsHtml(stars)}
      ${quoteHtml(who, text, "qFace")}
-     ${statsHtml([["Output", `${out} MW`], ["Star thresholds", G.starsAt.join(" / ")]])}
+     ${statsHtml()}
      <div class="modal-actions">
        ${last ? `<button class="px-btn" data-act="ending">▶ EPILOGUE</button>` : `<button class="px-btn" data-act="next">CONTINUE ▶</button>`}
        <button class="px-btn dark" data-act="retry">↺ RETRY</button>
@@ -474,13 +459,13 @@ function openHelp() {
     `<h2 class="cream">HOW TO PLAY</h2>
      <div class="help-body">
        <h4>THE PLATE</h4>
-       <p>A 4 m × 2 m metal plate. The <b>bottom</b> edge sits on a coolant pipe at 20 °C, the <b>top</b> edge loses heat to the air
-       by convection (h = 1, 20 °C), and the <b>sides</b> are insulated. After every change FEAScript solves the steady-state heat
+       <p>A 40 m × 20 m metal plate. The <b>bottom</b> edge sits on a coolant pipe at 20 °C, the <b>top</b> edge loses heat to the air
+       by convection (h = ${showH(H_CONV)}, 20 °C), and the <b>sides</b> are insulated. After every change FEAScript solves the steady-state heat
        equation <code>−∇·(k ∇T) = Q</code> on 32 × 16 quadratic elements.</p>
        <h4>A TURN</h4>
-       <p><b>Roll</b> the d6 (<kbd>R</kbd>): it sets the power of your next thermo-cell (pips × ${DIFFICULTY[store.settings.difficulty].qPerPip}).
+       <p><b>Roll</b> the d6 (<kbd>R</kbd>): it sets the power of your next thermo-cell (Q = pips × ${showQ(DIFFICULTY[store.settings.difficulty].qPerPip)}).
        Walk onto the plate (<kbd>WASD</kbd>/arrows) and press <kbd>SPACE</kbd> to mount it under your feet, or simply <b>click</b> a spot:
-       you'll walk there and mount it. Cells are circles of radius 0.3 m and can't overlap. Pass the critical limit anywhere and it's a <b>meltdown</b>.</p>
+       you'll walk there and mount it. Cells are circles of radius ${showLen(SOURCE_R)} m and can't overlap. Pass the critical limit anywhere and it's a <b>meltdown</b>.</p>
        <h4>YOUR SUIT</h4>
        <p>The temperature field is the floor. Standing on metal hotter than half the limit (red or brighter) heats your suit. When the
        suit gauge fills you lose a heart and get hauled back to the airlock. Lose every heart and you're evacuated.</p>
@@ -489,20 +474,20 @@ function openHelp() {
        (red if it's aimed at your hottest cell) and counts down. Supply drones drop crates: walk over them before they vanish.</p>
        <h4>BANK OR PUSH</h4>
        <p><b>Endless shift:</b> score = cells placed. Bank whenever you like; a meltdown or evacuation scores 0.<br />
-       <b>Campaign:</b> reach the quota in MW (1 pip = 1 MW), then <b>Deliver</b>. More output earns up to three stars.</p>
+       <b>Campaign:</b> reach the quota in MW (1 pip = 1 MW), then <b>Deliver</b>. More output earns up to three stars; at three stars the shift is delivered automatically.</p>
        <h4>TOOLS</h4>
        <p><b>Copper</b> lays a k = 10 inlay. <b>FEA scan</b> solves a what-if case. <b>Coolant</b> removes the strongest cell.
        <b>Re-roll</b> rolls the die again. <b>Weld</b> closes a crack you stand in (2 s). <b>Side vent</b> (stand by a side wall)
        turns that insulated edge into a convective boundary, so FEAScript re-solves with new boundary conditions. Tools don't use a turn.</p>
        <h4>KEYS</h4>
        <p><kbd>WASD</kbd>/arrows walk · <kbd>SPACE</kbd>/<kbd>E</kbd> mount/weld · <kbd>R</kbd> roll · <kbd>B</kbd> bank/deliver ·
-       <kbd>1</kbd>–<kbd>6</kbd> tools · <kbd>Esc</kbd> cancel · <kbd>V</kbd> bands/glow · <kbd>G</kbd> mesh · <kbd>N</kbd> field notes · <kbd>M</kbd> sound</p>
+       <kbd>1</kbd>–<kbd>6</kbd> tools · <kbd>Esc</kbd> cancel · <kbd>G</kbd> show the mesh · <kbd>N</kbd> field notes · <kbd>M</kbd> sound</p>
        <h4>MORE PHYSICS</h4>
        <p>Three campaign interludes use other FEAScript models: an <b>Euler-Bernoulli beam</b> (The Gantry), the <b>eikonal front
        propagation</b> model (Cold Pour) and <b>creeping Stokes flow</b> (Pump Room).</p>
        <h4>THE EQUATION AND FIELD NOTES</h4>
-       <p>The <b>THE EQUATION</b> panel shows what FEAScript is solving, with the values of <i>k</i>, <i>T</i> and <i>Q</i> under your
-       cursor (or your boots) and the condition on every edge. Terms light up when you change them. As you play, MESH writes
+       <p>The <b>EQUATION</b> panel shows what FEAScript is solving, with the values of <i>k</i>, <i>T</i> and <i>Q</i> under your
+       cursor (or your boots) and the condition on every edge. Terms light up when you change them. As you play, Tri writes
        <b>Field Notes</b> about the physics you meet. Press <kbd>N</kbd> to read them (the shift pauses while you do), or click a term.</p>
      </div>
      <div class="modal-actions"><button class="px-btn" data-act="close">GOT IT</button></div>`,
@@ -724,10 +709,10 @@ function showBriefing(i, begin) {
   const toolList = TOOL_ORDER.filter((n) => G.tools[n]).map((n) => `${TOOL_INFO[n].name.toLowerCase()} ×${G.tools[n]}`);
   const items = [
     `Deliver at least <b>${G.target} MW</b> (stars at ${G.starsAt.join(" / ")} MW)`,
-    `Critical limit <b>${G.limit} °C</b> · cell power ${G.qPerPip} per pip`,
+    `Critical limit <b>${G.limit} °C</b> · cell power Q = ${showQ(G.qPerPip)} per pip`,
     L.mutateEvery ? `Cracks every <b>${L.mutateEvery}</b> mounts${L.targeted ? `, <b>aimed at your hottest cell</b>` : ""}` : "No cracks tonight",
     L.kBase !== K_ALLOY ? `Alloy conductivity <b>k = ${L.kBase}</b>` : `Alloy conductivity k = ${K_ALLOY}`,
-    G.bc.airT !== T_AMB ? `Top edge convects to <b>${G.bc.airT} °C</b> air (h = ${G.bc.airH})` : null,
+    G.bc.airT !== T_AMB ? `Top edge convects to <b>${G.bc.airT} °C</b> air (h = ${showH(G.bc.airH)})` : null,
     G.bc.coolantT !== T_AMB ? `Coolant arrives at <b>${G.bc.coolantT} °C</b>: the bottom edge runs warm` : null,
     G.bc.pipe ? `A coolant <b>bypass pipe</b> runs through the plate (Gmsh mesh, ${Physics.bypass?.nodes || ""} nodes)` : null,
     L.brackets ? `${L.brackets.length} mounting brackets block the floor` : null,
@@ -760,18 +745,18 @@ function showBriefing(i, begin) {
 }
 
 function playEnding() {
-  Story.play("EPILOGUE", "LIGHTS OF ATHENS", ENDING, () => {
+  Story.play("EPILOGUE", "LIGHTS OF NODESSA", ENDING, () => {
     const total = CAMPAIGN.reduce((s, step, i) => s + (step.type === "shift" ? store.stars[i] || 0 : 0), 0);
     openModal(
       `<h2 class="gold">THE END</h2>
-       <p>The Heatworks stays public, and Athens keeps its lights on.</p>
+       <p>The Heatworks stays public, and Nodessa keeps its lights on.</p>
        <p style="color:var(--muted)">Campaign stars: <b>${total} / 30</b></p>
        <div class="ending-credits">
          <b>CRITICAL MESH</b><br />
          A heat-conduction game powered by FEAScript<br />
          Physics: <b>FEAScript</b> ${FEA.printVersion}, finite element simulation in JavaScript<br />
          Heat conduction · beam bending · front propagation · creeping flow<br />
-         Story, pixel art and sound: drawn and synthesised in plain JavaScript<br />
+         © 2023–2026 FEAScript<br />
          −∇·(k ∇T) = Q
        </div>
        <div class="modal-actions">

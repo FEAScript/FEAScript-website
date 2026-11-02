@@ -15,10 +15,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Critical Mesh · A FEAScript game</title>
+    <title>Critical Mesh · Tri's Lab by FEAScript</title>
     <meta
       name="description"
-      content="Critical Mesh: a pixel-art push-your-luck game about heat conduction. Walk the Plate, mount thermo-cells and keep Athens lit; FEAScript solves the physics after every move."
+      content="Critical Mesh: a pixel-art push-your-luck game about heat conduction. Walk the Plate, mount thermo-cells and keep Nodessa lit; FEAScript solves the physics after every move."
     />
     <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -44,11 +44,13 @@
               <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
           ></span>
         </a>
-        <a class="brand-crumb" href="../index.html" title="Back to the FEM Lab">FEM Lab</a>
+        <a class="brand-crumb" href="../index.html" title="Back to Tri's Lab">Tri's Lab</a>
         <span class="brand-sep" aria-hidden="true">›</span>
         <a class="brand-game" href="#" id="homeLink" title="Back to the title screen">CRITICAL MESH</a>
       </div>
       <div class="topbar-right">
+        <button class="icon-btn hidden" id="meshBtn" type="button">SHOW MESH</button>
+        <button class="icon-btn hidden" id="menuBtn" type="button">≡ MAP</button>
         <span class="chip" id="diffChip">NORMAL</span>
         <button class="icon-btn" id="helpBtn" type="button" title="How to play">? HELP</button>
         <button class="icon-btn" id="soundBtn" type="button" title="Toggle sound (M)">♪ ON</button>
@@ -75,7 +77,7 @@
         </div>
         <canvas id="titleLogo" class="px" width="56" height="22" aria-label="Critical Mesh"></canvas>
         <p class="tagline">
-          Athens, 2089. The city runs on one glowing slab of alloy, and tonight you walk on it. Roll for power, mount
+          Nodessa, 2089. The city runs on one glowing slab of alloy, and tonight you walk on it. Roll for power, mount
           thermo-cells and <b>push your luck</b>: after every move a real finite element solver computes the
           temperature under your boots. Pass the critical limit and it's a <b>meltdown</b>.
         </p>
@@ -98,9 +100,8 @@
 
         <div class="terminal px-panel" id="bootLog" aria-live="polite"></div>
         <p class="credits-line">
-          Physics by
-          <a href="https://feascript.com" target="_blank" rel="noopener">FEAScript</a> · Pixel art, story and sound
-          made in plain JavaScript
+          Physics by <a href="https://feascript.com" target="_blank" rel="noopener">FEAScript</a>, finite element
+          simulation in JavaScript · © 2023–2026 FEAScript
         </p>
       </div>
     </section>
@@ -136,7 +137,7 @@
       <div class="dialog px-panel" id="dialog">
         <div class="portrait-box">
           <canvas id="portrait" class="px" width="16" height="16"></canvas>
-          <div class="who" id="who">ELENI</div>
+          <div class="who" id="who">ELLA</div>
         </div>
         <div class="text" id="dialogText"></div>
         <div class="hint">CLICK / SPACE ▶</div>
@@ -203,10 +204,13 @@
             <div class="stat"><span>Max temperature</span><b id="maxT">20.0 °C</b></div>
             <canvas id="gauge" class="px" width="100" height="9"></canvas>
             <div class="gauge-scale"><span>20 °C</span><span id="limitLbl">limit 400 °C</span></div>
-            <div class="stat"><span>Critical limit</span><b id="limit">400 °C</b></div>
             <div class="stat"><span id="scoreLbl">Score (cells placed)</span><b id="score">0</b></div>
-            <div class="stat" id="targetRow"><span>Quota</span><b id="target">–</b></div>
-            <div class="stat"><span id="bestLbl">Best</span><b id="best">0</b></div>
+            <div class="out-gauge" id="outGauge">
+              <div class="out-stars" id="outStars"></div>
+              <canvas id="outBar" class="px" width="100" height="9"></canvas>
+              <div class="gauge-scale"><span>0 MW</span><span id="outMaxLbl"></span></div>
+            </div>
+            <div class="stat" id="bestRow"><span id="bestLbl">Best</span><b id="best">0</b></div>
             <div class="stat"><span>Last solve (FEAScript)</span><b id="solveTime">–</b></div>
           </section>
 
@@ -217,8 +221,8 @@
               <button class="px-btn dark" id="restartBtn" type="button">↺ RESTART</button>
             </div>
             <div class="manual" style="margin-top: 0.7rem">
-              Mount at x <input id="mx" type="number" step="0.1" min="0.3" max="3.7" value="2" /> y
-              <input id="my" type="number" step="0.1" min="0.3" max="1.7" value="0.3" />
+              Mount at x <input id="mx" type="number" step="1" min="3" max="37" value="20" /> y
+              <input id="my" type="number" step="1" min="3" max="17" value="3" />
               <button class="px-btn dark small" id="placeBtn" type="button">GO</button>
             </div>
           </section>
@@ -229,26 +233,6 @@
             <div class="tool-help" id="toolHelp"></div>
           </section>
 
-          <section class="px-panel">
-            <h3>VIEW</h3>
-            <div class="toggles">
-              <button class="px-btn dark small" id="viewBtn" type="button">BANDS <kbd>V</kbd></button>
-              <button class="px-btn dark small" id="meshBtn" type="button">MESH <kbd>G</kbd></button>
-              <button class="px-btn dark small" id="notesBtn" type="button">NOTES <kbd>N</kbd></button>
-              <button class="px-btn dark small" id="menuBtn" type="button">≡ MENU</button>
-            </div>
-          </section>
-
-          <section class="px-panel">
-            <details class="monitor" id="monitor">
-              <summary>FEASCRIPT MONITOR</summary>
-              <div id="monitorPlot"></div>
-              <div class="monitor-note">
-                Raw nodal solution drawn by FEAScript's <code>plotSolution(model, result, "contour", …)</code>, updated
-                after every solve (Plotly is loaded when you open this panel).
-              </div>
-            </details>
-          </section>
         </aside>
       </div>
     </section>
@@ -270,13 +254,15 @@
             <div id="labMsg"></div>
           </div>
           <div class="log px-panel" id="labLog"></div>
+          <section class="px-panel eq-wrap">
+            <details class="eq-panel" id="labEqPanel">
+              <summary>THE EQUATION FEASCRIPT IS SOLVING <button class="eq-more" id="labNoteBtn" type="button" data-open-note="">FIELD NOTES <b data-notes-count>0/15</b> <kbd>N</kbd></button></summary>
+              <div class="lab-eq-body" id="labPhysics"></div>
+            </details>
+          </section>
         </div>
         <aside class="hud">
           <section class="px-panel" id="labPanel"></section>
-          <section class="px-panel" id="labPhysics"></section>
-          <section class="px-panel">
-            <button class="px-btn dark small" id="labMenuBtn" type="button">≡ CAMPAIGN MAP</button>
-          </section>
         </aside>
       </div>
     </section>

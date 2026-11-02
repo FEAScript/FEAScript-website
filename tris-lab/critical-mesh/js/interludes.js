@@ -23,8 +23,10 @@ const Lab = {
     this.onDone = onDone;
     $("labTitle").innerHTML = `<small>INTERLUDE</small>${step.title.toUpperCase()}`;
     $("labPhysics").innerHTML =
-      `<h3>FEASCRIPT MODEL</h3><div class="phys-tag" style="--phys:${phys.color}">${phys.label}</div>` +
-      `<code class="model-name">${phys.model}</code>${labEquationHtml(step.type)}<div class="tool-help" id="labPhysicsNote"></div>`;
+      `<div class="phys-tag" style="--phys:${phys.color}">${phys.label}</div><code class="model-name">${phys.model}</code>` +
+      `${labEquationHtml(step.type)}<div class="tool-help" id="labPhysicsNote"></div>`;
+    $("labNoteBtn").dataset.openNote = { gantry: "beam", pour: "front", pump: "flow" }[step.type];
+    $("labEqPanel").open = store.settings.equationOpen;
     Codex.unlock({ gantry: "beam", pour: "front", pump: "flow" }[step.type]);
     $("labLog").innerHTML = "";
     particles.length = 0;
@@ -42,7 +44,11 @@ const Lab = {
   },
 };
 
-function labMessage(html, face = "eleni") {
+// Walls are numbered bottom, left, top, right; panels list them as they sit on screen
+const WALL_ORDER = [2, 1, 3, 0];
+
+// Status, rules and warnings come from MESH unless another speaker is given (Tri only explains physics)
+function labMessage(html, face = "mesh") {
   $("labMsg").innerHTML = html;
   paintSprite($("labFace"), SPEAKERS[face]?.sprite || face);
 }
@@ -88,12 +94,18 @@ const Gantry = {
   limit: 0.04, // allowed sag (m)
   maxProps: 2,
   deckY: 52,
+
+  // Sag is shown to 0.1 cm, so it is judged at that precision too: "4.0 cm" never fails a 4 cm limit
+  over(sag) {
+    return Math.round(sag * 1000) > Math.round(this.limit * 1000);
+  },
   sagScale: 350, // px per metre of sag (heavily exaggerated)
 
   start() {
     this.props = [];
     this.cases = null;
     this.envelope = null;
+    this.rest = this.restShape();
     this.phase = "setup";
     this.engX = 0.05;
     this.walks = 0;
@@ -105,7 +117,7 @@ const Gantry = {
     $("labObjective").innerHTML = `Place up to two props, then carry the spool across · max sag <b>${Math.round(this.limit * 100)} cm</b>`;
     $("labPhysicsNote").innerHTML =
       `d²/dx²(EI(x) d²w/dx²) = q(x) + F δ(x − x<sub>you</sub>) · clamped at the wall, pinned at the props · EI = ${this.EIsound}, ${this.EIrust} on the corroded span · self-weight ${this.selfWeight} N/m · load ${this.force} N · 16 cubic Hermite elements, 17 load cases per check.`;
-    labMessage("Click under the catwalk to place props (up to two; click a prop again to remove it). <b>SIMULATE</b> shows the sag envelope. Or be brave and <b>WALK</b>.", "eleni");
+    labMessage("Get the spool to the east store. If the catwalk sags more than <b>4 cm</b> anywhere, you fall in. Click under the catwalk to place up to two props (not on the rusty span), press <b>SIMULATE</b> to check every step of the walk, then <b>WALK</b>.");
     this.panel();
   },
 
@@ -114,16 +126,18 @@ const Gantry = {
     labPanel(
       `<h3>CATWALK</h3>
        <div class="stat"><span>Props</span><b>${this.props.length ? this.props.map((n) => `${((n - 1) * this.L / this.elements).toFixed(2)} m`).join(", ") : "none"}</b></div>
-       <div class="stat"><span>Max sag (all positions)</span><b class="${env == null ? "" : env > this.limit ? "hot" : "good"}">${env == null ? "–" : `${(env * 100).toFixed(1)} cm`}</b></div>
+       <div class="stat"><span>Max sag (all positions)</span><b class="${env == null ? "" : this.over(env) ? "hot" : "good"}">${env == null ? "–" : `${(env * 100).toFixed(1)} cm`}</b></div>
        <div class="stat"><span>Allowed sag</span><b>${Math.round(this.limit * 100)} cm</b></div>
        <div class="stat"><span>Walks</span><b>${this.walks}</b></div>
        <div class="actions" style="margin-top:.7rem">
          <button class="px-btn flow wide" data-act="sim" ${this.phase !== "setup" ? "disabled" : ""}>SIMULATE LOAD CASES</button>
-         <button class="px-btn cool" data-act="walk" ${this.phase !== "setup" ? "disabled" : ""}>WALK ▶</button>
+         ${this.phase === "walking"
+           ? `<button class="px-btn dark" data-act="back">◀ BACK</button>`
+           : `<button class="px-btn cool" data-act="walk" ${this.phase !== "setup" ? "disabled" : ""}>WALK ▶</button>`}
          <button class="px-btn dark" data-act="clear" ${this.phase !== "setup" || !this.props.length ? "disabled" : ""}>CLEAR PROPS</button>
        </div>
-       <div class="tool-help">Walk with <kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd>. The catwalk bends under you exactly as FEAScript says it does.</div>`,
-      { sim: () => this.simulate(), walk: () => this.beginWalk(), clear: () => this.setProps([]) },
+       <div class="tool-help"><b>WALK</b> crosses by itself. Or walk yourself with <kbd>←</kbd> <kbd>→</kbd> / <kbd>A</kbd> <kbd>D</kbd>. The catwalk bends under you exactly as FEAScript says it does.</div>`,
+      { sim: () => this.simulate(), walk: () => this.beginWalk(true), back: () => this.stopWalk(), clear: () => this.setProps([]) },
     );
   },
 
@@ -143,12 +157,20 @@ const Gantry = {
     this.props = list;
     this.cases = null;
     this.envelope = null;
+    this.rest = this.restShape();
     this.panel();
+  },
+
+  // The catwalk under its own weight alone (you standing at the wall), drawn while you place props
+  restShape() {
+    return Physics.solveBeam({
+      length: this.L, elements: this.elements, EI: this.EI, selfWeight: this.selfWeight, force: this.force, props: this.props, loadNode: 1,
+    }).w;
   },
 
   toggleProp(node) {
     if (this.isRusty(node)) {
-      labMessage("No footing there: the corroded span can't take a prop.", "eleni");
+      labMessage("No footing there: the corroded span can't take a prop.");
       Sound.play("error");
       return;
     }
@@ -175,7 +197,7 @@ const Gantry = {
     const ms = performance.now() - t0;
     const env = Math.max(...this.envelope);
     console.log(`[Critical Mesh] The Gantry: ${this.elements + 1} FEAScript beam solves in ${ms.toFixed(1)} ms · max sag ${(env * 100).toFixed(2)} cm`);
-    labLog(`${this.elements + 1} beam load cases · ${ms.toFixed(0)} ms · max sag ${(env * 100).toFixed(1)} cm`, env > this.limit ? "warn" : "");
+    labLog(`${this.elements + 1} beam load cases · ${ms.toFixed(0)} ms · max sag ${(env * 100).toFixed(1)} cm`, this.over(env) ? "warn" : "");
     return env;
   },
 
@@ -183,7 +205,7 @@ const Gantry = {
     const env = this.solveCases();
     Sound.play("scan");
     labMessage(
-      env > this.limit
+      this.over(env)
         ? `MESH: WITH THIS SETUP THE CATWALK SAGS <b>${(env * 100).toFixed(1)} CM</b> SOMEWHERE ALONG THE WALK. LIMIT ${Math.round(this.limit * 100)} CM. YOU WOULD GET WET.`
         : `MESH: MAX SAG <b>${(env * 100).toFixed(1)} CM</b>. WITHIN THE ${Math.round(this.limit * 100)} CM LIMIT. SAFE TO CROSS.`,
       "mesh",
@@ -191,12 +213,37 @@ const Gantry = {
     this.panel();
   },
 
-  beginWalk() {
+  beginWalk(auto = false) {
+    if (this.phase !== "setup") return;
+    // Already over the limit before the first step: say so instead of an instant splash
+    const restSag = Math.max(...this.rest.map(Math.abs));
+    if (this.over(restSag)) {
+      const worst = this.rest.reduce((b, w, i) => (Math.abs(w) > Math.abs(this.rest[b]) ? i : b), 0);
+      labMessage(
+        `Don't step on it yet: under its own weight the catwalk already sags <b>${(restSag * 100).toFixed(1)} cm</b> at ${((worst * this.L) / this.elements).toFixed(2)} m. ` +
+          "Move a prop further out to hold up the free end.",
+        "mesh",
+      );
+      Sound.play("error");
+      return;
+    }
     if (!this.cases) this.solveCases();
+    this.auto = auto;
     this.phase = "walking";
     this.engX = 0.05;
     this.walks++;
-    labMessage("Carry the spool across: <kbd>→</kbd> / <kbd>D</kbd> to walk. Watch the sag under your boots.", "eleni");
+    labMessage(`Walking. If the catwalk sags more than <b>${Math.round(this.limit * 100)} cm</b> anywhere, you fall in. <kbd>←</kbd> <kbd>→</kbd> to step, <b>BACK</b> or <kbd>Esc</kbd> to change the props.`);
+    this.panel();
+  },
+
+  // Step back off the catwalk to change the props; an abandoned walk doesn't count as a try
+  stopWalk() {
+    if (this.phase !== "walking") return;
+    this.phase = "setup";
+    this.engX = 0.05;
+    this.auto = false;
+    this.walks--;
+    labMessage("Back at the wall. Move the props (click under the catwalk), then <b>WALK</b> again.");
     this.panel();
   },
 
@@ -216,14 +263,21 @@ const Gantry = {
     return shape[i] * (1 - a) + shape[i + 1] * a;
   },
 
+  // A fresh → / D press starts the walk, like the WALK button
+  key(k) {
+    if (this.phase === "setup" && (k === "arrowright" || k === "d")) this.beginWalk();
+    else if (k === "escape") this.stopWalk();
+  },
+
   click(px, py) {
-    if (this.phase !== "setup") return;
+    if (this.phase !== "setup" && this.phase !== "walking") return;
     if (px < PX0 + 4 || px > PX0 + 162 || py < this.deckY - 6) return;
+    this.stopWalk();
     this.toggleProp(clamp(Math.round(((px - PX0) / 160) * this.elements) + 1, 2, this.elements + 1));
   },
 
   hover(px, py) {
-    this.hoverNode = this.phase === "setup" && px > PX0 + 4 && px < PX0 + 162 && py > this.deckY - 6
+    this.hoverNode = (this.phase === "setup" || this.phase === "walking") && px > PX0 + 4 && px < PX0 + 162 && py > this.deckY - 6
       ? clamp(Math.round(((px - PX0) / 160) * this.elements) + 1, 2, this.elements + 1)
       : null;
   },
@@ -233,6 +287,7 @@ const Gantry = {
     let shape = null;
     if (this.phase === "walking") {
       let dir = 0;
+      if (KEYS.has("arrowleft") || KEYS.has("a")) this.auto = false;
       if (KEYS.has("arrowright") || KEYS.has("d") || this.auto) dir += 1;
       if (KEYS.has("arrowleft") || KEYS.has("a")) dir -= 1;
       if (dir) {
@@ -246,12 +301,16 @@ const Gantry = {
       }
       shape = this.shapeAt(Math.min(this.engX, this.L));
       const sag = Math.max(...shape.map(Math.abs));
-      if (sag > this.limit) {
+      if (this.over(sag)) {
+        const worst = shape.reduce((b, w, i) => (Math.abs(w) > Math.abs(shape[b]) ? i : b), 0);
+        const at = (worst * this.L) / this.elements;
+        const where = at > this.rust[0] - 0.13 && at < this.rust[1] + 0.13 ? " on the rusty span" : at > this.L - 0.13 ? " at the free end" : "";
         this.phase = "fallen";
+        this.auto = false;
         this.fall = { x: this.engX, y: 0, vy: 0, t: 0 };
         Sound.play("splash");
         labLog(`Catwalk overloaded at x = ${this.engX.toFixed(2)} m · sag ${(sag * 100).toFixed(1)} cm`, "bad");
-        labMessage(`<span class="hot">SPLASH!</span> The catwalk sagged ${(sag * 100).toFixed(1)} cm and dumped you into the coolant. Try other props.`, "eleni");
+        labMessage(`<span class="hot">SPLASH!</span> With you at ${this.engX.toFixed(2)} m, the catwalk sagged <b>${(sag * 100).toFixed(1)} cm</b> at ${at.toFixed(2)} m${where}, over the ${Math.round(this.limit * 100)} cm limit. Try other props.`);
         showBanner("SPLASH!", "flow", false, "labBanner");
       } else if (this.engX >= this.L - 0.02) {
         this.phase = "done";
@@ -268,13 +327,16 @@ const Gantry = {
       this.fall.vy += 180 * dt;
       this.fall.y += this.fall.vy * dt;
       if (this.fall.t > 1.6) {
+        // Back at the wall, ready for another try
         this.phase = "setup";
         this.fall = null;
+        this.engX = 0.05;
+        this.walkT = 0;
         this.panel();
-        labMessage("Dried off? Move the props (click under the catwalk) and try again. <b>SIMULATE</b> is free.", "eleni");
+        labMessage("Dried off? Move the props (click under the catwalk), <b>SIMULATE</b> for free, then <b>WALK</b> or <kbd>→</kbd> to try again.");
       }
     } else if (this.phase === "done") shape = this.shapeAt(this.L);
-    if (!shape) shape = new Array(this.elements + 1).fill(0);
+    if (!shape) shape = this.rest;
     this.draw(g, now, dt, shape);
   },
 
@@ -331,7 +393,7 @@ const Gantry = {
       for (let px = PX0; px <= PX0 + 160; px++) {
         if (px % 3) continue;
         const env = this.deflAtPx(this.envelope, px);
-        g.fillStyle = env > this.limit ? "#ff5c8d" : "#e6c230";
+        g.fillStyle = this.over(env) ? "#ff5c8d" : "#e6c230";
         g.fillRect(px, deck + 1 + Math.round(Math.min(env, 0.1) * this.sagScale), 1, 1);
       }
     }
@@ -364,7 +426,7 @@ const Gantry = {
     for (let px = PX0; px <= PX0 + 160; px++) {
       const w = this.deflAtPx(shape, px);
       const y = deck + Math.round(Math.min(0.1, -w) * this.sagScale);
-      const over = Math.abs(w) > this.limit;
+      const over = this.over(Math.abs(w));
       const rusty = (px - PX0) / 40 > this.rust[0] && (px - PX0) / 40 < this.rust[1];
       g.fillStyle = "#0e0e12";
       g.fillRect(px, y - 1, 1, 5);
@@ -397,8 +459,8 @@ const Gantry = {
       g.drawImage(sprite(frame, KEYS.has("arrowleft") || KEYS.has("a")), epx - 4, epy - 13);
       g.drawImage(sprite("spool"), epx - 4, epy - 22);
       if (this.cases && this.phase === "walking") {
-        const here = Math.abs(this.deflAtPx(shape, clamp(epx, PX0, PX0 + 160)));
-        drawTag(g, `SAG ${(Math.max(...shape.map(Math.abs)) * 100).toFixed(1)}CM`, epx - 18, epy - 34, here > this.limit * 0.8 ? "#ff5c8d" : "#fdfaf2", { minX: 0, maxX: CW });
+        const maxSag = Math.max(...shape.map(Math.abs));
+        drawTag(g, `MAX SAG ${(maxSag * 100).toFixed(1)}CM`, epx - 24, epy - 34, maxSag > this.limit * 0.8 ? "#ff5c8d" : "#fdfaf2", { minX: 0, maxX: CW });
       }
     }
     drawParticles(g, dt);
@@ -434,7 +496,7 @@ const Pour = {
     $("labObjective").innerHTML = "Chill mould walls so the <b>riser</b> is the last part to freeze";
     $("labPhysicsNote").innerHTML =
       "|∇φ| = 1 with φ = 0 on chilled walls and zero gradient elsewhere. φ(x, y) is the freezing time; the maximum of φ is where porosity collects. 16 × 8 quadratic elements.";
-    labMessage("Toggle which mould walls are <b>chilled</b> (click the buttons or the walls). Then <b>SIMULATE</b> (3 left) or <b>CAST</b> for real.", "eleni");
+    labMessage("Toggle which mould walls are <b>chilled</b> (click the buttons or the walls). Then <b>SIMULATE</b> (3 left) or <b>CAST</b> for real.");
     this.panel();
   },
 
@@ -443,7 +505,7 @@ const Pour = {
     labPanel(
       `<h3>MOULD WALLS</h3>
        <div class="edge-grid">
-         ${this.edgeNames.map((n, k) => `<button class="px-btn small ${this.chilled[k] ? "flow" : "dark"}" data-act="e${k}" ${busy ? "disabled" : ""}>${n}: ${this.chilled[k] ? "CHILL" : "WARM"}</button>`).join("")}
+         ${WALL_ORDER.map((k) => [this.edgeNames[k], k]).map(([n, k]) => `<button class="px-btn small ${this.chilled[k] ? "flow" : "dark"}" data-act="e${k}" ${busy ? "disabled" : ""}>${n}: ${this.chilled[k] ? "CHILL" : "WARM"}</button>`).join("")}
        </div>
        <div class="stat"><span>Simulations left</span><b>${this.sims}</b></div>
        <div class="stat"><span>Last result</span><b class="${this.result ? (this.result.ok ? "good" : "hot") : ""}">${this.result ? (this.result.ok ? "RISER LAST ✓" : "POROSITY IN PLATE") : "–"}</b></div>
@@ -484,7 +546,7 @@ const Pour = {
       return;
     }
     if (!final) this.sims--;
-    labMessage(final ? "Casting... the front moves in from the chilled walls." : "MESH: SOLVING THE EIKONAL EQUATION...", final ? "eleni" : "mesh");
+    labMessage(final ? "Casting... the front moves in from the chilled walls." : "MESH: SOLVING THE EIKONAL EQUATION...", final ? "ella" : "mesh");
     this.final = final;
     this.anim = { t0: performance.now() + 60, pending: true };
     this.panel();
@@ -658,7 +720,7 @@ const Pump = {
       this.stage === 0
         ? "Set the wall belts (◀ ▶ / ▲ ▼), then <b>RUN PUMPS</b>. The first clog sits right in the middle of the manifold."
         : "One down. The second clog is jammed low in the left corner. Think about how to make the coolant swirl there.",
-      "eleni",
+      this.stage === 0 ? "mesh" : "tri", // the setup is a rule (MESH); the swirl hint is physics (Tri)
     );
     this.panel();
   },
@@ -679,9 +741,9 @@ const Pump = {
     labPanel(
       `<h3>BELT ROLLERS</h3>
        <div class="belt-grid">
-         ${this.wallNames
+         ${WALL_ORDER.map((k) => [this.wallNames[k], k])
            .map(
-             (n, k) =>
+             ([n, k]) =>
                `<span>${n}</span>${[-1, 0, 1]
                  .map((v, i) => `<button class="px-btn small ${this.walls[k] === v ? (v ? "flow" : "") : "dark"}" data-act="w${k}_${v}" ${busy ? "disabled" : ""}>${arrows(k)[i]}</button>`)
                  .join("")}`,
@@ -747,13 +809,13 @@ const Pump = {
         labMessage(`MESH: FLOW AT THE CLOG ${f.atClog.toFixed(2)}. ABOVE ${s.need.toFixed(2)}. FLUSHING.`, "mesh");
         setTimeout(() => this.cleared(), 2600);
       } else if (this.attempts <= 0) {
-        labMessage(`Flow at the clog only reached ${f.atClog.toFixed(2)}. We're out of pump time. We'll have to run the shift with a half-blocked manifold.`, "eleni");
+        labMessage(`Flow at the clog only reached ${f.atClog.toFixed(2)}. We're out of pump time. We'll have to run the shift with a half-blocked manifold.`, "ella");
         this.done = true;
         store.flags.pumpOk = false;
         saveStore();
         setTimeout(() => endInterlude("pump", false), 2600);
       } else {
-        labMessage(`Flow at the clog: <b>${f.atClog.toFixed(2)}</b>, need ${s.need.toFixed(2)}. The coolant moves, but not where it matters. Try another combination.`, "eleni");
+        labMessage(`Flow at the clog: <b>${f.atClog.toFixed(2)}</b>, need ${s.need.toFixed(2)}. The coolant moves, but not where it matters. Try another combination.`);
       }
       this.panel();
     }, 60);
@@ -868,7 +930,7 @@ function endInterlude(type, ok) {
         : "Spool delivered. A little wet, but delivered."
       : "",
     pour: ok ? "Clean cast. The riser took all the porosity." : "The cast is porous: the next Plate starts with an extra crack where the metal froze last.",
-    pump: ok ? "Both clogs flushed. Eleni slips you a spare coolant cartridge: +1 coolant." : "The manifold is still half-blocked. No spare cartridge.",
+    pump: ok ? "Both clogs flushed. Ella slips you a spare coolant cartridge: +1 coolant." : "The manifold is still half-blocked. No spare cartridge.",
   };
   openModal(
     `<h2 class="${ok ? "green" : "heat"}">${ok ? "DONE" : "SETBACK"}</h2>

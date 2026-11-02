@@ -58,9 +58,9 @@ const NOTES = [
     eq: "{Q} = pips·q in a cell",
     words:
       "Q is how much heat every cubic metre makes each second (W/m³). It is the only thing on the right-hand side of the equation, so it is what pushes the temperature up. Everything else (k and the edges) decides where that heat can go.",
-    game: "The die sets Q: each pip adds the same power inside a circle of radius 0.3 m. A 6 makes twice the heat of a 3.",
+    game: "The die sets Q: each pip adds the same power inside a circle of radius 3 m. A 6 makes twice the heat of a 3.",
     code: `heatSource: (x, y) =>
-  cells.reduce((Q, c) => Q + (Math.hypot(x - c.x, y - c.y) < 0.3 ? c.q : 0), 0)`,
+  cells.reduce((Q, c) => Q + (Math.hypot(x - c.x, y - c.y) < 3 ? c.q : 0), 0)`,
     how: "Mount your first cell.",
   },
   {
@@ -81,8 +81,8 @@ const NOTES = [
     eq: "−{k}∂{T}/∂n = h({T} − T_{air})",
     words:
       "The top edge touches air. Air carries heat away, but only in proportion to how much hotter the metal is than the air. <b>h</b> says how good the air is at it: still air has a small h, a fan a big one. This mix of T and its slope is a <b>Robin</b> boundary condition.",
-    game: "With h = 1 the top is a poor exit, so most of your heat must reach the coolant. On a heat wave the air is hotter than the coolant and the top edge heats the Plate instead.",
-    code: `model.addBoundaryCondition("2", ["convection", 1, 20]); // top: h, T_air`,
+    game: "With h = 0.1 the top is a poor exit, so most of your heat must reach the coolant. On a heat wave the air is hotter than the coolant and the top edge heats the Plate instead.",
+    code: `model.addBoundaryCondition("2", ["convection", 0.1, 20]); // top: h, T_air`,
     how: "Walk to the top edge.",
   },
   {
@@ -128,7 +128,7 @@ const NOTES = [
     game: "Press <kbd>G</kbd> to see the mesh. Every corner and mid-side point is a node.",
     code: `model.setMeshConfig({
   meshDimension: "2D", elementOrder: "quadratic",
-  numElementsX: 32, numElementsY: 16, maxX: 4, maxY: 2,
+  numElementsX: 32, numElementsY: 16, maxX: 40, maxY: 20,
 });`,
     how: "Switch on the mesh view (G).",
   },
@@ -160,11 +160,11 @@ const before = model.solve();`,
     id: "vent",
     physics: "heat",
     title: "Changing the boundary",
-    eq: "∂{T}/∂n = 0 → −{k}∂{T}/∂n = 3({T}−T_{air})",
+    eq: "∂{T}/∂n = 0 → −{k}∂{T}/∂n = 0.3({T}−T_{air})",
     words:
       "Opening a vent turns an insulated wall into a convective one. Same equation, same cells, different boundary, different answer: boundary conditions are half of every physics problem.",
     game: "A vent only helps the cells near its wall. FEAScript re-solves the whole Plate with the new edge right away.",
-    code: `model.addBoundaryCondition("1", ["convection", 3, 20]); // left vent`,
+    code: `model.addBoundaryCondition("1", ["convection", 0.3, 20]); // left vent`,
     how: "Open a side vent.",
   },
   {
@@ -283,7 +283,7 @@ const Codex = {
     }).join("");
     openModal(
       `<h2 class="cream">FIELD NOTES</h2>
-       <p class="notes-sub">MESH's notebook: the physics behind every move · <b data-notes-count>${this.count()}/${NOTES.length}</b></p>
+       <p class="notes-sub"><canvas class="px notes-face" id="notesFace" width="16" height="16"></canvas>Tri's notebook: the physics behind every move · <b data-notes-count>${this.count()}/${NOTES.length}</b></p>
        <div class="notes-book">
          <div class="note-list">${list}</div>
          <div class="note-page" id="notePage"></div>
@@ -292,6 +292,7 @@ const Codex = {
       { close: closeModal },
     );
     $("modalCard").classList.add("wide");
+    paintSprite($("notesFace"), "tri");
     $("modalCard").querySelectorAll("[data-note]").forEach((b) =>
       b.addEventListener("click", () => {
         Sound.play("click");
@@ -306,7 +307,7 @@ const Codex = {
     const page = $("notePage");
     const n = NOTE_BY_ID[id];
     if (!n) {
-      page.innerHTML = `<p class="note-empty">No notes yet. Play a shift: MESH writes down the physics as you meet it.</p>`;
+      page.innerHTML = `<p class="note-empty">No notes yet. Play a shift: Tri writes down the physics as you meet it.</p>`;
       return;
     }
     const locked = NOTES.filter((x) => !this.has(x.id));
@@ -318,7 +319,7 @@ const Codex = {
       <p>${n.words}</p>
       <div class="note-game"><b>IN THE GAME</b>${n.game}</div>
       <div class="note-code"><b>IN FEASCRIPT</b><pre>${n.code.replace(/</g, "&lt;")}</pre></div>
-      ${locked.length ? `<p class="note-next">Next to find: <i>${locked[0].how}</i></p>` : `<p class="note-next good">Notebook complete. MESH is proud of you.</p>`}`;
+      ${locked.length ? `<p class="note-next">Next to find: <i>${locked[0].how}</i></p>` : `<p class="note-next good">Notebook complete. Tri is proud of you.</p>`}`;
   },
 
   // ─── The live equation panel (shift HUD) ───
@@ -337,10 +338,10 @@ const Codex = {
     const bc = G.bc;
     const small = { color: "#e6e3da" };
     const side = (open) =>
-      open ? `<span data-edge="vent">${eqHtml(`−k∂T/∂n = ${H_VENT}(T − ${bc.airT})`, small)}</span>` : `<span data-edge="side">${eqHtml("∂T/∂n = 0", small)}</span>`;
+      open ? `<span data-edge="vent">${eqHtml(`−k∂T/∂n = ${showH(H_VENT)}(T − ${bc.airT})`, small)}</span>` : `<span data-edge="side">${eqHtml("∂T/∂n = 0", small)}</span>`;
     $("eqEdges").innerHTML = `
       <div><i>▼ bottom</i><span data-edge="bottom">${eqHtml(`T = ${bc.coolantT}°C`, small)}</span></div>
-      <div><i>▲ top</i><span data-edge="top">${eqHtml(`−k∂T/∂n = ${bc.airH}(T − ${bc.airT})`, small)}</span></div>
+      <div><i>▲ top</i><span data-edge="top">${eqHtml(`−k∂T/∂n = ${showH(bc.airH)}(T − ${bc.airT})`, small)}</span></div>
       <div><i>◀ left</i>${side(bc.ventLeft)}</div>
       <div><i>▶ right</i>${side(bc.ventRight)}</div>
       ${bc.pipe ? `<div><i>● pipe</i><span data-edge="pipe">${eqHtml(`T = ${bc.coolantT}°C`, small)}</span></div>` : ""}`;
@@ -376,18 +377,18 @@ const Codex = {
     const inPipe = G.bc.pipe && Math.hypot(p.x - G.bc.pipe.x, p.y - G.bc.pipe.y) < G.bc.pipe.r;
     const where = G.hover ? "cursor" : "boots";
     if (inPipe) {
-      $("eqProbe").innerHTML = `<div class="probe-where">at (${p.x.toFixed(1)}, ${p.y.toFixed(1)}) m · inside the pipe: not part of the mesh</div>`;
+      $("eqProbe").innerHTML = `<div class="probe-where">at (${showLen(p.x)}, ${showLen(p.y)}) m · inside the pipe: not part of the mesh</div>`;
       return;
     }
     const T = sampleGrid(G.displayGrid, p.x, p.y);
     const [k, mat] = this.kAt(p.x, p.y);
     const q = this.qAt(p.x, p.y);
     $("eqProbe").innerHTML = `
-      <div class="probe-where">under your ${where} · (${p.x.toFixed(1)}, ${p.y.toFixed(1)}) m</div>
+      <div class="probe-where">under your ${where} · (${showLen(p.x)}, ${showLen(p.y)}) m</div>
       <div class="probe-vals">
         <span data-term="T"><i>${eqHtml("{T}")}</i>${T.toFixed(1)} °C</span>
         <span data-term="k" class="${mat}"><i>${eqHtml("{k}")}</i>${k.toFixed(2)} <small>${mat}</small></span>
-        <span data-term="Q" class="${q > 0 ? "on" : ""}"><i>${eqHtml("{Q}")}</i>${q.toFixed(0)}</span>
+        <span data-term="Q" class="${q > 0 ? "on" : ""}"><i>${eqHtml("{Q}")}</i>${showQ(q).toFixed(0)}</span>
       </div>`;
   },
 
@@ -400,9 +401,8 @@ const Codex = {
   },
 };
 
-// Equation block for the interlude side panel
+// Equation block for the interlude equation panel
 function labEquationHtml(type) {
   const eq = { gantry: EQ.beam, pour: EQ.front, pump: EQ.flow }[type];
-  const note = { gantry: "beam", pour: "front", pump: "flow" }[type];
-  return `<div class="eq-big small">${eqHtml(eq)}</div><button type="button" class="eq-more" data-open-note="${note}">FIELD NOTE ▸</button>`;
+  return `<div class="eq-big small">${eqHtml(eq)}</div>`;
 }

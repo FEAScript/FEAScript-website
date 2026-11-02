@@ -26,14 +26,8 @@ function wireBoard() {
   $("restartBtn").addEventListener("click", restart);
   $("placeBtn").addEventListener("click", () => {
     if (G.carrying == null) return;
-    const [x, y] = snapMount(parseFloat($("mx").value), parseFloat($("my").value));
+    const [x, y] = snapMount(parseFloat($("mx").value) / SCALE, parseFloat($("my").value) / SCALE); // inputs are in metres
     Engineer.walkTo(x, y, "mount");
-  });
-  $("viewBtn").addEventListener("click", () => {
-    store.settings.view = store.settings.view === "bands" ? "glow" : "bands";
-    saveStore();
-    Scene.fieldDirty = true;
-    updateHUD();
   });
   $("meshBtn").addEventListener("click", () => {
     store.settings.mesh = !store.settings.mesh;
@@ -41,16 +35,20 @@ function wireBoard() {
     saveStore();
     updateHUD();
   });
+  // Top bar ≡ MENU, shown during shifts and interludes
   $("menuBtn").addEventListener("click", () => {
     Sound.play("click");
-    G.mode === "campaign" ? openMap() : openTitle();
+    if (isActive("scr-lab")) {
+      Lab.current = null;
+      openMap();
+    } else G.mode === "campaign" ? openMap() : openTitle();
   });
-  $("monitor").addEventListener("toggle", drawMonitor);
-  $("notesBtn").addEventListener("click", () => Codex.open());
-  $("eqPanel").addEventListener("toggle", () => {
-    store.settings.equationOpen = $("eqPanel").open;
-    saveStore();
-  });
+  // The equation panel stays open or closed across shifts and interludes
+  for (const id of ["eqPanel", "labEqPanel"])
+    $(id).addEventListener("toggle", () => {
+      store.settings.equationOpen = $(id).open;
+      saveStore();
+    });
   // Click a term or an edge of the live equation to read its Field Note
   $("eqPanel").addEventListener("click", (e) => {
     const el = e.target.closest("[data-term], [data-edge]");
@@ -70,10 +68,7 @@ function wireLab() {
     const { px, py } = labCoords(e);
     Lab.current?.hover(px, py);
   });
-  $("labMenuBtn").addEventListener("click", () => {
-    Lab.current = null;
-    openMap();
-  });
+
 }
 
 // ─── Menus ───
@@ -164,12 +159,12 @@ function wireKeys() {
     if (!inGame && !inLab) return;
     if (MOVE.includes(k) || k === " ") e.preventDefault();
     if (MOVE.includes(k)) KEYS.add(k);
+    if (inLab && !e.repeat) Lab.current?.key?.(k);
     if (!inGame) return;
     if (e.repeat && !MOVE.includes(k)) return;
     if (k === "r") Game.roll();
     else if (k === "b") Game.bank();
     else if (k === " " || k === "e") Game.action();
-    else if (k === "v") $("viewBtn").click();
     else if (k === "g") $("meshBtn").click();
     else if (k === "escape") {
       G.armed = null;
@@ -200,7 +195,7 @@ async function boot() {
   wireKeys();
   setDifficulty(store.settings.difficulty);
   setSound(store.settings.sound);
-  paintSprite($("msgFace"), "eleni");
+  paintSprite($("msgFace"), "ella");
   requestAnimationFrame(mainLoop);
 
   bootLine(`<span class="dim">HEATWORKS OS 9.2 · night shift terminal</span>`);
@@ -215,7 +210,7 @@ async function boot() {
   await wait(150);
 
   Physics.init();
-  bootLine(`&gt; plate mesh: ${PLATE.nx} × ${PLATE.ny} quadratic quads · ${NI * NJ} nodes · 4 m × 2 m`);
+  bootLine(`&gt; plate mesh: ${PLATE.nx} × ${PLATE.ny} quadratic quads · ${NI * NJ} nodes · ${showLen(PLATE.maxX)} m × ${showLen(PLATE.maxY)} m`);
   try {
     await Physics.prepareMeshes();
     bootLine(`&gt; Gmsh mesh imported: plate-bypass.msh · ${Physics.bypass.nodes} nodes`);

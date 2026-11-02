@@ -434,10 +434,23 @@ kbd {
   line-height: 1.5;
 }
 
+/* Four cards per row; a short last row is centred */
 .chapters {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1.1rem;
+}
+
+.chapters > * {
+  flex: 0 1 calc(25% - 0.825rem);
+  min-width: 240px;
+}
+
+@media (max-width: 560px) {
+  .chapters > * {
+    flex-basis: 100%;
+  }
 }
 
 .chapter {
@@ -927,6 +940,56 @@ kbd {
   display: block;
 }
 
+/* Output gauge: star groups sit above their tick on the bar */
+.out-gauge {
+  margin-top: 0.2rem;
+}
+
+.out-stars {
+  position: relative;
+  height: 26px;
+  margin: 0 3px;
+}
+
+.out-stars span {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  line-height: 1;
+  color: var(--faint);
+}
+
+.out-stars .row {
+  display: flex;
+  gap: 1px;
+}
+
+.out-stars b {
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+.out-stars span.on {
+  color: var(--gold-ink);
+}
+
+.out-stars canvas {
+  width: 11px;
+  height: 11px;
+}
+
+#outBar {
+  width: 100%;
+  height: 26px;
+  margin: 0.2rem 0 0.35rem;
+  display: block;
+}
+
 .gauge-scale {
   display: flex;
   justify-content: space-between;
@@ -940,6 +1003,13 @@ kbd {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.55rem;
+}
+
+/* Title screen: the odd third button gets its own centred row */
+#btnNotes {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc(50% - 0.275rem);
 }
 
 .actions .wide {
@@ -1031,36 +1101,6 @@ kbd {
   display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
-}
-
-details.monitor summary {
-  cursor: pointer;
-  font-family: var(--font-pixel);
-  font-size: 0.75rem;
-  color: var(--muted);
-  letter-spacing: 0.06em;
-  list-style: none;
-}
-
-details.monitor summary::before {
-  content: "▸ ";
-}
-
-details.monitor[open] summary::before {
-  content: "▾ ";
-}
-
-#monitorPlot {
-  width: 100%;
-  min-height: 160px;
-  margin-top: 0.5rem;
-}
-
-.monitor-note {
-  font-size: 0.72rem;
-  color: var(--faint);
-  margin-top: 0.3rem;
-  line-height: 1.4;
 }
 
 .alarm {
@@ -1520,6 +1560,11 @@ details.eq-panel summary .eq-more {
   padding: 0.4rem 0.7rem;
 }
 
+.lab-eq-body {
+  max-width: 34rem;
+  padding: 0.4rem 0 0.3rem;
+}
+
 .eq-body {
   display: grid;
   grid-template-columns: minmax(200px, 1.1fr) minmax(170px, 1fr) minmax(220px, 1.2fr);
@@ -1833,6 +1878,13 @@ details.eq-panel summary .eq-more {
   font-size: 0.9rem;
 }
 
+.notes-sub .notes-face {
+  width: 32px;
+  height: 32px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
 .notes-sub b {
   color: var(--gold-ink);
   font-weight: 500;
@@ -1978,7 +2030,7 @@ details.eq-panel summary .eq-more {
   }
 }
 
-/* Top bar links: FEAScript → main site, FEM Lab → the FEM Lab page, CRITICAL MESH → title screen */
+/* Top bar links: FEAScript → main site, Tri's Lab → the Tri's Lab page, CRITICAL MESH → title screen */
 .brand a {
   color: inherit;
   text-decoration: none;

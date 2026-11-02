@@ -211,7 +211,6 @@ const Game = {
     logLine(`${label} · solve ${r.ms.toFixed(0)} ms · ${r.nodes} nodes · max T ${r.max.toFixed(1)} °C`);
     Codex.renderFem(r);
     if (G.solveMs.length >= 5) Codex.unlock("system");
-    scheduleMonitor();
     return r;
   },
 
@@ -264,9 +263,9 @@ const Game = {
       drawDie($("die"), pips);
       Sound.play("land");
       message(
-        `You rolled a <b>${pips}</b>: a cell of power <b>${pips * G.qPerPip}</b>. Carry it onto the Plate and press <kbd>SPACE</kbd>, or click where to mount it` +
+        `You rolled a <b>${pips}</b>: a cell of power <b>Q = ${showQ(pips * G.qPerPip)}</b>. Carry it onto the Plate and press <kbd>SPACE</kbd>, or click where to mount it` +
           (pips >= 5 ? `. Big one: find a <span class="cool">cold</span> spot!` : "."),
-        pips >= 5 ? "mesh" : "eleni",
+        "mesh",
       );
       updateHUD();
     });
@@ -285,7 +284,7 @@ const Game = {
       G.phase = "carrying";
       drawDie($("die"), pips);
       Sound.play("land");
-      message(`Re-rolled: <b>${pips}</b> (power ${pips * G.qPerPip}). Mount it.`);
+      message(`Re-rolled: <b>${pips}</b> (power Q = ${showQ(pips * G.qPerPip)}). Mount it.`);
       logLine(`Re-roll used · new roll ${pips}`);
       updateHUD();
     });
@@ -372,7 +371,7 @@ const Game = {
       Codex.pulse("k", "cool");
       Codex.unlock("conductivity");
       logLine(
-        `Fatigue event at (${cracked.x.toFixed(2)}, ${cracked.y.toFixed(2)}) · k → ${(G.kBase * WEAK_FACTOR).toFixed(2)}` +
+        `Fatigue event at (${showLen(cracked.x, 1)}, ${showLen(cracked.y, 1)}) m · k → ${(G.kBase * WEAK_FACTOR).toFixed(2)}` +
           (G.nextMut.targeted ? " · TARGETED" : ""),
         "warn",
       );
@@ -392,26 +391,38 @@ const Game = {
     if (t <= 0.85) G.warnedHot = false;
 
     const margin = G.limit - r.max;
-    const crackNote = cracked ? ` <span class="cool">The alloy cracked near (${cracked.x.toFixed(1)}, ${cracked.y.toFixed(1)})!</span>` : "";
-    const face = t > 0.85 ? "meshAlarm" : cracked ? "mesh" : "eleni";
+    const crackNote = cracked ? ` <span class="cool">The alloy cracked near (${showLen(cracked.x)}, ${showLen(cracked.y)}) m!</span>` : "";
+    // MESH warns when the marked zone is due to crack on the next mount
+    const due = G.nextMut && turnsToMutation() === 1;
+    const crackWarn = due
+      ? ` <span class="hot">MESH: THE ${G.nextMut.targeted ? "RED" : "AMBER"} RING CRACKS ON YOUR NEXT MOUNT${G.nextMut.targeted ? " (AIMED AT YOUR HOTTEST CELL)" : ""}.</span>`
+      : "";
+    const face = t > 0.85 ? "meshAlarm" : "mesh";
     if (G.mode === "campaign") {
       const out = output();
+      // Every star earned: nothing left to push for, so deliver automatically
+      if (out >= G.target && !this.nextStarAt()) {
+        G.quotaMet = true;
+        message(`Every star earned with <b>${out} MW</b>.${crackNote} Delivering automatically.`, "ella");
+        return this.bank();
+      }
       if (!G.quotaMet && out >= G.target) {
         G.quotaMet = true;
         Sound.play("quota");
         showBanner("QUOTA MET!", "green");
-        message(`Quota reached: <b>${out} MW</b>.${crackNote} You can <b>DELIVER</b> now, or push for stars (next at ${this.nextStarAt()} MW).`, "eleni");
+        message(`Quota reached: <b>${out} MW</b>.${crackNote} You can <b>DELIVER</b> now, or push for stars (next at ${this.nextStarAt()} MW).${crackWarn}`, due ? "mesh" : "ella");
       } else {
         const left = G.target - out;
         message(
           `Mounted. Max T <b class="${t > 0.75 ? "hot" : ""}">${r.max.toFixed(1)} °C</b>, ${margin.toFixed(0)} °C below the limit.${crackNote} ` +
-            (left > 0 ? `${left} MW to the quota.` : this.nextStarAt() ? `Next star at ${this.nextStarAt()} MW.` : "Every star earned. Deliver!") +
-            " Step off the hot cell!",
+            (left > 0 ? `${left} MW to the quota.` : `Next star at ${this.nextStarAt()} MW.`) +
+            " Step off the hot cell!" +
+            crackWarn,
           face,
         );
       }
     } else {
-      message(`Cell ${G.placed} mounted. Max T <b>${r.max.toFixed(1)} °C</b>, ${margin.toFixed(0)} °C to spare.${crackNote} <b>Roll</b> again or <b>bank</b>?`, face);
+      message(`Cell ${G.placed} mounted. Max T <b>${r.max.toFixed(1)} °C</b>, ${margin.toFixed(0)} °C to spare.${crackNote} <b>Roll</b> again or <b>bank</b>?${crackWarn}`, face);
       if (!anyMountSpot()) {
         message("The Plate is full! Banking your score automatically.");
         setTimeout(() => this.bank(), 900);
@@ -446,7 +457,7 @@ const Game = {
       const item = G.crateRule.pool[Math.floor(Math.random() * G.crateRule.pool.length)];
       G.crates.push({ x, y, item, born: performance.now(), expires: G.turn + 3 });
       Sound.play("drop");
-      logLine(`Supply drone dropped a crate at (${x.toFixed(1)}, ${y.toFixed(1)}) · lasts 3 mounts`);
+      logLine(`Supply drone dropped a crate at (${showLen(x)}, ${showLen(y)}) m · lasts 3 mounts`);
     }
   },
 
@@ -540,7 +551,7 @@ const Game = {
     showBanner("FROZEN!", "flow");
     const r = this.solve("coolant");
     Codex.pulse("Q", "cool");
-    message(`Coolant flash-froze the ${best.pips}-pip cell at (${best.x.toFixed(1)}, ${best.y.toFixed(1)}). Max T fell to <b>${r.max.toFixed(1)} °C</b>.`);
+    message(`Coolant flash-froze the ${best.pips}-pip cell at (${showLen(best.x)}, ${showLen(best.y)}) m. Max T fell to <b>${r.max.toFixed(1)} °C</b>.`);
     if (G.mode === "campaign") G.quotaMet = output() >= G.target;
     updateHUD();
   },
@@ -557,7 +568,7 @@ const Game = {
     const r = this.solve("copper inlay");
     Codex.pulse("k", "gold");
     Codex.unlock("copper");
-    message(`Copper inlay laid at (${x.toFixed(2)}, ${y.toFixed(2)}). Max T is now <b>${r.max.toFixed(1)} °C</b>.`);
+    message(`Copper inlay laid at (${showLen(x, 1)}, ${showLen(y, 1)}) m. Max T is now <b>${r.max.toFixed(1)} °C</b>.`);
     updateHUD();
   },
 
@@ -583,7 +594,7 @@ const Game = {
     Sound.play("scan");
     Codex.renderFem(r);
     Codex.unlock("linear");
-    logLine(`FEA scan at (${x.toFixed(2)}, ${y.toFixed(2)}) · predicted max T ${r.max.toFixed(1)} °C${willCrack ? " (incl. crack)" : ""}`);
+    logLine(`FEA scan at (${showLen(x, 1)}, ${showLen(y, 1)}) m · predicted max T ${r.max.toFixed(1)} °C${willCrack ? " (incl. crack)" : ""}`);
     message(
       `FEA scan: mounting here gives a max T of <b class="${r.max > G.limit ? "hot" : ""}">${r.max.toFixed(1)} °C</b>` +
         (willCrack ? " (including the crack due this turn)" : "") +
@@ -597,7 +608,7 @@ const Game = {
   openVent() {
     const side = Engineer.x < 0.5 ? "Left" : Engineer.x > PLATE.maxX - 0.5 ? "Right" : null;
     if (!side) {
-      message("Walk to the <b>left or right wall</b> (within 0.5 m) to open its vent.");
+      message("Walk to the <b>left or right wall</b> (within 5 m) to open its vent.");
       Sound.play("error");
       return;
     }
@@ -614,8 +625,8 @@ const Game = {
     Codex.renderEdges();
     Codex.pulse("vent", "cool");
     Codex.unlock("vent");
-    logLine(`Boundary ${side === "Left" ? '"1" left' : '"3" right'}: insulated → convection h = ${H_VENT}, T = ${G.bc.airT} °C`);
-    message(`The ${side.toLowerCase()} edge now sheds heat by convection (h = ${H_VENT}). MESH rebuilt the boundary conditions: max T <b>${r.max.toFixed(1)} °C</b>.`, "mesh");
+    logLine(`Boundary ${side === "Left" ? '"1" left' : '"3" right'}: insulated → convection h = ${showH(H_VENT)}, T = ${G.bc.airT} °C`);
+    message(`The ${side.toLowerCase()} edge now sheds heat by convection (h = ${showH(H_VENT)}). MESH rebuilt the boundary conditions: max T <b>${r.max.toFixed(1)} °C</b>.`, "mesh");
     updateHUD();
   },
 
@@ -680,6 +691,12 @@ const Game = {
   update(dt) {
     if ($("modal").classList.contains("open")) return; // reading a note or a briefing pauses the shift
     Engineer.update(dt);
+    // "Mount at" follows your boots, unless you are typing in it
+    for (const [id, v] of [["mx", Engineer.x], ["my", Engineer.y]]) {
+      const el = $(id);
+      const shown = showLen(v);
+      if (document.activeElement !== el && el.value !== shown) el.value = shown;
+    }
     if (G.phase !== "over") {
       this.pickCrates();
       Codex.watch();

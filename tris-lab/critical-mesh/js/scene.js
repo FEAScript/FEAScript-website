@@ -68,7 +68,7 @@ const Scene = {
     renderBands(this.fieldCtx, this.fieldImg, G.displayGrid, PLATE_STENCIL, {
       palette: HEAT,
       norm: (T) => (T - T_AMB) / span,
-      mode: store.settings.view,
+      mode: "bands",
       flicker,
     });
   },
@@ -87,7 +87,7 @@ const Scene = {
       g.fillStyle = i % 4 === 0 ? "#2c3346" : "#232838";
       g.fillRect(Math.floor(x), y, 2, 1);
     }
-    drawText(g, `AIR  h=${G.bc.airH}  T=${G.bc.airT}°C`, 4, 3, G.bc.airT > T_AMB ? "#f7a21b" : "#77756d");
+    drawText(g, `AIR  h=${showH(G.bc.airH)}  T=${G.bc.airT}°C`, 4, 3, G.bc.airT > T_AMB ? "#f7a21b" : "#77756d");
     drawText(g, "CONVECTION", CW - 4, 3, "#4d4d55", { align: "right" });
 
     // Insulated side walls (or open vents)
@@ -179,7 +179,7 @@ const Scene = {
       drawTag(g, `BYPASS ${G.bc.coolantT}°C`, cx - 22, cy + r + 2, "#5aa2ec");
     }
 
-    // Ruler ticks every 0.5 m
+    // Ruler ticks every 5 m
     for (let i = 0; i <= 8; i++) {
       g.fillStyle = i % 2 === 0 ? "#8c8a82" : "#4d4d55";
       g.fillRect(PX0 + i * 20 - (i === 8 ? 1 : 0), PY0 - 3, 1, i % 2 === 0 ? 2 : 1);
@@ -360,8 +360,13 @@ const Scene = {
     g.fillRect(hx, hy + 2, 1, 2);
     const t = (G.maxT - T_AMB) / (G.limit - T_AMB);
     const col = t > 0.85 ? "#ff5c8d" : t > 0.6 ? "#f7a21b" : "#fdfaf2";
-    if (!G.hover || Math.hypot(G.hover.x - G.field.maxX, G.hover.y - G.field.maxY) > 1.2)
-      drawTag(g, `MAX ${Math.round(G.maxT)}°C`, hx + 5, clamp(hy - 13, PY0 + 1, PY0 + PH - 10), col);
+    if (!G.hover || Math.hypot(G.hover.x - G.field.maxX, G.hover.y - G.field.maxY) > 1.2) {
+      // Below the hot spot (a cell's MW badge sits above-right of it); above-left near the bottom edge
+      const label = `MAX ${Math.round(G.maxT)}°C`;
+      const below = hy + 5 + 9 <= PY0 + PH;
+      const x = below ? hx + 5 : hx - 5 - (textWidth(label) + 4);
+      drawTag(g, label, x, below ? hy + 5 : clamp(hy - 13, PY0 + 1, PY0 + PH - 10), col);
+    }
   },
 
   // Hearts in the top-left corner of the scene

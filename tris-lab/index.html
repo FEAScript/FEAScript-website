@@ -2,7 +2,7 @@
 
 <!--
  * ════════════════════════════════════════════════════════════════
- *  FEAScript FEM Lab: play and build with the finite element method
+ *  Tri's Lab by FEAScript: play and build with the finite element method
  *  Finite Element Simulation in JavaScript | https://feascript.com
  *  CC BY 4.0 License © 2023–2026 FEAScript
  * ════════════════════════════════════════════════════════════════
@@ -12,11 +12,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FEM Lab · FEAScript</title>
-    <link rel="icon" type="image/svg+xml" href="assets/fem-lab-icon.svg?v=pixel" />
+    <title>Tri's Lab by FEAScript</title>
+    <link rel="icon" type="image/svg+xml" href="assets/tris-lab-icon.svg?v=pixel" />
     <meta
       name="description"
-      content="FEAScript FEM Lab: a pixel-art game and a block editor that let anyone play with real finite element simulations in the browser, and learn the equations behind them."
+      content="Tri's Lab by FEAScript: a pixel-art game and a block editor that let anyone play with real finite element simulations in the browser, and learn the equations behind them."
     />
     <meta
       name="keywords"
@@ -42,7 +42,7 @@
       rel="stylesheet"
     />
     <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
-    <link href="fem-lab.css" rel="stylesheet" type="text/css" />
+    <link href="tris-lab.css" rel="stylesheet" type="text/css" />
   </head>
 
   <body>
@@ -64,7 +64,6 @@
           <nav class="nav-links label" aria-label="Main">
             <a class="nav-link" href="#play"><span>Play</span></a>
             <a class="nav-link" href="#learn"><span>What you learn</span></a>
-            <a class="nav-link" href="#teachers"><span>For teachers</span></a>
             <a class="nav-link nav-link-out" href="../index.html"><span>FEAScript</span></a>
           </nav>
         </div>
@@ -139,7 +138,6 @@
       <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
         <a href="#play">Play</a>
         <a href="#learn">What you learn</a>
-        <a href="#teachers">For teachers</a>
         <a class="nav-link-out" href="../index.html">FEAScript</a>
       </nav>
     </header>
@@ -152,7 +150,7 @@
 
           <div class="hero-content">
             <div class="wordmark-wrap">
-              <div class="wordmark lab-wordmark" role="img" aria-label="FEM Lab">
+              <div class="wordmark lab-wordmark" role="img" aria-label="Tri's Lab">
                 <!-- tri:start (generated from blocks/js/pixels.js) -->
                 <svg class="lab-tri" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -1 36 36" shape-rendering="crispEdges">
                   <g class="tri-feet" fill="#1d1d1d"><rect x="11" y="27" width="1" height="3"/><rect x="10" y="30" width="3" height="1"/><rect x="25" y="30" width="1" height="3"/><rect x="24" y="33" width="3" height="1"/></g>
@@ -164,7 +162,7 @@
                   </g>
                 </svg>
                 <!-- tri:end -->
-                <span aria-hidden="true">FEM<span class="lab-word">Lab</span></span>
+                <span aria-hidden="true">Tri's<span class="lab-word">Lab</span></span>
               </div>
             </div>
 
@@ -217,7 +215,7 @@
                 <p class="lab-kind"><span>GAME</span> Story campaign · single player</p>
                 <h3>Critical Mesh</h3>
                 <p>
-                  Athens, 2089. The city runs on a single glowing plate of alloy, and you're its new night engineer.
+                  Nodessa, 2089. The city runs on a single glowing plate of alloy, and you're its new night engineer.
                   Roll the die, carry heat cells across the floor and mount them, then watch FEAScript solve the
                   temperature under your boots. Push your luck too far, and the Plate melts down.
                 </p>
@@ -238,11 +236,11 @@
                 <img src="assets/fem-blocks.png" alt="FEM Blocks: pixel blocks on the left, a heat map and the heat equation on the right" loading="lazy" />
               </a>
               <div class="lab-card-body">
-                <p class="lab-kind"><span>NO CODE</span> For young engineers · in class or at home</p>
+                <p class="lab-kind"><span>NO CODE</span> For young engineers</p>
                 <h3>FEM Blocks</h3>
                 <p>
                   Snap pixel blocks together to build a simulation: a shape, a material, heaters and what happens at
-                  every edge. Press Run and FEAScript solves it. Tri, a small triangle robot, guides you through nine
+                  every edge. Press Run and FEAScript solves it. Tri, the FEAScript triangle robot, guides you through nine
                   missions, from a warm wire to a swirling tank of honey.
                 </p>
                 <ul class="lab-list">
@@ -267,89 +265,58 @@
           <div class="section-head">
             <h2 data-reveal>The ideas behind <span class="accent">every simulation.</span></h2>
             <p data-reveal>
-              Engineers use the finite element method to design bridges, engines, phones and hearts. Its big ideas
-              are simple enough to play with.
+              Engineers use the finite element method (FEM) to design bridges, engines and phones. Both apps are built
+              on six of its big ideas, and each one is simple enough to try for yourself.
             </p>
           </div>
 
           <div class="grid grid-3">
             <article class="cell cell-pad lab-idea" data-physics="heat" data-reveal>
               <p class="lab-eq">−∇·(k ∇T) = Q</p>
-              <h3>An equation is a balance</h3>
+              <h3>Every equation is a balance</h3>
               <p class="desc">
-                Heat in, heat out, heat made inside. The heat equation just says that, at every point.
+                Physics equations say that something balances at every point: heat in a plate, forces in a beam, fluid
+                in a pipe. In the heat equation, the heat flowing in, flowing out and made there all add up.
               </p>
             </article>
             <article class="cell cell-pad lab-idea" data-physics="front" data-reveal>
               <p class="lab-eq">T = T₀ or ∂T/∂n = 0</p>
-              <h3>Edges decide the answer</h3>
+              <h3>The edges matter</h3>
               <p class="desc">
-                A fixed temperature, cooling air or a perfect blanket: the boundary conditions are half the problem.
+                An edge can be held at a fixed temperature, cooled by air, or insulated so no heat escapes. These
+                boundary conditions change the whole answer.
               </p>
             </article>
             <article class="cell cell-pad lab-idea" data-physics="structure" data-reveal>
               <p class="lab-eq">T ≈ Σ Tᵢ Nᵢ</p>
-              <h3>Cut it into pieces</h3>
+              <h3>Split the shape into elements</h3>
               <p class="desc">
-                A mesh of small elements turns an impossible problem into many easy ones, linked at the nodes.
+                A shape too complicated to solve in one go is split into many small, simple pieces called elements.
+                They meet at points called nodes, and the temperature is worked out at each node.
               </p>
             </article>
             <article class="cell cell-pad lab-idea" data-physics="flow" data-reveal>
               <p class="lab-eq">K · T = F</p>
-              <h3>Solve them all at once</h3>
-              <p class="desc">One equation per node, stacked into one big table that the computer solves in well under a second.</p>
+              <h3>Solve all the nodes together</h3>
+              <p class="desc">
+                Each node gets one equation, linked to its neighbours. FEAScript solves all of them at once, usually in
+                well under a second.
+              </p>
             </article>
             <article class="cell cell-pad lab-idea" data-physics="heat" data-reveal>
-              <p class="lab-eq">k = 400 vs 0.03</p>
-              <h3>Materials matter</h3>
-              <p class="desc">Copper is a heat highway, foam a muddy path. That's why pans are metal and handles are wood.</p>
+              <p class="lab-eq">copper k ≈ 400 · foam k ≈ 0.03</p>
+              <h3>Materials change the result</h3>
+              <p class="desc">
+                The conductivity k says how easily heat moves through a material. Copper spreads heat fast, foam
+                almost stops it. That's why pans are metal and their handles aren't.
+              </p>
             </article>
             <article class="cell cell-pad lab-idea" data-physics="structure" data-reveal>
               <p class="lab-eq">beam · front · flow</p>
-              <h3>One method, many physics</h3>
-              <p class="desc">The same building blocks bend beams, grow solid fronts and stir fluids.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- ───────────── TEACHERS ───────────── -->
-      <section id="teachers" class="section">
-        <div class="section-frame">
-          <div class="eyebrow label">
-            <p>For teachers</p>
-          </div>
-
-          <div class="section-head">
-            <h2 data-reveal>Ready for the <span class="accent">classroom.</span></h2>
-            <p data-reveal>
-              Both apps run in any modern browser, with nothing to install and no sign-up. Progress is saved only in
-              the student's own browser. FEM Blocks projects can be saved to a file and shared.
-            </p>
-          </div>
-
-          <div class="grid grid-3">
-            <article class="cell cell-pad" data-reveal>
-              <p class="label text-faint">A</p>
-              <h3>Short missions</h3>
+              <h3>One method, many problems</h3>
               <p class="desc">
-                Each FEM Blocks mission takes a few minutes and has one goal that FEAScript checks on the real result.
-              </p>
-            </article>
-            <article class="cell cell-pad" data-reveal>
-              <p class="label text-faint">B</p>
-              <h3>From blocks to code</h3>
-              <p class="desc">
-                The Code tab shows the JavaScript behind every block program. Older students can paste it into their
-                own page.
-              </p>
-            </article>
-            <article class="cell cell-pad" data-reveal>
-              <p class="label text-faint">C</p>
-              <h3>Open source</h3>
-              <p class="desc">
-                FEAScript is free under the MIT license. Ideas for new missions or a workshop?
-                <a class="link" href="mailto:info@feascript.com">Write to us</a>.
+                Swap the equation and the same steps solve other problems: how a beam bends, how molten metal freezes
+                and how a thick fluid flows.
               </p>
             </article>
           </div>
@@ -374,8 +341,8 @@
             <p class="footer-tagline">Finite element simulation in JavaScript, for the browser and Node.js.</p>
             <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
           </div>
-          <nav class="footer-col" aria-label="FEM Lab">
-            <h2>FEM Lab</h2>
+          <nav class="footer-col" aria-label="Tri's Lab">
+            <h2>Tri's Lab</h2>
             <ul>
               <li><a href="critical-mesh/index.html">Critical Mesh</a></li>
               <li><a href="blocks/index.html">FEM Blocks</a></li>
@@ -397,6 +364,7 @@
               <li><a href="https://github.com/FEAScript/FEAScript-core">GitHub</a></li>
               <li><a href="https://www.youtube.com/@FEAScript">YouTube</a></li>
               <li><a href="https://www.linkedin.com/company/feascript/">LinkedIn</a></li>
+              <li><a href="https://bsky.app/profile/feascript.com">Bluesky</a></li>
             </ul>
           </nav>
         </div>

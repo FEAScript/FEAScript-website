@@ -1,13 +1,13 @@
-<img src="assets/fem-lab-icon.svg" width="80" alt="FEM Lab logo: Tri, the FEAScript triangle robot">
+<img src="assets/tris-lab-icon.svg" width="80" alt="Tri's Lab logo: Tri, the FEAScript triangle robot">
 
-# FEM Lab
+# Tri's Lab
 
 Playful, browser-only ways to meet the finite element method. Every result is a real FEAScript solve. Nothing here is linked from the main website yet.
 
 ```
-index.html          the FEM Lab page
-fem-lab.css         its styles (website tokens + pixel accents)
-assets/             the FEM Lab logo (fem-lab-icon.svg, fem-lab-logo.svg) and the page screenshots
+index.html          the Tri's Lab page
+tris-lab.css         its styles (website tokens + pixel accents)
+assets/             the Tri's Lab logo (tris-lab-icon.svg, tris-lab-logo.svg) and the page screenshots
 critical-mesh/      Critical Mesh, a pixel-art heat-conduction game (see its README)
 blocks/             FEM Blocks, a no-code block editor with missions for young learners
 ```

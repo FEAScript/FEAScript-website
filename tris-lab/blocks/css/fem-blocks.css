@@ -165,7 +165,7 @@ html.site body {
   overflow: visible;
 }
 
-/* Tri hops and blinks, like on the FEM Lab page */
+/* Tri hops and blinks, like on the Tri's Lab page */
 .lab-tri .tri-up {
   animation: triHop 1.6s steps(1) infinite;
 }

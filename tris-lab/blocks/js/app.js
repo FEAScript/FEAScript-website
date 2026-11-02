@@ -87,7 +87,7 @@ const Tri = {
     this.until = performance.now() + ms;
     this.draw();
   },
-  // The same drawing as the FEM Lab logo; CSS makes him hop and blink
+  // The same drawing as the Tri's Lab logo; CSS makes him hop and blink
   draw() {
     if (this.face === this.shown) return;
     this.shown = this.face;

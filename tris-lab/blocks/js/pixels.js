@@ -290,10 +290,10 @@ function iconUri(name) {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
-// ─── Tri, the FEM Lab robot (pixel art) ───
+// ─── Tri, the robot of Tri's Lab (pixel art) ───
 // Tri's body is the FEAScript logo triangle (same points, same tilt), drawn on a 36 × 35 pixel grid and
-// meshed into 4 × 4-pixel elements. The same drawing is the FEM Lab logo (assets/fem-lab-icon.svg),
-// the FEM Lab page hero and the mascot in this app. The hop and the blink are CSS (class "lab-tri").
+// meshed into 4 × 4-pixel elements. The same drawing is the Tri's Lab logo (assets/tris-lab-icon.svg),
+// the Tri's Lab page hero and the mascot in this app. The hop and the blink are CSS (class "lab-tri").
 // Faces: [x, y, w, h, colour] pixel rectangles; "E" = eye white, "K" = ink
 const TRI_FACES = {
   idle: { eyes: [[16, 16, 3, 3, "E"], [22, 16, 3, 3, "E"], [17, 17, 2, 2, "K"], [23, 17, 2, 2, "K"]], mouth: [[18, 22, 1, 1], [19, 23, 4, 1], [23, 22, 1, 1]] },

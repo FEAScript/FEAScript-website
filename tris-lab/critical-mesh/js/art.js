@@ -16,30 +16,50 @@ const PAL = {
   p: "#c87533", P: "#e8a070", d: "#8a5a32", D: "#b07a46",
 };
 
-// Engineer body parts, combined into animation frames below
-const ENG_HEAD = ["..kkkk..", ".kYYYYk.", "kYYYYYyk", ".kkkkkkk", ".kssesk.", ".kssssk."];
+// Engineer (you, the new night engineer) body parts, combined into animation frames below.
+// Green rookie hard hat, so you don't look like Ella in her gold one
+const ENG_HEAD = ["..kkkk..", ".kqqqqk.", "kqqqqqzk", ".kkkkkkk", ".kssesk.", ".kssssk."];
 const ENG_BODY = ["..kffk..", ".kfccfk.", "kffccffk"];
 
 const SPRITES = {
   // ─── Portraits (16 × 16) ───
-  // Chief Engineer Eleni Makri: gold hard hat, goggles, hi-vis jacket
-  eleni: [
+  // Chief Engineer Ella Mentz: gold hard hat, goggles, dark hair, hi-vis jacket
+  ella: [
     "....kkkkkkkk....",
     "...kYYYYYYyyk...",
     "..kYGGGGGGGGyk..",
     "..kYGgaGGgaGyk..",
     ".kkkkkkkkkkkkkk.",
     ".kyyyyyyyyyyyyok",
-    "..khssssssssShk.",
-    "..khswessweSShk.",
-    "..khssssssssShk.",
-    "..khhssssssSShk.",
-    "...khssmmssShk..",
-    "....kSsssssSk...",
-    "...kkfkSSSSkfkk.",
-    "..kffcfkkkkfcffk",
+    ".khhssssssssShhk",
+    ".khhswessweSShhk",
+    ".khhssssssssShhk",
+    ".khhhssssssSShhk",
+    ".khkhssmmssShkhk",
+    ".khhkSsssssSkhhk",
+    ".khkkfkSSSSkfkk.",
+    "..khfcfkkkkfcffk",
+    ".kfHfcfffffffcfk",
     ".kfffcfffffffcfk",
-    ".kfffcfffffffcfk",
+  ],
+  // Tri, the physics guide: the FEAScript triangle with a face
+  tri: [
+    "................",
+    "..........kk....",
+    ".........kYk....",
+    "........kYyk....",
+    ".......kYyYk....",
+    "......kYyyYyk...",
+    ".....kYwwyywwk..",
+    "....kYywkyywkyk.",
+    "...kYyRkyyykRyk.",
+    "..kYyyyykkkyyyk.",
+    ".kYYYYYYYYYYYYk.",
+    "kkkkkYyyyyYyyyyk",
+    "...k.kkkkkYyyyyk",
+    "...k......kkkkkk",
+    "..kkk.......k...",
+    "...........kkk..",
   ],
   // MESH, the Plate's monitor AI
   mesh: [
@@ -78,8 +98,8 @@ const SPRITES = {
     "....kNNNNNNk....",
     "...kkkkkkkkkk...",
   ],
-  // Director Aurelian Voss of the Consortium
-  voss: [
+  // Director Max Di Verge of the Consortium
+  diverge: [
     ".....kkkkkk.....",
     "....knnnnlnk....",
     "...knnlllllnk...",
@@ -116,7 +136,7 @@ const SPRITES = {
     "kaaaaaaaaaaaaaak",
     "kkkkkkkkkkkkkkkk",
   ],
-  // Athens Daily (newspaper headlines between shifts)
+  // Nodessa Daily (newspaper headlines between shifts)
   news: [
     "................",
     "..kkkkkkkkkkkk..",
@@ -452,9 +472,13 @@ function drawCell(g, cx, cy, pips, now, { badge = true } = {}) {
   g.fillStyle = pulse ? "#fff8dc" : "#fbe68a";
   g.fillRect(cx - 1, cy - 1, 3, 3);
   if (badge) {
+    // The cell's output (1 pip = 1 MW), kept inside the Plate next to the right wall
+    const label = `${pips}MW`;
+    const w = textWidth(label) + 2;
+    const x = Math.min(cx + 6, PX0 + PW - w);
     g.fillStyle = "#0e0e12";
-    g.fillRect(cx + 6, cy - 12, 5, 7);
-    drawText(g, String(pips), cx + 7, cy - 11, glow, { shadow: null });
+    g.fillRect(x, cy - 12, w, 7);
+    drawText(g, label, x + 1, cy - 11, glow, { shadow: null });
   }
 }
 

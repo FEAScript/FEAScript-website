@@ -20,11 +20,16 @@ const FEASCRIPT_URLS = [
   `https://cdn.jsdelivr.net/gh/FEAScript/FEAScript-core@${FEASCRIPT_VERSION}/dist/feascript.esm.js`,
 ];
 
-// Plotly is only needed by FEAScript's plotSolution in the optional monitor panel
-const PLOTLY_URL = "https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js";
-
 // ─── The plate (heat conduction) ───
 const PLATE = { maxX: 4, maxY: 2, nx: 32, ny: 16 }; // 32 × 16 quadratic elements
+
+// The Plate is 40 m × 20 m in the story; the game and the solver work in units of 10 m.
+// The player sees lengths ×10, heat sources ÷100 and convection coefficients ÷10, which is the
+// same heat equation on the bigger plate: k and every temperature stay exactly the same.
+const SCALE = 10;
+const showLen = (v, digits = 0) => (v * SCALE).toFixed(digits); // model units → metres shown
+const showQ = (q) => q / (SCALE * SCALE);
+const showH = (h) => h / SCALE;
 const NI = 2 * PLATE.nx + 1; // 65 nodes along x
 const NJ = 2 * PLATE.ny + 1; // 33 nodes along y
 const T_AMB = 20; // reference coolant and air temperature (°C)

@@ -225,6 +225,11 @@ html[data-theme="dark"] .lab-tri .tri-feet {
   color: var(--muted);
 }
 
+.lab-card-body > p a {
+  color: var(--gold-ink);
+  text-decoration: underline;
+}
+
 .lab-list {
   margin: 1rem 0 1.6rem;
   display: flex;
@@ -291,4 +296,134 @@ html[data-theme="dark"] .lab-tri .tri-feet {
   font-style: italic;
   font-size: 1.6rem;
   color: color-mix(in srgb, var(--phys) 75%, var(--ink));
+}
+
+/* ─── Meet Tri ─── */
+.hero-lede a {
+  color: var(--gold-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.lab-meet-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  padding: 2.5rem 1.5rem;
+  /* A pixel grid behind Tri, like the floor of the lab */
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--gold) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--gold) 14%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Tri stands on a pale badge in both themes, so the dark outline and feet stay visible */
+.lab-meet-badge {
+  padding: 1.5rem 1.75rem 1.25rem;
+  background: #f7e7b7;
+  border: 3px solid var(--outline);
+  box-shadow: 6px 6px 0 var(--outline);
+}
+
+/* On the pale badge the feet stay dark in the dark theme too */
+html[data-theme="dark"] .lab-meet-badge .lab-tri .tri-feet {
+  fill: #1d1d1d;
+}
+
+.lab-meet-svg {
+  display: block;
+  width: 11rem;
+  height: auto;
+  overflow: visible;
+}
+
+.lab-bubble {
+  position: relative;
+  max-width: 18rem;
+  padding: 0.5rem 0.9rem;
+  font-family: var(--font-pixel);
+  font-size: 1.5rem;
+  line-height: 1.1;
+  text-align: center;
+  color: #1d1d1d;
+  background: #fff;
+  border: 3px solid var(--outline);
+  box-shadow: 4px 4px 0 var(--outline);
+}
+
+/* The tail of the speech bubble, pointing down at Tri: an outline triangle with a white one on top */
+.lab-bubble::before,
+.lab-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  border-style: solid;
+  border-color: transparent;
+  transform: translateX(-50%);
+}
+
+.lab-bubble::before {
+  top: 100%;
+  border-width: 16px 14px 0;
+  border-top-color: var(--outline);
+}
+
+.lab-bubble::after {
+  top: calc(100% - 1px);
+  border-width: 11px 10px 0;
+  border-top-color: #fff;
+}
+
+.lab-roles {
+  justify-content: center;
+  gap: 1.75rem;
+}
+
+.lab-role {
+  padding-left: 1rem;
+  border-left: 4px solid var(--phys);
+}
+
+.lab-role .desc {
+  margin-top: 0.5rem;
+}
+
+.lab-role .desc a {
+  color: var(--gold-ink);
+  text-decoration: underline;
+}
+
+.lab-roles-title {
+  color: var(--faint);
+}
+
+/* ─── More games ─── */
+.lab-more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--line);
+  --phys: var(--phys-front);
+}
+
+.lab-more p:not(.lab-kind) {
+  flex: 1 1 24rem;
+  color: var(--muted);
+}
+
+.lab-more a {
+  color: var(--gold-ink);
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .lab-more {
+    padding: 1.75rem 2rem;
+  }
 }

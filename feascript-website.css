@@ -729,7 +729,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 44rem;
+  max-width: 54rem;
   margin: 0 auto;
   padding: 3rem 1.5rem;
   text-align: center;
@@ -785,6 +785,13 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   line-height: 1.12;
   letter-spacing: -0.01em;
   color: var(--ink-strong);
+}
+
+/* Keep the accent phrase of a heading together: on the same line if it
+   fits, otherwise moved to the next line as a whole */
+h1 .accent,
+h2 .accent {
+  display: inline-block;
 }
 
 .hero-lede {
@@ -1672,6 +1679,13 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   color: var(--ink-strong);
 }
 
+/* Long tutorial titles are wider than a phone screen; let them wrap */
+@media (max-width: 500px) {
+  .doc-head h1 .accent {
+    display: inline;
+  }
+}
+
 .doc-head p {
   max-width: 40rem;
   margin-top: 1rem;
@@ -1944,7 +1958,7 @@ html[data-theme="dark"] .doc .center-image img.schematic {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   404 PAGE (Tri, the FEM Lab robot, with the "oops" face)
+   404 PAGE (Tri, the robot of Tri's Lab, with the "oops" face)
    ───────────────────────────────────────────────────────────── */
 
 .not-found {

@@ -1,0 +1,412 @@
+<!doctype html>
+
+<!--
+ * ════════════════════════════════════════════════════════════════
+ *  FEAScript FEM Lab: play and build with the finite element method
+ *  Finite Element Simulation in JavaScript | https://feascript.com
+ *  CC BY 4.0 License © 2023–2026 FEAScript
+ * ════════════════════════════════════════════════════════════════
+-->
+
+<html lang="en" class="site">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FEM Lab · FEAScript</title>
+    <link rel="icon" type="image/svg+xml" href="assets/fem-lab-icon.svg?v=pixel" />
+    <meta
+      name="description"
+      content="FEAScript FEM Lab: a pixel-art game and a block editor that let anyone play with real finite element simulations in the browser, and learn the equations behind them."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, education, game, blocks, no-code, heat conduction, kids, javascript, FEAScript"
+    />
+
+    <script>
+      // Apply stored theme before first paint and enable JS-only styles
+      (function () {
+        var d = document.documentElement;
+        d.className += " js";
+        try {
+          var t = localStorage.getItem("feascript-theme");
+          if (t === "light" || t === "dark") d.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:wght@300;400;500;700&family=Jersey+10&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="fem-lab.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-nav">
+      <div class="nav-inner">
+        <div class="nav-group">
+          <a class="nav-brand" href="../index.html">
+            <svg viewBox="14 79 242 242" aria-hidden="true">
+              <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+            </svg>
+            <span
+              >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+            ></span>
+          </a>
+          <nav class="nav-links label" aria-label="Main">
+            <a class="nav-link" href="#play"><span>Play</span></a>
+            <a class="nav-link" href="#learn"><span>What you learn</span></a>
+            <a class="nav-link" href="#teachers"><span>For teachers</span></a>
+            <a class="nav-link nav-link-out" href="../index.html"><span>FEAScript</span></a>
+          </nav>
+        </div>
+
+        <div class="nav-group">
+          <a
+            class="nav-icon nav-github"
+            href="https://github.com/FEAScript/FEAScript-core"
+            aria-label="FEAScript on GitHub"
+            title="FEAScript on GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              />
+            </svg>
+            <span id="github-stars" class="label"></span>
+          </a>
+          <button id="theme-toggle" class="nav-icon theme-toggle" type="button" aria-label="Toggle colour theme">
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+              />
+            </svg>
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+              />
+            </svg>
+          </button>
+          <a class="nav-cta" href="#play">Start playing</a>
+          <button
+            id="nav-burger"
+            class="nav-icon nav-burger"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+        <a href="#play">Play</a>
+        <a href="#learn">What you learn</a>
+        <a href="#teachers">For teachers</a>
+        <a class="nav-link-out" href="../index.html">FEAScript</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <!-- ───────────── HERO ───────────── -->
+      <section class="hero lab-hero">
+        <div class="hero-inner">
+          <canvas id="mesh-canvas" aria-hidden="true"></canvas>
+
+          <div class="hero-content">
+            <div class="wordmark-wrap">
+              <div class="wordmark lab-wordmark" role="img" aria-label="FEM Lab">
+                <!-- tri:start (generated from blocks/js/pixels.js) -->
+                <svg class="lab-tri" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -1 36 36" shape-rendering="crispEdges">
+                  <g class="tri-feet" fill="#1d1d1d"><rect x="11" y="27" width="1" height="3"/><rect x="10" y="30" width="3" height="1"/><rect x="25" y="30" width="1" height="3"/><rect x="24" y="33" width="3" height="1"/></g>
+                  <g class="tri-up">
+                    <rect x="24" y="3" width="1" height="1" fill="#1d1d1d"/><rect x="23" y="4" width="2" height="1" fill="#1d1d1d"/><rect x="22" y="5" width="1" height="1" fill="#1d1d1d"/><rect x="23" y="5" width="1" height="1" fill="#f6d54a"/><rect x="24" y="5" width="1" height="1" fill="#1d1d1d"/><rect x="21" y="6" width="1" height="1" fill="#1d1d1d"/><rect x="22" y="6" width="1" height="1" fill="#f6d54a"/><rect x="23" y="6" width="1" height="1" fill="#d4aa00"/><rect x="24" y="6" width="1" height="1" fill="#1d1d1d"/><rect x="20" y="7" width="1" height="1" fill="#1d1d1d"/><rect x="21" y="7" width="1" height="1" fill="#d4aa00"/><rect x="22" y="7" width="1" height="1" fill="#f6d54a"/><rect x="23" y="7" width="2" height="1" fill="#d4aa00"/><rect x="25" y="7" width="1" height="1" fill="#1d1d1d"/><rect x="19" y="8" width="1" height="1" fill="#1d1d1d"/><rect x="20" y="8" width="2" height="1" fill="#d4aa00"/><rect x="22" y="8" width="1" height="1" fill="#f6d54a"/><rect x="23" y="8" width="2" height="1" fill="#d4aa00"/><rect x="25" y="8" width="1" height="1" fill="#1d1d1d"/><rect x="18" y="9" width="1" height="1" fill="#1d1d1d"/><rect x="19" y="9" width="6" height="1" fill="#f6d54a"/><rect x="25" y="9" width="1" height="1" fill="#1d1d1d"/><rect x="17" y="10" width="1" height="1" fill="#1d1d1d"/><rect x="18" y="10" width="1" height="1" fill="#f6d54a"/><rect x="19" y="10" width="3" height="1" fill="#d4aa00"/><rect x="22" y="10" width="1" height="1" fill="#f6d54a"/><rect x="23" y="10" width="3" height="1" fill="#d4aa00"/><rect x="26" y="10" width="1" height="1" fill="#1d1d1d"/><rect x="16" y="11" width="1" height="1" fill="#1d1d1d"/><rect x="17" y="11" width="1" height="1" fill="#d4aa00"/><rect x="18" y="11" width="1" height="1" fill="#f6d54a"/><rect x="19" y="11" width="3" height="1" fill="#d4aa00"/><rect x="22" y="11" width="1" height="1" fill="#f6d54a"/><rect x="23" y="11" width="3" height="1" fill="#d4aa00"/><rect x="26" y="11" width="1" height="1" fill="#1d1d1d"/><rect x="15" y="12" width="1" height="1" fill="#1d1d1d"/><rect x="16" y="12" width="2" height="1" fill="#d4aa00"/><rect x="18" y="12" width="1" height="1" fill="#f6d54a"/><rect x="19" y="12" width="3" height="1" fill="#d4aa00"/><rect x="22" y="12" width="1" height="1" fill="#f6d54a"/><rect x="23" y="12" width="3" height="1" fill="#d4aa00"/><rect x="26" y="12" width="1" height="1" fill="#1d1d1d"/><rect x="14" y="13" width="1" height="1" fill="#1d1d1d"/><rect x="15" y="13" width="11" height="1" fill="#f6d54a"/><rect x="26" y="13" width="1" height="1" fill="#1d1d1d"/><rect x="13" y="14" width="1" height="1" fill="#1d1d1d"/><rect x="14" y="14" width="1" height="1" fill="#f6d54a"/><rect x="15" y="14" width="3" height="1" fill="#d4aa00"/><rect x="18" y="14" width="1" height="1" fill="#f6d54a"/><rect x="19" y="14" width="3" height="1" fill="#d4aa00"/><rect x="22" y="14" width="1" height="1" fill="#f6d54a"/><rect x="23" y="14" width="3" height="1" fill="#d4aa00"/><rect x="26" y="14" width="1" height="1" fill="#f6d54a"/><rect x="27" y="14" width="1" height="1" fill="#1d1d1d"/><rect x="12" y="15" width="1" height="1" fill="#1d1d1d"/><rect x="13" y="15" width="1" height="1" fill="#d4aa00"/><rect x="14" y="15" width="1" height="1" fill="#f6d54a"/><rect x="15" y="15" width="3" height="1" fill="#d4aa00"/><rect x="18" y="15" width="1" height="1" fill="#f6d54a"/><rect x="19" y="15" width="3" height="1" fill="#d4aa00"/><rect x="22" y="15" width="1" height="1" fill="#f6d54a"/><rect x="23" y="15" width="3" height="1" fill="#d4aa00"/><rect x="26" y="15" width="1" height="1" fill="#f6d54a"/><rect x="27" y="15" width="1" height="1" fill="#1d1d1d"/><rect x="11" y="16" width="1" height="1" fill="#1d1d1d"/><rect x="12" y="16" width="2" height="1" fill="#d4aa00"/><rect x="14" y="16" width="1" height="1" fill="#f6d54a"/><rect x="15" y="16" width="3" height="1" fill="#d4aa00"/><rect x="18" y="16" width="1" height="1" fill="#f6d54a"/><rect x="19" y="16" width="3" height="1" fill="#d4aa00"/><rect x="22" y="16" width="1" height="1" fill="#f6d54a"/><rect x="23" y="16" width="3" height="1" fill="#d4aa00"/><rect x="26" y="16" width="1" height="1" fill="#f6d54a"/><rect x="27" y="16" width="1" height="1" fill="#1d1d1d"/><rect x="10" y="17" width="1" height="1" fill="#1d1d1d"/><rect x="11" y="17" width="16" height="1" fill="#f6d54a"/><rect x="27" y="17" width="1" height="1" fill="#1d1d1d"/><rect x="9" y="18" width="1" height="1" fill="#1d1d1d"/><rect x="10" y="18" width="1" height="1" fill="#f6d54a"/><rect x="11" y="18" width="3" height="1" fill="#d4aa00"/><rect x="14" y="18" width="1" height="1" fill="#f6d54a"/><rect x="15" y="18" width="3" height="1" fill="#d4aa00"/><rect x="18" y="18" width="1" height="1" fill="#f6d54a"/><rect x="19" y="18" width="3" height="1" fill="#d4aa00"/><rect x="22" y="18" width="1" height="1" fill="#f6d54a"/><rect x="23" y="18" width="3" height="1" fill="#d4aa00"/><rect x="26" y="18" width="1" height="1" fill="#f6d54a"/><rect x="27" y="18" width="1" height="1" fill="#d4aa00"/><rect x="28" y="18" width="1" height="1" fill="#1d1d1d"/><rect x="8" y="19" width="1" height="1" fill="#1d1d1d"/><rect x="9" y="19" width="1" height="1" fill="#d4aa00"/><rect x="10" y="19" width="1" height="1" fill="#f6d54a"/><rect x="11" y="19" width="3" height="1" fill="#d4aa00"/><rect x="14" y="19" width="1" height="1" fill="#f6d54a"/><rect x="15" y="19" width="3" height="1" fill="#d4aa00"/><rect x="18" y="19" width="1" height="1" fill="#f6d54a"/><rect x="19" y="19" width="3" height="1" fill="#d4aa00"/><rect x="22" y="19" width="1" height="1" fill="#f6d54a"/><rect x="23" y="19" width="3" height="1" fill="#d4aa00"/><rect x="26" y="19" width="1" height="1" fill="#f6d54a"/><rect x="27" y="19" width="1" height="1" fill="#d4aa00"/><rect x="28" y="19" width="1" height="1" fill="#1d1d1d"/><rect x="7" y="20" width="1" height="1" fill="#1d1d1d"/><rect x="8" y="20" width="2" height="1" fill="#d4aa00"/><rect x="10" y="20" width="1" height="1" fill="#f6d54a"/><rect x="11" y="20" width="3" height="1" fill="#d4aa00"/><rect x="14" y="20" width="1" height="1" fill="#f6d54a"/><rect x="15" y="20" width="3" height="1" fill="#d4aa00"/><rect x="18" y="20" width="1" height="1" fill="#f6d54a"/><rect x="19" y="20" width="3" height="1" fill="#d4aa00"/><rect x="22" y="20" width="1" height="1" fill="#f6d54a"/><rect x="23" y="20" width="3" height="1" fill="#d4aa00"/><rect x="26" y="20" width="1" height="1" fill="#f6d54a"/><rect x="27" y="20" width="1" height="1" fill="#d4aa00"/><rect x="28" y="20" width="1" height="1" fill="#1d1d1d"/><rect x="6" y="21" width="1" height="1" fill="#1d1d1d"/><rect x="7" y="21" width="21" height="1" fill="#f6d54a"/><rect x="28" y="21" width="1" height="1" fill="#1d1d1d"/><rect x="5" y="22" width="1" height="1" fill="#1d1d1d"/><rect x="6" y="22" width="1" height="1" fill="#f6d54a"/><rect x="7" y="22" width="3" height="1" fill="#d4aa00"/><rect x="10" y="22" width="1" height="1" fill="#f6d54a"/><rect x="11" y="22" width="3" height="1" fill="#d4aa00"/><rect x="14" y="22" width="1" height="1" fill="#f6d54a"/><rect x="15" y="22" width="3" height="1" fill="#d4aa00"/><rect x="18" y="22" width="1" height="1" fill="#f6d54a"/><rect x="19" y="22" width="3" height="1" fill="#d4aa00"/><rect x="22" y="22" width="1" height="1" fill="#f6d54a"/><rect x="23" y="22" width="3" height="1" fill="#d4aa00"/><rect x="26" y="22" width="1" height="1" fill="#f6d54a"/><rect x="27" y="22" width="2" height="1" fill="#d4aa00"/><rect x="29" y="22" width="1" height="1" fill="#1d1d1d"/><rect x="4" y="23" width="1" height="1" fill="#1d1d1d"/><rect x="5" y="23" width="1" height="1" fill="#d4aa00"/><rect x="6" y="23" width="1" height="1" fill="#f6d54a"/><rect x="7" y="23" width="3" height="1" fill="#d4aa00"/><rect x="10" y="23" width="1" height="1" fill="#f6d54a"/><rect x="11" y="23" width="3" height="1" fill="#d4aa00"/><rect x="14" y="23" width="1" height="1" fill="#f6d54a"/><rect x="15" y="23" width="3" height="1" fill="#d4aa00"/><rect x="18" y="23" width="1" height="1" fill="#f6d54a"/><rect x="19" y="23" width="3" height="1" fill="#d4aa00"/><rect x="22" y="23" width="1" height="1" fill="#f6d54a"/><rect x="23" y="23" width="3" height="1" fill="#d4aa00"/><rect x="26" y="23" width="1" height="1" fill="#f6d54a"/><rect x="27" y="23" width="2" height="1" fill="#d4aa00"/><rect x="29" y="23" width="1" height="1" fill="#1d1d1d"/><rect x="3" y="24" width="4" height="1" fill="#1d1d1d"/><rect x="7" y="24" width="3" height="1" fill="#d4aa00"/><rect x="10" y="24" width="1" height="1" fill="#f6d54a"/><rect x="11" y="24" width="3" height="1" fill="#d4aa00"/><rect x="14" y="24" width="1" height="1" fill="#f6d54a"/><rect x="15" y="24" width="3" height="1" fill="#d4aa00"/><rect x="18" y="24" width="1" height="1" fill="#f6d54a"/><rect x="19" y="24" width="3" height="1" fill="#d4aa00"/><rect x="22" y="24" width="1" height="1" fill="#f6d54a"/><rect x="23" y="24" width="3" height="1" fill="#d4aa00"/><rect x="26" y="24" width="1" height="1" fill="#f6d54a"/><rect x="27" y="24" width="2" height="1" fill="#d4aa00"/><rect x="29" y="24" width="1" height="1" fill="#1d1d1d"/><rect x="7" y="25" width="3" height="1" fill="#1d1d1d"/><rect x="10" y="25" width="20" height="1" fill="#f6d54a"/><rect x="30" y="25" width="1" height="1" fill="#1d1d1d"/><rect x="10" y="26" width="4" height="1" fill="#1d1d1d"/><rect x="14" y="26" width="1" height="1" fill="#f6d54a"/><rect x="15" y="26" width="3" height="1" fill="#d4aa00"/><rect x="18" y="26" width="1" height="1" fill="#f6d54a"/><rect x="19" y="26" width="3" height="1" fill="#d4aa00"/><rect x="22" y="26" width="1" height="1" fill="#f6d54a"/><rect x="23" y="26" width="3" height="1" fill="#d4aa00"/><rect x="26" y="26" width="1" height="1" fill="#f6d54a"/><rect x="27" y="26" width="3" height="1" fill="#d4aa00"/><rect x="30" y="26" width="1" height="1" fill="#1d1d1d"/><rect x="14" y="27" width="4" height="1" fill="#1d1d1d"/><rect x="18" y="27" width="1" height="1" fill="#f6d54a"/><rect x="19" y="27" width="3" height="1" fill="#d4aa00"/><rect x="22" y="27" width="1" height="1" fill="#f6d54a"/><rect x="23" y="27" width="3" height="1" fill="#d4aa00"/><rect x="26" y="27" width="1" height="1" fill="#f6d54a"/><rect x="27" y="27" width="3" height="1" fill="#d4aa00"/><rect x="30" y="27" width="1" height="1" fill="#1d1d1d"/><rect x="18" y="28" width="4" height="1" fill="#1d1d1d"/><rect x="22" y="28" width="1" height="1" fill="#f6d54a"/><rect x="23" y="28" width="3" height="1" fill="#d4aa00"/><rect x="26" y="28" width="1" height="1" fill="#f6d54a"/><rect x="27" y="28" width="3" height="1" fill="#d4aa00"/><rect x="30" y="28" width="1" height="1" fill="#1d1d1d"/><rect x="22" y="29" width="3" height="1" fill="#1d1d1d"/><rect x="25" y="29" width="6" height="1" fill="#f6d54a"/><rect x="31" y="29" width="1" height="1" fill="#1d1d1d"/><rect x="25" y="30" width="4" height="1" fill="#1d1d1d"/><rect x="29" y="30" width="1" height="1" fill="#d4aa00"/><rect x="30" y="30" width="1" height="1" fill="#f6d54a"/><rect x="31" y="30" width="1" height="1" fill="#1d1d1d"/><rect x="29" y="31" width="3" height="1" fill="#1d1d1d"/>
+                    <rect x="13" y="21" width="2" height="1" fill="#ff5c8d"/><rect x="26" y="21" width="2" height="1" fill="#ff5c8d"/>
+                    <g class="tri-eyes"><rect x="16" y="16" width="3" height="3" fill="#ffffff"/><rect x="22" y="16" width="3" height="3" fill="#ffffff"/><rect x="17" y="17" width="2" height="2" fill="#1d1d1d"/><rect x="23" y="17" width="2" height="2" fill="#1d1d1d"/></g>
+                    <rect x="18" y="22" width="1" height="1" fill="#1d1d1d"/><rect x="19" y="23" width="4" height="1" fill="#1d1d1d"/><rect x="23" y="22" width="1" height="1" fill="#1d1d1d"/>
+                  </g>
+                </svg>
+                <!-- tri:end -->
+                <span aria-hidden="true">FEM<span class="lab-word">Lab</span></span>
+              </div>
+            </div>
+
+            <p class="lab-pixel-tag" aria-hidden="true">
+              <span class="b-heat">PLAY</span><span class="b-flow">BUILD</span><span class="b-structure">SOLVE</span
+              ><span class="b-front">LEARN</span>
+            </p>
+
+            <h1>Finite elements, <span class="accent">for fun.</span></h1>
+            <p class="hero-lede">
+              A game and a block editor where every picture is a real finite element simulation, solved in your
+              browser by FEAScript. Play first. The equations come along for the ride.
+            </p>
+
+            <div class="hero-links label">
+              <a href="critical-mesh/index.html">Play Critical Mesh</a>
+              <a href="blocks/index.html">Build with FEM Blocks</a>
+            </div>
+
+            <div class="hero-meta label">
+              <span>Free</span>
+              <span>No install, no account</span>
+              <span>Powered by open-source FEAScript</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── PLAY ───────────── -->
+      <section id="play" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>Play</p>
+          </div>
+
+          <div class="section-head">
+            <h2 data-reveal>Two ways in. <span class="accent">One real solver.</span></h2>
+            <p data-reveal>
+              Nothing here is a fake animation. Every temperature, every bent beam and every swirl of fluid comes
+              from FEAScript solving the actual equations, in well under a second.
+            </p>
+          </div>
+
+          <div class="grid grid-2">
+            <article class="cell lab-card" data-physics="heat" data-reveal>
+              <a class="lab-shot" href="critical-mesh/index.html">
+                <img src="assets/critical-mesh.png" alt="Critical Mesh: the engineer walks on a glowing heat map of the Plate" loading="lazy" />
+              </a>
+              <div class="lab-card-body">
+                <p class="lab-kind"><span>GAME</span> Story campaign · single player</p>
+                <h3>Critical Mesh</h3>
+                <p>
+                  Athens, 2089. The city runs on a single glowing plate of alloy, and you're its new night engineer.
+                  Roll the die, carry heat cells across the floor and mount them, then watch FEAScript solve the
+                  temperature under your boots. Push your luck too far, and the Plate melts down.
+                </p>
+                <ul class="lab-list">
+                  <li>A story campaign of 10 night shifts and 3 engineering interludes, plus an endless mode with high scores</li>
+                  <li>
+                    Four FEAScript models: heat conduction (with a Gmsh mesh), beam bending, front propagation and
+                    Stokes flow
+                  </li>
+                  <li>The equation is always on screen, and 15 Field Notes explain the physics as you meet it</li>
+                </ul>
+                <a class="lab-btn heat" href="critical-mesh/index.html">▶ Play Critical Mesh</a>
+              </div>
+            </article>
+
+            <article class="cell lab-card" data-physics="flow" data-reveal>
+              <a class="lab-shot" href="blocks/index.html">
+                <img src="assets/fem-blocks.png" alt="FEM Blocks: pixel blocks on the left, a heat map and the heat equation on the right" loading="lazy" />
+              </a>
+              <div class="lab-card-body">
+                <p class="lab-kind"><span>NO CODE</span> For young engineers · in class or at home</p>
+                <h3>FEM Blocks</h3>
+                <p>
+                  Snap pixel blocks together to build a simulation: a shape, a material, heaters and what happens at
+                  every edge. Press Run and FEAScript solves it. Tri, a small triangle robot, guides you through nine
+                  missions, from a warm wire to a swirling tank of honey.
+                </p>
+                <ul class="lab-list">
+                  <li>Click any block to see which part of the equation it controls</li>
+                  <li>Every program is real FEAScript code: see it, copy it, use it</li>
+                  <li>"The math" tab explains the equation, then shows your mesh, your nodes and your matrix K</li>
+                </ul>
+                <a class="lab-btn flow" href="blocks/index.html">▶ Start building</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── LEARN ───────────── -->
+      <section id="learn" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>What you learn</p>
+          </div>
+
+          <div class="section-head">
+            <h2 data-reveal>The ideas behind <span class="accent">every simulation.</span></h2>
+            <p data-reveal>
+              Engineers use the finite element method to design bridges, engines, phones and hearts. Its big ideas
+              are simple enough to play with.
+            </p>
+          </div>
+
+          <div class="grid grid-3">
+            <article class="cell cell-pad lab-idea" data-physics="heat" data-reveal>
+              <p class="lab-eq">−∇·(k ∇T) = Q</p>
+              <h3>An equation is a balance</h3>
+              <p class="desc">
+                Heat in, heat out, heat made inside. The heat equation just says that, at every point.
+              </p>
+            </article>
+            <article class="cell cell-pad lab-idea" data-physics="front" data-reveal>
+              <p class="lab-eq">T = T₀ or ∂T/∂n = 0</p>
+              <h3>Edges decide the answer</h3>
+              <p class="desc">
+                A fixed temperature, cooling air or a perfect blanket: the boundary conditions are half the problem.
+              </p>
+            </article>
+            <article class="cell cell-pad lab-idea" data-physics="structure" data-reveal>
+              <p class="lab-eq">T ≈ Σ Tᵢ Nᵢ</p>
+              <h3>Cut it into pieces</h3>
+              <p class="desc">
+                A mesh of small elements turns an impossible problem into many easy ones, linked at the nodes.
+              </p>
+            </article>
+            <article class="cell cell-pad lab-idea" data-physics="flow" data-reveal>
+              <p class="lab-eq">K · T = F</p>
+              <h3>Solve them all at once</h3>
+              <p class="desc">One equation per node, stacked into one big table that the computer solves in well under a second.</p>
+            </article>
+            <article class="cell cell-pad lab-idea" data-physics="heat" data-reveal>
+              <p class="lab-eq">k = 400 vs 0.03</p>
+              <h3>Materials matter</h3>
+              <p class="desc">Copper is a heat highway, foam a muddy path. That's why pans are metal and handles are wood.</p>
+            </article>
+            <article class="cell cell-pad lab-idea" data-physics="structure" data-reveal>
+              <p class="lab-eq">beam · front · flow</p>
+              <h3>One method, many physics</h3>
+              <p class="desc">The same building blocks bend beams, grow solid fronts and stir fluids.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── TEACHERS ───────────── -->
+      <section id="teachers" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>For teachers</p>
+          </div>
+
+          <div class="section-head">
+            <h2 data-reveal>Ready for the <span class="accent">classroom.</span></h2>
+            <p data-reveal>
+              Both apps run in any modern browser, with nothing to install and no sign-up. Progress is saved only in
+              the student's own browser. FEM Blocks projects can be saved to a file and shared.
+            </p>
+          </div>
+
+          <div class="grid grid-3">
+            <article class="cell cell-pad" data-reveal>
+              <p class="label text-faint">A</p>
+              <h3>Short missions</h3>
+              <p class="desc">
+                Each FEM Blocks mission takes a few minutes and has one goal that FEAScript checks on the real result.
+              </p>
+            </article>
+            <article class="cell cell-pad" data-reveal>
+              <p class="label text-faint">B</p>
+              <h3>From blocks to code</h3>
+              <p class="desc">
+                The Code tab shows the JavaScript behind every block program. Older students can paste it into their
+                own page.
+              </p>
+            </article>
+            <article class="cell cell-pad" data-reveal>
+              <p class="label text-faint">C</p>
+              <h3>Open source</h3>
+              <p class="desc">
+                FEAScript is free under the MIT license. Ideas for new missions or a workshop?
+                <a class="link" href="mailto:info@feascript.com">Write to us</a>.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="footer-wordmark" href="../index.html">
+              <svg viewBox="14 79 242 242" aria-hidden="true">
+                <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+              </svg>
+              <span
+                >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
+            </a>
+            <p class="footer-tagline">Finite element simulation in JavaScript, for the browser and Node.js.</p>
+            <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
+          </div>
+          <nav class="footer-col" aria-label="FEM Lab">
+            <h2>FEM Lab</h2>
+            <ul>
+              <li><a href="critical-mesh/index.html">Critical Mesh</a></li>
+              <li><a href="blocks/index.html">FEM Blocks</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Resources">
+            <h2>Resources</h2>
+            <ul>
+              <li><a href="../index.html#tutorials">Tutorials</a></li>
+              <li><a href="https://docs.feascript.com">Documentation</a></li>
+              <li><a href="https://blog.feascript.com/">Blog</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Community">
+            <h2>Community</h2>
+            <ul>
+              <li><a href="https://discord.gg/3DVjNcuW4f">Discord</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core">GitHub</a></li>
+              <li><a href="https://www.youtube.com/@FEAScript">YouTube</a></li>
+              <li><a href="https://www.linkedin.com/company/feascript/">LinkedIn</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>&#169; 2023-<span id="currentYear"></span> FEAScript</span>
+          <span>Core: MIT license &middot; Website: CC BY 4.0 &middot; FEM Blocks uses Blockly (Apache 2.0)</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../feascript-website.js"></script>
+  </body>
+</html>

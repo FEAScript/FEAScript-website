@@ -1,0 +1,277 @@
+<!doctype html>
+
+<!--
+ * ════════════════════════════════════════════════════════════════
+ *  FEAScript Website · 404 page
+ *  Finite Element Simulation in JavaScript | https://feascript.com
+ *  CC BY 4.0 License © 2023–2026 FEAScript
+ * ════════════════════════════════════════════════════════════════
+ *
+ *  GitHub Pages serves this file for any missing URL, at any depth.
+ *  The <base> set below makes the relative links and assets resolve
+ *  from the site root there, and from this folder when served locally.
+-->
+
+<html lang="en" class="site">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page not found · FEAScript</title>
+    <meta name="robots" content="noindex" />
+    <script>
+      // Resolve every relative URL from the site root: "/" on feascript.com, the FEAScript-website folder when
+      // served from a parent directory (e.g. a local dev server) or opened as a file
+      (function () {
+        var m = location.pathname.match(/^(.*\/FEAScript-website\/)/i);
+        var base = document.createElement("base");
+        base.href = m ? m[1] : "/";
+        document.head.appendChild(base);
+      })();
+    </script>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
+    <script>
+      // Apply stored theme before first paint and enable JS-only styles
+      (function () {
+        var d = document.documentElement;
+        d.className += " js";
+        try {
+          var t = localStorage.getItem("feascript-theme");
+          if (t === "light" || t === "dark") d.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="feascript-website.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- ───────────── NAVIGATION ───────────── -->
+    <header class="site-nav">
+      <div class="nav-inner">
+        <div class="nav-group">
+          <a class="nav-brand" href="index.html">
+            <svg viewBox="14 79 242 242" aria-hidden="true">
+              <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+            </svg>
+            <span
+              >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+            ></span>
+          </a>
+          <nav class="nav-links label" aria-label="Main">
+            <a class="nav-link" href="index.html#whyusefeascript"><span>Why FEAScript</span></a>
+            <a class="nav-link" href="index.html#howtousefeascript"><span>How to use</span></a>
+            <a class="nav-link" href="index.html#features"><span>Features</span></a>
+            <a class="nav-link" href="index.html#tutorials"><span>Tutorials</span></a>
+            <a class="nav-link" href="index.html#licensing"><span>Licensing</span></a>
+            <a class="nav-link nav-link-out" href="https://docs.feascript.com"><span>Documentation</span></a>
+            <a class="nav-link nav-link-out" href="studio.html"><span>Studio</span></a>
+          </nav>
+        </div>
+
+        <div class="nav-group">
+          <a
+            class="nav-icon nav-github"
+            href="https://github.com/FEAScript/FEAScript-core"
+            aria-label="FEAScript on GitHub"
+            title="FEAScript on GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              />
+            </svg>
+            <span id="github-stars" class="label"></span>
+          </a>
+          <button
+            id="theme-toggle"
+            class="nav-icon theme-toggle"
+            type="button"
+            aria-label="Toggle colour theme"
+          >
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+              />
+            </svg>
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+              />
+            </svg>
+          </button>
+          <a class="nav-cta" href="index.html#howtousefeascript">Get started</a>
+          <button
+            id="nav-burger"
+            class="nav-icon nav-burger"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+        <a href="index.html#whyusefeascript">Why use FEAScript</a>
+        <a href="index.html#howtousefeascript">How to use FEAScript</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#tutorials">Tutorials</a>
+        <a href="index.html#licensing">Licensing</a>
+        <a class="nav-link-out" href="https://docs.feascript.com">Documentation</a>
+        <a class="nav-link-out" href="studio.html">FEAScript Studio</a>
+      </nav>
+    </header>
+
+    <main id="main" class="not-found">
+      <div class="nf-inner">
+        <!-- tri:start (generated from fem-lab/blocks/js/pixels.js, triSvg("oops")) -->
+        <svg class="nf-tri" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 -1 36 36" shape-rendering="crispEdges">
+          <g class="tri-feet" fill="#1d1d1d"><rect x="11" y="27" width="1" height="3"/><rect x="10" y="30" width="3" height="1"/><rect x="25" y="30" width="1" height="3"/><rect x="24" y="33" width="3" height="1"/></g>
+          <g class="tri-up">
+          <rect x="24" y="3" width="1" height="1" fill="#1d1d1d"/><rect x="23" y="4" width="2" height="1" fill="#1d1d1d"/><rect x="22" y="5" width="1" height="1" fill="#1d1d1d"/><rect x="23" y="5" width="1" height="1" fill="#f6d54a"/><rect x="24" y="5" width="1" height="1" fill="#1d1d1d"/><rect x="21" y="6" width="1" height="1" fill="#1d1d1d"/><rect x="22" y="6" width="1" height="1" fill="#f6d54a"/><rect x="23" y="6" width="1" height="1" fill="#d4aa00"/><rect x="24" y="6" width="1" height="1" fill="#1d1d1d"/><rect x="20" y="7" width="1" height="1" fill="#1d1d1d"/><rect x="21" y="7" width="1" height="1" fill="#d4aa00"/><rect x="22" y="7" width="1" height="1" fill="#f6d54a"/><rect x="23" y="7" width="2" height="1" fill="#d4aa00"/><rect x="25" y="7" width="1" height="1" fill="#1d1d1d"/><rect x="19" y="8" width="1" height="1" fill="#1d1d1d"/><rect x="20" y="8" width="2" height="1" fill="#d4aa00"/><rect x="22" y="8" width="1" height="1" fill="#f6d54a"/><rect x="23" y="8" width="2" height="1" fill="#d4aa00"/><rect x="25" y="8" width="1" height="1" fill="#1d1d1d"/><rect x="18" y="9" width="1" height="1" fill="#1d1d1d"/><rect x="19" y="9" width="6" height="1" fill="#f6d54a"/><rect x="25" y="9" width="1" height="1" fill="#1d1d1d"/><rect x="17" y="10" width="1" height="1" fill="#1d1d1d"/><rect x="18" y="10" width="1" height="1" fill="#f6d54a"/><rect x="19" y="10" width="3" height="1" fill="#d4aa00"/><rect x="22" y="10" width="1" height="1" fill="#f6d54a"/><rect x="23" y="10" width="3" height="1" fill="#d4aa00"/><rect x="26" y="10" width="1" height="1" fill="#1d1d1d"/><rect x="16" y="11" width="1" height="1" fill="#1d1d1d"/><rect x="17" y="11" width="1" height="1" fill="#d4aa00"/><rect x="18" y="11" width="1" height="1" fill="#f6d54a"/><rect x="19" y="11" width="3" height="1" fill="#d4aa00"/><rect x="22" y="11" width="1" height="1" fill="#f6d54a"/><rect x="23" y="11" width="3" height="1" fill="#d4aa00"/><rect x="26" y="11" width="1" height="1" fill="#1d1d1d"/><rect x="15" y="12" width="1" height="1" fill="#1d1d1d"/><rect x="16" y="12" width="2" height="1" fill="#d4aa00"/><rect x="18" y="12" width="1" height="1" fill="#f6d54a"/><rect x="19" y="12" width="3" height="1" fill="#d4aa00"/><rect x="22" y="12" width="1" height="1" fill="#f6d54a"/><rect x="23" y="12" width="3" height="1" fill="#d4aa00"/><rect x="26" y="12" width="1" height="1" fill="#1d1d1d"/><rect x="14" y="13" width="1" height="1" fill="#1d1d1d"/><rect x="15" y="13" width="11" height="1" fill="#f6d54a"/><rect x="26" y="13" width="1" height="1" fill="#1d1d1d"/><rect x="13" y="14" width="1" height="1" fill="#1d1d1d"/><rect x="14" y="14" width="1" height="1" fill="#f6d54a"/><rect x="15" y="14" width="3" height="1" fill="#d4aa00"/><rect x="18" y="14" width="1" height="1" fill="#f6d54a"/><rect x="19" y="14" width="3" height="1" fill="#d4aa00"/><rect x="22" y="14" width="1" height="1" fill="#f6d54a"/><rect x="23" y="14" width="3" height="1" fill="#d4aa00"/><rect x="26" y="14" width="1" height="1" fill="#f6d54a"/><rect x="27" y="14" width="1" height="1" fill="#1d1d1d"/><rect x="12" y="15" width="1" height="1" fill="#1d1d1d"/><rect x="13" y="15" width="1" height="1" fill="#d4aa00"/><rect x="14" y="15" width="1" height="1" fill="#f6d54a"/><rect x="15" y="15" width="3" height="1" fill="#d4aa00"/><rect x="18" y="15" width="1" height="1" fill="#f6d54a"/><rect x="19" y="15" width="3" height="1" fill="#d4aa00"/><rect x="22" y="15" width="1" height="1" fill="#f6d54a"/><rect x="23" y="15" width="3" height="1" fill="#d4aa00"/><rect x="26" y="15" width="1" height="1" fill="#f6d54a"/><rect x="27" y="15" width="1" height="1" fill="#1d1d1d"/><rect x="11" y="16" width="1" height="1" fill="#1d1d1d"/><rect x="12" y="16" width="2" height="1" fill="#d4aa00"/><rect x="14" y="16" width="1" height="1" fill="#f6d54a"/><rect x="15" y="16" width="3" height="1" fill="#d4aa00"/><rect x="18" y="16" width="1" height="1" fill="#f6d54a"/><rect x="19" y="16" width="3" height="1" fill="#d4aa00"/><rect x="22" y="16" width="1" height="1" fill="#f6d54a"/><rect x="23" y="16" width="3" height="1" fill="#d4aa00"/><rect x="26" y="16" width="1" height="1" fill="#f6d54a"/><rect x="27" y="16" width="1" height="1" fill="#1d1d1d"/><rect x="10" y="17" width="1" height="1" fill="#1d1d1d"/><rect x="11" y="17" width="16" height="1" fill="#f6d54a"/><rect x="27" y="17" width="1" height="1" fill="#1d1d1d"/><rect x="9" y="18" width="1" height="1" fill="#1d1d1d"/><rect x="10" y="18" width="1" height="1" fill="#f6d54a"/><rect x="11" y="18" width="3" height="1" fill="#d4aa00"/><rect x="14" y="18" width="1" height="1" fill="#f6d54a"/><rect x="15" y="18" width="3" height="1" fill="#d4aa00"/><rect x="18" y="18" width="1" height="1" fill="#f6d54a"/><rect x="19" y="18" width="3" height="1" fill="#d4aa00"/><rect x="22" y="18" width="1" height="1" fill="#f6d54a"/><rect x="23" y="18" width="3" height="1" fill="#d4aa00"/><rect x="26" y="18" width="1" height="1" fill="#f6d54a"/><rect x="27" y="18" width="1" height="1" fill="#d4aa00"/><rect x="28" y="18" width="1" height="1" fill="#1d1d1d"/><rect x="8" y="19" width="1" height="1" fill="#1d1d1d"/><rect x="9" y="19" width="1" height="1" fill="#d4aa00"/><rect x="10" y="19" width="1" height="1" fill="#f6d54a"/><rect x="11" y="19" width="3" height="1" fill="#d4aa00"/><rect x="14" y="19" width="1" height="1" fill="#f6d54a"/><rect x="15" y="19" width="3" height="1" fill="#d4aa00"/><rect x="18" y="19" width="1" height="1" fill="#f6d54a"/><rect x="19" y="19" width="3" height="1" fill="#d4aa00"/><rect x="22" y="19" width="1" height="1" fill="#f6d54a"/><rect x="23" y="19" width="3" height="1" fill="#d4aa00"/><rect x="26" y="19" width="1" height="1" fill="#f6d54a"/><rect x="27" y="19" width="1" height="1" fill="#d4aa00"/><rect x="28" y="19" width="1" height="1" fill="#1d1d1d"/><rect x="7" y="20" width="1" height="1" fill="#1d1d1d"/><rect x="8" y="20" width="2" height="1" fill="#d4aa00"/><rect x="10" y="20" width="1" height="1" fill="#f6d54a"/><rect x="11" y="20" width="3" height="1" fill="#d4aa00"/><rect x="14" y="20" width="1" height="1" fill="#f6d54a"/><rect x="15" y="20" width="3" height="1" fill="#d4aa00"/><rect x="18" y="20" width="1" height="1" fill="#f6d54a"/><rect x="19" y="20" width="3" height="1" fill="#d4aa00"/><rect x="22" y="20" width="1" height="1" fill="#f6d54a"/><rect x="23" y="20" width="3" height="1" fill="#d4aa00"/><rect x="26" y="20" width="1" height="1" fill="#f6d54a"/><rect x="27" y="20" width="1" height="1" fill="#d4aa00"/><rect x="28" y="20" width="1" height="1" fill="#1d1d1d"/><rect x="6" y="21" width="1" height="1" fill="#1d1d1d"/><rect x="7" y="21" width="21" height="1" fill="#f6d54a"/><rect x="28" y="21" width="1" height="1" fill="#1d1d1d"/><rect x="5" y="22" width="1" height="1" fill="#1d1d1d"/><rect x="6" y="22" width="1" height="1" fill="#f6d54a"/><rect x="7" y="22" width="3" height="1" fill="#d4aa00"/><rect x="10" y="22" width="1" height="1" fill="#f6d54a"/><rect x="11" y="22" width="3" height="1" fill="#d4aa00"/><rect x="14" y="22" width="1" height="1" fill="#f6d54a"/><rect x="15" y="22" width="3" height="1" fill="#d4aa00"/><rect x="18" y="22" width="1" height="1" fill="#f6d54a"/><rect x="19" y="22" width="3" height="1" fill="#d4aa00"/><rect x="22" y="22" width="1" height="1" fill="#f6d54a"/><rect x="23" y="22" width="3" height="1" fill="#d4aa00"/><rect x="26" y="22" width="1" height="1" fill="#f6d54a"/><rect x="27" y="22" width="2" height="1" fill="#d4aa00"/><rect x="29" y="22" width="1" height="1" fill="#1d1d1d"/><rect x="4" y="23" width="1" height="1" fill="#1d1d1d"/><rect x="5" y="23" width="1" height="1" fill="#d4aa00"/><rect x="6" y="23" width="1" height="1" fill="#f6d54a"/><rect x="7" y="23" width="3" height="1" fill="#d4aa00"/><rect x="10" y="23" width="1" height="1" fill="#f6d54a"/><rect x="11" y="23" width="3" height="1" fill="#d4aa00"/><rect x="14" y="23" width="1" height="1" fill="#f6d54a"/><rect x="15" y="23" width="3" height="1" fill="#d4aa00"/><rect x="18" y="23" width="1" height="1" fill="#f6d54a"/><rect x="19" y="23" width="3" height="1" fill="#d4aa00"/><rect x="22" y="23" width="1" height="1" fill="#f6d54a"/><rect x="23" y="23" width="3" height="1" fill="#d4aa00"/><rect x="26" y="23" width="1" height="1" fill="#f6d54a"/><rect x="27" y="23" width="2" height="1" fill="#d4aa00"/><rect x="29" y="23" width="1" height="1" fill="#1d1d1d"/><rect x="3" y="24" width="4" height="1" fill="#1d1d1d"/><rect x="7" y="24" width="3" height="1" fill="#d4aa00"/><rect x="10" y="24" width="1" height="1" fill="#f6d54a"/><rect x="11" y="24" width="3" height="1" fill="#d4aa00"/><rect x="14" y="24" width="1" height="1" fill="#f6d54a"/><rect x="15" y="24" width="3" height="1" fill="#d4aa00"/><rect x="18" y="24" width="1" height="1" fill="#f6d54a"/><rect x="19" y="24" width="3" height="1" fill="#d4aa00"/><rect x="22" y="24" width="1" height="1" fill="#f6d54a"/><rect x="23" y="24" width="3" height="1" fill="#d4aa00"/><rect x="26" y="24" width="1" height="1" fill="#f6d54a"/><rect x="27" y="24" width="2" height="1" fill="#d4aa00"/><rect x="29" y="24" width="1" height="1" fill="#1d1d1d"/><rect x="7" y="25" width="3" height="1" fill="#1d1d1d"/><rect x="10" y="25" width="20" height="1" fill="#f6d54a"/><rect x="30" y="25" width="1" height="1" fill="#1d1d1d"/><rect x="10" y="26" width="4" height="1" fill="#1d1d1d"/><rect x="14" y="26" width="1" height="1" fill="#f6d54a"/><rect x="15" y="26" width="3" height="1" fill="#d4aa00"/><rect x="18" y="26" width="1" height="1" fill="#f6d54a"/><rect x="19" y="26" width="3" height="1" fill="#d4aa00"/><rect x="22" y="26" width="1" height="1" fill="#f6d54a"/><rect x="23" y="26" width="3" height="1" fill="#d4aa00"/><rect x="26" y="26" width="1" height="1" fill="#f6d54a"/><rect x="27" y="26" width="3" height="1" fill="#d4aa00"/><rect x="30" y="26" width="1" height="1" fill="#1d1d1d"/><rect x="14" y="27" width="4" height="1" fill="#1d1d1d"/><rect x="18" y="27" width="1" height="1" fill="#f6d54a"/><rect x="19" y="27" width="3" height="1" fill="#d4aa00"/><rect x="22" y="27" width="1" height="1" fill="#f6d54a"/><rect x="23" y="27" width="3" height="1" fill="#d4aa00"/><rect x="26" y="27" width="1" height="1" fill="#f6d54a"/><rect x="27" y="27" width="3" height="1" fill="#d4aa00"/><rect x="30" y="27" width="1" height="1" fill="#1d1d1d"/><rect x="18" y="28" width="4" height="1" fill="#1d1d1d"/><rect x="22" y="28" width="1" height="1" fill="#f6d54a"/><rect x="23" y="28" width="3" height="1" fill="#d4aa00"/><rect x="26" y="28" width="1" height="1" fill="#f6d54a"/><rect x="27" y="28" width="3" height="1" fill="#d4aa00"/><rect x="30" y="28" width="1" height="1" fill="#1d1d1d"/><rect x="22" y="29" width="3" height="1" fill="#1d1d1d"/><rect x="25" y="29" width="6" height="1" fill="#f6d54a"/><rect x="31" y="29" width="1" height="1" fill="#1d1d1d"/><rect x="25" y="30" width="4" height="1" fill="#1d1d1d"/><rect x="29" y="30" width="1" height="1" fill="#d4aa00"/><rect x="30" y="30" width="1" height="1" fill="#f6d54a"/><rect x="31" y="30" width="1" height="1" fill="#1d1d1d"/><rect x="29" y="31" width="3" height="1" fill="#1d1d1d"/>
+          <rect x="13" y="21" width="2" height="1" fill="#ff5c8d"/><rect x="26" y="21" width="2" height="1" fill="#ff5c8d"/>
+          <g class="tri-eyes"><rect x="16" y="16" width="3" height="3" fill="#ffffff"/><rect x="22" y="16" width="3" height="3" fill="#ffffff"/><rect x="17" y="17" width="1" height="1" fill="#1d1d1d"/><rect x="23" y="17" width="1" height="1" fill="#1d1d1d"/></g>
+          <rect x="20" y="22" width="2" height="2" fill="#1d1d1d"/>
+          </g>
+          </svg>
+        <!-- tri:end -->
+        <div class="nf-text">
+          <p class="label nf-code">404 · Node not found</p>
+          <h1>This page isn't in the mesh.</h1>
+          <p class="nf-lead">
+            Tri looked for <code id="nf-path">this page</code>, but no element connects to it. The page may have
+            moved, or the link has a typo.
+          </p>
+          <div class="nf-actions">
+            <a class="btn btn-solid" href="index.html">Back to FEAScript</a>
+            <a class="btn btn-outline" href="index.html#tutorials">Tutorials</a>
+            <a class="btn btn-outline" href="https://docs.feascript.com">Documentation</a>
+          </div>
+          <p class="nf-more text-muted">
+            Or play with real finite elements in the <a href="fem-lab/index.html">FEM Lab</a>. Think a link is broken?
+            <a href="https://github.com/FEAScript/FEAScript-core/issues">Tell us on GitHub</a>.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <!-- ───────────── FOOTER ───────────── -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="footer-wordmark" href="index.html">
+              <svg viewBox="14 79 242 242" aria-hidden="true">
+                <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+              </svg>
+              <span
+                >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
+            </a>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
+            <a class="footer-mail" href="mailto:info@feascript.com">info@feascript.com</a>
+          </div>
+          <nav class="footer-col" aria-label="Platform">
+            <h2>Platform</h2>
+            <ul>
+              <li><a href="index.html#howtousefeascript">Get started</a></li>
+              <li><a href="studio.html">FEAScript Studio</a></li>
+              <li><a href="https://www.npmjs.com/package/feascript">npm package</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Resources">
+            <h2>Resources</h2>
+            <ul>
+              <li><a href="index.html#tutorials">Tutorials</a></li>
+              <li><a href="https://docs.feascript.com">Documentation</a></li>
+              <li><a href="https://blog.feascript.com/">Blog</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues">Support</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Community">
+            <h2>Community</h2>
+            <ul>
+              <li><a href="https://discord.gg/3DVjNcuW4f">Discord</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core">GitHub</a></li>
+              <li><a href="https://www.youtube.com/@FEAScript">YouTube</a></li>
+              <li><a href="https://www.linkedin.com/company/feascript/">LinkedIn</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>&#169; 2023-<span id="currentYear"></span> FEAScript</span>
+          <span>Core: MIT license &middot; Website: CC BY 4.0</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Show the path that was asked for
+      document.getElementById("nf-path").textContent = location.pathname;
+      // With a <base>, "#main" would point at the home page; keep the skip link on this page
+      document.querySelector(".skip-link").addEventListener("click", function (e) {
+        e.preventDefault();
+        var main = document.getElementById("main");
+        main.setAttribute("tabindex", "-1");
+        main.focus();
+      });
+    </script>
+    <script src="feascript-website.js"></script>
+  </body>
+</html>

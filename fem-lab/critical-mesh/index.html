@@ -1,0 +1,309 @@
+<!doctype html>
+
+<!--
+ * ════════════════════════════════════════════════════════════════
+ *  Critical Mesh: a pixel-art heat-conduction game
+ *  Powered by FEAScript | https://feascript.com
+ *  CC BY 4.0 License © 2023–2026 FEAScript
+ * ════════════════════════════════════════════════════════════════
+ *
+ *  Plain JavaScript, no build step. Open this file directly (file://)
+ *  or serve the folder. See README.md for the file layout.
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Critical Mesh · A FEAScript game</title>
+    <meta
+      name="description"
+      content="Critical Mesh: a pixel-art push-your-luck game about heat conduction. Walk the Plate, mount thermo-cells and keep Athens lit; FEAScript solves the physics after every move."
+    />
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500&family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="css/critical-mesh.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <!-- ─── Top bar ─── -->
+    <header class="topbar">
+      <div class="brand">
+        <a class="fea-logo" href="../../index.html" aria-label="FEAScript" title="FEAScript home">
+          <svg viewBox="14 79 242 242" aria-hidden="true">
+            <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+          </svg>
+          <span
+            >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+              <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+              <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+          ></span>
+        </a>
+        <a class="brand-crumb" href="../index.html" title="Back to the FEM Lab">FEM Lab</a>
+        <span class="brand-sep" aria-hidden="true">›</span>
+        <a class="brand-game" href="#" id="homeLink" title="Back to the title screen">CRITICAL MESH</a>
+      </div>
+      <div class="topbar-right">
+        <span class="chip" id="diffChip">NORMAL</span>
+        <button class="icon-btn" id="helpBtn" type="button" title="How to play">? HELP</button>
+        <button class="icon-btn" id="soundBtn" type="button" title="Toggle sound (M)">♪ ON</button>
+      </div>
+    </header>
+
+    <!-- ─── Title screen ─── -->
+    <section id="scr-title" class="screen active">
+      <canvas id="titleBg" class="px" width="160" height="80"></canvas>
+      <div class="title-vignette"></div>
+      <div class="title-inner">
+        <div class="presents">
+          <span class="fea-logo" aria-label="FEAScript">
+            <svg viewBox="14 79 242 242" aria-hidden="true">
+              <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+            </svg>
+            <span
+              >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+            ></span>
+          </span>
+          <span>presents</span>
+        </div>
+        <canvas id="titleLogo" class="px" width="56" height="22" aria-label="Critical Mesh"></canvas>
+        <p class="tagline">
+          Athens, 2089. The city runs on one glowing slab of alloy, and tonight you walk on it. Roll for power, mount
+          thermo-cells and <b>push your luck</b>: after every move a real finite element solver computes the
+          temperature under your boots. Pass the critical limit and it's a <b>meltdown</b>.
+        </p>
+
+        <div class="menu">
+          <button class="px-btn" id="btnCampaign" type="button" disabled>▶ CAMPAIGN</button>
+          <button class="px-btn flow" id="btnArcade" type="button" disabled>∞ ENDLESS SHIFT</button>
+          <div class="seg-label">DIFFICULTY</div>
+          <div class="seg" id="diffSeg">
+            <button type="button" data-diff="easy">EASY</button>
+            <button type="button" data-diff="normal">NORMAL</button>
+            <button type="button" data-diff="hard">HARD</button>
+          </div>
+          <div class="actions">
+            <button class="px-btn dark small" id="btnScores" type="button">HIGH SCORES</button>
+            <button class="px-btn dark small" id="btnHelp2" type="button">HOW TO PLAY</button>
+            <button class="px-btn dark small" id="btnNotes" type="button">FIELD NOTES <b data-notes-count>0/15</b></button>
+          </div>
+        </div>
+
+        <div class="terminal px-panel" id="bootLog" aria-live="polite"></div>
+        <p class="credits-line">
+          Physics by
+          <a href="https://feascript.com" target="_blank" rel="noopener">FEAScript</a> · Pixel art, story and sound
+          made in plain JavaScript
+        </p>
+      </div>
+    </section>
+
+    <!-- ─── Campaign map ─── -->
+    <section id="scr-map" class="screen">
+      <div class="map-wrap">
+        <div class="map-head">
+          <div>
+            <h2 class="px-title">THE HEATWORKS · CAMPAIGN</h2>
+            <p>
+              Ten night shifts on the Plate and three engineering interludes, each solved by a different FEAScript
+              model. Hit the quota, then deliver before it melts. Something about this Plate is not right...
+            </p>
+          </div>
+          <div class="map-btns">
+            <button class="px-btn dark small" id="mapNotes" type="button">FIELD NOTES <b data-notes-count>0/15</b></button>
+            <button class="px-btn dark small" id="mapBack" type="button">◀ TITLE</button>
+          </div>
+        </div>
+        <div class="chapters" id="chapters"></div>
+      </div>
+    </section>
+
+    <!-- ─── Story / dialogue ─── -->
+    <section id="scr-story" class="screen">
+      <canvas id="storyBg" class="px" width="160" height="80"></canvas>
+      <div class="story-chapter">
+        <div class="kicker" id="storyKicker">SHIFT 1</div>
+        <h2 id="storyTitle">COLD START</h2>
+      </div>
+      <button class="px-btn dark small story-skip" id="storySkip" type="button">SKIP ▶▶</button>
+      <div class="dialog px-panel" id="dialog">
+        <div class="portrait-box">
+          <canvas id="portrait" class="px" width="16" height="16"></canvas>
+          <div class="who" id="who">ELENI</div>
+        </div>
+        <div class="text" id="dialogText"></div>
+        <div class="hint">CLICK / SPACE ▶</div>
+      </div>
+    </section>
+
+    <!-- ─── Shift (heat conduction) ─── -->
+    <section id="scr-game" class="screen">
+      <div class="game">
+        <div class="stage">
+          <div class="stage-head">
+            <div class="lvl" id="lvlTitle"><small>SHIFT 1</small>COLD START</div>
+            <div class="objective" id="objective"></div>
+          </div>
+          <div class="board-wrap px-panel" id="boardWrap">
+            <canvas id="board" class="px" width="200" height="136"></canvas>
+            <div class="banner" id="banner"></div>
+          </div>
+          <div class="msg-bar px-panel">
+            <canvas id="msgFace" class="px" width="16" height="16"></canvas>
+            <div id="msg">Press <b>ROLL</b> to start.</div>
+          </div>
+          <div class="log px-panel" id="log"></div>
+          <section class="px-panel eq-wrap">
+            <details class="eq-panel" id="eqPanel">
+              <summary>THE EQUATION FEASCRIPT IS SOLVING <button class="eq-more" type="button" data-open-note="">FIELD NOTES <b data-notes-count>0/15</b> <kbd>N</kbd></button></summary>
+              <div class="eq-body">
+                <div class="eq-col">
+                  <div class="eq-big" id="eqMain"></div>
+                  <div class="eq-fem" id="eqFem"></div>
+                </div>
+                <div class="eq-probe" id="eqProbe"></div>
+                <div class="eq-edges" id="eqEdges"></div>
+              </div>
+            </details>
+          </section>
+        </div>
+
+        <aside class="hud">
+          <section class="px-panel">
+            <h3>THE DIE</h3>
+            <div class="dice-row">
+              <canvas id="die" class="px" width="15" height="15"></canvas>
+              <div class="dice-info">
+                Last roll <b id="rollVal">–</b><br />
+                Carrying <b id="qNext">–</b>
+              </div>
+            </div>
+          </section>
+
+          <section class="px-panel">
+            <h3>ENGINEER</h3>
+            <div class="hearts" id="hearts"></div>
+            <div class="suit-row">
+              <span>Suit heat</span>
+              <canvas id="suit" class="px" width="60" height="5"></canvas>
+              <b id="feetT">20 °C</b>
+            </div>
+          </section>
+
+          <section class="px-panel">
+            <h3>PLATE STATUS <span class="alarm" id="alarm"></span></h3>
+            <div class="stat"><span>Turn</span><b id="turn">0</b></div>
+            <div class="stat"><span>Max temperature</span><b id="maxT">20.0 °C</b></div>
+            <canvas id="gauge" class="px" width="100" height="9"></canvas>
+            <div class="gauge-scale"><span>20 °C</span><span id="limitLbl">limit 400 °C</span></div>
+            <div class="stat"><span>Critical limit</span><b id="limit">400 °C</b></div>
+            <div class="stat"><span id="scoreLbl">Score (cells placed)</span><b id="score">0</b></div>
+            <div class="stat" id="targetRow"><span>Quota</span><b id="target">–</b></div>
+            <div class="stat"><span id="bestLbl">Best</span><b id="best">0</b></div>
+            <div class="stat"><span>Last solve (FEAScript)</span><b id="solveTime">–</b></div>
+          </section>
+
+          <section class="px-panel">
+            <div class="actions">
+              <button class="px-btn heat wide" id="rollBtn" type="button">🎲 ROLL <kbd>R</kbd></button>
+              <button class="px-btn cool" id="bankBtn" type="button">BANK <kbd>B</kbd></button>
+              <button class="px-btn dark" id="restartBtn" type="button">↺ RESTART</button>
+            </div>
+            <div class="manual" style="margin-top: 0.7rem">
+              Mount at x <input id="mx" type="number" step="0.1" min="0.3" max="3.7" value="2" /> y
+              <input id="my" type="number" step="0.1" min="0.3" max="1.7" value="0.3" />
+              <button class="px-btn dark small" id="placeBtn" type="button">GO</button>
+            </div>
+          </section>
+
+          <section class="px-panel" id="toolsPanel">
+            <h3>TOOLS</h3>
+            <div class="tools" id="tools"></div>
+            <div class="tool-help" id="toolHelp"></div>
+          </section>
+
+          <section class="px-panel">
+            <h3>VIEW</h3>
+            <div class="toggles">
+              <button class="px-btn dark small" id="viewBtn" type="button">BANDS <kbd>V</kbd></button>
+              <button class="px-btn dark small" id="meshBtn" type="button">MESH <kbd>G</kbd></button>
+              <button class="px-btn dark small" id="notesBtn" type="button">NOTES <kbd>N</kbd></button>
+              <button class="px-btn dark small" id="menuBtn" type="button">≡ MENU</button>
+            </div>
+          </section>
+
+          <section class="px-panel">
+            <details class="monitor" id="monitor">
+              <summary>FEASCRIPT MONITOR</summary>
+              <div id="monitorPlot"></div>
+              <div class="monitor-note">
+                Raw nodal solution drawn by FEAScript's <code>plotSolution(model, result, "contour", …)</code>, updated
+                after every solve (Plotly is loaded when you open this panel).
+              </div>
+            </details>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ─── Interlude (beam, front propagation, creeping flow) ─── -->
+    <section id="scr-lab" class="screen">
+      <div class="game">
+        <div class="stage">
+          <div class="stage-head">
+            <div class="lvl" id="labTitle"></div>
+            <div class="objective" id="labObjective"></div>
+          </div>
+          <div class="board-wrap px-panel" id="labWrap">
+            <canvas id="lab" class="px" width="200" height="136"></canvas>
+            <div class="banner" id="labBanner"></div>
+          </div>
+          <div class="msg-bar px-panel">
+            <canvas id="labFace" class="px" width="16" height="16"></canvas>
+            <div id="labMsg"></div>
+          </div>
+          <div class="log px-panel" id="labLog"></div>
+        </div>
+        <aside class="hud">
+          <section class="px-panel" id="labPanel"></section>
+          <section class="px-panel" id="labPhysics"></section>
+          <section class="px-panel">
+            <button class="px-btn dark small" id="labMenuBtn" type="button">≡ CAMPAIGN MAP</button>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ─── Field Note toast ─── -->
+    <button class="note-toast px-panel" id="noteToast" type="button"></button>
+
+    <!-- ─── Modal ─── -->
+    <div class="modal" id="modal" role="dialog" aria-modal="true">
+      <div class="modal-card px-panel" id="modalCard"></div>
+    </div>
+
+    <!-- Plain classic scripts (they also work on file://); FEAScript is loaded by physics.js -->
+    <script src="js/config.js"></script>
+    <script src="js/art.js"></script>
+    <script src="js/story.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/meshes.js"></script>
+    <script src="js/physics.js"></script>
+    <script src="js/field.js"></script>
+    <script src="js/engineer.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/scene.js"></script>
+    <script src="js/interludes.js"></script>
+    <script src="js/codex.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

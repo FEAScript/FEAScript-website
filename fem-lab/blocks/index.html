@@ -1,0 +1,201 @@
+<!doctype html>
+
+<!--
+ * ════════════════════════════════════════════════════════════════
+ *  FEM Blocks: build a finite element simulation with blocks
+ *  Part of the FEAScript FEM Lab | https://feascript.com
+ *  CC BY 4.0 License © 2023–2026 FEAScript
+ * ════════════════════════════════════════════════════════════════
+-->
+
+<html lang="en" class="site">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FEM Blocks · FEAScript FEM Lab</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/fem-lab-icon.svg?v=pixel" />
+    <meta
+      name="description"
+      content="FEM Blocks: snap pixel blocks together to build and solve real finite element simulations with FEAScript. Missions about heat and flow teach the equations behind them, no code needed."
+    />
+    <meta
+      name="keywords"
+      content="finite elements, fem, kids, education, blocks, no-code, heat conduction, javascript, FEAScript"
+    />
+
+    <script>
+      // Apply stored theme before first paint and enable JS-only styles
+      (function () {
+        var d = document.documentElement;
+        d.className += " js";
+        try {
+          var t = localStorage.getItem("feascript-theme");
+          if (t === "light" || t === "dark") d.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&family=Jersey+10&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../../feascript-website.css" rel="stylesheet" type="text/css" />
+    <link href="css/fem-blocks.css" rel="stylesheet" type="text/css" />
+
+    <!-- Blockly (Apache 2.0), the visual block editor -->
+    <script src="https://cdn.jsdelivr.net/npm/blockly@12.3.1/blockly_compressed.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/blockly@12.3.1/msg/en.js"></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#workspace">Skip to the blocks</a>
+
+    <!-- ─── Top bar ─── -->
+    <header class="fb-top">
+      <a class="fb-brand" href="../../index.html" title="FEAScript home">
+        <svg viewBox="14 79 242 242" aria-hidden="true">
+          <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+        </svg>
+        <span
+          >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+            <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+            <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+        ></span>
+      </a>
+      <span class="fb-crumb"><a href="../index.html">FEM Lab</a> ›</span>
+      <span class="fb-title">FEM<b>BLOCKS</b></span>
+      <div class="fb-top-right">
+        <button class="fb-btn ghost" id="btnOpen" type="button" title="Open a saved project (.json)">Open</button>
+        <button class="fb-btn ghost" id="btnSave" type="button" title="Save your blocks to a file">Save</button>
+        <button class="fb-btn ghost" id="btnSound" type="button" title="Sound on/off">♪ On</button>
+        <button id="theme-toggle" class="nav-icon theme-toggle" type="button" aria-label="Toggle colour theme">
+          <svg
+            class="icon-moon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+            />
+          </svg>
+          <svg
+            class="icon-sun"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4" />
+            <path
+              d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ─── Mission bar: Tri the robot explains the current mission ─── -->
+    <section class="fb-mission" aria-live="polite">
+      <button id="mascot" type="button" aria-label="Tri: click for a joke"></button>
+      <div class="fb-bubble">
+        <div class="fb-bubble-head">
+          <span class="fb-kicker" id="missionKicker">MISSION 1</span>
+          <h1 id="missionTitle">Hello, heat!</h1>
+        </div>
+        <p id="missionText"></p>
+        <p class="fb-goal" id="missionGoal"></p>
+      </div>
+      <div class="fb-mission-side">
+        <div class="fb-missions" id="missionList" role="tablist" aria-label="Missions"></div>
+        <div class="fb-mission-actions">
+          <button class="fb-btn ghost small" id="btnHint" type="button">💡 Hint</button>
+          <button class="fb-btn ghost small" id="btnReset" type="button" title="Put the starting blocks back">↺ Start over</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Workbench ─── -->
+    <main class="fb-bench" id="main">
+      <section class="fb-ws-wrap" aria-label="Blocks">
+        <div id="workspace"></div>
+        <button class="fb-run" id="btnRun" type="button" disabled>
+          <span class="fb-run-icon" aria-hidden="true">▶</span>
+          <span id="runLabel">Loading FEAScript…</span>
+        </button>
+      </section>
+
+      <aside class="fb-side">
+        <div class="fb-card fb-results">
+          <div class="fb-tabs" role="tablist">
+            <button class="fb-tab on" type="button" data-tab="picture" role="tab">Picture</button>
+            <button class="fb-tab" type="button" data-tab="code" role="tab">Code</button>
+            <button class="fb-tab" type="button" data-tab="fem" role="tab">The math</button>
+          </div>
+          <div class="fb-pane on" data-pane="picture">
+            <div class="fb-canvas-wrap" id="canvasWrap">
+              <canvas id="result" class="px"></canvas>
+              <div class="fb-empty" id="resultEmpty">
+                <b>Nothing solved yet</b>
+                Snap the blocks together and press <span class="kbd-run">▶ Run</span>.
+              </div>
+              <div class="fb-tip" id="hoverTip"></div>
+            </div>
+            <div class="fb-legend" id="legend"></div>
+            <div class="fb-summary" id="summary"></div>
+          </div>
+          <div class="fb-pane" data-pane="code">
+            <p class="fb-pane-note">
+              Your blocks write this JavaScript. It's real FEAScript code: Run executes exactly these lines.
+              <button class="fb-btn ghost small" id="btnCopy" type="button">Copy</button>
+            </p>
+            <pre class="fb-code" id="code"></pre>
+          </div>
+          <div class="fb-pane" data-pane="fem">
+            <div class="fb-math">
+              <div class="fb-math-head">
+                <span class="fb-kicker">1 · What your blocks mean</span>
+                <span class="fb-phys" id="mathPhys">Heat</span>
+              </div>
+              <div class="fb-eq" id="mathEq"></div>
+              <div class="fb-terms" id="mathTerms"></div>
+              <div class="fb-explain" id="blockExplain"></div>
+            </div>
+            <div class="fb-math-head fb-solved-head">
+              <span class="fb-kicker">2 · How it's solved</span>
+            </div>
+            <div id="femExplain"></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="fb-foot">
+      <span>FEM Blocks is part of the <a href="../index.html">FEAScript FEM Lab</a>.</span>
+      <span>Solver: <a href="https://feascript.com">FEAScript</a> <b id="feaVersion"></b> · Blocks:
+        <a href="https://github.com/google/blockly">Blockly</a> (Apache 2.0)</span>
+      <span>&#169; 2023-<span id="currentYear"></span> FEAScript</span>
+    </footer>
+
+    <div class="fb-toast" id="toast" role="status"></div>
+    <input type="file" id="fileInput" accept=".json,application/json" hidden />
+
+    <!-- Plain classic scripts (they also work on file://); FEAScript is loaded by app.js -->
+    <script src="js/pixels.js"></script>
+    <script src="js/blocks.js"></script>
+    <script src="js/generator.js"></script>
+    <script src="js/missions.js"></script>
+    <script src="js/results.js"></script>
+    <script src="js/app.js"></script>
+    <script src="../../feascript-website.js"></script>
+  </body>
+</html>

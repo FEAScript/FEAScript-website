@@ -1,10 +1,10 @@
-<img src="https://feascript.github.io/FEAScript-website/assets/feascript-logo.png" width="80">
+<img src="https://feascript.github.io/FEAScript-website/assets/feascript-logo.png" width="80" alt="FEAScript Logo">
 
 # FEAScript-website
 
-![website status](https://img.shields.io/website?url=https%3A%2F%2Ffeascript.com%2F)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Ffeascript.com%2F)](https://feascript.com/)
 
-FEAScript is a finite element simulation library built in JavaScript. This is the source code of the FEAScript <a href="https://feascript.com/" target="_blank">website</a>.
+FEAScript is a finite element simulation library built in JavaScript. This is the source code of the FEAScript [website](https://feascript.com/).
 
 ## Tutorial section labels
 
@@ -16,6 +16,6 @@ Schematics and meshes are black line-art SVGs in `assets/`, placed in a `<div cl
 
 ## License
 
-The content of the FEAScript website is licensed under <a href="https://github.com/FEAScript/FEAScript-website/blob/main/LICENSE" target="_blank">CC-BY 4.0</a>. Note that the core library of FEAScript is distributed under the terms of the <a href="https://github.com/FEAScript/FEAScript-core/blob/main/LICENSE" target="_blank">MIT license</a>.
+The content of the FEAScript website is licensed under [CC BY 4.0](LICENSE). Note that the core library of FEAScript is distributed under the terms of the [MIT license](https://github.com/FEAScript/FEAScript-core/blob/main/LICENSE).
 
-The CC-BY 4.0 license does not cover the FEAScript and FEAScript Studio logos, Tri (the FEAScript triangle robot), or the names "FEAScript", "FEAScript Studio" and "Tri's Lab", which are not licensed. You may use them unchanged when you refer to FEAScript, for example in a lesson, a talk or a blog post; for anything else, please ask first at info@feascript.com. Logos and names of other companies and projects belong to their owners.
+The CC BY 4.0 license does not cover the FEAScript and FEAScript Studio logos, Tri (the FEAScript triangle robot), or the names "FEAScript", "FEAScript Studio" and "Tri's Lab", which are not licensed. You may use them unchanged when you refer to FEAScript, for example in a lesson, a talk or a blog post; for anything else, please ask first at info@feascript.com. Logos and names of other companies and projects belong to their owners.

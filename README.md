@@ -17,3 +17,5 @@ Schematics and meshes are black line-art SVGs in `assets/`, placed in a `<div cl
 ## License
 
 The content of the FEAScript website is licensed under <a href="https://github.com/FEAScript/FEAScript-website/blob/main/LICENSE" target="_blank">CC-BY 4.0</a>. Note that the core library of FEAScript is distributed under the terms of the <a href="https://github.com/FEAScript/FEAScript-core/blob/main/LICENSE" target="_blank">MIT license</a>.
+
+The CC-BY 4.0 license does not cover the FEAScript and FEAScript Studio logos, Tri (the FEAScript triangle robot), or the names "FEAScript", "FEAScript Studio" and "Tri's Lab", which are not licensed. You may use them unchanged when you refer to FEAScript, for example in a lesson, a talk or a blog post; for anything else, please ask first at info@feascript.com. Logos and names of other companies and projects belong to their owners.

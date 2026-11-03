@@ -1,12 +1,13 @@
-/*
+/**
  * ════════════════════════════════════════════════════════════════
- *  FEAScript Website - home page behaviour
+ *  FEAScript Website
  *  Finite Element Simulation in JavaScript
  *  https://feascript.com
  *  CC BY 4.0 License © 2023–2026 FEAScript
  * ════════════════════════════════════════════════════════════════
  */
 
+// Home page behaviour
 (function () {
   "use strict";
 

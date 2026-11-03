@@ -675,7 +675,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   color: var(--ink-strong);
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
   .nav-links {
     display: flex;
   }

@@ -549,6 +549,29 @@ html.site {
   color: #1d1d1d;
 }
 
+/* Tri's Lab gets the lab's playful pixel look: Tri's blush pink, a hard outline and a shadow that presses in */
+.nav-link-lab span {
+  border: 1px solid #1d1d1d;
+  border-radius: 2px;
+  background: #ffd6e3;
+  color: #1d1d1d;
+  box-shadow: 2px 2px 0 #1d1d1d;
+  transition:
+    transform 0.1s steps(1),
+    box-shadow 0.1s steps(1);
+}
+
+.nav-link-lab:hover span {
+  border-color: #1d1d1d;
+  background: #ffd6e3;
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #1d1d1d;
+}
+
+html[data-theme="dark"] .nav-link-lab span {
+  box-shadow: 2px 2px 0 #ff5c8d;
+}
+
 .mobile-nav a.nav-link-out {
   color: var(--gold-ink);
   font-weight: 500;

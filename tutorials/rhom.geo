@@ -1,5 +1,5 @@
 // 2D rhomboid: 4 m (base width) x 2 m (height), top edge shifted by dx
-// Generate the mesh with: gmsh rhom.geo -2 -format msh41 -o rhom_quad.msh
+// Generate the mesh with: gmsh rhom.geo -2 -format msh41 -o rhom_quad_quadratic.msh
 
 // 1. Mesh size and shape
 lc = 0.7; // Characteristic length

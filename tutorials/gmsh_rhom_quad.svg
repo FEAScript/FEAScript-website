@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 320" width="660" height="320" font-family="sans-serif" font-size="15" fill="#000">
-  <!-- Mesh: 24 quadratic quadrilaterals (117 nodes), read from rhom_quad.msh -->
+  <!-- Mesh: 24 quadratic quadrilaterals (117 nodes), read from rhom_quad_quadratic.msh -->
   <g fill="none" stroke="#000" stroke-width="0.8" stroke-opacity="0.55" stroke-linejoin="round">
     <polygon points="255.35,199.84 228.95,199.83 202.54,199.82 192.94,219.91 183.33,240 210,240 236.67,240 246.01,219.92"/>
     <polygon points="402.65,120.66 429.62,120.53 456.58,120.39 466.62,100.19 476.67,80 450,80 423.33,80 412.99,100.33"/>

@@ -229,11 +229,11 @@
       model.setModelConfig("heatConductionScript");
 
       // 2. Load the Gmsh mesh (.msh format version 4.1)
-      const response = await fetch("./rect_quad.msh");
+      const response = await fetch("./rect_quad_quadratic.msh");
       if (!response.ok) {
         throw new Error(`Failed to load the mesh file: ${response.status} ${response.statusText}`);
       }
-      const meshFile = new File([await response.text()], "rect_quad.msh");
+      const meshFile = new File([await response.text()], "rect_quad_quadratic.msh");
       const mesh = await importGmshMesh(meshFile);
       model.setMeshConfig({ parsedMesh: mesh });
 
@@ -313,7 +313,7 @@
               </div>
               <pre class="prettyprint" id="rect-geo">
 // 2D rectangle: 4 m (width) x 2 m (height)
-// Generate the mesh with: gmsh rect.geo -2 -format msh41 -o rect_quad.msh
+// Generate the mesh with: gmsh rect.geo -2 -format msh41 -o rect_quad_quadratic.msh
 
 // 1. Mesh size
 lc = 0.7; // Characteristic length
@@ -373,7 +373,7 @@ Mesh 2;</pre
 
             <p>
               To generate a mesh file from this <code>.geo</code> script, you would run:
-              <code>gmsh rect.geo -2 -format msh41 -o rect_quad.msh</code> in your terminal, which creates the <code>rect_quad.msh</code> file that
+              <code>gmsh rect.geo -2 -format msh41 -o rect_quad_quadratic.msh</code> in your terminal, which creates the <code>rect_quad_quadratic.msh</code> file that
               can be imported into FEAScript.
             </p>
 
@@ -416,7 +416,7 @@ Mesh 2;</pre
                 width="580"
               />
               <p class="image-caption">
-                Quadrilateral mesh (<code>rect_quad.msh</code>) generated using the
+                Quadrilateral mesh (<code>rect_quad_quadratic.msh</code>) generated using the
                 <code>rect.geo</code> script with Gmsh
               </p>
             </div>
@@ -471,14 +471,14 @@ Mesh 2;</pre
                 console.log("FEAScript version:", printVersion);
 
                 // Fetch the mesh file
-                const response = await fetch("./rect_quad.msh"); // .msh version 4.1 is currently supported
+                const response = await fetch("./rect_quad_quadratic.msh"); // .msh version 4.1 is currently supported
                 if (!response.ok) {
                   throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
                 }
                 const meshContent = await response.text();
 
                 // Create a File object with the actual content
-                const meshFile = new File([meshContent], "rect_quad.msh");
+                const meshFile = new File([meshContent], "rect_quad_quadratic.msh");
 
                 // Create a new FEAScript model
                 const gmshModel = new FEAScriptModel();

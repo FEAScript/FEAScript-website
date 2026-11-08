@@ -140,6 +140,97 @@ def advection_diffusion_schematic():
     return svg(580, 310, body, "Advection-diffusion in 1D: domain [0, 1], Gaussian source centered at x = 0.5")
 
 
+def read_gmsh_2d(file_name):
+    """Nodes, 6-node triangles and boundary curves (by physical tag) of a .msh 4.1 ASCII file of P2 triangles."""
+    with open(os.path.join(OUTPUT, file_name)) as handle:
+        lines = [line.split() for line in handle]
+    section = {line[0]: index for index, line in enumerate(lines) if line and line[0].startswith("$")}
+    # Physical tag of each curve entity
+    counts = [int(value) for value in lines[section["$Entities"] + 1]]
+    curve_tags, row = {}, section["$Entities"] + 2 + counts[0]
+    for line in lines[row : row + counts[1]]:
+        if int(line[7]) > 0:
+            curve_tags[int(line[0])] = int(line[8])
+    nodes, row = {}, section["$Nodes"] + 2
+    while row < section["$EndNodes"]:
+        count = int(lines[row][3])
+        tags = [int(line[0]) for line in lines[row + 1 : row + 1 + count]]
+        for tag, line in zip(tags, lines[row + 1 + count : row + 1 + 2 * count]):
+            nodes[tag] = (float(line[0]), float(line[1]))
+        row += 1 + 2 * count
+    triangles, curves, row = [], {}, section["$Elements"] + 2
+    while row < section["$EndElements"]:
+        dimension_, entity, element_type, count = (int(value) for value in lines[row])
+        for line in lines[row + 1 : row + 1 + count]:
+            connectivity = [int(value) for value in line[1:]]
+            if element_type == 9:
+                triangles.append(connectivity)
+            elif element_type == 8 and entity in curve_tags:
+                curves.setdefault(curve_tags[entity], []).append(connectivity)
+        row += 1 + count
+    return nodes, triangles, curves
+
+
+PILLARS = [(2, 0.5), (2, 1.5), (3, 1), (4, 0.5), (4, 1.5), (5, 1), (6, 0.5), (6, 1.5)]
+
+
+def pillar_frame(scale, x0, y0):
+    """Channel outline and pillars of the pillar array, 8 x 2 with radius 0.3, at scale px per unit."""
+    x1, y1 = x0 + 8 * scale, y0 - 2 * scale
+    body = [f'<rect x="{x0}" y="{fmt(y1)}" width="{fmt(8 * scale)}" height="{fmt(2 * scale)}" fill="none" stroke="#000" stroke-width="2"/>']
+    body += [
+        f'<circle cx="{fmt(x0 + scale * x)}" cy="{fmt(y0 - scale * y)}" r="{fmt(0.3 * scale)}" fill="#fff" stroke="#000" stroke-width="2"/>'
+        for x, y in PILLARS
+    ]
+    return body, x1, y1
+
+
+def pillar_array_schematic():
+    """Channel with the staggered pillars, the boundary conditions and the dimensions."""
+    scale, x0, y0 = 55, 100, 175
+    body, x1, y1 = pillar_frame(scale, x0, y0)
+    for k in range(5):
+        y = y0 - scale * (0.2 + 0.4 * k)
+        body.append(f'<line x1="{x0 - 42}" y1="{fmt(y)}" x2="{x0 - 6}" y2="{fmt(y)}" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>')
+    ym = (y0 + y1) / 2
+    body += [text(x0 - 62, ym, f"{italic('u')} = 1, {italic('v')} = 0", rotate=-90), text(x0 - 80, ym, 'inlet, boundary "0"', 12, "#666", rotate=-90)]
+    body += [text((x0 + x1) / 2, y1 - 10, f"No-slip {italic('u')} = {italic('v')} = 0"), text((x0 + x1) / 2, y1 - 28, 'walls, boundary "1"', 12, "#666")]
+    body += [text((x0 + x1) / 2, y0 + 22, 'walls, boundary "1"', 12, "#666")]
+    body += [text(x1 + 20, ym, "Stress-free", rotate=90), text(x1 + 38, ym, 'outlet, boundary "2"', 12, "#666", rotate=90)]
+    px, py = x0 + scale * 3, y0 - scale * 1
+    body += [f'<line x1="{fmt(px + 30)}" y1="{fmt(y0 + 62)}" x2="{fmt(px + 0.3 * scale * 0.7)}" y2="{fmt(py + 0.3 * scale * 0.7)}" stroke="#000" stroke-width="1" marker-end="url(#arrow)"/>']
+    body += [text(px + 36, y0 + 62, f"Pillars, no-slip, radius 0.3", 13, anchor="start"), text(px + 36, y0 + 78, 'boundary "3"', 12, "#666", anchor="start")]
+    body += dimension(x0, y0 + 100, x1, y0 + 100, "8")
+    body += [f'<line x1="{fmt(x1 + 70)}" y1="{y0}" x2="{fmt(x1 + 70)}" y2="{fmt(y1)}" stroke="#000" stroke-width="1" stroke-dasharray="4 3" marker-start="url(#arrow)" marker-end="url(#arrow)"/>']
+    body += [text(x1 + 82, ym + 5, "2", anchor="start")]
+    body += [f'<circle cx="{x0}" cy="{y0}" r="3"/>', text(x0 - 8, y0 + 20, "(0, 0)", 13, anchor="end")]
+    return svg(680, int(y0 + 130), body, "Pillar array: 8 x 2 channel with 8 pillars of radius 0.3, Stokes flow from left to right")
+
+
+def pillar_array_mesh():
+    """The P2 triangle mesh of pillar_triang_quadratic.msh, with the boundary keys."""
+    nodes, triangles, curves = read_gmsh_2d("pillar_triang_quadratic.msh")
+    scale, x0, y0 = 70, 70, 210
+
+    def point(tag):
+        x, y = nodes[tag]
+        return f"{fmt(x0 + scale * x)},{fmt(y0 - scale * y)}"
+
+    polygons = [f'<polygon points="{" ".join(point(t[i]) for i in (0, 3, 1, 4, 2, 5))}"/>' for t in triangles]
+    body = [f'<g {MESH_STYLE.replace("0.8", "0.5")}>'] + ["  " + line for line in polygons] + ["</g>"]
+    for tag in curves:
+        for a, b, m in curves[tag]:
+            body.append(f'<polyline points="{point(a)} {point(m)} {point(b)}" fill="none" stroke="#000" stroke-width="1.6"/>')
+    x1, y1, ym = x0 + 8 * scale, y0 - 2 * scale, y0 - scale
+    body += [text(x0 - 14, ym, "inlet", rotate=-90), text(x0 - 32, ym, 'boundary "0"', 12, "#666", rotate=-90)]
+    body += [text((x0 + x1) / 2, y1 - 10, "walls"), text((x0 + x1) / 2, y1 - 28, 'boundary "1"', 12, "#666")]
+    body += [text(x1 + 20, ym, "outlet", rotate=90), text(x1 + 38, ym, 'boundary "2"', 12, "#666", rotate=90)]
+    body += [text((x0 + x1) / 2, y0 + 26, 'walls: boundary "1", pillars: boundary "3"', 12, "#666")]
+    body += [f'<circle cx="{x0}" cy="{y0}" r="3"/>', text(x0 - 8, y0 + 20, "(0, 0)", 13, anchor="end")]
+    comment = f"Mesh: {len(triangles)} quadratic triangles ({len(nodes)} nodes), read from pillar_triang_quadratic.msh"
+    return svg(680, int(y0 + 60), body, comment)
+
+
 FIGURES = {
     "heat-conduction-1d-wall-mesh.svg": lambda: mesh_1d(
         0.15, 10, False, "Convection", f"{italic('T')} = 5 °C", "0.15 m", "1D wall: 10 linear elements, 11 nodes"
@@ -154,6 +245,8 @@ FIGURES = {
         4, 2, 12, 8, "Solidification front: 12 x 8 quadratic quadrilaterals (25 x 17 nodes), internally generated"
     ),
     "advection-diffusion-1d.svg": advection_diffusion_schematic,
+    "creeping-flow-2d-pillar-array.svg": pillar_array_schematic,
+    "creeping-flow-2d-pillar-array-mesh.svg": pillar_array_mesh,
     "advection-diffusion-1d-mesh.svg": lambda: mesh_1d(
         1, 20, True, f"{italic('u')}(0) = 1", f"d{italic('u')}/d{italic('x')} = 0", "1",
         "Advection-diffusion in 1D: 20 quadratic elements, 41 nodes",

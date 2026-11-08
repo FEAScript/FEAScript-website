@@ -456,8 +456,8 @@
       model.setModelConfig("heatConductionScript");
 
       // 2. Load the Gmsh mesh (any hosted .msh file works)
-      const response = await fetch("https://feascript.com/tutorials/rect_with_hole.msh");
-      const meshFile = new File([await response.text()], "rect_with_hole.msh");
+      const response = await fetch("https://feascript.com/tutorials/rect_with_hole_quad_quadratic.msh");
+      const meshFile = new File([await response.text()], "rect_with_hole_quad_quadratic.msh");
       const mesh = await importGmshMesh(meshFile);
       model.setMeshConfig({ parsedMesh: mesh });
 
@@ -766,11 +766,6 @@
                     class="badge badge-gmsh"
                     href="https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html"
                     >Gmsh mesh</a
-                  >
-                  <a
-                    class="badge badge-gmsh"
-                    href="https://feascript.com/tutorials/heat-conduction-2d-rhom-fin-gmsh.html"
-                    >Rhomboid fin (Gmsh mesh)</a
                   >
                   <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/WbrzwPG">CodePen</a>
                   <a

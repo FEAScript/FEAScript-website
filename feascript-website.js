@@ -326,9 +326,9 @@
             : loadScript("https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"),
         ]);
         core = module;
-        const response = await fetch("tutorials/rect_with_hole.msh");
+        const response = await fetch("tutorials/rect_with_hole_quad_quadratic.msh");
         if (!response.ok) throw new Error(`Mesh file: ${response.status}`);
-        mesh = await core.importGmshMesh(new File([await response.text()], "rect_with_hole.msh"));
+        mesh = await core.importGmshMesh(new File([await response.text()], "rect_with_hole_quad_quadratic.msh"));
         Object.values(inputs).forEach((input) => {
           input.disabled = false;
           input.addEventListener("input", () => {

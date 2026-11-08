@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 305" width="680" height="305" font-family="sans-serif" font-size="15" fill="#000">
+  <!-- Pillar array: 8 x 2 channel with 8 pillars of radius 0.3, Stokes flow from left to right -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
+    </marker>
+  </defs>
+  <rect x="100" y="65" width="440" height="110" fill="none" stroke="#000" stroke-width="2"/>
+  <circle cx="210" cy="147.5" r="16.5" fill="#fff" stroke="#000" stroke-width="2"/>
+  <circle cx="210" cy="92.5" r="16.5" fill="#fff" stroke="#000" stroke-width="2"/>
+  <circle cx="265" cy="120" r="16.5" fill="#fff" stroke="#000" stroke-width="2"/>
+  <circle cx="320" cy="147.5" r="16.5" fill="#fff" stroke="#000" stroke-width="2"/>
+  <circle cx="320" cy="92.5" r="16.5" fill="#fff" stroke="#000" stroke-width="2"/>
+  <circle cx="375" cy="120" r="16.5" fill="#fff" stroke="#000" stroke-width="2"/>
+  <circle cx="430" cy="147.5" r="16.5" fill="#fff" stroke="#000" stroke-width="2"/>
+  <circle cx="430" cy="92.5" r="16.5" fill="#fff" stroke="#000" stroke-width="2"/>
+  <line x1="58" y1="164" x2="94" y2="164" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="58" y1="142" x2="94" y2="142" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="58" y1="120" x2="94" y2="120" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="58" y1="98" x2="94" y2="98" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="58" y1="76" x2="94" y2="76" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="38" y="120" text-anchor="middle" transform="rotate(-90 38 120)"><tspan font-style="italic">u</tspan> = 1, <tspan font-style="italic">v</tspan> = 0</text>
+  <text x="20" y="120" font-size="12" fill="#666" text-anchor="middle" transform="rotate(-90 20 120)">inlet, boundary "0"</text>
+  <text x="320" y="55" text-anchor="middle">No-slip <tspan font-style="italic">u</tspan> = <tspan font-style="italic">v</tspan> = 0</text>
+  <text x="320" y="37" font-size="12" fill="#666" text-anchor="middle">walls, boundary "1"</text>
+  <text x="320" y="197" font-size="12" fill="#666" text-anchor="middle">walls, boundary "1"</text>
+  <text x="560" y="120" text-anchor="middle" transform="rotate(90 560 120)">Stress-free</text>
+  <text x="578" y="120" font-size="12" fill="#666" text-anchor="middle" transform="rotate(90 578 120)">outlet, boundary "2"</text>
+  <line x1="295" y1="237" x2="276.55" y2="131.55" stroke="#000" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="301" y="237" font-size="13">Pillars, no-slip, radius 0.3</text>
+  <text x="301" y="253" font-size="12" fill="#666">boundary "3"</text>
+  <line x1="100" y1="275" x2="540" y2="275" stroke="#000" stroke-width="1" stroke-dasharray="4 3" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="320" y="295" text-anchor="middle">8</text>
+  <line x1="610" y1="175" x2="610" y2="65" stroke="#000" stroke-width="1" stroke-dasharray="4 3" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="622" y="125">2</text>
+  <circle cx="100" cy="175" r="3"/>
+  <text x="92" y="195" font-size="13" text-anchor="end">(0, 0)</text>
+</svg>

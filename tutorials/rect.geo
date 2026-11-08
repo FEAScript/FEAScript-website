@@ -1,5 +1,5 @@
 // 2D rectangle: 4 m (width) x 2 m (height)
-// Generate the mesh with: gmsh rect.geo -2 -format msh41 -o rect_quad.msh
+// Generate the mesh with: gmsh rect.geo -2 -format msh41 -o rect_quad_quadratic.msh
 
 // 1. Mesh size
 lc = 0.7; // Characteristic length

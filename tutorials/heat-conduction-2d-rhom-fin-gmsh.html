@@ -232,11 +232,11 @@
       model.setModelConfig("heatConductionScript");
 
       // 2. Load the Gmsh mesh (.msh format version 4.1)
-      const response = await fetch("./rhom_quad.msh");
+      const response = await fetch("./rhom_quad_quadratic.msh");
       if (!response.ok) {
         throw new Error(`Failed to load the mesh file: ${response.status} ${response.statusText}`);
       }
-      const meshFile = new File([await response.text()], "rhom_quad.msh");
+      const meshFile = new File([await response.text()], "rhom_quad_quadratic.msh");
       const mesh = await importGmshMesh(meshFile);
       model.setMeshConfig({ parsedMesh: mesh });
 
@@ -296,7 +296,7 @@
               </div>
               <pre class="prettyprint" id="rhom-geo">
 // 2D rhomboid: 4 m (base width) x 2 m (height), top edge shifted by dx
-// Generate the mesh with: gmsh rhom.geo -2 -format msh41 -o rhom_quad.msh
+// Generate the mesh with: gmsh rhom.geo -2 -format msh41 -o rhom_quad_quadratic.msh
 
 // 1. Mesh size and shape
 lc = 0.7; // Characteristic length
@@ -332,7 +332,7 @@ Mesh 2;</pre
 
             <p>
               To generate a mesh file from this <code>.geo</code> script, you would run:
-              <code>gmsh rhom.geo -2 -format msh41 -o rhom_quad.msh</code> in your terminal.
+              <code>gmsh rhom.geo -2 -format msh41 -o rhom_quad_quadratic.msh</code> in your terminal.
             </p>
 
             <div class="eyebrow label" id="generatedmesh" role="heading" aria-level="2">
@@ -351,7 +351,7 @@ Mesh 2;</pre
                 width="660"
               />
               <p class="image-caption">
-                Quadrilateral mesh (<code>rhom_quad.msh</code>) generated using the
+                Quadrilateral mesh (<code>rhom_quad_quadratic.msh</code>) generated using the
                 <code>rhom.geo</code> script with Gmsh
               </p>
             </div>
@@ -406,14 +406,14 @@ Mesh 2;</pre
                 console.log("FEAScript version:", printVersion);
 
                 // Fetch the mesh file
-                const response = await fetch("./rhom_quad.msh"); // .msh version 4.1 is currently supported
+                const response = await fetch("./rhom_quad_quadratic.msh"); // .msh version 4.1 is currently supported
                 if (!response.ok) {
                   throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
                 }
                 const meshContent = await response.text();
 
                 // Create a File object with the actual content
-                const meshFile = new File([meshContent], "rhom_quad.msh");
+                const meshFile = new File([meshContent], "rhom_quad_quadratic.msh");
 
                 // Create a new FEAScript model
                 const gmshModel = new FEAScriptModel();

@@ -539,8 +539,21 @@ html.site {
   border-left: 1px solid var(--line);
 }
 
-.nav-link-out span::after {
-  content: " \2197";
+/* Each outbound link carries its footer icon (data-icon), drawn in the text colour so it follows the hover state */
+.nav-link-out[data-icon] span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.nav-link-out[data-icon] span::before {
+  content: "";
+  flex: none;
+  width: 0.95em;
+  height: 0.95em;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
 }
 
 .nav-link-out:hover span {
@@ -1485,6 +1498,44 @@ h2 .accent {
   color: color-mix(in srgb, var(--phys, var(--faint)) 70%, var(--ink));
 }
 
+/* Each tutorial card shows its physics logo (assets/feascript-<physics>.svg, without the tile background) before the label,
+   drawn as a mask in the physics colour */
+.tutorial[data-physics] .fig-label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.tutorial[data-physics] .fig-label::before {
+  content: "";
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  background: var(--phys);
+  -webkit-mask: var(--phys-icon) center / contain no-repeat;
+  mask: var(--phys-icon) center / contain no-repeat;
+}
+
+.tutorial[data-physics="heat"] {
+  --phys-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='72 72 368 368'%3E%3Cg fill='none' stroke='%23000' stroke-width='32' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M 176 96 C 177 97 180 102 182 105 C 184 108 187 111 189 114 C 190 117 192 120 194 124 C 196 127 197 130 198 133 C 199 136 200 139 201 142 C 201 145 202 148 202 152 C 202 155 201 158 201 161 C 200 164 199 167 198 170 C 197 173 196 176 194 180 C 192 183 190 186 189 189 C 187 192 184 195 182 198 C 180 201 178 204 176 208 C 173 211 171 214 169 217 C 167 220 164 223 163 226 C 161 229 159 232 157 236 C 156 239 154 242 153 245 C 152 248 151 251 150 254 C 150 257 150 260 150 264 C 150 267 150 270 150 273 C 151 276 152 279 153 282 C 154 285 156 288 157 292 C 159 295 161 298 163 301 C 164 304 167 307 169 310 C 171 313 174 318 176 320'/%3E%3Cpath d='M 256 128 C 257 129 260 133 262 136 C 264 138 267 141 269 144 C 270 146 272 149 274 152 C 276 154 277 157 278 160 C 279 162 280 165 281 168 C 281 170 282 173 282 176 C 282 178 281 181 281 184 C 280 186 279 189 278 192 C 277 194 276 197 274 200 C 272 202 270 205 269 208 C 267 210 264 213 262 216 C 260 218 258 221 256 224 C 253 226 251 229 249 232 C 247 234 244 237 243 240 C 241 242 239 245 237 248 C 236 250 234 253 233 256 C 232 258 231 261 230 264 C 230 266 230 269 230 272 C 230 274 230 277 230 280 C 231 282 232 285 233 288 C 234 290 236 293 237 296 C 239 298 241 301 243 304 C 244 306 247 309 249 312 C 251 314 254 318 256 320'/%3E%3Cpath d='M 336 96 C 337 97 340 102 342 105 C 344 108 347 111 349 114 C 350 117 352 120 354 124 C 356 127 357 130 358 133 C 359 136 360 139 361 142 C 361 145 362 148 362 152 C 362 155 361 158 361 161 C 360 164 359 167 358 170 C 357 173 356 176 354 180 C 352 183 350 186 349 189 C 347 192 344 195 342 198 C 340 201 338 204 336 208 C 333 211 331 214 329 217 C 327 220 324 223 323 226 C 321 229 319 232 317 236 C 316 239 314 242 313 245 C 312 248 311 251 310 254 C 310 257 310 260 310 264 C 310 267 310 270 310 273 C 311 276 312 279 313 282 C 314 285 316 288 317 292 C 319 295 321 298 323 301 C 324 304 327 307 329 310 C 331 313 334 318 336 320'/%3E%3Cpath d='M 120 408 L 392 408'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tutorial[data-physics="flow"] {
+  --phys-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='72 72 368 368'%3E%3Cg fill='none' stroke='%23000' stroke-width='32' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M 204 136 C 204 137 204 140 204 142 C 204 144 204 146 204 148 C 204 150 204 152 204 154 C 204 156 204 158 204 160 C 203 162 203 164 203 166 C 203 168 203 170 202 172 C 202 174 201 176 200 178 C 199 180 199 182 198 184 C 197 186 196 188 195 190 C 194 192 192 194 191 196 C 190 198 189 200 187 202 C 186 204 185 206 184 208 C 182 210 181 212 180 214 C 178 216 177 218 176 220 C 175 222 174 224 172 226 C 171 228 170 230 169 232 C 168 234 168 236 167 238 C 166 240 166 242 165 244 C 165 246 164 248 164 250 C 164 252 164 254 164 256 C 164 258 164 260 164 262 C 164 264 165 266 165 268 C 166 270 166 272 167 274 C 168 276 168 278 169 280 C 170 282 171 284 172 286 C 174 288 175 290 176 292 C 177 294 178 296 180 298 C 181 300 182 302 184 304 C 185 306 186 308 187 310 C 189 312 190 314 191 316 C 192 318 194 320 195 322 C 196 324 197 326 198 328 C 199 330 199 332 200 334 C 201 336 202 338 202 340 C 203 342 203 344 203 346 C 203 348 203 350 204 352 C 204 354 204 356 204 358 C 204 360 204 362 204 364 C 204 366 204 368 204 370 C 204 372 204 375 204 376'/%3E%3Cpath d='M 308 136 C 308 137 308 140 308 142 C 308 144 308 146 308 148 C 308 150 308 152 308 154 C 308 156 307 158 308 160 C 308 162 308 164 308 166 C 308 168 309 170 309 172 C 310 174 310 176 311 178 C 312 180 312 182 313 184 C 314 186 315 188 316 190 C 318 192 319 194 320 196 C 321 198 322 200 324 202 C 325 204 326 206 328 208 C 329 210 330 212 331 214 C 333 216 334 218 335 220 C 336 222 338 224 339 226 C 340 228 341 230 342 232 C 343 234 343 236 344 238 C 345 240 346 242 346 244 C 347 246 347 248 347 250 C 347 252 348 254 348 256 C 348 258 347 260 347 262 C 347 264 347 266 346 268 C 346 270 345 272 344 274 C 343 276 343 278 342 280 C 341 282 340 284 339 286 C 338 288 336 290 335 292 C 334 294 333 296 331 298 C 330 300 329 302 328 304 C 326 306 325 308 324 310 C 322 312 321 314 320 316 C 319 318 318 320 316 322 C 315 324 314 326 313 328 C 312 330 312 332 311 334 C 310 336 310 338 309 340 C 309 342 308 344 308 346 C 308 348 308 350 308 352 C 307 354 308 356 308 358 C 308 360 308 362 308 364 C 308 366 308 368 308 370 C 308 372 308 375 308 376'/%3E%3Cpath d='M 128 96 C 128 97 128 101 128 104 C 128 106 128 109 128 112 C 128 114 128 117 128 120 C 128 122 128 125 128 128 C 128 130 128 133 128 136 C 128 138 128 141 128 144 C 128 146 128 149 128 152 C 128 154 128 157 128 160 C 127 162 127 165 127 168 C 127 170 126 173 126 176 C 125 178 125 181 124 184 C 123 186 122 189 122 192 C 121 194 120 197 119 200 C 118 202 117 205 116 208 C 115 210 113 213 112 216 C 111 218 110 221 110 224 C 109 226 108 229 107 232 C 106 234 106 237 105 240 C 105 242 104 245 104 248 C 104 250 104 253 104 256 C 104 258 104 261 104 264 C 104 266 105 269 105 272 C 106 274 106 277 107 280 C 108 282 109 285 110 288 C 110 290 111 293 112 296 C 113 298 115 301 116 304 C 117 306 118 309 119 312 C 120 314 121 317 122 320 C 122 322 123 325 124 328 C 125 330 125 333 126 336 C 126 338 127 341 127 344 C 127 346 127 349 128 352 C 128 354 128 357 128 360 C 128 362 128 365 128 368 C 128 370 128 373 128 376 C 128 378 128 381 128 384 C 128 386 128 389 128 392 C 128 394 128 397 128 400 C 128 402 128 405 128 408 C 128 410 128 414 128 416'/%3E%3Cpath d='M 384 96 C 384 97 384 101 384 104 C 384 106 384 109 384 112 C 384 114 384 117 384 120 C 384 122 384 125 384 128 C 384 130 384 133 384 136 C 384 138 384 141 384 144 C 384 146 384 149 384 152 C 384 154 383 157 384 160 C 384 162 384 165 384 168 C 384 170 385 173 385 176 C 386 178 386 181 387 184 C 388 186 389 189 390 192 C 390 194 391 197 392 200 C 393 202 395 205 396 208 C 397 210 398 213 399 216 C 400 218 401 221 402 224 C 402 226 403 229 404 232 C 405 234 405 237 406 240 C 406 242 407 245 407 248 C 407 250 408 253 408 256 C 408 258 407 261 407 264 C 407 266 406 269 406 272 C 405 274 405 277 404 280 C 403 282 402 285 402 288 C 401 290 400 293 399 296 C 398 298 397 301 396 304 C 395 306 393 309 392 312 C 391 314 390 317 390 320 C 389 322 388 325 387 328 C 386 330 386 333 385 336 C 385 338 384 341 384 344 C 384 346 384 349 384 352 C 383 354 384 357 384 360 C 384 362 384 365 384 368 C 384 370 384 373 384 376 C 384 378 384 381 384 384 C 384 386 384 389 384 392 C 384 394 384 397 384 400 C 384 402 384 405 384 408 C 384 410 384 414 384 416'/%3E%3Ccircle cx='256' cy='256' r='56' fill='%23000' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tutorial[data-physics="structure"] {
+  --phys-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='72 72 368 368'%3E%3Cg fill='none' stroke='%23000' stroke-width='32' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M 100 120 L 100 392'/%3E%3Cpath d='M 116 212 C 118 212 124 212 128 212 C 133 212 137 212 141 213 C 145 213 150 214 154 215 C 158 215 162 216 167 217 C 171 218 175 219 180 220 C 184 221 188 222 192 223 C 197 224 201 226 205 227 C 209 229 214 230 218 232 C 222 233 226 235 231 236 C 235 238 239 240 244 242 C 248 243 252 245 256 247 C 261 249 265 251 269 253 C 273 255 278 257 282 259 C 286 261 290 263 295 266 C 299 268 303 270 308 272 C 312 275 316 277 320 279 C 325 281 329 284 333 286 C 337 288 342 291 346 293 C 350 296 354 298 359 300 C 363 303 369 306 372 308'/%3E%3Cpath d='M 372 120 L 372 232'/%3E%3Cpath d='M 336 200 L 372 236 L 408 200'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tutorial[data-physics="front"] {
+  --phys-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='72 72 368 368'%3E%3Cg fill='none' stroke='%23000' stroke-width='32' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M 208 340 A 48 48 0 0 1 304 340'/%3E%3Cpath d='M 152 340 A 104 104 0 0 1 360 340'/%3E%3Cpath d='M 96 340 A 160 160 0 0 1 416 340'/%3E%3Ccircle cx='256' cy='340' r='18' fill='%23000' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.tutorial[data-physics="general"] {
+  --phys-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='72 72 368 368'%3E%3Cg fill='none' stroke='%23000' stroke-width='32' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M 362 142 C 352 112 322 100 298 108 C 272 116 262 142 256 174 L 226 340 C 220 376 202 404 172 406 C 150 408 136 398 130 380'/%3E%3Cpath d='M 196 214 L 330 214'/%3E%3C/g%3E%3C/svg%3E");
+}
+
 .tutorial-img {
   order: 2;
   flex-shrink: 0;
@@ -1604,6 +1655,77 @@ h2 .accent {
 .logo-row img {
   height: 30px;
   width: auto;
+}
+
+/* Case study card (Powered by FEAScript) */
+.case-study {
+  display: grid;
+  gap: 2rem;
+  grid-column: 1 / -1;
+}
+
+.case-study-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.case-study-logo img {
+  display: block;
+  height: 32px;
+  width: auto;
+}
+
+.case-study h3 {
+  margin-top: 1.5rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink-strong);
+}
+
+.case-study .desc {
+  max-width: 40rem;
+}
+
+.case-study-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.cell-pad .case-study-actions .btn {
+  margin-top: 0;
+}
+
+.case-study-meta {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.case-study-meta dd {
+  margin: 0.25rem 0 0;
+  color: var(--ink);
+}
+
+@media (min-width: 900px) {
+  .case-study {
+    grid-template-columns: minmax(0, 1fr) 16rem;
+    gap: 3rem;
+  }
+
+  .case-study-meta {
+    align-content: center;
+    padding-top: 0;
+    padding-left: 2rem;
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -1960,7 +2082,7 @@ h2 .accent {
 }
 
 [data-icon="tris-lab"] {
-  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 -1 31 36' fill='%23000' shape-rendering='crispEdges'%3E%3Cpath d='M24 3h1v1h-1zM23 4h2v1h-2zM22 5h3v1h-3zM21 6h4v1h-4zM20 7h6v1h-6zM19 8h7v1h-7zM18 9h8v1h-8zM17 10h10v1h-10zM16 11h11v1h-11zM15 12h12v1h-12zM14 13h13v1h-13zM13 14h15v1h-15zM12 15h16v1h-16zM11 16h5v1h-5zM19 16h3v1h-3zM25 16h3v1h-3zM10 17h6v1h-6zM19 17h3v1h-3zM25 17h3v1h-3zM9 18h7v1h-7zM19 18h3v1h-3zM25 18h4v1h-4zM8 19h21v1h-21zM7 20h22v1h-22zM6 21h23v1h-23zM5 22h13v1h-13zM19 22h4v1h-4zM24 22h6v1h-6zM4 23h15v1h-15zM23 23h7v1h-7zM3 24h27v1h-27zM7 25h24v1h-24zM10 26h21v1h-21zM11 27h1v1h-1zM14 27h17v1h-17zM11 28h1v1h-1zM18 28h13v1h-13zM11 29h1v1h-1zM22 29h10v1h-10zM10 30h3v1h-3zM25 30h7v1h-7zM25 31h1v1h-1zM29 31h3v1h-3zM25 32h1v1h-1zM24 33h3v1h-3z'/%3E%3C/svg%3E");
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3'/%3E%3Cpath d='M9 17.5l3-4.5 3 4.5z' fill='%23000'/%3E%3C/svg%3E");
 }
 
 [data-icon="tutorials"] {

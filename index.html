@@ -124,9 +124,9 @@
             <a class="nav-link" href="#features"><span>Features</span></a>
             <a class="nav-link" href="#tutorials"><span>Tutorials</span></a>
             <a class="nav-link" href="#licensing"><span>Licensing</span></a>
-            <a class="nav-link nav-link-out" href="https://docs.feascript.com"><span>Documentation</span></a>
-            <a class="nav-link nav-link-out" href="studio.html"><span>Studio</span></a>
-            <a class="nav-link nav-link-out nav-link-lab" href="https://lab.feascript.com/"><span>Tri's Lab</span></a>
+            <a class="nav-link nav-link-out" href="https://docs.feascript.com" data-icon="documentation"><span>Documentation</span></a>
+            <a class="nav-link nav-link-out" href="studio.html" data-icon="studio"><span>Studio</span></a>
+            <a class="nav-link nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab"><span>Tri's Lab</span></a>
           </nav>
         </div>
 
@@ -355,8 +355,7 @@
             <p class="prose" data-reveal>
               You can run simulations with FEAScript by calling its functions from JavaScript (the FEAScript
               API). The API offers full programmatic control and works across multiple environments, including
-              the browser (simple HTML pages and online JavaScript playgrounds, e.g.
-              <a href="https://codepen.io/">CodePen</a> and <a href="https://scribbler.live/">Scribbler</a>)
+              the browser (simple HTML pages and online JavaScript playgrounds, e.g. CodePen and Scribbler)
               and server-side runtimes such as <a href="https://nodejs.org/en">Node.js</a>.
             </p>
           </div>
@@ -598,11 +597,7 @@
                   >)
                 </li>
                 <li>
-                  Interactive JavaScript playgrounds (e.g.
-                  <a href="https://codepen.io/FEAScript">CodePen</a> and
-                  <a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
-                    >Scribbler</a
-                  >)
+                  Interactive JavaScript playgrounds (e.g. CodePen and Scribbler)
                 </li>
                 <li>Server-side runtime (<a href="https://www.npmjs.com/package/feascript">npm</a>)</li>
               </ul>
@@ -637,13 +632,13 @@
             <h2 data-reveal>Learn by <span class="accent">running.</span></h2>
             <p class="prose" data-reveal>
               These tutorials provide a step-by-step introduction to FEAScript. They show how to integrate
-              finite element simulations into your own websites and applications or to run them in interactive
-              JavaScript playgrounds such as <a href="https://codepen.io/FEAScript">CodePen</a> and
+              finite element simulations into your own websites and applications, or how to run them in
+              interactive JavaScript playgrounds such as <a href="https://codepen.io/FEAScript">CodePen</a> and
               <a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
                 >Scribbler</a
-              >. Each tutorial includes different variations that demonstrate the same physical problem under
-              different configurations, ranging from simple examples to advanced setups using external meshes
-              or multiple threads. For the equations and options behind each example, see the
+              >. Several tutorials come in variants that solve the same physical problem in different
+              configurations, from the basic example to more advanced setups with external meshes or multiple
+              threads. For the equations and options behind each example, see the
               <a href="https://docs.feascript.com">documentation</a>.
             </p>
           </div>
@@ -873,20 +868,42 @@
           </div>
 
           <div class="grid">
-            <article class="cell cell-pad" data-reveal>
-              <div class="logo-row">
-                <img src="assets/better-building-logo.png" alt="BetterBuilding Logo" />
-                <p class="text-muted" style="max-width: 46rem">
+            <article class="cell cell-pad case-study" data-reveal>
+              <div class="case-study-main">
+                <div class="case-study-head">
+                  <a href="https://betterbuilding.io/" class="case-study-logo">
+                    <img src="assets/better-building-logo.png" alt="Better Building" />
+                  </a>
+                  <span class="tag">Case study</span>
+                </div>
+                <h3>Heat Transfer Simulator</h3>
+                <p class="desc">
                   <a class="link" href="https://betterbuilding.io/">Better Building</a> integrated FEAScript
-                  to power their online
-                  <a
-                    class="link"
-                    href="https://docs.betterbuilding.io/sign-up-and-plans/news-and-updates/2025/introducing-our-free-heat-transfer-simulator"
-                    >Heat Transfer Simulator</a
-                  >
-                  for architects and engineers.
+                  to power their online Heat Transfer Simulator for architects and engineers.
                 </p>
+                <div class="case-study-actions">
+                  <a
+                    class="btn btn-solid btn-sm"
+                    href="https://docs.betterbuilding.io/sign-up-and-plans/news-and-updates/2025/introducing-our-free-heat-transfer-simulator"
+                    >Read the story <span aria-hidden="true">&rarr;</span></a
+                  >
+                  <a class="btn btn-outline btn-sm" href="https://betterbuilding.io/">Visit Better Building</a>
+                </div>
               </div>
+              <dl class="case-study-meta">
+                <div>
+                  <dt class="label text-faint">Domain</dt>
+                  <dd>Building physics</dd>
+                </div>
+                <div>
+                  <dt class="label text-faint">Solver</dt>
+                  <dd>Heat conduction</dd>
+                </div>
+                <div>
+                  <dt class="label text-faint">Users</dt>
+                  <dd>Architects and engineers</dd>
+                </div>
+              </dl>
             </article>
           </div>
         </div>

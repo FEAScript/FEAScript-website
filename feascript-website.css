@@ -1614,10 +1614,6 @@ h2 .accent {
   color: var(--invert-fg);
 }
 
-.badge-mt {
-  --dot: #5585a3;
-}
-
 .badge-gmsh {
   --dot: #8a9277;
 }

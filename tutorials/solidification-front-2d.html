@@ -96,6 +96,7 @@
             <a class="nav-link" href="#mathematicalformulation"><span>Mathematical Formulation</span></a>
             <a class="nav-link" href="#solvingwithfeascript"><span>Solving with FEAScript</span></a>
             <a class="nav-link" href="#results"><span>Results</span></a>
+            <a class="nav-link" href="#webworker"><span>Web Worker</span></a>
           </nav>
         </div>
 
@@ -175,6 +176,7 @@
         <a href="#mathematicalformulation">Mathematical Formulation</a>
         <a href="#solvingwithfeascript">Solving with FEAScript</a>
         <a href="#results">Results</a>
+        <a href="#webworker">Web Worker</a>
       </nav>
     </header>
 
@@ -398,12 +400,6 @@
 
             <br />
 
-            <!-- Link to the worker-based implementation -->
-            <p>
-              See also the
-              <a href="https://feascript.com/tutorials/solidification-front-2d-worker.html">multi-threaded version</a>
-              of this tutorial, which runs FEAScript in a separate thread (web worker) for improved responsiveness.
-            </p>
 
             <aside class="tri-tip" aria-label="Tip from Tri">
               <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
@@ -419,6 +415,37 @@
                 </p>
               </div>
             </aside>
+
+            <div class="eyebrow label" id="webworker" role="heading" aria-level="2">
+              <p><a name="Running it in a web worker"></a>Running it in a web worker</p>
+            </div>
+            <p>
+              <code>FEAScriptWorker</code> runs the model in a separate thread, so the page stays responsive
+              during the solve. It has the same methods as <code>FEAScriptModel</code>, but each call returns a
+              promise. Import from <code>src/index.js</code>, which loads the worker script next to it, and
+              add <code>await</code> to each call:
+            </p>
+            <pre class="prettyprint">
+import { FEAScriptWorker, plotSolution } from "https://core.feascript.com/src/index.js";
+
+const model = new FEAScriptWorker();
+await model.ping(); // Wait until the worker is ready
+await model.setModelConfig("frontPropagationScript");
+// ...setMeshConfig, addBoundaryCondition and setSolverMethod as above, each with await...
+const result = await model.solve();
+
+const modelInfo = await model.getModelInfo();
+plotSolution(modelInfo, result, "contour", "resultsCanvas");
+model.terminate();</pre
+            >
+            <p>
+              The worker does not make the solve faster: the same solver runs on another thread. A Newton
+              iteration that does not converge is logged, not thrown, so check the console for
+              <code>Front propagation did not converge</code>; the worker logs to the same console. Run it:
+              <a href="https://feascript.com/tutorials/solidification-front-2d-worker.html"
+                >solidification front in a web worker</a
+              >.
+            </p>
 
             <script type="module">
               // Import FEAScript library from GitHub

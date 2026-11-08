@@ -96,6 +96,7 @@
             <a class="nav-link" href="#mathematicalformulation"><span>Mathematical Formulation</span></a>
             <a class="nav-link" href="#solvingwithfeascript"><span>Solving with FEAScript</span></a>
             <a class="nav-link" href="#results"><span>Results</span></a>
+            <a class="nav-link" href="#webworker"><span>Web Worker</span></a>
           </nav>
         </div>
 
@@ -175,6 +176,7 @@
         <a href="#mathematicalformulation">Mathematical Formulation</a>
         <a href="#solvingwithfeascript">Solving with FEAScript</a>
         <a href="#results">Results</a>
+        <a href="#webworker">Web Worker</a>
       </nav>
     </header>
 
@@ -407,6 +409,39 @@
                 </p>
               </div>
             </aside>
+
+            <div class="eyebrow label" id="webworker" role="heading" aria-level="2">
+              <p><a name="Running it in a web worker"></a>Running it in a web worker</p>
+            </div>
+            <p>
+              <code>FEAScriptWorker</code> runs the model in a separate thread, so the page stays responsive
+              during the solve. It has the same methods as <code>FEAScriptModel</code>, but each call returns a
+              promise. Import from <code>src/index.js</code>, which loads the worker script next to it, and
+              add <code>await</code> to each call:
+            </p>
+            <pre class="prettyprint">
+import { FEAScriptWorker, plotSolution } from "https://core.feascript.com/src/index.js";
+
+const model = new FEAScriptWorker();
+await model.ping(); // Wait until the worker is ready
+await model.setModelConfig("creepingFlowScript", { coefficientFunctions: { viscosity: 1 } });
+// ...setMeshConfig, addBoundaryCondition and setSolverMethod as above, each with await...
+const result = await model.solve();
+
+const modelInfo = await model.getModelInfo();
+plotSolution(modelInfo, result, "contour", "velocityMagnitudeCanvas");
+plotSolution(modelInfo, result, "contour", "uVelocityCanvas", { field: "u" });
+plotSolution(modelInfo, result, "contour", "vVelocityCanvas", { field: "v" });
+model.terminate();</pre
+            >
+            <p>
+              The worker does not make the solve faster: the same solver runs on another thread. A viscosity
+              given as a function <code>(x, y) =&gt; …</code> is sent as source code and rebuilt in the worker,
+              so it must not use variables defined outside it. Run it:
+              <a href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow-worker.html"
+                >lid-driven cavity in a web worker</a
+              >.
+            </p>
 
             <script type="module">
               // Import FEAScript library from GitHub

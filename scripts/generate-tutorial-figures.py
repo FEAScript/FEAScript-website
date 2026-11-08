@@ -1,19 +1,19 @@
 """Generate the mesh figures of the tutorials, and the schematic of the advection-diffusion tutorial.
 
-The figures follow the style of the other figures in assets/: black line art, sans-serif 15 px labels, boundary
+The figures follow the style of the other tutorial figures: black line art, sans-serif 15 px labels, boundary
 keys in grey 12 px, dashed dimension lines with arrows, and thin grey mesh edges. The 2D meshes use the layout of
 gmsh_rect_quad.svg and gmsh_rhom_quad.svg (side names with their boundary keys, origin marker).
 
     python3 scripts/generate-tutorial-figures.py
 
-The figures are written to assets/.
+The figures are written to tutorials/, beside the tutorial pages.
 """
 
 import math
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUTPUT = os.path.join(ROOT, "assets")
+OUTPUT = os.path.join(ROOT, "tutorials")
 
 DEFS = """  <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -164,4 +164,4 @@ if __name__ == "__main__":
     for file_name, draw in FIGURES.items():
         with open(os.path.join(OUTPUT, file_name), "w") as handle:
             handle.write(draw())
-        print(f"Wrote assets/{file_name}")
+        print(f"Wrote tutorials/{file_name}")

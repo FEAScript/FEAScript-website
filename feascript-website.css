@@ -2341,17 +2341,17 @@ h2 .accent {
   text-decoration-color: currentColor;
 }
 
-.doc ul:not(#menu) {
+.doc ul {
   padding-left: 0;
 }
 
-.doc ul:not(#menu) li {
+.doc ul li {
   position: relative;
   padding-left: 1.1rem;
   margin-top: 0.25rem;
 }
 
-.doc ul:not(#menu) li::before {
+.doc ul li::before {
   content: "▪";
   position: absolute;
   left: 0;
@@ -2492,41 +2492,6 @@ html[data-theme="dark"] .doc .center-image img.schematic {
 .doc .doc-run .label {
   margin-right: 0.35rem;
   color: var(--faint);
-}
-
-.doc ul#menu {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-}
-
-.doc ul#menu li {
-  max-width: none;
-  padding: 0;
-  margin: 0;
-}
-
-.doc ul#menu a {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.15rem 0.75rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 4px;
-  color: var(--ink);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition:
-    background 0.15s,
-    color 0.15s,
-    border-color 0.15s;
-}
-
-.doc ul#menu a:hover {
-  border-color: transparent;
-  background: var(--invert-bg);
-  color: var(--invert-fg);
 }
 
 .doc #loading {

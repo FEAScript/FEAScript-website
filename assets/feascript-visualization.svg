@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="FEAScript visualization">
+  <title>FEAScript visualization</title>
+  <rect width="512" height="512" fill="#4d4d4d"/>
+  <g fill="none" stroke="#d4aa00" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 112 96 L 112 368 A 32 32 0 0 0 144 400 L 416 400"/>
+    <path d="M 184 320 L 248 240 L 312 288 L 392 176"/>
+    <g fill="#d4aa00" stroke="none">
+      <circle cx="184" cy="320" r="26"/>
+      <circle cx="248" cy="240" r="26"/>
+      <circle cx="312" cy="288" r="26"/>
+      <circle cx="392" cy="176" r="26"/>
+    </g>
+  </g>
+</svg>

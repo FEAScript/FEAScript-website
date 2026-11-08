@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="FEAScript examples">
+  <title>FEAScript examples</title>
+  <rect width="512" height="512" fill="#4d4d4d"/>
+  <g fill="none" stroke="#d4aa00" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="112" y="112" width="120" height="120" rx="24"/>
+    <rect x="280" y="112" width="120" height="120" rx="24"/>
+    <rect x="112" y="280" width="120" height="120" rx="24"/>
+    <rect x="280" y="280" width="120" height="120" rx="24"/>
+  </g>
+</svg>

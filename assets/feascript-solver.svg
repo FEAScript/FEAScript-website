@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="FEAScript solver">
+  <title>FEAScript solver</title>
+  <rect width="512" height="512" fill="#4d4d4d"/>
+  <g fill="none" stroke="#d4aa00" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 368 168 L 368 136 A 24 24 0 0 0 344 112 L 152 112 L 264 256 L 152 400 L 344 400 A 24 24 0 0 0 368 376 L 368 344"/>
+  </g>
+</svg>

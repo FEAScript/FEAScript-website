@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="FEAScript web worker">
+  <title>FEAScript web worker</title>
+  <rect width="512" height="512" fill="#4d4d4d"/>
+  <g fill="none" stroke="#d4aa00" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="152" y="152" width="208" height="208" rx="28"/>
+    <rect x="216" y="216" width="80" height="80" rx="8" fill="#d4aa00" stroke="none"/>
+    <path d="M 208 96 L 208 152 M 304 96 L 304 152 M 208 360 L 208 416 M 304 360 L 304 416"/>
+    <path d="M 96 208 L 152 208 M 96 304 L 152 304 M 360 208 L 416 208 M 360 304 L 416 304"/>
+  </g>
+</svg>

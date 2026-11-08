@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="FEAScript boundary conditions">
+  <title>FEAScript boundary conditions</title>
+  <rect width="512" height="512" fill="#4d4d4d"/>
+  <g fill="none" stroke="#d4aa00" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="112" y="240" width="288" height="160" rx="24"/>
+    <path d="M 160 96 L 160 176"/>
+    <path d="M 132 148 L 160 176 L 188 148"/>
+    <path d="M 256 96 L 256 176"/>
+    <path d="M 228 148 L 256 176 L 284 148"/>
+    <path d="M 352 96 L 352 176"/>
+    <path d="M 324 148 L 352 176 L 380 148"/>
+  </g>
+</svg>

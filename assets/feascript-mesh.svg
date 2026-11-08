@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="FEAScript mesh">
+  <title>FEAScript mesh</title>
+  <rect width="512" height="512" fill="#4d4d4d"/>
+  <g fill="none" stroke="#d4aa00" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="112" y="112" width="288" height="288" rx="32"/>
+    <path d="M 208 112 L 208 400"/>
+    <path d="M 304 112 L 304 400"/>
+    <path d="M 112 208 L 400 208"/>
+    <path d="M 112 304 L 400 304"/>
+    <g fill="#d4aa00" stroke="none">
+      <circle cx="208" cy="208" r="40"/>
+      <circle cx="304" cy="208" r="40"/>
+      <circle cx="208" cy="304" r="40"/>
+      <circle cx="304" cy="304" r="40"/>
+    </g>
+  </g>
+</svg>

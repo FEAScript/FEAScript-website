@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="FEAScript custom code">
+  <title>FEAScript custom code</title>
+  <rect width="512" height="512" fill="#4d4d4d"/>
+  <g fill="none" stroke="#d4aa00" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 208 96 L 192 96 A 32 32 0 0 0 160 128 L 160 216 A 40 40 0 0 1 120 256 A 40 40 0 0 1 160 296 L 160 384 A 32 32 0 0 0 192 416 L 208 416"/>
+    <path d="M 304 96 L 320 96 A 32 32 0 0 1 352 128 L 352 216 A 40 40 0 0 0 392 256 A 40 40 0 0 0 352 296 L 352 384 A 32 32 0 0 1 320 416 L 304 416"/>
+  </g>
+</svg>

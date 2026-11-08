@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="FEAScript installation">
+  <title>FEAScript installation</title>
+  <rect width="512" height="512" fill="#4d4d4d"/>
+  <g fill="none" stroke="#d4aa00" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 256 96 L 256 304"/>
+    <path d="M 176 224 L 256 304 L 336 224"/>
+    <path d="M 112 320 L 112 376 A 32 32 0 0 0 144 408 L 368 408 A 32 32 0 0 0 400 376 L 400 320"/>
+  </g>
+</svg>

@@ -265,6 +265,9 @@
         "yaxis.gridcolor": line,
         "xaxis.zeroline": false,
         "yaxis.zeroline": false,
+        // A preview: no zoom or pan, so there is no view to reset
+        "xaxis.fixedrange": true,
+        "yaxis.fixedrange": true,
       });
       window.Plotly.restyle(plotDiv, { "colorbar.title.text": "T (°C)", "colorbar.thickness": 12 });
     };
@@ -400,6 +403,80 @@
       })
       .catch((error) => console.error("Error fetching GitHub stars:", error));
   }
+
+  // Screenshot carousels: arrows, dots and arrow keys on top of a native scroll-snap track
+  document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+    const track = carousel.querySelector(".shots-track");
+    const slides = Array.from(track.children);
+    if (slides.length < 2) return;
+
+    const arrow = (dir, label, path) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "shots-arrow";
+      b.setAttribute("aria-label", label);
+      b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`;
+      b.addEventListener("click", () => go(current + dir));
+      return b;
+    };
+
+    const nav = document.createElement("div");
+    nav.className = "shots-nav";
+    const dotsBox = document.createElement("div");
+    dotsBox.className = "shots-dots";
+    const dots = slides.map((slide, i) => {
+      const d = document.createElement("button");
+      d.type = "button";
+      d.className = "shots-dot";
+      const label = slide.dataset.label || `Screenshot ${i + 1}`;
+      d.setAttribute("aria-label", label);
+      d.title = label;
+      d.addEventListener("click", () => go(i));
+      dotsBox.appendChild(d);
+      return d;
+    });
+    nav.append(
+      arrow(-1, "Previous screenshot", "m15 18-6-6 6-6"),
+      dotsBox,
+      arrow(1, "Next screenshot", "m9 18 6-6-6-6"),
+    );
+    carousel.appendChild(nav);
+
+    let current = 0;
+    const mark = (i) => {
+      current = i;
+      dots.forEach((d, k) => d.setAttribute("aria-current", k === i ? "true" : "false"));
+      slides.forEach((s, k) => s.setAttribute("aria-hidden", k === i ? "false" : "true"));
+    };
+    // Wrap around at both ends
+    const go = (i) => {
+      const n = (i + slides.length) % slides.length;
+      track.scrollTo({ left: n * track.clientWidth, behavior: reducedMotion ? "auto" : "smooth" });
+      mark(n);
+    };
+
+    // Follow swipes and trackpad scrolling
+    let frame = 0;
+    track.addEventListener("scroll", () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const i = Math.round(track.scrollLeft / track.clientWidth);
+        if (i !== current) mark(i);
+      });
+    });
+
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault();
+        go(current + (e.key === "ArrowRight" ? 1 : -1));
+      }
+    });
+
+    // Keep the current slide in view when the width changes
+    window.addEventListener("resize", () => (track.scrollLeft = current * track.clientWidth));
+
+    mark(0);
+  });
 
   /* ─────────────────────────────────────────────────────────────
      HERO MESH ANIMATION

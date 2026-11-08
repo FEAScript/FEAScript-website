@@ -2370,6 +2370,152 @@ html[data-theme="dark"] .nf-tri .tri-feet {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   SCREENSHOT CAROUSEL (Studio page)
+   ───────────────────────────────────────────────────────────── */
+
+/* One slide per view; swipe or scroll natively, arrows and dots are added by the script */
+.doc .shots {
+  margin-top: 1.5rem;
+}
+
+.shots-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  border-radius: 8px;
+}
+
+.shots-track::-webkit-scrollbar {
+  display: none;
+}
+
+.shots-track:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.shots-slide {
+  flex: 0 0 100%;
+  margin: 0;
+  scroll-snap-align: start;
+}
+
+.shots-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-sunken);
+}
+
+.doc .shots-slide figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.shots-slide figcaption strong {
+  font-weight: 500;
+  color: var(--ink-strong);
+}
+
+.shots-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.shots .shots-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--line-strong);
+  padding: 0;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* Override the filled look of .doc buttons */
+.shots .shots-arrow:hover,
+.shots .shots-dot:hover {
+  opacity: 1;
+}
+
+.shots .shots-arrow:hover {
+  border-color: var(--ink);
+}
+
+.shots .shots-arrow svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.shots .shots-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* The visible dot is small; the button around it is large enough to tap */
+.shots .shots-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.shots .shots-dot::before {
+  content: "";
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: var(--line-strong);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.shots .shots-dot:hover::before {
+  background: var(--muted);
+}
+
+.shots .shots-dot[aria-current="true"]::before {
+  background: var(--gold);
+  transform: scale(1.3);
+}
+
+.shots .shots-arrow:focus-visible,
+.shots .shots-dot:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shots-track {
+    scroll-behavior: auto;
+  }
+
+  .shots .shots-dot::before {
+    transition: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
    MOTION
    ───────────────────────────────────────────────────────────── */
 

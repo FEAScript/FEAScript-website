@@ -159,6 +159,219 @@
   if (codeBlock) highlight(codeBlock);
   document.querySelectorAll(".doc pre.prettyprint").forEach(highlight);
 
+  /* ─────────────────────────────────────────────────────────────
+     LIVE QUICK-START RESULT
+     ───────────────────────────────────────────────────────────── */
+
+  // Solve the quick-start example in the page, and keep its code in step with the sliders
+  const live = document.getElementById("qs-live");
+  if (live && codeBlock) {
+    const plotDiv = document.getElementById("qs-plot");
+    const status = document.getElementById("qs-status");
+    const hkSteps = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50]; // h/k spans orders of magnitude
+    const inputs = {
+      temp: document.getElementById("qs-temp"),
+      hk: document.getElementById("qs-hk"),
+      ext: document.getElementById("qs-ext"),
+    };
+    const outputs = {
+      temp: document.getElementById("qs-temp-out"),
+      hk: document.getElementById("qs-hk-out"),
+      ext: document.getElementById("qs-ext-out"),
+    };
+    const baseCode = codeBlock.textContent;
+    let core = null;
+    let mesh = null;
+    let busy = false;
+    let pending = false;
+
+    const values = () => ({
+      temp: Number(inputs.temp.value),
+      hk: hkSteps[Number(inputs.hk.value)],
+      ext: Number(inputs.ext.value),
+    });
+
+    // Write the values into the boundary conditions of the code, keeping the comments aligned
+    const updateCode = ({ temp, hk, ext }) => {
+      const lines = baseCode.split("\n").map((line) => {
+        if (!line.includes("addBoundaryCondition")) return line;
+        const comment = line.indexOf("//");
+        const code = line
+          .slice(0, comment)
+          .trimEnd()
+          .replace(/\["constantTemperature", [-\d.]+\]/, `["constantTemperature", ${temp}]`)
+          .replace(/\["convection", [-\d.]+, [-\d.]+\]/, `["convection", ${hk}, ${ext}]`);
+        return code.padEnd(comment - 1) + " " + line.slice(comment);
+      });
+      codeBlock.textContent = lines.join("\n");
+      highlight(codeBlock);
+      markValues();
+    };
+
+    // Mark the numbers the sliders set, and scroll the code to them
+    const markValues = () => {
+      const text = codeBlock.textContent;
+      const starts = new Set();
+      for (const bc of text.matchAll(/\["(?:constantTemperature|convection)", ([^\]]+)\]/g)) {
+        const offset = bc.index + bc[0].indexOf(bc[1]);
+        for (const number of bc[1].matchAll(/\d+(?:\.\d+)?/g)) starts.add(offset + number.index);
+      }
+      let offset = 0;
+      let first = null;
+      codeBlock.childNodes.forEach((node) => {
+        if (node.nodeType === 1 && node.classList.contains("tok-num") && starts.has(offset)) {
+          node.classList.add("tok-live");
+          first ??= node;
+        }
+        offset += node.textContent.length;
+      });
+      if (!first) return;
+      const box = codeBlock.getBoundingClientRect();
+      const mark = first.getBoundingClientRect();
+      if (mark.top < box.top || mark.bottom > box.bottom) {
+        codeBlock.scrollTop += mark.top - box.top - codeBlock.clientHeight / 3;
+      }
+    };
+
+    const showValues = ({ temp, hk, ext }) => {
+      outputs.temp.textContent = `${temp} °C`;
+      outputs.hk.textContent = `${hk} m⁻¹`;
+      outputs.ext.textContent = `${ext} °C`;
+    };
+
+    // Plotly draws with fixed colours: take them from the site tokens instead
+    const themePlot = () => {
+      if (!plotDiv.data) return;
+      const css = getComputedStyle(root);
+      const ink = css.getPropertyValue("--muted").trim();
+      const line = css.getPropertyValue("--line").trim();
+      const { nodesXCoordinates: xs, nodesYCoordinates: ys } = plotDiv.feascriptNodes;
+      const aspect = (Math.max(...ys) - Math.min(...ys)) / (Math.max(...xs) - Math.min(...xs));
+      // Keep the plot no taller than about 22rem, so the sliders stay in view
+      const style = getComputedStyle(plotDiv);
+      const room = plotDiv.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+      const width = Math.round(Math.min(room, 300 / aspect + 90));
+      window.Plotly.relayout(plotDiv, {
+        title: { text: "" },
+        width,
+        height: Math.round((width - 90) * aspect) + 50,
+        margin: { l: 34, r: 8, t: 10, b: 30 },
+        paper_bgcolor: "rgba(0,0,0,0)",
+        plot_bgcolor: "rgba(0,0,0,0)",
+        font: { family: "Roboto, sans-serif", size: 11, color: ink },
+        "xaxis.title.text": "",
+        "yaxis.title.text": "",
+        "xaxis.gridcolor": line,
+        "yaxis.gridcolor": line,
+        "xaxis.zeroline": false,
+        "yaxis.zeroline": false,
+      });
+      window.Plotly.restyle(plotDiv, { "colorbar.title.text": "T (°C)", "colorbar.thickness": 12 });
+    };
+
+    const solve = () => {
+      if (busy) {
+        pending = true;
+        return;
+      }
+      busy = true;
+      const { temp, hk, ext } = values();
+      const model = new core.FEAScriptModel();
+      model.setModelConfig("heatConductionScript");
+      model.setMeshConfig({ parsedMesh: mesh });
+      model.addBoundaryCondition("0", ["constantTemperature", temp]);
+      model.addBoundaryCondition("1", ["symmetry"]);
+      model.addBoundaryCondition("2", ["convection", hk, ext]);
+      model.addBoundaryCondition("3", ["constantTemperature", temp]);
+      model.addBoundaryCondition("4", ["convection", hk, ext]);
+      model.setSolverMethod("lusolve");
+      const start = performance.now();
+      const result = model.solve();
+      const time = performance.now() - start;
+      plotDiv.textContent = "";
+      core.plotInterpolatedSolution(model, result, "contour", "qs-plot");
+      plotDiv.feascriptNodes = result.nodesCoordinates;
+      themePlot();
+      const nodes = result.nodesCoordinates.nodesXCoordinates.length;
+      status.textContent = `Solved in ${time < 10 ? time.toFixed(1) : Math.round(time)} ms · ${nodes} nodes · FEAScript ${core.printVersion}`;
+      // Let the browser paint before the next solve
+      setTimeout(() => {
+        busy = false;
+        if (pending) {
+          pending = false;
+          solve();
+        }
+      }, 0);
+    };
+
+    const loadScript = (src) =>
+      new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+
+    const start = async () => {
+      status.textContent = "Loading FEAScript…";
+      try {
+        const [module] = await Promise.all([
+          import("https://core.feascript.com/dist/feascript.esm.js"),
+          window.Plotly
+            ? null
+            : loadScript("https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"),
+        ]);
+        core = module;
+        const response = await fetch("tutorials/rect_with_hole.msh");
+        if (!response.ok) throw new Error(`Mesh file: ${response.status}`);
+        mesh = await core.importGmshMesh(new File([await response.text()], "rect_with_hole.msh"));
+        Object.values(inputs).forEach((input) => {
+          input.disabled = false;
+          input.addEventListener("input", () => {
+            const current = values();
+            showValues(current);
+            updateCode(current);
+            solve();
+          });
+        });
+        live.classList.add("is-live");
+        solve();
+      } catch (error) {
+        console.error("Live example:", error);
+        live.classList.add("is-failed");
+        plotDiv.innerHTML =
+          '<p class="qs-wait">The live result could not be loaded. Run the code on CodePen.</p>';
+        status.textContent = "";
+      }
+    };
+
+    // Load Plotly and FEAScript only when the example comes near the screen
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            io.disconnect();
+            start();
+          }
+        },
+        { rootMargin: "300px" },
+      );
+      io.observe(live);
+    } else {
+      start();
+    }
+
+    // Follow the theme and the width of the page
+    new MutationObserver(themePlot).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", themePlot);
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(themePlot, 150);
+    });
+  }
+
   if (copyButton && codeBlock) {
     copyButton.addEventListener("click", () => {
       navigator.clipboard.writeText(codeBlock.innerText.trim()).then(() => {
@@ -177,13 +390,13 @@
   const year = document.getElementById("currentYear");
   if (year) year.textContent = new Date().getFullYear();
 
-  // GitHub stars
-  const stars = document.getElementById("github-stars");
-  if (stars) {
+  // GitHub stars: the nav icon and the star link at the end of tutorials share one request
+  const stars = document.querySelectorAll("#github-stars, [data-github-stars]");
+  if (stars.length) {
     fetch("https://api.github.com/repos/FEAScript/FEAScript-core")
       .then((r) => r.json())
       .then((d) => {
-        if (d && d.stargazers_count) stars.textContent = `★ ${d.stargazers_count}`;
+        if (d && d.stargazers_count) stars.forEach((el) => (el.textContent = `★ ${d.stargazers_count}`));
       })
       .catch((error) => console.error("Error fetching GitHub stars:", error));
   }

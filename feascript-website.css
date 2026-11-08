@@ -1244,6 +1244,159 @@ h2 .accent {
   white-space: pre;
 }
 
+/* The example solved live beside its code: under it on small screens */
+.qs-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+/* Side by side, the code takes the height of the result and scrolls inside it */
+@media (min-width: 1024px) {
+  .qs-layout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+
+  .qs-layout .code-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .qs-layout .code-block pre {
+    flex: 1 1 0;
+    height: 0;
+    max-height: none;
+  }
+}
+
+.qs-live {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  container-type: inline-size;
+}
+
+/* A wide panel (under the code on tablets) puts the sliders beside the plot */
+@container (min-width: 640px) {
+  .qs-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17rem;
+  }
+
+  .qs-body .qs-controls {
+    align-content: center;
+    border-top: none;
+    border-left: 1px solid var(--line);
+  }
+}
+
+.qs-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.6rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.qs-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--faint);
+}
+
+.qs-live.is-live .qs-dot {
+  background: var(--phys-structure);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--phys-structure) 60%, transparent);
+  animation: qs-pulse 2s ease-out infinite;
+}
+
+@keyframes qs-pulse {
+  to {
+    box-shadow: 0 0 0 7px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qs-live.is-live .qs-dot {
+    animation: none;
+  }
+}
+
+.qs-plot {
+  display: flex;
+  justify-content: center;
+  min-height: 12rem;
+  padding: 0.75rem 0.5rem 0.25rem;
+}
+
+/* No Plotly toolbar: the plot is a preview, CodePen is the place to work with it */
+.qs-plot .modebar-container {
+  display: none;
+}
+
+.qs-wait {
+  padding: 3rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--faint);
+}
+
+.qs-controls {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.qs-control {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.qs-name {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.qs-name output {
+  flex: none;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  color: var(--ink-strong);
+}
+
+.qs-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--gold);
+}
+
+.qs-control input:disabled {
+  opacity: 0.4;
+}
+
+.qs-status {
+  min-height: 2.3rem;
+  padding: 0.6rem 1.25rem;
+  border-top: 1px solid var(--line);
+  color: var(--faint);
+}
+
+/* The numbers of the example that the sliders set */
+.tok-live {
+  border-radius: 2px;
+  background: rgba(212, 170, 0, 0.28);
+  box-shadow: 0 0 0 2px rgba(212, 170, 0, 0.28);
+  color: #ffe27a;
+}
+
 .tok-tag {
   color: #7cb7ff;
 }
@@ -1474,7 +1627,7 @@ h2 .accent {
   color: var(--ink-strong);
 }
 
-.cta > p.lede {
+.cta p.lede {
   max-width: 28rem;
   margin-top: 1.5rem;
   font-size: 1.125rem;
@@ -1534,6 +1687,64 @@ h2 .accent {
 .maillist-honeypot {
   position: absolute;
   left: -5000px;
+}
+
+/* End of tutorial pages: the mailing list, with a GitHub star link under it or beside it */
+.cta-end {
+  padding: 4rem 1.5rem;
+}
+
+.cta-end h2 {
+  font-size: clamp(2.25rem, 6vw, 3.25rem);
+}
+
+.cta-main,
+.cta-star {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.cta-star {
+  margin-top: 4rem;
+  padding-top: 3.5rem;
+  border-top: 1px dashed var(--line-strong);
+}
+
+/* The button sits where the email field sits in the other column */
+.cta-star .btn {
+  margin-top: 2.25rem;
+}
+
+/* Side by side on wide screens: two matching columns with a line between them */
+@media (min-width: 900px) {
+  .cta-end {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    max-width: 76rem;
+    margin: 0 auto;
+  }
+
+  .cta-main {
+    padding-right: 3rem;
+  }
+
+  .cta-star {
+    margin-top: 0;
+    padding: 0 0 0 3rem;
+    border-top: none;
+    border-left: 1px dashed var(--line-strong);
+  }
+
+  .cta-star .btn {
+    margin-top: calc(2.25rem + 1.6rem);
+  }
+}
+
+.cta-star [data-github-stars]:empty {
+  display: none;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -1920,6 +2131,18 @@ html[data-theme="dark"] .doc .center-image img.schematic {
 
 .doc mjx-container {
   text-align: left;
+}
+
+/* Run links at the top of a tutorial (CodePen, Scribbler) */
+.doc .doc-run {
+  align-items: center;
+  margin: 1.25rem 0 0.5rem;
+  padding-top: 0;
+}
+
+.doc .doc-run .label {
+  margin-right: 0.35rem;
+  color: var(--faint);
 }
 
 .doc ul#menu {

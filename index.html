@@ -365,12 +365,14 @@
             <p class="cell cell-note prose">
               The example below demonstrates a simulation workflow: steady-state heat conduction in a 2D
               rectangular fin with a circular hole, solved using a Gmsh-generated mesh. Create an HTML file
-              with the code below to run the simulation. See the
+              with the code below to run the simulation. The result beside the code is solved by FEAScript in
+              this page: move a slider and both the code and the result change. See the
               <a href="#tutorials">tutorials section</a> for more examples, and the
               <a href="https://docs.feascript.com">documentation</a> for every model, option and function of
               the API.
             </p>
             <div class="cell quickstart" data-reveal>
+              <div class="qs-layout">
               <div class="code-block">
                 <div class="code-bar label">
                   <span class="file">index.html</span>
@@ -478,6 +480,35 @@
 &lt;/body&gt;
 &lt;/html&gt;</pre
                 >
+              </div>
+
+              <!-- The example above, solved live in this page (feascript-website.js) -->
+              <figure class="qs-live" id="qs-live">
+                <div class="qs-bar label">
+                  <span class="qs-dot" aria-hidden="true"></span>
+                  <span>Result, solved in your browser</span>
+                </div>
+                <div class="qs-body">
+                <div class="qs-plot" id="qs-plot">
+                  <p class="qs-wait">The simulation runs when this part of the page comes into view.</p>
+                </div>
+                <div class="qs-controls">
+                  <label class="qs-control">
+                    <span class="qs-name">Temperature, bottom and right <output id="qs-temp-out">200 °C</output></span>
+                    <input type="range" id="qs-temp" min="50" max="400" step="10" value="200" disabled />
+                  </label>
+                  <label class="qs-control">
+                    <span class="qs-name">h/k, top and hole <output id="qs-hk-out">1 m⁻¹</output></span>
+                    <input type="range" id="qs-hk" min="0" max="8" step="1" value="3" disabled />
+                  </label>
+                  <label class="qs-control">
+                    <span class="qs-name">External temperature <output id="qs-ext-out">20 °C</output></span>
+                    <input type="range" id="qs-ext" min="-20" max="100" step="5" value="20" disabled />
+                  </label>
+                </div>
+                </div>
+                <figcaption class="qs-status label" id="qs-status" aria-live="polite"></figcaption>
+              </figure>
               </div>
             </div>
           </div>
@@ -822,8 +853,9 @@
             </article>
 
             <p class="cell cell-note prose" style="grid-column: 1 / -1">
-              Please report any feedback or issues with the above tutorials to the
-              <a href="https://github.com/FEAScript/FEAScript-core/issues">FEAScript support</a>.
+              Found a problem or have feedback on the above tutorials? Tell us on
+              <a href="https://github.com/FEAScript/FEAScript-core/issues">GitHub</a> or
+              <a href="https://discord.gg/3DVjNcuW4f">Discord</a>.
             </p>
           </div>
         </div>
@@ -917,7 +949,8 @@
       <!-- ───────────── MAILING LIST ───────────── -->
       <section id="maillist" class="section">
         <div class="section-frame">
-          <div class="cta">
+          <div class="cta cta-end">
+            <div class="cta-main">
             <p class="label text-faint">Stay in the loop</p>
             <h2 data-reveal>Join the <span class="accent">mailing list.</span></h2>
             <p class="lede">Receive project updates and news.</p>
@@ -951,6 +984,22 @@
                 <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
               </div>
             </form>
+            </div>
+
+            <div class="cta-star">
+              <p class="label text-faint">Open source</p>
+              <h2 data-reveal>Star us on <span class="accent">GitHub.</span></h2>
+              <p class="lede">Like FEAScript? Give it a star.</p>
+              <a class="btn btn-solid" href="https://github.com/FEAScript/FEAScript-core">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+                  />
+                </svg>
+                Star FEAScript
+                <span class="label" data-github-stars></span>
+              </a>
+            </div>
           </div>
         </div>
       </section>

@@ -1894,9 +1894,12 @@ h2 .accent {
   gap: 2.25rem 1.5rem;
 }
 
+/* On desktop the brand takes the first, wider column and each link column after it gets an equal share, */
 @media (min-width: 1024px) {
   .footer-grid {
-    grid-template-columns: minmax(0, 1.7fr) repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.7fr);
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
     gap: 2.25rem 2rem;
   }
 }
@@ -1950,6 +1953,33 @@ h2 .accent {
 
 .footer-mail:hover {
   color: var(--ink-strong);
+}
+
+/* Social links: icon-only buttons under the mail address, so the brand column holds all the contact routes */
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.footer-social a {
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.footer-social a:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.footer-social a:hover::before {
+  background: var(--ink-strong);
 }
 
 .footer-col {
@@ -2021,6 +2051,10 @@ h2 .accent {
   --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z'/%3E%3C/svg%3E");
 }
 
+[data-icon="codepen"] {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M18.144 13.067v-2.134L16.55 12zm1.276 1.194a.628.628 0 01-.006.083l-.005.028-.011.053-.01.031c-.005.016-.01.031-.017.047l-.014.03a.78.78 0 01-.021.043l-.019.03a.57.57 0 01-.08.1l-.026.025a.602.602 0 01-.036.03l-.029.022-.01.008-6.782 4.522a.637.637 0 01-.708 0L4.864 14.79l-.01-.008a.599.599 0 01-.065-.052l-.026-.025-.032-.034-.021-.028a.588.588 0 01-.067-.11l-.014-.031a.644.644 0 01-.017-.047l-.01-.03c-.004-.018-.008-.036-.01-.054l-.006-.028a.628.628 0 01-.006-.083V9.739c0-.028.002-.055.006-.083l.005-.027.011-.054.01-.03a.574.574 0 01.12-.217l.031-.034.026-.025a.62.62 0 01.065-.052l.01-.008 6.782-4.521a.638.638 0 01.708 0l6.782 4.521.01.008.03.022.035.03c.01.008.017.016.026.025a.545.545 0 01.08.1l.019.03a.633.633 0 01.021.043l.014.03c.007.016.012.032.017.047l.01.031c.004.018.008.036.01.054l.006.027a.619.619 0 01.006.083zM12 0C5.373 0 0 5.372 0 12 0 18.627 5.373 24 12 24c6.628 0 12-5.372 12-12 0-6.627-5.372-12-12-12m0 10.492L9.745 12 12 13.51 14.255 12zm.638 4.124v2.975l4.996-3.33-2.232-1.493zm-6.272-.356l4.996 3.33v-2.974l-2.764-1.849zm11.268-4.52l-4.996-3.33v2.974l2.764 1.85zm-6.272-.356V6.41L6.366 9.74l2.232 1.493zm-5.506 1.549v2.134L7.45 12Z'/%3E%3C/svg%3E");
+}
+
 [data-icon="critical-mesh"] {
   --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 6.5h10a4 4 0 0 1 3.9 3.2l1 5a2.6 2.6 0 0 1-4.5 2.2L15.5 15h-7l-1.9 1.9a2.6 2.6 0 0 1-4.5-2.2l1-5A4 4 0 0 1 7 6.5z'/%3E%3Cpath d='M8 9.5v3.5M6.25 11.25h3.5'/%3E%3Ccircle cx='15.5' cy='10.25' r='.4'/%3E%3Ccircle cx='17.5' cy='12.25' r='.4'/%3E%3C/svg%3E");
 }
@@ -2063,6 +2097,10 @@ h2 .accent {
 
 [data-icon="pricing"] {
   --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 12.6V4.5a1 1 0 0 1 1-1h8.1l8 8a1.4 1.4 0 0 1 0 2l-7.1 7.1a1.4 1.4 0 0 1-2 0z'/%3E%3Ccircle cx='8.3' cy='8.3' r='1.4'/%3E%3C/svg%3E");
+}
+
+[data-icon="scribbler"] {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.5 3 5 9l5.5 6M13.5 9l5.5 6-5.5 6'/%3E%3C/svg%3E");
 }
 
 [data-icon="sponsors"] {

@@ -1,0 +1,310 @@
+<!doctype html>
+
+<!--
+ * ════════════════════════════════════════════════════════════════
+ *  FEAScript Website
+ *  Finite Element Simulation in JavaScript
+ *  https://feascript.com
+ *  CC BY 4.0 License © 2023–2026 FEAScript
+ * ════════════════════════════════════════════════════════════════
+-->
+
+<html lang="en" class="site">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy | FEAScript</title>
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
+    <meta
+      name="description"
+      content="What the FEAScript websites, docs, blog, Studio and Tri's Lab measure, what stays in your browser, and how to opt out"
+    />
+    <meta
+      name="keywords"
+      content="FEAScript, privacy, analytics, cookies, Google Analytics"
+    />
+
+    <script>
+      // Apply stored theme before first paint and enable JS-only styles
+      (function () {
+        var d = document.documentElement;
+        d.className += " js";
+        try {
+          var t = localStorage.getItem("feascript-theme");
+          if (t === "light" || t === "dark") d.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="feascript-website.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-1JPK0KLEC9");
+  </script>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-nav">
+      <div class="nav-inner">
+        <div class="nav-group">
+          <a class="nav-brand" href="index.html">
+            <svg viewBox="14 79 242 242" aria-hidden="true">
+              <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+            </svg>
+            <span
+              >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+            ></span>
+          </a>
+          <nav class="nav-links label" aria-label="Main">
+            <a class="nav-link" href="index.html#whyusefeascript"><span>Why FEAScript</span></a>
+            <a class="nav-link" href="index.html#howtousefeascript"><span>How to use</span></a>
+            <a class="nav-link" href="index.html#features"><span>Features</span></a>
+            <a class="nav-link" href="index.html#tutorials"><span>Tutorials</span></a>
+            <a class="nav-link" href="index.html#licensing"><span>Licensing</span></a>
+            <a class="nav-link nav-link-out" href="https://docs.feascript.com" data-icon="documentation"><span>Documentation</span></a>
+            <a class="nav-link nav-link-out" href="studio.html" data-icon="studio"><span>Studio</span></a>
+            <a class="nav-link nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab"><span>Tri's Lab</span></a>
+          </nav>
+        </div>
+
+        <div class="nav-group">
+          <a
+            class="nav-icon nav-github"
+            href="https://github.com/FEAScript/FEAScript-core"
+            aria-label="FEAScript on GitHub"
+            title="FEAScript on GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              />
+            </svg>
+            <span id="github-stars" class="label"></span>
+          </a>
+          <button
+            id="theme-toggle"
+            class="nav-icon theme-toggle"
+            type="button"
+            aria-label="Toggle colour theme"
+          >
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+              />
+            </svg>
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+              />
+            </svg>
+          </button>
+          <a class="nav-cta" href="index.html#howtousefeascript">Get started</a>
+          <button
+            id="nav-burger"
+            class="nav-icon nav-burger"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+        <a href="index.html#whyusefeascript">Why use FEAScript</a>
+        <a href="index.html#howtousefeascript">How to use FEAScript</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#tutorials">Tutorials</a>
+        <a href="index.html#licensing">Licensing</a>
+        <a class="nav-link-out" href="https://docs.feascript.com">Documentation</a>
+        <a class="nav-link-out" href="studio.html">FEAScript Studio</a>
+        <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/">Tri's Lab by FEAScript</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p data-doc-bar>Privacy</p>
+          </div>
+
+          <div class="section-head doc-head">
+            <h1>What we measure, <span class="accent">and what we don't.</span></h1>
+            <p>
+              This page covers feascript.com, docs.feascript.com, blog.feascript.com, studio.feascript.com and
+              lab.feascript.com. <strong>There are no ads, and we never sell or share data with anyone else.</strong>
+            </p>
+          </div>
+
+          <div class="doc">
+            <div class="eyebrow label" id="analytics" role="heading" aria-level="2">
+              <p>Analytics</p>
+            </div>
+            <p>
+              We use Google Analytics to see which pages people read and which tutorials and games they use. It
+              records the pages you visit, the site that sent you, your browser, device and approximate location
+              (country and city), and how long you stay. In Tri's Lab it also records play events: levels started,
+              won and lost in Critical Mesh, and runs and finished missions in FEM Blocks. It never receives your
+              name or email address.
+            </p>
+            <p>
+              Google Analytics sets cookies (named <code>_ga</code>) to tell new visitors from returning ones. Google
+              processes this data under its own
+              <a href="https://policies.google.com/privacy">privacy policy</a>.
+            </p>
+            <p>
+              To opt out, install the
+              <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics opt-out add-on</a> or use a
+              content blocker. Every page works the same without analytics.
+            </p>
+
+            <div class="eyebrow label" id="browser" role="heading" aria-level="2">
+              <p>What stays in your browser</p>
+            </div>
+            <p>
+              Your theme choice, your progress and scores in Tri's Lab, your FEM Blocks workspaces and your work in
+              Studio are kept in your browser's local storage. They are never sent to us. Clearing the site data in
+              your browser removes them.
+            </p>
+
+            <div class="eyebrow label" id="newsletter" role="heading" aria-level="2">
+              <p>Newsletter and email</p>
+            </div>
+            <p>
+              If you sign up for the newsletter, your email address is stored by Mailchimp, which sends it. Every
+              newsletter has an unsubscribe link. If you email
+              <a href="mailto:info@feascript.com">info@feascript.com</a>, we use your message only to reply to you.
+            </p>
+
+            <div class="eyebrow label" id="third-parties" role="heading" aria-level="2">
+              <p>Fonts and scripts from other services</p>
+            </div>
+            <p>
+              Pages load fonts from Google Fonts and libraries, including FEAScript itself, from jsDelivr and cdnjs.
+              Your browser fetches these files directly, so those services see your IP address, as any website you
+              load a file from does.
+            </p>
+
+            <div class="eyebrow label" id="contact" role="heading" aria-level="2">
+              <p>Questions</p>
+            </div>
+            <p>
+              Ask us anything about this page at <a href="mailto:info@feascript.com">info@feascript.com</a>. If what
+              we collect changes, we update this page first.
+            </p>
+            <p>Last updated: 9 November 2026.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="footer-wordmark" href="index.html">
+              <svg viewBox="14 79 242 242" aria-hidden="true">
+                <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+              </svg>
+              <span
+                >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
+            </a>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
+            <a class="footer-mail" data-icon="mail" href="mailto:info@feascript.com">info@feascript.com</a>
+            <div class="footer-social">
+              <a href="https://www.youtube.com/@FEAScript" data-icon="youtube" aria-label="YouTube" title="YouTube"></a>
+              <a href="https://www.linkedin.com/company/feascript/" data-icon="linkedin" aria-label="LinkedIn" title="LinkedIn"></a>
+              <a href="https://bsky.app/profile/feascript.com" data-icon="bluesky" aria-label="Bluesky" title="Bluesky"></a>
+            </div>
+          </div>
+          <nav class="footer-col" aria-label="Learn">
+            <h2>Learn</h2>
+            <ul>
+              <li><a href="index.html#tutorials" data-icon="tutorials">Tutorials</a></li>
+              <li><a href="https://codepen.io/FEAScript" data-icon="codepen">CodePen</a></li>
+              <li><a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples" data-icon="scribbler">Scribbler</a></li>
+              <li><a href="https://docs.feascript.com" data-icon="documentation">Documentation</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Build">
+            <h2>Build</h2>
+            <ul>
+              <li><a href="studio.html" data-icon="studio">FEAScript Studio</a></li>
+              <li><a href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab</a></li>
+              <li><a href="https://www.npmjs.com/package/feascript" data-icon="npm">npm package</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core" data-icon="github">GitHub</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Community">
+            <h2>Community</h2>
+            <ul>
+              <li><a href="https://blog.feascript.com/" data-icon="blog">Blog</a></li>
+              <li><a href="https://discord.gg/3DVjNcuW4f" data-icon="discord">Discord</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues" data-icon="support">Support</a></li>
+              <li><a href="sponsors.html" data-icon="sponsors">Sponsors</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>&#169; 2023-<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a></span>
+          <span>Core: MIT license &middot; Website: CC BY 4.0</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="feascript-website.js"></script>
+  </body>
+</html>

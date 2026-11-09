@@ -2149,6 +2149,14 @@ h2 .accent {
   color: var(--faint);
 }
 
+.footer-bottom a {
+  color: var(--muted);
+}
+
+.footer-bottom a:hover {
+  color: var(--ink-strong);
+}
+
 /* ─────────────────────────────────────────────────────────────
    SITE: DOCUMENT PAGES (tutorials and long-form content)
    ───────────────────────────────────────────────────────────── */

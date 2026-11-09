@@ -16,7 +16,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example demonstrates solving a steady-state heat transfer problem using the FEAScript library with WebGPU for accelerated computation."
+      content="This example demonstrates solving a steady-state heat transfer problem using the FEAScript library with a Jacobi solver that runs on the GPU through WebGPU."
     />
     <!-- Link previews (LinkedIn, Bluesky and others); cards from scripts/generate-social-cards.py -->
     <link rel="canonical" href="https://feascript.com/tutorials/heat-conduction-2d-fin-webgpu.html" />
@@ -209,12 +209,20 @@
             <div class="highlight-container">
               <p>
                 This page demonstrates solving the 2D heat conduction fin problem using FEAScript with a
-                WebGPU-accelerated Jacobi solver. For the mathematical formulation and theory, see the
-                <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">basic tutorial</a>.
+                Jacobi solver that runs on the GPU through WebGPU. For the mathematical formulation and theory,
+                see the <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">basic tutorial</a>.
               </p>
               <p>
                 <strong>⚠️ Important:</strong> This feature is experimental and requires a browser that
                 supports WebGPU.
+              </p>
+              <p>
+                It shows FEAScript running on the GPU; it is not yet faster than the CPU solvers. The GPU solver
+                stores the system matrix as a full (dense) matrix, so each iteration works through every entry,
+                although almost all of them are zero. Each solve also starts a worker and sets up the GPU before
+                the first iteration, which takes longer than the whole CPU solve on a mesh of this size. Plain
+                Jacobi needs many iterations, and it computes in 32-bit floats, so the result carries at most
+                about seven significant digits. A sparse GPU solver is planned.
               </p>
             </div>
 
@@ -284,7 +292,7 @@
                 <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="https://lab.feascript.com/#tri">Who is Tri?</a></p>
                 <p>
                   Jacobi needs many more iterations as the mesh is refined (roughly 4× per halving
-                  of the element size), and the GPU only makes each iteration cheaper.
+                  of the element size), and the GPU does not reduce that number.
                   <code>solveAsync()</code> returns no convergence flag: if the console shows
                   <code>Jacobi: Did not converge</code>, the result is the last iterate. Raise the
                   limit with <code>model.solveAsync(null, { maxIterations, tolerance })</code>.

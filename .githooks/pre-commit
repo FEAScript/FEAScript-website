@@ -1,0 +1,4 @@
+#!/bin/sh
+# Refresh <lastmod> dates in sitemap.xml and include it in the commit.
+python3 scripts/update-sitemap.py || exit 1
+git add sitemap.xml

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Add "Signed-off-by: <committer>" to every commit (like git commit -s), unless it is already there
+SOB=$(git var GIT_COMMITTER_IDENT | sed -n 's/^\(.*>\).*$/Signed-off-by: \1/p')
+git interpret-trailers --in-place --if-exists addIfDifferent --trailer "$SOB" "$1"

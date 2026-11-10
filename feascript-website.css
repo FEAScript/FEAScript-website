@@ -1132,16 +1132,20 @@ h2 .accent {
   }
 }
 
+/* Each cell draws its own 1px ring into the gaps, so an unfilled slot stays page-coloured;
+   the clip hides the ring's outer edge so only the lines between cells show */
 .grid {
   display: grid;
   gap: 1px;
   border-top: 1px solid var(--line);
-  background: var(--line);
+  background: var(--bg);
+  overflow: clip;
 }
 
 .cell {
   min-width: 0;
   background: var(--bg);
+  box-shadow: 0 0 0 1px var(--line);
 }
 
 @media (min-width: 768px) {
@@ -1155,6 +1159,10 @@ h2 .accent {
 
   .span-2 {
     grid-column: span 2;
+  }
+
+  .cell-tall {
+    grid-row: span 2;
   }
 }
 
@@ -1573,7 +1581,9 @@ h2 .accent {
   align-items: flex-start;
   gap: 1.25rem;
   padding: 1.25rem 1.5rem;
-  box-shadow: inset 3px 0 0 var(--phys, var(--line-strong));
+  box-shadow:
+    inset 3px 0 0 var(--phys, var(--line-strong)),
+    0 0 0 1px var(--line);
 }
 
 .fig-label {

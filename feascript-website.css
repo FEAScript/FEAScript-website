@@ -1316,6 +1316,33 @@ h2 .accent {
   color: var(--muted);
 }
 
+.qs-toggle {
+  margin-left: auto;
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.qs-toggle:hover:not(:disabled, [aria-pressed="true"]) {
+  color: var(--ink-strong);
+}
+
+.qs-toggle[aria-pressed="true"] {
+  background: var(--invert-bg);
+  border-color: var(--invert-bg);
+  color: var(--invert-fg);
+}
+
+.qs-toggle:disabled {
+  opacity: 0.4;
+}
+
 .qs-dot {
   width: 8px;
   height: 8px;
@@ -1385,6 +1412,11 @@ h2 .accent {
   white-space: nowrap;
   font-family: var(--font-mono);
   color: var(--ink-strong);
+}
+
+.qs-hint {
+  font-size: 0.75rem;
+  color: var(--faint);
 }
 
 .qs-control input[type="range"] {

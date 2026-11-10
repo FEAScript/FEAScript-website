@@ -179,9 +179,12 @@
       hk: document.getElementById("qs-hk-out"),
       ext: document.getElementById("qs-ext-out"),
     };
+    const meshButton = document.getElementById("qs-mesh");
     const baseCode = codeBlock.textContent;
     let core = null;
     let mesh = null;
+    let meshLines = null; // Element edges as one polyline, with null gaps between edges
+    let showMesh = false;
     let busy = false;
     let pending = false;
 
@@ -233,6 +236,57 @@
       }
     };
 
+    // Trace each element edge once, through its mid-side node (Gmsh 9-node quad order, 1-based)
+    const buildMeshLines = (parsed) => {
+      const xs = parsed.nodesXCoordinates;
+      const ys = parsed.nodesYCoordinates;
+      const x = [];
+      const y = [];
+      const seen = new Set();
+      for (const nodes of parsed.nodalNumbering.quadElements) {
+        for (let side = 0; side < 4; side++) {
+          const a = nodes[side];
+          const b = nodes[(side + 1) % 4];
+          const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          const path = nodes.length === 9 ? [a, nodes[4 + side], b] : [a, b];
+          path.forEach((n) => {
+            x.push(xs[n - 1]);
+            y.push(ys[n - 1]);
+          });
+          x.push(null);
+          y.push(null);
+        }
+      }
+      return { x, y };
+    };
+
+    const meshColor = () => getComputedStyle(root).getPropertyValue("--ink-strong").trim();
+
+    const meshTraceIndex = () => (plotDiv.data || []).findIndex((trace) => trace.name === "mesh");
+
+    const drawMesh = () => {
+      if (!plotDiv.data || !meshLines) return;
+      const index = meshTraceIndex();
+      if (!showMesh) {
+        if (index >= 0) window.Plotly.deleteTraces(plotDiv, index);
+        return;
+      }
+      if (index >= 0) return;
+      window.Plotly.addTraces(plotDiv, {
+        type: "scatter",
+        mode: "lines",
+        name: "mesh",
+        x: meshLines.x,
+        y: meshLines.y,
+        line: { width: 0.5, color: meshColor() },
+        opacity: 0.45,
+        hoverinfo: "skip",
+        showlegend: false,
+      });
+    };
+
     const showValues = ({ temp, hk, ext }) => {
       outputs.temp.textContent = `${temp} °C`;
       outputs.hk.textContent = `${hk} m⁻¹`;
@@ -246,16 +300,43 @@
       const ink = css.getPropertyValue("--muted").trim();
       const line = css.getPropertyValue("--line").trim();
       const { nodesXCoordinates: xs, nodesYCoordinates: ys } = plotDiv.feascriptNodes;
-      const aspect = (Math.max(...ys) - Math.min(...ys)) / (Math.max(...xs) - Math.min(...xs));
+      const xRange = [Math.min(...xs), Math.max(...xs)];
+      const yRange = [Math.min(...ys), Math.max(...ys)];
+      const aspect = (yRange[1] - yRange[0]) / (xRange[1] - xRange[0]);
       // Keep the plot no taller than about 22rem, so the sliders stay in view
       const style = getComputedStyle(plotDiv);
       const room = plotDiv.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
       const width = Math.round(Math.min(room, 300 / aspect + 90));
+      const xMid = (xRange[0] + xRange[1]) / 2;
+      const yMid = (yRange[0] + yRange[1]) / 2;
+      // Name the boundary condition on each side, with the values the sliders set
+      const { temp, hk, ext } = values();
+      const label = (text, x, y, extra) => ({
+        text,
+        x,
+        y,
+        showarrow: false,
+        font: { size: 10, color: css.getPropertyValue("--ink-strong").trim() },
+        bgcolor: css.getPropertyValue("--bg").trim(),
+        bordercolor: line,
+        borderpad: 2,
+        opacity: 0.85,
+        ...extra,
+      });
+      const convection = `Convection, h/k = ${hk} m⁻¹, T<sub>ext</sub> = ${ext} °C`;
+      const annotations = [
+        label(`T = ${temp} °C`, xMid, yRange[0], { yanchor: "bottom", yshift: 4 }),
+        label(`T = ${temp} °C`, xRange[1], yMid, { xanchor: "right", xshift: -4, textangle: -90 }),
+        label("Symmetry", xRange[0], yMid, { xanchor: "left", xshift: 4, textangle: -90 }),
+        label(convection, xMid, yRange[1], { yanchor: "top", yshift: -4 }),
+        label("Convection", 2, 1), // Hole centre
+      ];
       window.Plotly.relayout(plotDiv, {
         title: { text: "" },
         width,
         height: Math.round((width - 90) * aspect) + 50,
         margin: { l: 34, r: 8, t: 10, b: 30 },
+        annotations,
         paper_bgcolor: "rgba(0,0,0,0)",
         plot_bgcolor: "rgba(0,0,0,0)",
         font: { family: "Roboto, sans-serif", size: 11, color: ink },
@@ -265,11 +346,21 @@
         "yaxis.gridcolor": line,
         "xaxis.zeroline": false,
         "yaxis.zeroline": false,
+        // Fixed to the domain, so the mesh overlay does not pad the axes and shrink the plot
+        "xaxis.range": xRange,
+        "yaxis.range": yRange,
+        "xaxis.autorange": false,
+        "yaxis.autorange": false,
         // A preview: no zoom or pan, so there is no view to reset
         "xaxis.fixedrange": true,
         "yaxis.fixedrange": true,
       });
-      window.Plotly.restyle(plotDiv, { "colorbar.title.text": "T (°C)", "colorbar.thickness": 12 });
+      const fields = plotDiv.data
+        .map((trace, index) => (trace.name === "mesh" ? -1 : index))
+        .filter((index) => index >= 0);
+      window.Plotly.restyle(plotDiv, { "colorbar.title.text": "T (°C)", "colorbar.thickness": 12 }, fields);
+      const index = meshTraceIndex();
+      if (index >= 0) window.Plotly.restyle(plotDiv, { "line.color": meshColor() }, [index]);
     };
 
     const solve = () => {
@@ -294,6 +385,7 @@
       plotDiv.textContent = "";
       core.plotInterpolatedSolution(model, result, "contour", "qs-plot");
       plotDiv.feascriptNodes = result.nodesCoordinates;
+      drawMesh();
       themePlot();
       const nodes = result.nodesCoordinates.nodesXCoordinates.length;
       status.textContent = `Solved in ${time < 10 ? time.toFixed(1) : Math.round(time)} ms · ${nodes} nodes · FEAScript ${core.printVersion}`;
@@ -329,6 +421,15 @@
         const response = await fetch("tutorials/rect_with_hole_quad_quadratic.msh");
         if (!response.ok) throw new Error(`Mesh file: ${response.status}`);
         mesh = await core.importGmshMesh(new File([await response.text()], "rect_with_hole_quad_quadratic.msh"));
+        // Read the edges now: the first solve renumbers the elements in place
+        meshLines = buildMeshLines(mesh);
+        meshButton.disabled = false;
+        meshButton.addEventListener("click", () => {
+          showMesh = !showMesh;
+          meshButton.setAttribute("aria-pressed", String(showMesh));
+          meshButton.textContent = showMesh ? "Hide mesh" : "Show mesh";
+          drawMesh();
+        });
         Object.values(inputs).forEach((input) => {
           input.disabled = false;
           input.addEventListener("input", () => {

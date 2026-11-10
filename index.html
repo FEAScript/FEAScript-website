@@ -486,6 +486,7 @@
                 <div class="qs-bar label">
                   <span class="qs-dot" aria-hidden="true"></span>
                   <span>Result, solved in your browser</span>
+                  <button class="qs-toggle" id="qs-mesh" type="button" aria-pressed="false" disabled>Show mesh</button>
                 </div>
                 <div class="qs-body">
                 <div class="qs-plot" id="qs-plot">
@@ -499,6 +500,7 @@
                   <label class="qs-control">
                     <span class="qs-name">h/k, top and hole <output id="qs-hk-out">1 m⁻¹</output></span>
                     <input type="range" id="qs-hk" min="0" max="8" step="1" value="3" disabled />
+                    <span class="qs-hint">Heat transfer coefficient h (W/m²·K) over thermal conductivity k (W/m·K)</span>
                   </label>
                   <label class="qs-control">
                     <span class="qs-name">External temperature <output id="qs-ext-out">20 °C</output></span>

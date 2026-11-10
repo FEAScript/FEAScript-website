@@ -311,19 +311,20 @@
       const yMid = (yRange[0] + yRange[1]) / 2;
       // Name the boundary condition on each side, with the values the sliders set
       const { temp, hk, ext } = values();
+      // Small and see-through, so the labels do not hide the field underneath
       const label = (text, x, y, extra) => ({
         text,
         x,
         y,
         showarrow: false,
-        font: { size: 10, color: css.getPropertyValue("--ink-strong").trim() },
+        font: { size: 9, color: css.getPropertyValue("--ink-strong").trim() },
         bgcolor: css.getPropertyValue("--bg").trim(),
-        bordercolor: line,
-        borderpad: 2,
-        opacity: 0.85,
+        borderpad: 1,
+        opacity: 0.6,
         ...extra,
       });
-      const convection = `Convection, h/k = ${hk} m⁻¹, T<sub>ext</sub> = ${ext} °C`;
+      // On a phone the sliders below show the values, so the label names the condition only
+      const convection = width < 480 ? "Convection" : `Convection, h/k = ${hk} m⁻¹, T<sub>ext</sub> = ${ext} °C`;
       const annotations = [
         label(`T = ${temp} °C`, xMid, yRange[0], { yanchor: "bottom", yshift: 4 }),
         label(`T = ${temp} °C`, xRange[1], yMid, { xanchor: "right", xshift: -4, textangle: -90 }),

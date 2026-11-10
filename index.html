@@ -13,12 +13,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FEAScript: A JavaScript Finite Element Simulation Library</title>
+    <title>FEAScript · JavaScript finite element simulation library</title>
     <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
     <meta
       name="description"
       content="FEAScript is an open-source JavaScript library for finite element simulations in both browser-based and server-side environments for physics, engineering and computational mechanics."
     />
+    <!-- Link previews (LinkedIn, Bluesky and others); cards from scripts/generate-social-cards.py -->
+    <link rel="canonical" href="https://feascript.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FEAScript" />
+    <meta property="og:title" content="FEAScript · JavaScript finite element simulation library" />
+    <meta property="og:description" content="FEAScript is an open-source JavaScript library for finite element simulations in both browser-based and server-side environments for physics, engineering and computational mechanics." />
+    <meta property="og:url" content="https://feascript.com/" />
+    <meta property="og:image" content="https://feascript.com/assets/social-home.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="keywords"
       content="finite elements, fem, galerkin, cfd, computational mechanics, javascript"
@@ -117,8 +128,8 @@
             <a class="nav-link" href="#whyusefeascript"><span>Why FEAScript</span></a>
             <a class="nav-link" href="#howtousefeascript"><span>How to use</span></a>
             <a class="nav-link" href="#features"><span>Features</span></a>
+            <a class="nav-link" href="#verification"><span>Verification</span></a>
             <a class="nav-link" href="#tutorials"><span>Tutorials</span></a>
-            <a class="nav-link" href="#licensing"><span>Licensing</span></a>
             <a class="nav-link nav-link-out" href="https://docs.feascript.com" data-icon="documentation"><span>Documentation</span></a>
             <a class="nav-link nav-link-out" href="studio.html" data-icon="studio"><span>Studio</span></a>
             <a class="nav-link nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab"><span>Tri's Lab</span></a>
@@ -143,7 +154,7 @@
             id="theme-toggle"
             class="nav-icon theme-toggle"
             type="button"
-            aria-label="Toggle colour theme"
+            aria-label="Toggle color theme"
           >
             <svg
               class="icon-moon"
@@ -175,7 +186,7 @@
               />
             </svg>
           </button>
-          <a class="nav-cta" href="#howtousefeascript">Get started</a>
+          <a class="nav-cta" href="#maillist">Join mailing list</a>
           <button
             id="nav-burger"
             class="nav-icon nav-burger"
@@ -198,11 +209,11 @@
         </div>
       </div>
       <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
-        <a href="#whyusefeascript">Why use FEAScript</a>
-        <a href="#howtousefeascript">How to use FEAScript</a>
+        <a href="#whyusefeascript">Why FEAScript</a>
+        <a href="#howtousefeascript">How to use</a>
         <a href="#features">Features</a>
+        <a href="#verification">Verification</a>
         <a href="#tutorials">Tutorials</a>
-        <a href="#licensing">Licensing</a>
         <a class="nav-link-out" href="https://docs.feascript.com" data-icon="documentation">Documentation</a>
         <a class="nav-link-out" href="studio.html" data-icon="studio">FEAScript Studio</a>
         <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab by FEAScript</a>
@@ -235,67 +246,44 @@
               without the overhead of traditional desktop software.
             </p>
 
-            <div class="cmd">
-              <span class="cmd-prompt" aria-hidden="true">$</span>
-              <code>npm install feascript</code>
-              <button
-                class="cmd-copy"
-                type="button"
-                data-copy="npm install feascript"
-                aria-label="Copy command"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
+            <div class="hero-actions">
+              <a class="cmd cmd-link" href="#howtousefeascript">
+                <span class="cmd-prompt" aria-hidden="true">&rarr;</span>
+                <span>Try it live in your browser</span>
+              </a>
+              <div class="cmd">
+                <span class="cmd-prompt" aria-hidden="true">$</span>
+                <code>npm install feascript</code>
+                <button
+                  class="cmd-copy"
+                  type="button"
+                  data-copy="npm install feascript"
+                  aria-label="Copy command"
                 >
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-                <span>Copy</span>
-              </button>
-            </div>
-
-            <div class="hero-links label">
-              <a href="#howtousefeascript">Get started</a>
-              <a href="https://github.com/FEAScript/FEAScript-core">View on GitHub</a>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+              </div>
             </div>
 
             <div class="hero-meta label">
               <span>MIT licensed</span>
-              <span>Browser and Node.js</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ───────────── OUR GOAL ───────────── -->
-      <section id="ourgoal" class="section">
-        <div class="section-frame">
-          <div class="eyebrow label">
-            <p>Our goal</p>
-          </div>
-
-          <div class="section-head eq-head">
-            <h2 data-reveal>A powerful JavaScript <span class="accent">API for FEM.</span></h2>
-            <p data-reveal>
-              We are closing the gap between complex computational mechanics and the accessibility of the web,
-              empowering developers to build professional-grade simulation tools that work on any device,
-              anywhere.
-            </p>
-
-            <div class="eq" aria-hidden="true">
-              <span class="eq-1">&minus;&nabla;&middot;(k&nabla;T) = Q</span>
-              <span class="eq-2">Ku = F</span>
-              <span class="eq-3">&nabla;&middot;u = 0</span>
-              <span class="eq-4">&mu;&nabla;&sup2;u &minus; &nabla;p = f</span>
-              <span class="eq-5">|&nabla;&phi;| = 1</span>
-              <span class="eq-6">u &asymp; &Sigma; N&#7522;u&#7522;</span>
-              <span class="eq-7">EI d&#8308;w/dx&#8308; = q</span>
+              <a href="https://github.com/FEAScript/FEAScript-core">View on GitHub</a>
+              <span
+                >Prefer no code? Try <a href="https://lab.feascript.com/">Tri's Lab</a> or
+                <a href="#studio">FEAScript Studio</a></span
+              >
             </div>
           </div>
         </div>
@@ -308,29 +296,46 @@
             <p>Why use FEAScript</p>
           </div>
 
-          <div class="section-head">
+          <div class="section-head eq-head">
             <h2 data-reveal>Engineering simulation, <span class="accent">without the barriers.</span></h2>
+            <p data-reveal>
+              FEAScript brings the finite element method to the web. You set up the model, solve it and plot the
+              results in JavaScript, in a browser or in Node.js, and you can build the simulation into your own
+              web pages and applications.
+            </p>
+
+            <div class="eq" aria-hidden="true">
+              <span class="eq-1">&minus;&nabla;&middot;(k&nabla;T) = Q</span>
+              <span class="eq-2">Ku = F</span>
+              <span class="eq-3">&nabla;&middot;u = 0</span>
+              <span class="eq-4">&mu;&nabla;&sup2;u &minus; &nabla;p = f</span>
+              <span class="eq-5">|&nabla;&phi;| = 1</span>
+              <span class="eq-6">u &asymp; &Sigma; N&#7522;u&#7522;</span>
+              <span class="eq-7">EI d&#8308;w/dx&#8308; = q</span>
+            </div>
           </div>
 
           <div class="grid grid-3">
             <article class="cell cell-pad" data-reveal>
-              <h3>No installation</h3>
+              <h3>Nothing to install in the browser</h3>
               <p class="desc">
-                Run simulations straight from the browser, with no setup, licenses or admin rights needed.
+                A web page loads FEAScript from a URL, so simulations run with no setup, licenses or admin
+                rights. In Node.js, FEAScript is one npm package.
               </p>
             </article>
             <article class="cell cell-pad" data-reveal>
-              <h3>Portability</h3>
+              <h3>Runs where JavaScript runs</h3>
               <p class="desc">
-                Works everywhere JavaScript runs (Windows, macOS and Linux systems that use x64, IA-32, or ARM
-                processors).
+                In current web browsers on desktops, tablets and phones, and in Node.js on Windows, macOS and
+                Linux.
               </p>
             </article>
-            <article class="cell cell-pad" data-reveal>
-              <h3>Open-source</h3>
+            <article id="licensing" class="cell cell-pad" data-reveal>
+              <h3>Open source</h3>
               <p class="desc">
-                The core library of FEAScript is open-source, removing the high cost barrier of traditional
-                FEA software.
+                The core library is free to use, change and build on under the
+                <a href="https://github.com/FEAScript/FEAScript-core/blob/main/LICENSE">MIT license</a>, with no
+                license fees.
               </p>
             </article>
           </div>
@@ -347,23 +352,14 @@
           <div class="section-head">
             <h2 data-reveal>Run a simulation with <span class="accent">a few lines.</span></h2>
             <p class="prose" data-reveal>
-              You can run simulations with FEAScript by calling its functions from JavaScript (the FEAScript
-              API). The API offers full programmatic control and works across multiple environments, including
-              the browser (simple HTML pages and online JavaScript playgrounds, e.g. CodePen and Scribbler)
-              and server-side runtimes such as Node.js.
+              Call FEAScript from JavaScript in a web page, in a playground such as CodePen or Scribbler, or in
+              Node.js. The example below solves heat conduction in a 2D fin with a hole, live in this page: move
+              a slider and both the code and the result change. Save the code as an HTML file to run it
+              yourself.
             </p>
           </div>
 
           <div class="grid">
-            <p class="cell cell-note prose">
-              The example below demonstrates a simulation workflow: steady-state heat conduction in a 2D
-              rectangular fin with a circular hole, solved using a Gmsh-generated mesh. Create an HTML file
-              with the code below to run the simulation. The result beside the code is solved by FEAScript in
-              this page: move a slider and both the code and the result change. See the
-              <a href="#tutorials">tutorials section</a> for more examples, and the
-              <a href="https://docs.feascript.com">documentation</a> for every model, option and function of
-              the API.
-            </p>
             <div class="cell quickstart" data-reveal>
               <div class="qs-layout">
               <div class="code-block">
@@ -518,10 +514,9 @@
           </div>
 
           <div class="section-head">
-            <h2 data-reveal>Everything you need, <span class="accent">in the browser.</span></h2>
+            <h2 data-reveal>What it <span class="accent">solves.</span></h2>
             <p data-reveal>
-              From physics and meshing to solvers and visualization, the following list highlights the key
-              FEAScript features.
+              FEAScript currently solves 1D and 2D problems with linear and quadratic elements.
             </p>
           </div>
 
@@ -530,16 +525,17 @@
               <h3>Physical modeling</h3>
               <ul class="feature-list">
                 <li data-physics="flow">Creeping (Stokes) flow</li>
-                <li data-physics="structure">Euler-Bernoulli beam bending</li>
+                <li data-physics="structure">Euler–Bernoulli beam bending</li>
                 <li data-physics="front">Front propagation</li>
                 <li data-physics="heat">Heat conduction</li>
+                <li data-physics="general">General-form PDE (linear and nonlinear)</li>
               </ul>
             </article>
 
             <article class="cell cell-pad" data-reveal>
               <h3>Geometry and meshing</h3>
               <ul class="feature-list">
-                <li>Simple mesh generation (1D &amp; 2D domains)</li>
+                <li>Simple mesh generation (1D and 2D domains)</li>
                 <li>
                   Unstructured mesh import from <a href="https://gmsh.info/">Gmsh</a> (<code>.msh</code> file
                   format) with quadrilateral and triangular elements (linear and quadratic)
@@ -550,28 +546,27 @@
             <article class="cell cell-pad cell-tall" data-reveal>
               <h3>Numerical methods</h3>
               <ul class="feature-list">
-                <li>General form PDE (linear &amp; nonlinear)</li>
                 <li>
                   Linear system solvers:
                   <ul>
                     <li>Frontal</li>
-                    <li>Jacobi (CPU &amp; WebGPU versions)</li>
+                    <li>Jacobi (CPU and WebGPU versions)</li>
                     <li>LU (via <a href="https://mathjs.org/">math.js</a>)</li>
                   </ul>
                 </li>
-                <li>Newton-Raphson method for nonlinear systems</li>
+                <li>Newton–Raphson method for nonlinear systems</li>
               </ul>
             </article>
 
             <article class="cell cell-pad" data-reveal>
-              <h3>Performance &amp; parallelization</h3>
+              <h3>Performance and parallelization</h3>
               <ul class="feature-list">
                 <li>Web worker support for multi-threaded computation</li>
               </ul>
             </article>
 
             <article class="cell cell-pad" data-reveal>
-              <h3>Visualization &amp; post-processing</h3>
+              <h3>Visualization and post-processing</h3>
               <ul class="feature-list">
                 <li>
                   Interactive rendering with <a href="https://kitware.github.io/vtk-js/">vtk.js</a> and
@@ -580,40 +575,86 @@
               </ul>
             </article>
 
-            <article class="cell cell-pad span-all" data-reveal>
-              <h3>Platform &amp; deployment</h3>
-              <ul class="feature-list">
-                <li>
-                  Browser runtime (<a href="https://cdn.jsdelivr.net/gh/FEAScript/FEAScript-core/dist/feascript.esm.js"
-                    >jsDelivr CDN</a
-                  >
-                  /
-                  <a href="https://core.feascript.com/dist/feascript.esm.js"
-                    >hosted ESM build</a
-                  >)
-                </li>
-                <li>
-                  Interactive JavaScript playgrounds (e.g. CodePen and Scribbler)
-                </li>
-                <li>Server-side runtime (<a href="https://www.npmjs.com/package/feascript">npm</a>)</li>
-              </ul>
-            </article>
 
             <p class="cell cell-note prose" style="grid-column: 1 / -1">
               <span class="tag">In development</span>
-              <strong
-                >FEAScript is currently under heavy development with new features being added
-                regularly.</strong
-              >
-              <a href="https://github.com/sponsors/FEAScript">Donations</a> help accelerate the next
-              generation of FEAScript's solvers, performance, documentation and tutorials. Interested in
-              contributing? Check out our
+              <strong>FEAScript is in development, and each release adds features.</strong> See
+              <a href="#whatsnew">what's new</a> for the latest release and the roadmap. To contribute code,
+              read the
               <a href="https://github.com/FEAScript/FEAScript-core/blob/main/CONTRIBUTING.md"
                 >contribution guidelines</a
-              >
-              to get started.
+              >.
             </p>
           </div>
+        </div>
+      </section>
+
+      <!-- ───────────── VERIFICATION ───────────── -->
+      <section id="verification" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p>Verification</p>
+          </div>
+
+          <div class="section-head">
+            <h2 data-reveal>Checked against <span class="accent">known answers.</span></h2>
+            <p data-reveal>
+              FEAScript is checked in three ways: against values published for standard problems, against
+              exact solutions, and against other finite element software on the same meshes. Each result links to
+              the test or run that produced it, so you can check it and run it yourself.
+            </p>
+          </div>
+
+          <div class="grid grid-3">
+            <article class="cell cell-pad" data-reveal>
+              <h3>Published benchmark</h3>
+              <p class="verify-value">18.26 °C</p>
+              <p class="verify-ref label text-faint">NAFEMS T4 target: 18.3 °C</p>
+              <p class="desc prose">
+                The temperature at the target point of NAFEMS T4, a standard heat conduction benchmark with
+                convection, on a 12 × 20 mesh of quadratic elements. The test runs on every change to FEAScript.
+                <a
+                  href="https://github.com/FEAScript/FEAScript-core/tree/main/tests/verification/benchmark/heatConduction2DNafemsT4"
+                  >Read the NAFEMS T4 test</a
+                >.
+              </p>
+            </article>
+
+            <article class="cell cell-pad" data-reveal>
+              <h3>Closed-form solutions</h3>
+              <p class="verify-value">Exact</p>
+              <p class="verify-ref label text-faint">Up to rounding in double precision</p>
+              <p class="desc prose">
+                Couette flow, a cantilever beam under a tip load and special cases of heat conduction with
+                spatially varying conductivity are set up so that the finite element solution equals the exact
+                solution at the nodes. FEAScript matches it to about 15 significant digits.
+                <a href="https://github.com/FEAScript/FEAScript-core/tree/main/tests/verification"
+                  >See the verification tests</a
+                >.
+              </p>
+            </article>
+
+            <article class="cell cell-pad" data-reveal>
+              <h3>Other finite element software</h3>
+              <p class="verify-value">1.8e-10 °C</p>
+              <p class="verify-ref label text-faint">Largest difference from scikit-fem</p>
+              <p class="desc prose">
+                On the same mesh and elements, every correct code solves the same equations, so the results must
+                match node by node. For heat conduction in a 2D fin, on meshes up to 51,681 nodes, FEAScript
+                0.3.1 matches <a href="https://github.com/kinnala/scikit-fem">scikit-fem</a> to the figure above.
+                It also matches <a href="https://www.elmerfem.org/">Elmer</a> to within 5e-6 °C, the limit of
+                Elmer's output files.
+                <a
+                  href="https://github.com/FEAScript/FEAScript-benchmark/tree/main/heatConduction2DFin/reports/amd-ryzen-5-9600x/0.3.1"
+                  >See the benchmark results</a
+                >.
+              </p>
+            </article>
+          </div>
+
+          <p class="verify-note label text-faint">
+            NAFEMS T4 is reproduced independently. FEAScript is not affiliated with NAFEMS.
+          </p>
         </div>
       </section>
 
@@ -627,15 +668,8 @@
           <div class="section-head">
             <h2 data-reveal>Learn by <span class="accent">running.</span></h2>
             <p class="prose" data-reveal>
-              These tutorials provide a step-by-step introduction to FEAScript. They show how to integrate
-              finite element simulations into your own websites and applications, or how to run them in
-              interactive JavaScript playgrounds such as <a href="https://codepen.io/FEAScript">CodePen</a> and
-              <a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
-                >Scribbler</a
-              >. Several tutorials come in variants that solve the same physical problem in different
-              configurations, from the basic example to more advanced setups with external meshes or multiple
-              threads. For the equations and options behind each example, see the
-              <a href="https://docs.feascript.com">documentation</a>.
+              Step-by-step tutorials, each with the full code to run in a web page, on CodePen or in Scribbler.
+              Four to start with, one for each kind of physics:
             </p>
           </div>
 
@@ -646,88 +680,6 @@
               finite element method through games and block-based missions, with no code to write.
             </p>
 
-            <article class="cell tutorial" data-physics="general" data-reveal>
-              <img
-                class="tutorial-img"
-                src="tutorials/advection-diffusion-1d-results.png"
-                alt="Advection-diffusion with Gaussian source results"
-                loading="lazy"
-              />
-              <div class="tutorial-body">
-                <p class="fig-label">General-form PDE</p>
-                <h3>Advection-Diffusion with a Gaussian Source Term</h3>
-                <p>
-                  1D steady-state scalar transport governed by the advection-diffusion equation with a
-                  localized Gaussian source term
-                </p>
-                <div class="badges">
-                  <a
-                    class="badge badge-basic"
-                    href="https://feascript.com/tutorials/advection-diffusion-1d.html"
-                    >Tutorial</a
-                  >
-                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/azNbeJw">CodePen</a>
-                  <a
-                    class="badge badge-scribbler"
-                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/generalFormPDEScript/advection-diffusion-1d.jsnb"
-                    >Scribbler</a
-                  >
-                </div>
-              </div>
-            </article>
-
-            <article class="cell tutorial" data-physics="structure" data-reveal>
-              <img
-                class="tutorial-img"
-                src="tutorials/cantilever-beam-1d-results.png"
-                alt="Cantilever beam under a tip load results"
-                loading="lazy"
-              />
-              <div class="tutorial-body">
-                <p class="fig-label">Structural mechanics</p>
-                <h3>Cantilever Beam Under a Tip Load</h3>
-                <p>
-                  1D Euler-Bernoulli cantilever beam bending under a concentrated tip load, with the finite
-                  element solution verified against the classical analytical solution
-                </p>
-                <div class="badges">
-                  <a class="badge badge-basic" href="https://feascript.com/tutorials/cantilever-beam-1d.html"
-                    >Tutorial</a
-                  >
-                </div>
-              </div>
-            </article>
-
-            <article class="cell tutorial" data-physics="flow" data-reveal>
-              <img
-                class="tutorial-img"
-                src="tutorials/lid-driven-cavity-2d-stokes-u-results.png"
-                alt="Creeping flow on a lid-driven 2D cavity results"
-                loading="lazy"
-              />
-              <div class="tutorial-body">
-                <p class="fig-label">Creeping flow</p>
-                <h3>Creeping Flow in a 2D Lid-Driven Cavity</h3>
-                <p>
-                  Stokes flow in a square 2D cavity driven by a moving lid, with velocity and pressure fields
-                  resolved
-                </p>
-                <div class="badges">
-                  <a
-                    class="badge badge-basic"
-                    href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow.html"
-                    >Tutorial</a
-                  >
-                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/XJKGmRz">CodePen</a>
-                  <a
-                    class="badge badge-scribbler"
-                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/creepingFlowScript/lid-driven-cavity-2d-creeping-flow.jsnb"
-                    >Scribbler</a
-                  >
-                </div>
-              </div>
-            </article>
-
             <article class="cell tutorial" data-physics="heat" data-reveal>
               <img
                 class="tutorial-img"
@@ -737,7 +689,7 @@
               />
               <div class="tutorial-body">
                 <p class="fig-label">Heat conduction</p>
-                <h3>Heat Conduction in a 2D Fin</h3>
+                <h3>Heat conduction in a 2D fin</h3>
                 <p>
                   2D steady-state heat conduction in a cooling fin with mixed boundary conditions including
                   constant temperature, symmetry, and convective cooling
@@ -763,31 +715,53 @@
               </div>
             </article>
 
-            <article class="cell tutorial" data-physics="heat" data-reveal>
+            <article class="cell tutorial" data-physics="flow" data-reveal>
               <img
                 class="tutorial-img"
-                src="tutorials/heat-conduction-1d-wall-results.png"
-                alt="Heat conduction through a wall results"
+                src="tutorials/lid-driven-cavity-2d-stokes-u-results.png"
+                alt="Creeping flow on a lid-driven 2D cavity results"
                 loading="lazy"
               />
               <div class="tutorial-body">
-                <p class="fig-label">Heat conduction</p>
-                <h3>Heat Conduction Through a Wall</h3>
+                <p class="fig-label">Creeping flow</p>
+                <h3>Creeping flow in a 2D lid-driven cavity</h3>
                 <p>
-                  1D steady-state heat conduction across a wall with convection boundary condition at one end
-                  and constant temperature at the other
+                  Stokes flow in a square 2D cavity driven by a moving lid, with velocity and pressure fields
+                  resolved
                 </p>
                 <div class="badges">
                   <a
                     class="badge badge-basic"
-                    href="https://feascript.com/tutorials/heat-conduction-1d-wall.html"
+                    href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow.html"
                     >Tutorial</a
                   >
-                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/ZYQrqJK">CodePen</a>
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/XJKGmRz">CodePen</a>
                   <a
                     class="badge badge-scribbler"
-                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/heatConductionScript/heat-conduction-1d-wall.jsnb"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/creepingFlowScript/lid-driven-cavity-2d-creeping-flow.jsnb"
                     >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="structure" data-reveal>
+              <img
+                class="tutorial-img"
+                src="tutorials/cantilever-beam-1d-results.png"
+                alt="Cantilever beam under a tip load results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Structural mechanics</p>
+                <h3>Cantilever beam under a tip load</h3>
+                <p>
+                  1D Euler–Bernoulli cantilever beam bending under a concentrated tip load, with the finite
+                  element solution verified against the classical analytical solution
+                </p>
+                <div class="badges">
+                  <a class="badge badge-basic" href="https://feascript.com/tutorials/cantilever-beam-1d.html"
+                    >Tutorial</a
                   >
                 </div>
               </div>
@@ -802,7 +776,7 @@
               />
               <div class="tutorial-body">
                 <p class="fig-label">Front propagation</p>
-                <h3>Solidification Front Propagation in a 2D Domain</h3>
+                <h3>Solidification front propagation in a 2D domain</h3>
                 <p>
                   Transient simulation of a solidification front advancing through a 2D domain using the
                   eikonal equation
@@ -823,10 +797,10 @@
               </div>
             </article>
 
-            <p class="cell cell-note prose" style="grid-column: 1 / -1">
-              Found a problem or have feedback on the above tutorials? Tell us on
-              <a href="https://github.com/FEAScript/FEAScript-core/issues">GitHub</a> or
-              <a href="https://discord.gg/3DVjNcuW4f">Discord</a>.
+            <p class="cell cell-note" style="grid-column: 1 / -1">
+              <a class="btn btn-solid btn-sm" href="tutorials/index.html"
+                >All tutorials <span aria-hidden="true">&rarr;</span></a
+              >
             </p>
           </div>
         </div>
@@ -844,7 +818,7 @@
           </div>
 
           <div class="grid">
-            <article class="cell cell-pad case-study" data-reveal>
+            <article class="cell cell-pad case-study showcase showcase-compact" data-reveal>
               <div class="case-study-main">
                 <div class="case-study-head">
                   <a href="https://betterbuilding.io/" class="case-study-logo">
@@ -854,8 +828,9 @@
                 </div>
                 <h3>Heat Transfer Simulator</h3>
                 <p class="desc">
-                  Better Building integrated FEAScript
-                  to power their online Heat Transfer Simulator for architects and engineers.
+                  Better Building integrated FEAScript to power their online Heat Transfer Simulator for architects
+                  and engineers. Users draw a building detail from material layers, set its boundary conditions,
+                  and FEAScript solves the 2D heat conduction in the browser.
                 </p>
                 <div class="case-study-actions">
                   <a
@@ -866,20 +841,16 @@
                   <a class="btn btn-outline btn-sm" href="https://betterbuilding.io/">Visit Better Building</a>
                 </div>
               </div>
-              <dl class="case-study-meta">
-                <div>
-                  <dt class="label text-faint">Domain</dt>
-                  <dd>Building physics</dd>
-                </div>
-                <div>
-                  <dt class="label text-faint">Solver</dt>
-                  <dd>Heat conduction</dd>
-                </div>
-                <div>
-                  <dt class="label text-faint">Users</dt>
-                  <dd>Architects and engineers</dd>
-                </div>
-              </dl>
+              <figure class="showcase-shot">
+                <img
+                  src="assets/better-building-heat-transfer-simulator.png"
+                  alt="Better Building's Heat Transfer Simulator: a wall corner drawn from material layers, with the temperature field and isotherms computed by FEAScript"
+                  width="1278"
+                  height="944"
+                  loading="lazy"
+                />
+                <figcaption class="label text-faint">Screenshot courtesy of Better Building.</figcaption>
+              </figure>
             </article>
           </div>
         </div>
@@ -897,7 +868,7 @@
           </div>
 
           <div class="grid">
-            <article class="cell cell-pad case-study studio-teaser" data-reveal>
+            <article class="cell cell-pad case-study showcase" data-reveal>
               <div class="case-study-main">
                 <div class="case-study-head">
                   <span class="tag">In development</span>
@@ -915,7 +886,7 @@
                   >
                 </div>
               </div>
-              <figure class="studio-teaser-shot">
+              <figure class="showcase-shot">
                 <img
                   src="assets/feascript-studio-app.png"
                   alt="Cooling fin calculator app built in FEAScript Studio, with sliders for the inputs, the coldest temperature and a temperature plot"
@@ -946,16 +917,30 @@
               <h3>Documentation</h3>
               <p class="desc prose" style="margin-top: 1rem">
                 The <a href="https://docs.feascript.com">FEAScript documentation</a> covers installation, the
-                physical models and their equations, and the full API reference. For more background, visit
-                our <a href="https://blog.feascript.com">blog</a>.
+                physical models and their equations, and the full API reference. Good places to start:
               </p>
+              <ul class="feature-list">
+                <li><a href="https://docs.feascript.com/getting-started/installation">Installation</a></li>
+                <li><a href="https://docs.feascript.com/getting-started/first-simulation">Your first simulation</a></li>
+                <li><a href="https://docs.feascript.com/models/heat-conduction">Physical models</a></li>
+                <li><a href="https://docs.feascript.com/fundamentals/solvers">Solvers</a></li>
+                <li><a href="https://docs.feascript.com/api/feascript-model">API reference</a></li>
+              </ul>
             </article>
 
-            <article id="licensing" class="cell cell-pad" data-reveal>
-              <h3>Licensing</h3>
+            <article id="whatsnew" class="cell cell-pad" data-reveal>
+              <h3>What's new</h3>
               <p class="desc prose" style="margin-top: 1rem">
-                The core library of FEAScript is distributed under the terms of the
-                <a href="https://github.com/FEAScript/FEAScript-core/blob/main/LICENSE">MIT license</a>.
+                The latest release, 0.3.0 with its fix 0.3.1 (October 2026), added triangular elements, the
+                Euler–Bernoulli beam, the frontal solver for every model, vtk.js plots and VTK export, and the
+                NAFEMS T4 test. Every change is in the
+                <a href="https://github.com/FEAScript/FEAScript-core/blob/main/CHANGELOG.md">changelog</a>.
+              </p>
+              <p class="desc prose">
+                Next, 0.4.0 brings faster solvers and clearer error messages, and 0.5.0 multi-threading, units
+                and multi-block meshes. Follow the plans in the
+                <a href="https://github.com/FEAScript/FEAScript-core/discussions/114">0.4.0 roadmap</a> and the
+                <a href="https://github.com/FEAScript/FEAScript-core/discussions/133">0.5.0 roadmap</a>.
               </p>
             </article>
 
@@ -964,8 +949,9 @@
               <p class="desc prose" style="margin-top: 1rem">
                 If you find FEAScript useful, please consider
                 <strong>supporting its development with a donation</strong>. Your support helps fund new
-                features, performance improvements, documentation and tutorials. See who already supports
-                FEAScript on the <a href="sponsors.html">sponsors page</a>.
+                features, performance improvements, documentation and tutorials. Companies can sponsor too, with
+                their logo on the home page. See who already supports FEAScript on the
+                <a href="sponsors.html">sponsors page</a>.
               </p>
               <div class="inline-media">
                 <a href="https://github.com/sponsors/FEAScript"
@@ -987,7 +973,7 @@
       <!-- ───────────── MAILING LIST ───────────── -->
       <section id="maillist" class="section">
         <div class="section-frame">
-          <div class="cta cta-end">
+          <div class="cta">
             <div class="cta-main">
             <p class="label text-faint">Stay in the loop</p>
             <h2 data-reveal>Join the <span class="accent">mailing list.</span></h2>
@@ -1023,21 +1009,6 @@
               </div>
             </form>
             </div>
-
-            <div class="cta-star">
-              <p class="label text-faint">Open source</p>
-              <h2 data-reveal>Star us on <span class="accent">GitHub.</span></h2>
-              <p class="lede">Like FEAScript? Give it a star.</p>
-              <a class="btn btn-solid" href="https://github.com/FEAScript/FEAScript-core">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-                  <path
-                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-                  />
-                </svg>
-                Star FEAScript
-                <span class="label" data-github-stars></span>
-              </a>
-            </div>
           </div>
         </div>
       </section>
@@ -1071,7 +1042,7 @@
           <nav class="footer-col" aria-label="Learn">
             <h2>Learn</h2>
             <ul>
-              <li><a href="index.html#tutorials" data-icon="tutorials">Tutorials</a></li>
+              <li><a href="tutorials/index.html" data-icon="tutorials">Tutorials</a></li>
               <li><a href="https://codepen.io/FEAScript" data-icon="codepen">CodePen</a></li>
               <li><a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples" data-icon="scribbler">Scribbler</a></li>
               <li><a href="https://docs.feascript.com" data-icon="documentation">Documentation</a></li>
@@ -1097,7 +1068,7 @@
           </nav>
         </div>
         <div class="footer-bottom">
-          <span>&#169; 2023-<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
+          <span>&#169; 2023–<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
           <span>Core: MIT license &middot; Website: CC BY 4.0</span>
         </div>
       </div>

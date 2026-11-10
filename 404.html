@@ -79,8 +79,8 @@
             <a class="nav-link" href="index.html#whyusefeascript"><span>Why FEAScript</span></a>
             <a class="nav-link" href="index.html#howtousefeascript"><span>How to use</span></a>
             <a class="nav-link" href="index.html#features"><span>Features</span></a>
-            <a class="nav-link" href="index.html#tutorials"><span>Tutorials</span></a>
-            <a class="nav-link" href="index.html#licensing"><span>Licensing</span></a>
+            <a class="nav-link" href="index.html#verification"><span>Verification</span></a>
+            <a class="nav-link" href="tutorials/index.html"><span>Tutorials</span></a>
             <a class="nav-link nav-link-out" href="https://docs.feascript.com" data-icon="documentation"><span>Documentation</span></a>
             <a class="nav-link nav-link-out" href="studio.html" data-icon="studio"><span>Studio</span></a>
             <a class="nav-link nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab"><span>Tri's Lab</span></a>
@@ -105,7 +105,7 @@
             id="theme-toggle"
             class="nav-icon theme-toggle"
             type="button"
-            aria-label="Toggle colour theme"
+            aria-label="Toggle color theme"
           >
             <svg
               class="icon-moon"
@@ -137,7 +137,7 @@
               />
             </svg>
           </button>
-          <a class="nav-cta" href="index.html#howtousefeascript">Get started</a>
+          <a class="nav-cta" id="surprise-me" href="tutorials/index.html">Surprise me</a>
           <button
             id="nav-burger"
             class="nav-icon nav-burger"
@@ -160,11 +160,11 @@
         </div>
       </div>
       <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
-        <a href="index.html#whyusefeascript">Why use FEAScript</a>
-        <a href="index.html#howtousefeascript">How to use FEAScript</a>
+        <a href="index.html#whyusefeascript">Why FEAScript</a>
+        <a href="index.html#howtousefeascript">How to use</a>
         <a href="index.html#features">Features</a>
-        <a href="index.html#tutorials">Tutorials</a>
-        <a href="index.html#licensing">Licensing</a>
+        <a href="index.html#verification">Verification</a>
+        <a href="tutorials/index.html">Tutorials</a>
         <a class="nav-link-out" href="https://docs.feascript.com" data-icon="documentation">Documentation</a>
         <a class="nav-link-out" href="studio.html" data-icon="studio">FEAScript Studio</a>
         <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab by FEAScript</a>
@@ -193,7 +193,7 @@
           </p>
           <div class="nf-actions">
             <a class="btn btn-solid" href="index.html">Back to FEAScript</a>
-            <a class="btn btn-outline" href="index.html#tutorials">Tutorials</a>
+            <a class="btn btn-outline" href="tutorials/index.html">Tutorials</a>
             <a class="btn btn-outline" href="https://docs.feascript.com">Documentation</a>
           </div>
           <p class="nf-more text-muted">
@@ -232,7 +232,7 @@
           <nav class="footer-col" aria-label="Learn">
             <h2>Learn</h2>
             <ul>
-              <li><a href="index.html#tutorials" data-icon="tutorials">Tutorials</a></li>
+              <li><a href="tutorials/index.html" data-icon="tutorials">Tutorials</a></li>
               <li><a href="https://codepen.io/FEAScript" data-icon="codepen">CodePen</a></li>
               <li><a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples" data-icon="scribbler">Scribbler</a></li>
               <li><a href="https://docs.feascript.com" data-icon="documentation">Documentation</a></li>
@@ -258,7 +258,7 @@
           </nav>
         </div>
         <div class="footer-bottom">
-          <span>&#169; 2023-<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
+          <span>&#169; 2023–<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
           <span>Core: MIT license &middot; Website: CC BY 4.0</span>
         </div>
       </div>
@@ -274,6 +274,38 @@
         main.setAttribute("tabindex", "-1");
         main.focus();
       });
+    </script>
+    <script>
+      // "Surprise me": a random page of the website, the docs or Tri's Lab
+      (function () {
+        var pages = [
+          "index.html#howtousefeascript",
+          "index.html#verification",
+          "tutorials/index.html",
+          "tutorials/heat-conduction-2d-fin.html",
+          "tutorials/lid-driven-cavity-2d-creeping-flow.html",
+          "tutorials/cantilever-beam-1d.html",
+          "tutorials/solidification-front-2d.html",
+          "tutorials/advection-diffusion-1d.html",
+          "tutorials/heat-conduction-1d-wall.html",
+          "studio.html",
+          "https://docs.feascript.com/getting-started/first-simulation",
+          "https://docs.feascript.com/fundamentals/finite-element-method",
+          "https://docs.feascript.com/models/heat-conduction",
+          "https://docs.feascript.com/models/creeping-flow",
+          "https://lab.feascript.com/critical-mesh/",
+          "https://lab.feascript.com/blocks/",
+        ];
+        var link = document.getElementById("surprise-me");
+        if (link) {
+          link.addEventListener("click", function (event) {
+            event.preventDefault();
+            // Relative pages resolve from the site root, through the <base> set at the top
+            var page = pages[Math.floor(Math.random() * pages.length)];
+            window.location.href = new URL(page, document.baseURI).href;
+          });
+        }
+      })();
     </script>
     <script src="feascript-website.js"></script>
   </body>

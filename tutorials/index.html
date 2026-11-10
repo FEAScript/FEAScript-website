@@ -1,0 +1,523 @@
+<!doctype html>
+
+<!--
+ * ════════════════════════════════════════════════════════════════
+ *  FEAScript Website
+ *  Finite Element Simulation in JavaScript
+ *  https://feascript.com
+ *  CC BY 4.0 License © 2023–2026 FEAScript
+ * ════════════════════════════════════════════════════════════════
+-->
+
+<html lang="en" class="site">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tutorials · FEAScript</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta
+      name="description"
+      content="Step-by-step FEAScript tutorials: heat conduction, creeping flow, beams, front propagation and general-form PDEs, each with code to run in a web page, on CodePen or in Scribbler"
+    />
+    <!-- Link previews (LinkedIn, Bluesky and others); cards from scripts/generate-social-cards.py -->
+    <link rel="canonical" href="https://feascript.com/tutorials/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FEAScript" />
+    <meta property="og:title" content="Tutorials · FEAScript" />
+    <meta property="og:description" content="Step-by-step FEAScript tutorials: heat conduction, creeping flow, beams, front propagation and general-form PDEs, each with code to run in a web page, on CodePen or in Scribbler" />
+    <meta property="og:url" content="https://feascript.com/tutorials/" />
+    <meta property="og:image" content="https://feascript.com/assets/social-tutorials.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="keywords"
+      content="FEAScript, sponsors, contributors, open source, finite elements, javascript, GitHub Sponsors"
+    />
+
+    <script>
+      // Apply stored theme before first paint and enable JS-only styles
+      (function () {
+        var d = document.documentElement;
+        d.className += " js";
+        try {
+          var t = localStorage.getItem("feascript-theme");
+          if (t === "light" || t === "dark") d.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+
+    <!-- Cloudflare Web Analytics (no cookies) -->
+    <script
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "b688c1274c374e5a95647253cf19085e"}'
+    ></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-nav">
+      <div class="nav-inner">
+        <div class="nav-group">
+          <a class="nav-brand" href="../index.html">
+            <svg viewBox="14 79 242 242" aria-hidden="true">
+              <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+            </svg>
+            <span
+              >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+            ></span>
+          </a>
+          <nav class="nav-links label" aria-label="Main">
+            <a class="nav-link" href="../index.html#whyusefeascript"><span>Why FEAScript</span></a>
+            <a class="nav-link" href="../index.html#howtousefeascript"><span>How to use</span></a>
+            <a class="nav-link" href="../index.html#features"><span>Features</span></a>
+            <a class="nav-link" href="../index.html#verification"><span>Verification</span></a>
+            <a class="nav-link" href="index.html"><span>Tutorials</span></a>
+            <a class="nav-link nav-link-out" href="https://docs.feascript.com" data-icon="documentation"><span>Documentation</span></a>
+            <a class="nav-link nav-link-out" href="../studio.html" data-icon="studio"><span>Studio</span></a>
+            <a class="nav-link nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab"><span>Tri's Lab</span></a>
+          </nav>
+        </div>
+
+        <div class="nav-group">
+          <a
+            class="nav-icon nav-github"
+            href="https://github.com/FEAScript/FEAScript-core"
+            aria-label="FEAScript on GitHub"
+            title="FEAScript on GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              />
+            </svg>
+            <span id="github-stars" class="label"></span>
+          </a>
+          <button
+            id="theme-toggle"
+            class="nav-icon theme-toggle"
+            type="button"
+            aria-label="Toggle color theme"
+          >
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+              />
+            </svg>
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+              />
+            </svg>
+          </button>
+          <a class="nav-cta" href="#maillist">Join mailing list</a>
+          <button
+            id="nav-burger"
+            class="nav-icon nav-burger"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+        <a href="../index.html#whyusefeascript">Why FEAScript</a>
+        <a href="../index.html#howtousefeascript">How to use</a>
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#verification">Verification</a>
+        <a href="index.html">Tutorials</a>
+        <a class="nav-link-out" href="https://docs.feascript.com" data-icon="documentation">Documentation</a>
+        <a class="nav-link-out" href="../studio.html" data-icon="studio">FEAScript Studio</a>
+        <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab by FEAScript</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section id="tutorials" class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p data-doc-bar>Tutorials</p>
+          </div>
+
+          <div class="section-head doc-head">
+            <h1>Learn by <span class="accent">running.</span></h1>
+            <p class="prose">
+              These tutorials provide a step-by-step introduction to FEAScript. They show how to integrate
+              finite element simulations into your own websites and applications, or how to run them in
+              interactive JavaScript playgrounds such as <a href="https://codepen.io/FEAScript">CodePen</a> and
+              <a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples"
+                >Scribbler</a
+              >. Several tutorials come in variants that solve the same physical problem in different
+              configurations, from the basic example to more advanced setups with external meshes or multiple
+              threads. For the equations and options behind each example, see the
+              <a href="https://docs.feascript.com">documentation</a>.
+            </p>
+          </div>
+
+          <div class="grid grid-2">
+            <p class="cell cell-note prose" style="grid-column: 1 / -1">
+              <span class="tag">New to finite elements?</span>
+              Start with <a href="https://lab.feascript.com/">Tri's Lab by FEAScript</a>, where you learn the
+              finite element method through games and block-based missions, with no code to write.
+            </p>
+
+            <article class="cell tutorial" data-physics="general" data-reveal>
+              <img
+                class="tutorial-img"
+                src="advection-diffusion-1d-results.png"
+                alt="Advection-diffusion with Gaussian source results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">General-form PDE</p>
+                <h3>Advection-diffusion with a Gaussian source term</h3>
+                <p>
+                  1D steady-state scalar transport governed by the advection-diffusion equation with a
+                  localized Gaussian source term
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/advection-diffusion-1d.html"
+                    >Tutorial</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/azNbeJw">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/generalFormPDEScript/advection-diffusion-1d.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="structure" data-reveal>
+              <img
+                class="tutorial-img"
+                src="cantilever-beam-1d-results.png"
+                alt="Cantilever beam under a tip load results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Structural mechanics</p>
+                <h3>Cantilever beam under a tip load</h3>
+                <p>
+                  1D Euler–Bernoulli cantilever beam bending under a concentrated tip load, with the finite
+                  element solution verified against the classical analytical solution
+                </p>
+                <div class="badges">
+                  <a class="badge badge-basic" href="https://feascript.com/tutorials/cantilever-beam-1d.html"
+                    >Tutorial</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="flow" data-reveal>
+              <img
+                class="tutorial-img"
+                src="lid-driven-cavity-2d-stokes-u-results.png"
+                alt="Creeping flow on a lid-driven 2D cavity results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Creeping flow</p>
+                <h3>Creeping flow in a 2D lid-driven cavity</h3>
+                <p>
+                  Stokes flow in a square 2D cavity driven by a moving lid, with velocity and pressure fields
+                  resolved
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow.html"
+                    >Tutorial</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/XJKGmRz">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/creepingFlowScript/lid-driven-cavity-2d-creeping-flow.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="heat" data-reveal>
+              <img
+                class="tutorial-img"
+                src="heat-conduction-2d-fin-results.png"
+                alt="Heat conduction in a 2D fin results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Heat conduction</p>
+                <h3>Heat conduction in a 2D fin</h3>
+                <p>
+                  2D steady-state heat conduction in a cooling fin with mixed boundary conditions including
+                  constant temperature, symmetry, and convective cooling
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/heat-conduction-2d-fin.html"
+                    >Tutorial</a
+                  >
+                  <a
+                    class="badge badge-gmsh"
+                    href="https://feascript.com/tutorials/heat-conduction-2d-fin-gmsh.html"
+                    >Gmsh mesh</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/WbrzwPG">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/heatConductionScript/heat-conduction-2d-fin.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="heat" data-reveal>
+              <img
+                class="tutorial-img"
+                src="heat-conduction-1d-wall-results.png"
+                alt="Heat conduction through a wall results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Heat conduction</p>
+                <h3>Heat conduction through a wall</h3>
+                <p>
+                  1D steady-state heat conduction across a wall with convection boundary condition at one end
+                  and constant temperature at the other
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/heat-conduction-1d-wall.html"
+                    >Tutorial</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/ZYQrqJK">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/heatConductionScript/heat-conduction-1d-wall.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell tutorial" data-physics="front" data-reveal>
+              <img
+                class="tutorial-img"
+                src="solidification-front-2d-results.png"
+                alt="Solidification front propagation results"
+                loading="lazy"
+              />
+              <div class="tutorial-body">
+                <p class="fig-label">Front propagation</p>
+                <h3>Solidification front propagation in a 2D domain</h3>
+                <p>
+                  Transient simulation of a solidification front advancing through a 2D domain using the
+                  eikonal equation
+                </p>
+                <div class="badges">
+                  <a
+                    class="badge badge-basic"
+                    href="https://feascript.com/tutorials/solidification-front-2d.html"
+                    >Tutorial</a
+                  >
+                  <a class="badge badge-codepen" href="https://codepen.io/FEAScript/pen/dPMxaLq">CodePen</a>
+                  <a
+                    class="badge badge-scribbler"
+                    href="https://app.scribbler.live/?jsnb=github:nikoscham/FEAScript-Scribbler-examples/frontPropagationScript/solidification-front-2d.jsnb"
+                    >Scribbler</a
+                  >
+                </div>
+              </div>
+            </article>
+
+            <article class="cell cell-pad" style="grid-column: 1 / -1" data-reveal>
+              <h3>More variants</h3>
+              <p class="desc prose">The same problems, set up in other ways:</p>
+              <ul class="feature-list">
+                <li><a href="heat-conduction-2d-fin-gmsh.html">Heat conduction in a 2D fin, on a Gmsh mesh</a></li>
+                <li>
+                  <a href="heat-conduction-2d-rhom-fin-gmsh.html"
+                    >Heat conduction in a 2D rhomboid fin, on a Gmsh mesh</a
+                  >
+                </li>
+                <li><a href="heat-conduction-2d-fin-worker.html">Heat conduction in a 2D fin, multi-threaded</a></li>
+                <li><a href="heat-conduction-2d-fin-webgpu.html">Heat conduction in a 2D fin, with WebGPU</a></li>
+                <li>
+                  <a href="heat-conduction-2d-fin-performance-test.html"
+                    >Heat conduction in a 2D fin, performance test</a
+                  >
+                </li>
+                <li>
+                  <a href="lid-driven-cavity-2d-creeping-flow-worker.html"
+                    >Creeping flow in a 2D lid-driven cavity, multi-threaded</a
+                  >
+                </li>
+                <li>
+                  <a href="solidification-front-2d-worker.html"
+                    >Solidification front propagation in a 2D domain, multi-threaded</a
+                  >
+                </li>
+              </ul>
+            </article>
+
+            <p class="cell cell-note prose" style="grid-column: 1 / -1">
+              Found a problem or have feedback on the above tutorials? Tell us on
+              <a href="https://github.com/FEAScript/FEAScript-core/issues">GitHub</a> or
+              <a href="https://discord.gg/3DVjNcuW4f">Discord</a>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── MAILING LIST AND GITHUB STAR ───────────── -->
+      <section id="maillist" class="section">
+        <div class="section-frame">
+          <div class="cta">
+            <div class="cta-main">
+            <p class="label text-faint">Stay in the loop</p>
+            <h2 data-reveal>Join the <span class="accent">mailing list.</span></h2>
+            <p class="lede">Receive new tutorials, project updates and news.</p>
+
+            <form
+              class="maillist-form"
+              action="https://feascript.us10.list-manage.com/subscribe/post?u=83b4dec50b84e136c2e82c6a4&amp;id=4aa4a60f27&amp;f_id=009362e3f0"
+              method="post"
+              id="mc-embedded-subscribe-form"
+              name="mc-embedded-subscribe-form"
+              target="_blank"
+            >
+              <label class="label" for="mce-EMAIL">Email address</label>
+              <div class="maillist-row">
+                <input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" required value="" />
+                <input
+                  type="submit"
+                  name="subscribe"
+                  id="mc-embedded-subscribe"
+                  class="btn btn-solid"
+                  value="Subscribe"
+                />
+              </div>
+
+              <div class="maillist-honeypot" aria-hidden="true">
+                <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="footer-wordmark" href="../index.html">
+              <svg viewBox="14 79 242 242" aria-hidden="true">
+                <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+              </svg>
+              <span
+                >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
+            </a>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
+            <a class="footer-mail" data-icon="mail" href="mailto:info@feascript.com">info@feascript.com</a>
+            <div class="footer-social">
+              <a href="https://www.youtube.com/@FEAScript" data-icon="youtube" aria-label="YouTube" title="YouTube"></a>
+              <a href="https://www.linkedin.com/company/feascript/" data-icon="linkedin" aria-label="LinkedIn" title="LinkedIn"></a>
+              <a href="https://bsky.app/profile/feascript.com" data-icon="bluesky" aria-label="Bluesky" title="Bluesky"></a>
+            </div>
+          </div>
+          <nav class="footer-col" aria-label="Learn">
+            <h2>Learn</h2>
+            <ul>
+              <li><a href="index.html" data-icon="tutorials">Tutorials</a></li>
+              <li><a href="https://codepen.io/FEAScript" data-icon="codepen">CodePen</a></li>
+              <li><a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples" data-icon="scribbler">Scribbler</a></li>
+              <li><a href="https://docs.feascript.com" data-icon="documentation">Documentation</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Build">
+            <h2>Build</h2>
+            <ul>
+              <li><a href="../studio.html" data-icon="studio">FEAScript Studio</a></li>
+              <li><a href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab</a></li>
+              <li><a href="https://www.npmjs.com/package/feascript" data-icon="npm">npm package</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core" data-icon="github">GitHub</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Community">
+            <h2>Community</h2>
+            <ul>
+              <li><a href="https://blog.feascript.com/" data-icon="blog">Blog</a></li>
+              <li><a href="https://discord.gg/3DVjNcuW4f" data-icon="discord">Discord</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues" data-icon="support">Support</a></li>
+              <li><a href="../sponsors.html" data-icon="sponsors">Sponsors</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>&#169; 2023–<span id="currentYear"></span> FEAScript &middot; <a href="../privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
+          <span>Core: MIT license &middot; Website: CC BY 4.0</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../feascript-website.js"></script>
+  </body>
+</html>

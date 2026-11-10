@@ -13,12 +13,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sponsors and contributors | FEAScript</title>
+    <title>Sponsors and contributors · FEAScript</title>
     <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
     <meta
       name="description"
       content="Thank you to the sponsors and contributors who support FEAScript, the open-source finite element library in JavaScript"
     />
+    <!-- Link previews (LinkedIn, Bluesky and others); cards from scripts/generate-social-cards.py -->
+    <link rel="canonical" href="https://feascript.com/sponsors.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FEAScript" />
+    <meta property="og:title" content="Sponsors and contributors · FEAScript" />
+    <meta property="og:description" content="Thank you to the sponsors and contributors who support FEAScript, the open-source finite element library in JavaScript" />
+    <meta property="og:url" content="https://feascript.com/sponsors.html" />
+    <meta property="og:image" content="https://feascript.com/assets/social-home.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="keywords"
       content="FEAScript, sponsors, contributors, open source, finite elements, javascript, GitHub Sponsors"
@@ -72,8 +83,8 @@
             <a class="nav-link" href="index.html#whyusefeascript"><span>Why FEAScript</span></a>
             <a class="nav-link" href="index.html#howtousefeascript"><span>How to use</span></a>
             <a class="nav-link" href="index.html#features"><span>Features</span></a>
-            <a class="nav-link" href="index.html#tutorials"><span>Tutorials</span></a>
-            <a class="nav-link" href="index.html#licensing"><span>Licensing</span></a>
+            <a class="nav-link" href="index.html#verification"><span>Verification</span></a>
+            <a class="nav-link" href="tutorials/index.html"><span>Tutorials</span></a>
             <a class="nav-link nav-link-out" href="https://docs.feascript.com" data-icon="documentation"><span>Documentation</span></a>
             <a class="nav-link nav-link-out" href="studio.html" data-icon="studio"><span>Studio</span></a>
             <a class="nav-link nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab"><span>Tri's Lab</span></a>
@@ -98,7 +109,7 @@
             id="theme-toggle"
             class="nav-icon theme-toggle"
             type="button"
-            aria-label="Toggle colour theme"
+            aria-label="Toggle color theme"
           >
             <svg
               class="icon-moon"
@@ -130,7 +141,7 @@
               />
             </svg>
           </button>
-          <a class="nav-cta" href="index.html#howtousefeascript">Get started</a>
+          <a class="nav-cta" href="#maillist">Join mailing list</a>
           <button
             id="nav-burger"
             class="nav-icon nav-burger"
@@ -153,11 +164,11 @@
         </div>
       </div>
       <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
-        <a href="index.html#whyusefeascript">Why use FEAScript</a>
-        <a href="index.html#howtousefeascript">How to use FEAScript</a>
+        <a href="index.html#whyusefeascript">Why FEAScript</a>
+        <a href="index.html#howtousefeascript">How to use</a>
         <a href="index.html#features">Features</a>
-        <a href="index.html#tutorials">Tutorials</a>
-        <a href="index.html#licensing">Licensing</a>
+        <a href="index.html#verification">Verification</a>
+        <a href="tutorials/index.html">Tutorials</a>
         <a class="nav-link-out" href="https://docs.feascript.com" data-icon="documentation">Documentation</a>
         <a class="nav-link-out" href="studio.html" data-icon="studio">FEAScript Studio</a>
         <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab by FEAScript</a>
@@ -244,6 +255,44 @@
           </div>
         </div>
       </section>
+
+      <!-- ───────────── MAILING LIST AND GITHUB STAR ───────────── -->
+      <section id="maillist" class="section">
+        <div class="section-frame">
+          <div class="cta">
+            <div class="cta-main">
+            <p class="label text-faint">Stay in the loop</p>
+            <h2 data-reveal>Join the <span class="accent">mailing list.</span></h2>
+            <p class="lede">Receive new tutorials, project updates and news.</p>
+
+            <form
+              class="maillist-form"
+              action="https://feascript.us10.list-manage.com/subscribe/post?u=83b4dec50b84e136c2e82c6a4&amp;id=4aa4a60f27&amp;f_id=009362e3f0"
+              method="post"
+              id="mc-embedded-subscribe-form"
+              name="mc-embedded-subscribe-form"
+              target="_blank"
+            >
+              <label class="label" for="mce-EMAIL">Email address</label>
+              <div class="maillist-row">
+                <input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" required value="" />
+                <input
+                  type="submit"
+                  name="subscribe"
+                  id="mc-embedded-subscribe"
+                  class="btn btn-solid"
+                  value="Subscribe"
+                />
+              </div>
+
+              <div class="maillist-honeypot" aria-hidden="true">
+                <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
@@ -273,7 +322,7 @@
           <nav class="footer-col" aria-label="Learn">
             <h2>Learn</h2>
             <ul>
-              <li><a href="index.html#tutorials" data-icon="tutorials">Tutorials</a></li>
+              <li><a href="tutorials/index.html" data-icon="tutorials">Tutorials</a></li>
               <li><a href="https://codepen.io/FEAScript" data-icon="codepen">CodePen</a></li>
               <li><a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples" data-icon="scribbler">Scribbler</a></li>
               <li><a href="https://docs.feascript.com" data-icon="documentation">Documentation</a></li>
@@ -299,7 +348,7 @@
           </nav>
         </div>
         <div class="footer-bottom">
-          <span>&#169; 2023-<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
+          <span>&#169; 2023–<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
           <span>Core: MIT license &middot; Website: CC BY 4.0</span>
         </div>
       </div>

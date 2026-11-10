@@ -21,7 +21,7 @@
     />
     <meta
       name="keywords"
-      content="FEAScript, privacy, analytics, cookies, Google Analytics"
+      content="FEAScript, privacy, analytics, Cloudflare Web Analytics"
     />
 
     <script>
@@ -43,19 +43,14 @@
       rel="stylesheet"
     />
     <link href="feascript-website.css" rel="stylesheet" type="text/css" />
+
+    <!-- Cloudflare Web Analytics (no cookies) -->
+    <script
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "b688c1274c374e5a95647253cf19085e"}'
+    ></script>
   </head>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-
-    gtag("config", "G-1JPK0KLEC9");
-  </script>
 
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -163,9 +158,9 @@
         <a href="index.html#features">Features</a>
         <a href="index.html#tutorials">Tutorials</a>
         <a href="index.html#licensing">Licensing</a>
-        <a class="nav-link-out" href="https://docs.feascript.com">Documentation</a>
-        <a class="nav-link-out" href="studio.html">FEAScript Studio</a>
-        <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/">Tri's Lab by FEAScript</a>
+        <a class="nav-link-out" href="https://docs.feascript.com" data-icon="documentation">Documentation</a>
+        <a class="nav-link-out" href="studio.html" data-icon="studio">FEAScript Studio</a>
+        <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab by FEAScript</a>
       </nav>
     </header>
 
@@ -180,30 +175,40 @@
             <h1>What we measure, <span class="accent">and what we don't.</span></h1>
             <p>
               This page covers feascript.com, docs.feascript.com, blog.feascript.com, studio.feascript.com and
-              lab.feascript.com. <strong>There are no ads, and we never sell or share data with anyone else.</strong>
+              lab.feascript.com. <strong>There are no ads and no cookies, and we never sell or share data with
+              anyone else.</strong>
             </p>
           </div>
 
           <div class="doc">
+            <div class="eyebrow label" id="cookies" role="heading" aria-level="2">
+              <p>Cookies</p>
+            </div>
+            <p>
+              These sites set no cookies, neither ours nor anyone else's: the analytics below works without them,
+              and the pages embed no videos, ads or social media widgets. Your settings and progress are kept in
+              your browser's local storage instead (see below). That is why there is no cookie banner.
+            </p>
+            <p>
+              When you sign up for the newsletter, the form opens a Mailchimp page in a new tab. That page is
+              Mailchimp's, under its own privacy policy, and may set its own cookies.
+            </p>
+
             <div class="eyebrow label" id="analytics" role="heading" aria-level="2">
               <p>Analytics</p>
             </div>
             <p>
-              We use Google Analytics to see which pages people read and which tutorials and games they use. It
-              records the pages you visit, the site that sent you, your browser, device and approximate location
-              (country and city), and how long you stay. In Tri's Lab it also records play events: levels started,
-              won and lost in Critical Mesh, and runs and finished missions in FEM Blocks. It never receives your
-              name or email address.
+              We use Cloudflare Web Analytics to see which pages people read. It records the page you visit, the
+              site that sent you, your browser, operating system and type of device, your country, and how fast the
+              page loaded. It never receives your name or email address.
             </p>
             <p>
-              Google Analytics sets cookies (named <code>_ga</code>) to tell new visitors from returning ones. Google
-              processes this data under its own
-              <a href="https://policies.google.com/privacy">privacy policy</a>.
+              It sets no cookies and stores nothing in your browser, so it cannot tell new visitors from returning
+              ones or follow you from site to site. Cloudflare processes this data under its own
+              <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>.
             </p>
             <p>
-              To opt out, install the
-              <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics opt-out add-on</a> or use a
-              content blocker. Every page works the same without analytics.
+              To opt out, use a content blocker. Every page works the same without analytics.
             </p>
 
             <div class="eyebrow label" id="browser" role="heading" aria-level="2">
@@ -240,7 +245,7 @@
               Ask us anything about this page at <a href="mailto:info@feascript.com">info@feascript.com</a>. If what
               we collect changes, we update this page first.
             </p>
-            <p>Last updated: 9 November 2026.</p>
+            <p>Last updated: 10 November 2026.</p>
           </div>
         </div>
       </section>
@@ -299,7 +304,7 @@
           </nav>
         </div>
         <div class="footer-bottom">
-          <span>&#169; 2023-<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a></span>
+          <span>&#169; 2023-<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
           <span>Core: MIT license &middot; Website: CC BY 4.0</span>
         </div>
       </div>

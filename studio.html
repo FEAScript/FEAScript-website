@@ -43,19 +43,14 @@
       rel="stylesheet"
     />
     <link href="feascript-website.css" rel="stylesheet" type="text/css" />
+
+    <!-- Cloudflare Web Analytics (no cookies) -->
+    <script
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "b688c1274c374e5a95647253cf19085e"}'
+    ></script>
   </head>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JPK0KLEC9"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-
-    gtag("config", "G-1JPK0KLEC9");
-  </script>
 
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -163,9 +158,9 @@
         <a href="index.html#features">Features</a>
         <a href="index.html#tutorials">Tutorials</a>
         <a href="index.html#licensing">Licensing</a>
-        <a class="nav-link-out" href="https://docs.feascript.com">Documentation</a>
-        <a class="nav-link-out" href="studio.html">FEAScript Studio</a>
-        <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/">Tri's Lab by FEAScript</a>
+        <a class="nav-link-out" href="https://docs.feascript.com" data-icon="documentation">Documentation</a>
+        <a class="nav-link-out" href="studio.html" data-icon="studio">FEAScript Studio</a>
+        <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab by FEAScript</a>
       </nav>
     </header>
 
@@ -193,11 +188,10 @@
                 ><i class="wire w-physics up"><svg viewBox="0 0 16 7" preserveAspectRatio="none"><path d="M0 7C8 7 8 0 16 0" /></svg></i><span class="b-crimson">IO</span>
               </span>
             </div>
-            <h1>Turn FEAScript models into <span class="accent">web applications.</span></h1>
+            <h1>Simulation apps, <span class="accent">built in the browser.</span></h1>
             <p>
-              FEAScript Studio is a browser-based environment for creating and managing engineering
-              applications powered by FEAScript. With FEAScript Studio you will be able to turn FEAScript
-              models into focused applications with controlled inputs and interactive simulation results.
+              Build finite element models, solve them in your browser and turn them into focused
+              applications. No installation, no desktop licenses.
             </p>
           </div>
 
@@ -239,7 +233,7 @@
               <article class="cell cell-pad">
                 <h3>Sharing and embedding</h3>
                 <p class="desc">
-                  Publish supported applications through a web link or embed them into another website.
+                  Share applications through a web link or embed them into another website.
                 </p>
               </article>
               <article class="cell cell-pad">
@@ -419,7 +413,7 @@
           </nav>
         </div>
         <div class="footer-bottom">
-          <span>&#169; 2023-<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a></span>
+          <span>&#169; 2023-<span id="currentYear"></span> FEAScript &middot; <a href="privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
           <span>Core: MIT license &middot; Website: CC BY 4.0</span>
         </div>
       </div>

@@ -590,6 +590,23 @@ html[data-theme="dark"] .nav-link-lab span {
   font-weight: 500;
 }
 
+/* The same icons as the desktop nav, drawn in the link colour */
+.mobile-nav a[data-icon] {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.mobile-nav a[data-icon]::before {
+  content: "";
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+
 .nav-icon {
   display: flex;
   align-items: center;
@@ -1756,6 +1773,31 @@ h2 .accent {
   }
 }
 
+/* Studio teaser (home page): case-study card with a screenshot */
+.studio-teaser-shot {
+  margin: 0;
+  align-self: center;
+}
+
+.studio-teaser-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-sunken);
+}
+
+.studio-teaser-shot figcaption {
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 900px) {
+  .studio-teaser {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  }
+}
+
 /* ─────────────────────────────────────────────────────────────
    MAILING LIST (final CTA)
    ───────────────────────────────────────────────────────────── */
@@ -2145,6 +2187,24 @@ h2 .accent {
 
 [data-icon="support"] {
   --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='3.8'/%3E%3Cpath d='M5.6 5.6l3.7 3.7M14.7 14.7l3.7 3.7M18.4 5.6l-3.7 3.7M9.3 14.7l-3.7 3.7'/%3E%3C/svg%3E");
+}
+
+[data-icon="no-cookies"] {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l7 3v5.5c0 4.2-2.9 7.9-7 9.5-4.1-1.6-7-5.3-7-9.5V6z'/%3E%3Cpath d='M9 12.2l2.1 2.1 3.9-4.1'/%3E%3C/svg%3E");
+}
+
+/* The no-cookies note sits in the small type of the bottom line: inline, so it keeps that line's
+   baseline, with a smaller icon */
+.footer [data-icon="no-cookies"] {
+  display: inline;
+}
+
+.footer [data-icon="no-cookies"]::before {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin-right: 0.5em;
+  vertical-align: -0.2em;
 }
 
 [data-icon="tris-lab"] {

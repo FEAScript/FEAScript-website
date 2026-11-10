@@ -612,7 +612,8 @@
               <p class="verify-ref label text-faint">NAFEMS T4 target: 18.3 °C</p>
               <p class="desc prose">
                 The temperature at the target point of NAFEMS T4, a standard heat conduction benchmark with
-                convection, on a 12 × 20 mesh of quadratic elements. The test runs on every change to FEAScript.
+                convection, on a 12 × 20 mesh of quadratic elements. The test runs on every change to
+                FEAScript and fails if the value drifts by more than 0.1 °C.
                 <a
                   href="https://github.com/FEAScript/FEAScript-core/tree/main/tests/verification/benchmark/heatConduction2DNafemsT4"
                   >Read the NAFEMS T4 test</a
@@ -636,14 +637,13 @@
 
             <article class="cell cell-pad" data-reveal>
               <h3>Other finite element software</h3>
-              <p class="verify-value">1.8e-10 °C</p>
-              <p class="verify-ref label text-faint">Largest difference from scikit-fem</p>
+              <p class="verify-value">11 digits</p>
+              <p class="verify-ref label text-faint">Agreement with scikit-fem, node by node</p>
               <p class="desc prose">
-                On the same mesh and elements, every correct code solves the same equations, so the results must
-                match node by node. For heat conduction in a 2D fin, on meshes up to 51,681 nodes, FEAScript
-                0.3.1 matches <a href="https://github.com/kinnala/scikit-fem">scikit-fem</a> to the figure above.
-                It also matches <a href="https://www.elmerfem.org/">Elmer</a> to within 5e-6 °C, the limit of
-                Elmer's output files.
+                For heat conduction in a 2D fin, on meshes up to 51,681 nodes, FEAScript 0.3.1 matches
+                <a href="https://github.com/kinnala/scikit-fem">scikit-fem</a> to 11 significant digits, a
+                largest difference of 1.8e-10 °C. It also matches <a href="https://www.elmerfem.org/">Elmer</a>
+                to within 5e-6 °C, the rounding of Elmer's output files.
                 <a
                   href="https://github.com/FEAScript/FEAScript-benchmark/tree/main/heatConduction2DFin/reports/amd-ryzen-5-9600x/0.3.1"
                   >See the benchmark results</a

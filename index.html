@@ -536,6 +536,7 @@
               <h3>Geometry and meshing</h3>
               <ul class="feature-list">
                 <li>Simple mesh generation (1D and 2D domains)</li>
+                <li>Triangle mesh generation in a polygon with holes, with named boundaries</li>
                 <li>
                   Unstructured mesh import from <a href="https://gmsh.info/">Gmsh</a> (<code>.msh</code> file
                   format) with quadrilateral and triangular elements (linear and quadratic)
@@ -607,16 +608,16 @@
 
           <div class="grid grid-3">
             <article class="cell cell-pad" data-reveal>
-              <h3>Published benchmark</h3>
+              <h3>Published benchmarks</h3>
               <p class="verify-value">18.26 °C</p>
               <p class="verify-ref label text-faint">NAFEMS T4 target: 18.3 °C</p>
               <p class="desc prose">
-                The temperature at the target point of NAFEMS T4, a standard heat conduction benchmark with
-                convection, on a 12 × 20 mesh of quadratic elements. The test runs on every change to
-                FEAScript and fails if the value drifts by more than 0.1 °C.
-                <a
-                  href="https://github.com/FEAScript/FEAScript-core/tree/main/tests/verification/benchmark/heatConduction2DNafemsT4"
-                  >Read the NAFEMS T4 test</a
+                The temperature at the target point of NAFEMS T4, a heat conduction benchmark with convection, on
+                a 12 × 20 mesh of quadratic elements. Two cases of the Code_Aster validation manual are reproduced
+                too: TPLP302, a heated strip, to within 1.6e-4 °C of its series solution, and TPLP01, an L-shaped
+                domain, to within 0.24 % at 12 of 13 points.
+                <a href="https://github.com/FEAScript/FEAScript-core/tree/main/tests/verification/benchmark"
+                  >Read the benchmark tests</a
                 >.
               </p>
             </article>
@@ -631,7 +632,7 @@
                 solution at the nodes. FEAScript matches it to about 15 significant digits.
                 <a href="https://github.com/FEAScript/FEAScript-core/tree/main/tests/verification"
                   >See the verification tests</a
-                >.
+                >, or <a href="https://docs.feascript.com/verification/overview">every case in the docs</a>.
               </p>
             </article>
 
@@ -640,12 +641,13 @@
               <p class="verify-value">11 digits</p>
               <p class="verify-ref label text-faint">Agreement with scikit-fem, node by node</p>
               <p class="desc prose">
-                For heat conduction in a 2D fin, on meshes up to 51,681 nodes, FEAScript 0.3.1 matches
+                For heat conduction in a 2D fin, on meshes up to 51,681 nodes, FEAScript 0.4.0 matches
                 <a href="https://github.com/kinnala/scikit-fem">scikit-fem</a> to 11 significant digits, a
-                largest difference of 1.8e-10 °C. It also matches <a href="https://www.elmerfem.org/">Elmer</a>
-                to within 5e-6 °C, the rounding of Elmer's output files.
+                largest difference of 1.7e-10 °C, and <a href="https://www.elmerfem.org/">Elmer</a> to within
+                5e-6 °C, the rounding of Elmer's output files. On the lid-driven cavity, the velocities agree with
+                scikit-fem to within 4.0e-13.
                 <a
-                  href="https://github.com/FEAScript/FEAScript-benchmark/tree/main/heatConduction2DFin/reports/amd-ryzen-5-9600x/0.3.1"
+                  href="https://github.com/FEAScript/FEAScript-benchmark/tree/main/heatConduction2DFin/reports/amd-ryzen-5-9600x/0.4.0"
                   >See the benchmark results</a
                 >.
               </p>
@@ -653,7 +655,8 @@
           </div>
 
           <p class="verify-note label text-faint">
-            NAFEMS T4 is reproduced independently. FEAScript is not affiliated with NAFEMS.
+            NAFEMS T4 and the Code_Aster cases are reproduced independently. FEAScript is not affiliated with
+            NAFEMS, EDF or the Code_Aster project.
           </p>
         </div>
       </section>
@@ -931,15 +934,14 @@
             <article id="whatsnew" class="cell cell-pad" data-reveal>
               <h3>What's new</h3>
               <p class="desc prose" style="margin-top: 1rem">
-                The latest release, 0.3.0 with its fix 0.3.1 (October 2026), added triangular elements, the
-                Euler–Bernoulli beam, the frontal solver for every model, vtk.js plots and VTK export, and the
-                NAFEMS T4 test. Every change is in the
+                The latest release, 0.4.0, added a triangle mesh generator for polygons with holes, much faster
+                direct solvers, errors that stop a wrong solve and list every input mistake at once, loading
+                from a plain script tag, and the Code_Aster benchmark tests. Every change is in the
                 <a href="https://github.com/FEAScript/FEAScript-core/blob/main/CHANGELOG.md">changelog</a>.
               </p>
               <p class="desc prose">
-                Next, 0.4.0 brings faster solvers and clearer error messages, and 0.5.0 multi-threading, units
-                and multi-block meshes. Follow the plans in the
-                <a href="https://github.com/FEAScript/FEAScript-core/discussions/114">0.4.0 roadmap</a> and the
+                Next, 0.5.0 brings multi-threading, multigrid, units with a dimensional check and multi-block
+                meshes. Follow the plans in the
                 <a href="https://github.com/FEAScript/FEAScript-core/discussions/133">0.5.0 roadmap</a>.
               </p>
             </article>

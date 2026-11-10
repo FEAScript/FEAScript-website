@@ -42,6 +42,8 @@ PAGES = {
                                "tutorials/heat-conduction-2d-fin-results.png", None),
     "heat-conduction-2d-fin-gmsh": ("tutorials/heat-conduction-2d-fin-gmsh.html", "tutorial",
                                     "tutorials/heat-conduction-2d-fin-results.png", None),
+    "heat-conduction-2d-fin-triangle-mesh": ("tutorials/heat-conduction-2d-fin-triangle-mesh.html", "tutorial",
+                                             "tutorials/heat-conduction-2d-fin-results.png", None),
     "heat-conduction-2d-fin-performance-test": ("tutorials/heat-conduction-2d-fin-performance-test.html",
                                                 "performance test", "tutorials/heat-conduction-2d-fin-results.png",
                                                 None),

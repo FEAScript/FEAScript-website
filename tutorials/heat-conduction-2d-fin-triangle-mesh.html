@@ -1,0 +1,558 @@
+<!doctype html>
+
+<!--
+ * ════════════════════════════════════════════════════════════════
+ *  FEAScript Website
+ *  Finite Element Simulation in JavaScript
+ *  https://feascript.com
+ *  CC BY 4.0 License © 2023–2026 FEAScript
+ * ════════════════════════════════════════════════════════════════
+-->
+
+<html lang="en" class="site">
+  <head>
+    <title>Heat conduction in a 2D fin, on a generated triangle mesh · FEAScript tutorial</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="This example solves the 2D heat conduction fin problem on a mesh of triangles that FEAScript generates itself, with generateTriangleMesh."
+    />
+    <!-- Link previews (LinkedIn, Bluesky and others); cards from scripts/generate-social-cards.py -->
+    <link rel="canonical" href="https://feascript.com/tutorials/heat-conduction-2d-fin-triangle-mesh.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FEAScript" />
+    <meta property="og:title" content="Heat conduction in a 2D fin, on a generated triangle mesh · FEAScript tutorial" />
+    <meta property="og:description" content="This example solves the 2D heat conduction fin problem on a mesh of triangles that FEAScript generates itself, with generateTriangleMesh." />
+    <meta property="og:url" content="https://feascript.com/tutorials/heat-conduction-2d-fin-triangle-mesh.html" />
+    <meta property="og:image" content="https://feascript.com/assets/social-heat-conduction-2d-fin-triangle-mesh.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, mesh generation, triangles, 2D heat transfer"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <script>
+      // Apply stored theme before first paint and enable JS-only styles
+      (function () {
+        var d = document.documentElement;
+        d.className += " js";
+        try {
+          var t = localStorage.getItem("feascript-theme");
+          if (t === "light" || t === "dark") d.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <!-- Import the Plotly.js library for plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+    <!-- Import MathJax for writing equations -->
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Import map: remap npm bare specifiers used in FEAScript source to CDN ESM builds -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
+          "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
+          "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
+          "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+        }
+      }
+    </script>
+
+    <!-- Cloudflare Web Analytics (no cookies) -->
+    <script
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "b688c1274c374e5a95647253cf19085e"}'
+    ></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-nav">
+      <div class="nav-inner">
+        <div class="nav-group">
+          <a class="nav-brand" href="../index.html">
+            <svg viewBox="14 79 242 242" aria-hidden="true">
+              <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+            </svg>
+            <span
+              >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+            ></span>
+          </a>
+          <nav class="nav-links label" aria-label="Main">
+            <a class="nav-link" href="#meshgeneration"><span>Mesh generation</span></a>
+            <a class="nav-link" href="#boundaries"><span>Boundaries</span></a>
+            <a class="nav-link" href="#generatedmesh"><span>Mesh</span></a>
+            <a class="nav-link" href="#results"><span>Results</span></a>
+            <a class="nav-link" href="index.html"><span>All tutorials</span></a>
+            <a class="nav-link nav-link-out" href="https://docs.feascript.com" data-icon="documentation"><span>Documentation</span></a>
+            <a class="nav-link nav-link-out" href="../studio.html" data-icon="studio"><span>Studio</span></a>
+            <a class="nav-link nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab"><span>Tri's Lab</span></a>
+          </nav>
+        </div>
+
+        <div class="nav-group">
+          <a
+            class="nav-icon nav-github"
+            href="https://github.com/FEAScript/FEAScript-core"
+            aria-label="FEAScript on GitHub"
+            title="FEAScript on GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              />
+            </svg>
+            <span id="github-stars" class="label"></span>
+          </a>
+          <button
+            id="theme-toggle"
+            class="nav-icon theme-toggle"
+            type="button"
+            aria-label="Toggle color theme"
+          >
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+              />
+            </svg>
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+              />
+            </svg>
+          </button>
+          <a class="nav-cta" href="#maillist">Join mailing list</a>
+          <button
+            id="nav-burger"
+            class="nav-icon nav-burger"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+        <a href="#meshgeneration">Mesh generation</a>
+        <a href="#boundaries">Boundaries</a>
+        <a href="#generatedmesh">Mesh</a>
+        <a href="#results">Results</a>
+        <a href="index.html">All tutorials</a>
+        <a class="nav-link-out" href="https://docs.feascript.com" data-icon="documentation">Documentation</a>
+        <a class="nav-link-out" href="../studio.html" data-icon="studio">FEAScript Studio</a>
+        <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab by FEAScript</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p data-doc-bar>Overview</p>
+          </div>
+
+          <div class="section-head doc-head">
+            <h1>Heat conduction in a 2D fin, <span class="accent">on a generated triangle mesh.</span></h1>
+          </div>
+
+          <div class="doc">
+            <div class="highlight-container">
+              <p>
+                This page solves the 2D heat conduction fin problem on a mesh of triangles that FEAScript
+                generates itself, from the corners of the domain, with <code>generateTriangleMesh</code>. No
+                mesh file and no external tool are needed. For the formulation and the theory, see the
+                <a href="heat-conduction-2d-fin.html">basic tutorial</a>; for a mesh made with Gmsh, see the
+                <a href="heat-conduction-2d-fin-gmsh.html">Gmsh variant</a>.
+              </p>
+            </div>
+
+            <div class="eyebrow label" id="meshgeneration" role="heading" aria-level="2">
+              <p><a name="meshgeneration"></a>Mesh generation</p>
+            </div>
+            <p>
+              <code>generateTriangleMesh</code> takes the polygon of the domain, the name of each of its edges
+              and the size and quality of the elements, and returns a mesh in the same form as one imported
+              from Gmsh, so it is passed to the model through <code>parsedMesh</code>:
+            </p>
+
+            <pre class="prettyprint">
+&lt;body&gt;
+  &lt;!-- ...body region... --&gt;
+  &lt;script type="module"&gt;
+    import {
+      FEAScriptModel,
+      generateTriangleMesh,
+      plotInterpolatedSolution,
+      printVersion,
+    } from "https://core.feascript.com/dist/feascript.esm.js";
+
+    window.addEventListener("DOMContentLoaded", () =&gt; {
+      console.log("FEAScript version:", printVersion);
+
+      // 1. Create the model and select the physics
+      const model = new FEAScriptModel();
+      model.setModelConfig("heatConductionScript");
+
+      // 2. Generate the mesh: a 4 m × 2 m rectangle, quadratic triangles of area 0.1 m² at most
+      const parsedMesh = generateTriangleMesh({
+        polygon: {
+          points: [
+            [0, 0], // Bottom left
+            [4, 0], // Bottom right
+            [4, 2], // Top right
+            [0, 2], // Top left
+          ],
+          boundaries: ["bottom", "right", "top", "left"], // One name per edge, from point i to point i + 1
+        },
+        maxArea: 0.1,
+        minAngle: 30,
+        elementOrder: "quadratic",
+      });
+      model.setMeshConfig({ parsedMesh });
+
+      // 3. Apply the boundary conditions (key = order in which the boundary names first appear)
+      model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom
+      model.addBoundaryCondition("1", ["constantTemperature", 200]); // Right
+      model.addBoundaryCondition("2", ["convection", 1, 20]);        // Top
+      model.addBoundaryCondition("3", ["symmetry"]);                 // Left
+
+      // 4. Solve
+      model.setSolverMethod("lusolve");
+      const result = model.solve();
+
+      // 5. Plot the results
+      plotInterpolatedSolution(model, result, "contour", "resultsCanvas");
+    });
+  &lt;/script&gt;
+  &lt;!-- ...rest of body region... --&gt;
+&lt;/body&gt;</pre
+            >
+
+            <p>The settings of the mesh:</p>
+            <ul>
+              <li>
+                <strong><code>polygon</code>:</strong> the corners of the domain, in order around it, in either
+                direction. The edge <code>i</code> goes from point <code>i</code> to point <code>i + 1</code>,
+                and the last edge closes the polygon. Holes are polygons in the same form, listed in
+                <code>holes</code>.
+              </li>
+              <li>
+                <strong><code>boundaries</code>:</strong> one name per edge, or one name for all of them. Edges
+                with the same name form one boundary, so a curved side made of many short edges can take one
+                name.
+              </li>
+              <li>
+                <strong><code>maxArea</code>:</strong> the largest element area. For elements of side about
+                <code>h</code>, use <code>0.433 * h ** 2</code>, the area of the equilateral triangle of side
+                <code>h</code>. A function <code>(x, y)</code> of the element center grades the mesh, for
+                example <code>maxArea: (x, y) => 0.01 + 0.05 * (2 - y)</code> for finer elements towards the
+                convective top edge.
+              </li>
+              <li>
+                <strong><code>minAngle</code>:</strong> the smallest angle of the elements, in degrees. The
+                refinement always ends below 20.7 degrees (the default is 20) and in practice up to about 33.
+              </li>
+              <li>
+                <strong><code>elementOrder</code>:</strong> <code>"linear"</code> (3-node) or
+                <code>"quadratic"</code> (6-node) triangles. The mesh dimension and the element order are
+                carried by the mesh, so <code>setMeshConfig</code> needs nothing else.
+              </li>
+            </ul>
+
+            <div class="eyebrow label" id="boundaries" role="heading" aria-level="2">
+              <p><a name="boundaries"></a>Boundary keys</p>
+            </div>
+            <p>
+              The boundaries are numbered in the order in which their names first appear, the outer polygon
+              first and then the holes, and get the keys <code>"0"</code>, <code>"1"</code>, ... in that order.
+              With the points above, the edges are the bottom, right, top and left sides, so:
+            </p>
+            <ul>
+              <li><code>"bottom"</code> → <code>model.addBoundaryCondition("0", ["constantTemperature", 200]);</code></li>
+              <li><code>"right"</code> → <code>model.addBoundaryCondition("1", ["constantTemperature", 200]);</code></li>
+              <li><code>"top"</code> → <code>model.addBoundaryCondition("2", ["convection", 1, 20]);</code></li>
+              <li><code>"left"</code> → <code>model.addBoundaryCondition("3", ["symmetry"]);</code></li>
+            </ul>
+            <p>
+              This order differs from the one of FEAScript's structured meshes (bottom, left, top, right), which
+              the <a href="heat-conduction-2d-fin.html">basic tutorial</a> and the
+              <a href="heat-conduction-2d-fin-gmsh.html">Gmsh variant</a> use, so the keys of the right and left
+              sides are swapped here.
+            </p>
+
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="https://lab.feascript.com/#tri">Who is Tri?</a></p>
+                <p>
+                  Points where you want to read the result, for example the tip of the fin, can be made nodes
+                  with the <code>points</code> option, so no interpolation is needed. A point that is not
+                  inside the domain, or a polygon whose edges cross, stops the generation with a
+                  <code>FEAScriptError</code> of code <code>"INVALID_INPUT"</code>, and a mesh that would pass
+                  <code>maxNodes</code> (100,000 vertices by default) with <code>"MESH_TOO_FINE"</code>.
+                  Docs: <a href="https://docs.feascript.com/fundamentals/mesh#generated-triangle-meshes">Generated triangle meshes</a>.
+                </p>
+              </div>
+            </aside>
+
+            <div class="eyebrow label" id="generatedmesh" role="heading" aria-level="2">
+              <p><a name="generatedmesh"></a>Generated mesh</p>
+            </div>
+            <p>
+              Below is the mesh that the settings above generate: 128 quadratic triangles with 281 nodes (with
+              FEAScript 0.4.0), all with angles of at least 30 degrees. The figure is drawn from the same
+              call.
+            </p>
+
+            <div class="center-image">
+              <img
+                class="schematic"
+                src="heat-conduction-2d-fin-triangle-mesh.svg"
+                alt="Triangle mesh of the fin generated by FEAScript, with the boundary keys"
+                width="580"
+              />
+              <p class="image-caption">
+                Quadratic triangle mesh of the 4 m × 2 m fin, generated by <code>generateTriangleMesh</code>
+              </p>
+            </div>
+
+            <p>
+              The generator meshes any polygon with holes, so it covers geometries that the structured mesh
+              cannot, without leaving the browser. For curved boundaries, approximate them by short edges with
+              one common name. Gmsh remains the tool for quadrilaterals and for meshes that need its full
+              control of the element sizes.
+            </p>
+
+            <div class="eyebrow label" id="results" role="heading" aria-level="2">
+              <p><a name="results"></a>Results</p>
+            </div>
+            <p>
+              Below is the 2D contour plot of the computed temperature distribution, generated in real time
+              with FEAScript. The temperatures are the same as on the structured and the Gmsh meshes, up to the
+              discretization error of each mesh.
+            </p>
+
+            <div id="resultsCanvas"></div>
+
+            <p>
+              See also the <a href="heat-conduction-2d-fin-gmsh.html">Gmsh variant</a> and the
+              <a href="heat-conduction-2d-rhom-fin-gmsh.html">rhomboid fin</a>, on meshes imported from Gmsh.
+            </p>
+
+            <script type="module">
+              // Import FEAScript library from GitHub
+              import {
+                FEAScriptModel,
+                generateTriangleMesh,
+                plotInterpolatedSolution,
+                printVersion,
+              } from "https://core.feascript.com/dist/feascript.esm.js";
+              // Import FEAScript library from a local directory
+              // import {
+              //   FEAScriptModel,
+              //   generateTriangleMesh,
+              //   plotInterpolatedSolution,
+              //   printVersion,
+              //   logSystem,
+              // } from "../../FEAScript-core/src/index.js";
+
+              window.addEventListener("DOMContentLoaded", () => {
+                // Enable debug logging mode
+                //logSystem("debug");
+
+                // Print FEAScript version in the console
+                console.log("FEAScript version:", printVersion);
+
+                // Create a new FEAScript model
+                const model = new FEAScriptModel();
+
+                // Set solver configuration
+                model.setModelConfig("heatConductionScript");
+
+                // Generate the mesh: a 4 m x 2 m rectangle, quadratic triangles of area 0.1 at most
+                const parsedMesh = generateTriangleMesh({
+                  polygon: {
+                    points: [
+                      [0, 0], // Bottom left
+                      [4, 0], // Bottom right
+                      [4, 2], // Top right
+                      [0, 2], // Top left
+                    ],
+                    boundaries: ["bottom", "right", "top", "left"],
+                  },
+                  maxArea: 0.1,
+                  minAngle: 30,
+                  elementOrder: "quadratic",
+                });
+                model.setMeshConfig({ parsedMesh });
+
+                // Define boundary conditions (keys in the order the boundary names first appear)
+                model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
+                model.addBoundaryCondition("1", ["constantTemperature", 200]); // Right boundary
+                model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
+                model.addBoundaryCondition("3", ["symmetry"]); // Left boundary
+
+                // Set solver method
+                model.setSolverMethod("lusolve");
+
+                // Solve the problem and get the solution
+                const result = model.solve();
+
+                // Plot the solution
+                plotInterpolatedSolution(model, result, "contour", "resultsCanvas");
+              });
+            </script>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── MAILING LIST AND GITHUB STAR ───────────── -->
+      <section id="maillist" class="section">
+        <div class="section-frame">
+          <div class="cta">
+            <div class="cta-main">
+            <p class="label text-faint">Stay in the loop</p>
+            <h2 data-reveal>Join the <span class="accent">mailing list.</span></h2>
+            <p class="lede">Receive new tutorials, project updates and news.</p>
+
+            <form
+              class="maillist-form"
+              action="https://feascript.us10.list-manage.com/subscribe/post?u=83b4dec50b84e136c2e82c6a4&amp;id=4aa4a60f27&amp;f_id=009362e3f0"
+              method="post"
+              id="mc-embedded-subscribe-form"
+              name="mc-embedded-subscribe-form"
+              target="_blank"
+            >
+              <label class="label" for="mce-EMAIL">Email address</label>
+              <div class="maillist-row">
+                <input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" required value="" />
+                <input
+                  type="submit"
+                  name="subscribe"
+                  id="mc-embedded-subscribe"
+                  class="btn btn-solid"
+                  value="Subscribe"
+                />
+              </div>
+
+              <div class="maillist-honeypot" aria-hidden="true">
+                <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="footer-wordmark" href="../index.html">
+              <svg viewBox="14 79 242 242" aria-hidden="true">
+                <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+              </svg>
+              <span
+                >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
+            </a>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
+            <a class="footer-mail" data-icon="mail" href="mailto:info@feascript.com">info@feascript.com</a>
+            <div class="footer-social">
+              <a href="https://www.youtube.com/@FEAScript" data-icon="youtube" aria-label="YouTube" title="YouTube"></a>
+              <a href="https://www.linkedin.com/company/feascript/" data-icon="linkedin" aria-label="LinkedIn" title="LinkedIn"></a>
+              <a href="https://bsky.app/profile/feascript.com" data-icon="bluesky" aria-label="Bluesky" title="Bluesky"></a>
+            </div>
+          </div>
+          <nav class="footer-col" aria-label="Learn">
+            <h2>Learn</h2>
+            <ul>
+              <li><a href="index.html" data-icon="tutorials">Tutorials</a></li>
+              <li><a href="https://codepen.io/FEAScript" data-icon="codepen">CodePen</a></li>
+              <li><a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples" data-icon="scribbler">Scribbler</a></li>
+              <li><a href="https://docs.feascript.com" data-icon="documentation">Documentation</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Build">
+            <h2>Build</h2>
+            <ul>
+              <li><a href="../studio.html" data-icon="studio">FEAScript Studio</a></li>
+              <li><a href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab</a></li>
+              <li><a href="https://www.npmjs.com/package/feascript" data-icon="npm">npm package</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core" data-icon="github">GitHub</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Community">
+            <h2>Community</h2>
+            <ul>
+              <li><a href="https://blog.feascript.com/" data-icon="blog">Blog</a></li>
+              <li><a href="https://discord.gg/3DVjNcuW4f" data-icon="discord">Discord</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues" data-icon="support">Support</a></li>
+              <li><a href="../sponsors.html" data-icon="sponsors">Sponsors</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>&#169; 2023–<span id="currentYear"></span> FEAScript &middot; <a href="../privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
+          <span>Core: MIT license &middot; Website: CC BY 4.0</span>
+        </div>
+      </div>
+    </footer>
+    <script src="../feascript-website.js"></script>
+  </body>
+</html>

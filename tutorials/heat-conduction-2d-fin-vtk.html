@@ -259,7 +259,7 @@ import {
   plotInterpolatedSolutionVtk,
   createColorScale,
   createContourLineOptions,
-  printVersion,
+  version,
 } from "https://core.feascript.com/dist/feascript.esm.js";
 
 // Steps 1-4 (model, mesh, boundary conditions, solve) are the same as in the Plotly tutorial
@@ -313,7 +313,7 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
                 plotInterpolatedSolutionVtk,
                 createColorScale,
                 createContourLineOptions,
-                printVersion,
+                version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
               // import {
@@ -321,23 +321,22 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
               //   plotInterpolatedSolutionVtk,
               //   createColorScale,
               //   createContourLineOptions,
-              //   printVersion,
+              //   version,
               // } from "../../FEAScript-core/src/index.js";
 
               window.addEventListener("DOMContentLoaded", async () => {
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 const model = new FEAScriptModel();
-                model.setModelConfig("heatConductionScript");
+                model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
                 model.setGeometry({ rectangle: [4, 2] });
                 model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [8, 4] });
 
-                model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
-                model.addBoundaryCondition("left", ["symmetry"]);
-                model.addBoundaryCondition("top", ["convection", 1, 20]);
-                model.addBoundaryCondition("right", ["constantTemperature", 200]);
+                model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 });
+                model.addBoundaryCondition("left", { type: "symmetry" });
+                model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 });
+                model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });
 
-                model.setSolverMethod("lusolve");
                 const result = model.solve();
 
                 await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {

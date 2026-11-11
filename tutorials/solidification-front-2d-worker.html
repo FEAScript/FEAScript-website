@@ -230,29 +230,28 @@
     import {
       FEAScriptWorker,
       plotSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/src/index.js";
 
     window.addEventListener("DOMContentLoaded", async () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // 1. Create the model in a web worker and select the physics
       const model = new FEAScriptWorker();
       await model.ping(); // Wait until the worker is ready
-      await model.setModelConfig("frontPropagationScript");
+      await model.setModelConfig("frontPropagation", { solver: { method: "lusolve" } });
 
       // 2. Define the mesh
       await model.setGeometry({ rectangle: [4, 2] });
       await model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 8] });
 
       // 3. Apply the boundary conditions
-      await model.addBoundaryCondition("bottom", ["constantValue", 0]); // Bottom: initial front
-      await model.addBoundaryCondition("left", ["constantValue", 0]); // Left: initial front
-      await model.addBoundaryCondition("top", ["zeroGradient"]);     // Top
-      await model.addBoundaryCondition("right", ["constantValue", 0]); // Right: initial front
+      await model.addBoundaryCondition("bottom", { type: "constantValue", value: 0 }); // Bottom: initial front
+      await model.addBoundaryCondition("left", { type: "constantValue", value: 0 });   // Left: initial front
+      await model.addBoundaryCondition("top", { type: "zeroGradient" });               // Top
+      await model.addBoundaryCondition("right", { type: "constantValue", value: 0 });  // Right: initial front
 
       // 4. Solve
-      await model.setSolverMethod("lusolve");
       const result = await model.solve();
 
       // 5. Plot the results
@@ -300,11 +299,11 @@
               import {
                 FEAScriptWorker,
                 plotSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/src/index.js";
 
               // Import FEAScript library from a local directory
-              // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+              // import { FEAScriptWorker, plotSolution, version } from "../../FEAScript-core/src/index.js";
 
               window.addEventListener("DOMContentLoaded", async () => {
                 document.getElementById("resultsCanvas").style.display = "block";
@@ -313,7 +312,7 @@
                 document.getElementById("loading").style.display = "block";
 
                 // Print FEAScript version
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Create a new FEAScriptWorker instance
                 const model = new FEAScriptWorker();
@@ -323,20 +322,18 @@
                   await model.ping();
 
                   // Set solver configuration
-                  await model.setModelConfig("frontPropagationScript");
+                  await model.setModelConfig("frontPropagation", { solver: { method: "lusolve" } });
 
                   // Define mesh configuration
                   await model.setGeometry({ rectangle: [4, 2] });
                   await model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 8] });
 
                   // Define boundary conditions
-                  await model.addBoundaryCondition("bottom", ["constantValue", 0]); // Bottom
-                  await model.addBoundaryCondition("left", ["constantValue", 0]); // Left
-                  await model.addBoundaryCondition("top", ["zeroGradient"]); // Top
-                  await model.addBoundaryCondition("right", ["constantValue", 0]); // Right
+                  await model.addBoundaryCondition("bottom", { type: "constantValue", value: 0 }); // Bottom
+                  await model.addBoundaryCondition("left", { type: "constantValue", value: 0 });   // Left
+                  await model.addBoundaryCondition("top", { type: "zeroGradient" });               // Top
+                  await model.addBoundaryCondition("right", { type: "constantValue", value: 0 });  // Right
 
-                  // Set solver method
-                  await model.setSolverMethod("lusolve");
 
                   // Solve the problem and get the solution
                   const result = await model.solve();

@@ -217,8 +217,8 @@
         const code = line
           .slice(0, comment)
           .trimEnd()
-          .replace(/\["constantTemperature", [-\d.]+\]/, `["constantTemperature", ${temp}]`)
-          .replace(/\["convection", [-\d.]+, [-\d.]+\]/, `["convection", ${hk}, ${ext}]`);
+          .replace(/temperature: [-\d.]+/, `temperature: ${temp}`)
+          .replace(/h: [-\d.]+, ambientTemperature: [-\d.]+/, `h: ${hk}, ambientTemperature: ${ext}`);
         return code.padEnd(comment - 1) + " " + line.slice(comment);
       });
       codeBlock.textContent = lines.join("\n");
@@ -230,7 +230,7 @@
     const markValues = () => {
       const text = codeBlock.textContent;
       const starts = new Set();
-      for (const bc of text.matchAll(/\["(?:constantTemperature|convection)", ([^\]]+)\]/g)) {
+      for (const bc of text.matchAll(/type: "(?:constantTemperature|convection)", ([^}]+)\}/g)) {
         const offset = bc.index + bc[0].indexOf(bc[1]);
         for (const number of bc[1].matchAll(/\d+(?:\.\d+)?/g)) starts.add(offset + number.index);
       }
@@ -387,14 +387,13 @@
       busy = true;
       const { temp, hk, ext } = values();
       const model = new core.FEAScriptModel();
-      model.setModelConfig("heatConductionScript");
+      model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
       model.setMesh(mesh);
-      model.addBoundaryCondition("bottom", ["constantTemperature", temp]);
-      model.addBoundaryCondition("left", ["symmetry"]);
-      model.addBoundaryCondition("top", ["convection", hk, ext]);
-      model.addBoundaryCondition("right", ["constantTemperature", temp]);
-      model.addBoundaryCondition("hole", ["convection", hk, ext]);
-      model.setSolverMethod("lusolve");
+      model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: temp });
+      model.addBoundaryCondition("left", { type: "symmetry" });
+      model.addBoundaryCondition("top", { type: "convection", h: hk, ambientTemperature: ext });
+      model.addBoundaryCondition("right", { type: "constantTemperature", temperature: temp });
+      model.addBoundaryCondition("hole", { type: "convection", h: hk, ambientTemperature: ext });
       const start = performance.now();
       const result = model.solve();
       const time = performance.now() - start;
@@ -404,7 +403,7 @@
       drawMesh();
       themePlot();
       const nodes = result.nodesCoordinates.nodesXCoordinates.length;
-      status.textContent = `Solved in ${time < 10 ? time.toFixed(1) : Math.round(time)} ms · ${nodes} nodes · FEAScript ${core.printVersion}`;
+      status.textContent = `Solved in ${time < 10 ? time.toFixed(1) : Math.round(time)} ms · ${nodes} nodes · FEAScript ${core.version}`;
       // Let the browser paint before the next solve
       setTimeout(() => {
         busy = false;

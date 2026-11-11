@@ -443,7 +443,7 @@
     window.addEventListener("DOMContentLoaded", async () =&gt; {
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("heatConductionScript");
+      model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
       // 2. Load the Gmsh mesh (any hosted .msh file works)
       const response = await fetch("https://feascript.com/tutorials/rect_with_hole_quad_quadratic.msh");
@@ -452,14 +452,13 @@
       model.setMesh(mesh);
 
       // 3. Apply the boundary conditions, keyed by the names of the Gmsh physical groups
-      model.addBoundaryCondition("bottom", ["constantTemperature", 200]); // Bottom
-      model.addBoundaryCondition("left", ["symmetry"]);                 // Left
-      model.addBoundaryCondition("top", ["convection", 1, 20]);        // Top
-      model.addBoundaryCondition("right", ["constantTemperature", 200]); // Right
-      model.addBoundaryCondition("hole", ["convection", 1, 20]);        // Hole
+      model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 });  // Bottom
+      model.addBoundaryCondition("left", { type: "symmetry" });                                 // Left
+      model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 });  // Top
+      model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });   // Right
+      model.addBoundaryCondition("hole", { type: "convection", h: 1, ambientTemperature: 20 }); // Hole
 
       // 4. Solve
-      model.setSolverMethod("lusolve");
       const result = model.solve();
 
       // 5. Plot the results

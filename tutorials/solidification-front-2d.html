@@ -309,28 +309,27 @@
     import {
       FEAScriptModel,
       plotSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/dist/feascript.esm.js";
 
     window.addEventListener("DOMContentLoaded", () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("frontPropagationScript");
+      model.setModelConfig("frontPropagation", { solver: { method: "lusolve" } });
 
       // 2. Define the mesh
       model.setGeometry({ rectangle: [4, 2] });
       model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 8] });
 
       // 3. Apply the boundary conditions
-      model.addBoundaryCondition("bottom", ["constantValue", 0]); // Bottom: initial front
-      model.addBoundaryCondition("left", ["constantValue", 0]); // Left: initial front
-      model.addBoundaryCondition("top", ["zeroGradient"]);     // Top
-      model.addBoundaryCondition("right", ["constantValue", 0]); // Right: initial front
+      model.addBoundaryCondition("bottom", { type: "constantValue", value: 0 }); // Bottom: initial front
+      model.addBoundaryCondition("left", { type: "constantValue", value: 0 });   // Left: initial front
+      model.addBoundaryCondition("top", { type: "zeroGradient" });               // Top
+      model.addBoundaryCondition("right", { type: "constantValue", value: 0 });  // Right: initial front
 
       // 4. Solve
-      model.setSolverMethod("lusolve");
       const result = model.solve();
 
       // 5. Plot the results
@@ -441,8 +440,8 @@ import { FEAScriptWorker, plotSolution } from "https://core.feascript.com/src/in
 
 const model = new FEAScriptWorker();
 await model.ping(); // Wait until the worker is ready
-await model.setModelConfig("frontPropagationScript");
-// ...setMeshConfig, addBoundaryCondition and setSolverMethod as above, each with await...
+await model.setModelConfig("frontPropagation", { solver: { method: "lusolve" } });
+// ...setGeometry, setMeshConfig and addBoundaryCondition as above, each with await...
 const result = await model.solve();
 
 const modelInfo = await model.getModelInfo();
@@ -463,7 +462,7 @@ model.terminate();</pre
               import {
                 FEAScriptModel,
                 plotSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // } from "https://core.feascript.com/src/index.js";
               // Import FEAScript library from a local directory
@@ -475,27 +474,24 @@ model.terminate();</pre
                 // logSystem("debug");
 
                 // Print FEAScript version
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Create a new FEAScript model
                 const model = new FEAScriptModel();
 
                 // Set solver configuration
-                model.setModelConfig("frontPropagationScript");
+                model.setModelConfig("frontPropagation", { solver: { method: "lusolve" } });
 
                 // Define mesh configuration
                 model.setGeometry({ rectangle: [4, 2] });
                 model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 8] });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("bottom", ["constantValue", 0]); // Βottom
-                model.addBoundaryCondition("left", ["constantValue", 0]); // Left
-                model.addBoundaryCondition("top", ["zeroGradient"]); // Top
-                model.addBoundaryCondition("right", ["constantValue", 0]); // Right
+                model.addBoundaryCondition("bottom", { type: "constantValue", value: 0 }); // Βottom
+                model.addBoundaryCondition("left", { type: "constantValue", value: 0 });   // Left
+                model.addBoundaryCondition("top", { type: "zeroGradient" });               // Top
+                model.addBoundaryCondition("right", { type: "constantValue", value: 0 });  // Right
 
-                // Set solver method
-                model.setSolverMethod("lusolve");
-                // model.setSolverMethod("frontal");
 
                 // Solve the problem and get the solution
                 const result = model.solve();

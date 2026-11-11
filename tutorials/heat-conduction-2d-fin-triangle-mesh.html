@@ -236,28 +236,27 @@
     import {
       FEAScriptModel,
       plotInterpolatedSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/dist/feascript.esm.js";
 
     window.addEventListener("DOMContentLoaded", () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("heatConductionScript");
+      model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
       // 2. Define the geometry and mesh it with quadratic triangles of side 0.5 m at most
       model.setGeometry({ rectangle: [4, 2] }); // Boundaries "bottom", "right", "top", "left"
       model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.5, minAngle: 30 });
 
       // 3. Apply the boundary conditions, keyed by the boundary names
-      model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
-      model.addBoundaryCondition("right", ["constantTemperature", 200]);
-      model.addBoundaryCondition("top", ["convection", 1, 20]);
-      model.addBoundaryCondition("left", ["symmetry"]);
+      model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 });
+      model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });
+      model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 });
+      model.addBoundaryCondition("left", { type: "symmetry" });
 
       // 4. Solve
-      model.setSolverMethod("lusolve");
       const result = model.solve();
 
       // 5. Plot the results
@@ -424,13 +423,13 @@ model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.
               import {
                 FEAScriptModel,
                 plotInterpolatedSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
               // import {
               //   FEAScriptModel,
               //   plotInterpolatedSolution,
-              //   printVersion,
+              //   version,
               //   logSystem,
               // } from "../../FEAScript-core/src/index.js";
 
@@ -439,26 +438,24 @@ model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.
                 //logSystem("debug");
 
                 // Print FEAScript version in the console
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Create a new FEAScript model
                 const model = new FEAScriptModel();
 
                 // Set solver configuration
-                model.setModelConfig("heatConductionScript");
+                model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
                 // Define the geometry and mesh it with quadratic triangles of side 0.5 at most
                 model.setGeometry({ rectangle: [4, 2] });
                 model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.5, minAngle: 30 });
 
                 // Define boundary conditions, keyed by the boundary names
-                model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
-                model.addBoundaryCondition("right", ["constantTemperature", 200]);
-                model.addBoundaryCondition("top", ["convection", 1, 20]);
-                model.addBoundaryCondition("left", ["symmetry"]);
+                model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 });
+                model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });
+                model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 });
+                model.addBoundaryCondition("left", { type: "symmetry" });
 
-                // Set solver method
-                model.setSolverMethod("lusolve");
 
                 // Solve the problem and get the solution
                 const result = model.solve();

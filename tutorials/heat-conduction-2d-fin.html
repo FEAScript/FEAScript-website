@@ -288,28 +288,27 @@
     import {
       FEAScriptModel,
       plotSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/dist/feascript.esm.js";
 
     window.addEventListener("DOMContentLoaded", () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("heatConductionScript");
+      model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
       // 2. Define the mesh
       model.setGeometry({ rectangle: [4, 2] });
       model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [8, 4] });
 
       // 3. Apply the boundary conditions
-      model.addBoundaryCondition("bottom", ["constantTemperature", 200]); // Bottom
-      model.addBoundaryCondition("left", ["symmetry"]);                 // Left
-      model.addBoundaryCondition("top", ["convection", 1, 20]);        // Top
-      model.addBoundaryCondition("right", ["constantTemperature", 200]); // Right
+      model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 }); // Bottom
+      model.addBoundaryCondition("left", { type: "symmetry" });                                // Left
+      model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 }); // Top
+      model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });  // Right
 
       // 4. Solve
-      model.setSolverMethod("lusolve");
       const result = model.solve();
 
       // 5. Plot the results
@@ -428,8 +427,8 @@ import { FEAScriptWorker, plotSolution } from "https://core.feascript.com/src/in
 
 const model = new FEAScriptWorker();
 await model.ping(); // Wait until the worker is ready
-await model.setModelConfig("heatConductionScript");
-// ...setMeshConfig, addBoundaryCondition and setSolverMethod as above, each with await...
+await model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
+// ...setGeometry, setMeshConfig and addBoundaryCondition as above, each with await...
 const result = await model.solve();
 
 const modelInfo = await model.getModelInfo();
@@ -451,7 +450,7 @@ model.terminate();</pre
               experimental. Select it and call <code>solveAsync()</code> instead of <code>solve()</code>:
             </p>
             <pre class="prettyprint">
-model.setSolverMethod("jacobi-gpu");
+model.setModelConfig("heatConduction", { solver: { method: "jacobi-gpu" } });
 const result = await model.solveAsync();
 // Raise the limits if the console shows "Jacobi: Did not converge"
 // const result = await model.solveAsync(null, { maxIterations: 20000, tolerance: 1e-8 });</pre
@@ -549,36 +548,32 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
               import {
                 FEAScriptModel,
                 plotSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
-              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
-              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/dist/feascript.esm.js";
+              // import { FEAScriptModel, plotSolution, version } from "../../FEAScript-core/src/index.js";
+              // import { FEAScriptModel, plotSolution, version } from "../../FEAScript-core/dist/feascript.esm.js";
 
               window.addEventListener("DOMContentLoaded", () => {
                 // Print FEAScript version
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Create a new FEAScript model
                 const model = new FEAScriptModel();
 
                 // Set solver configuration
-                model.setModelConfig("heatConductionScript");
+                model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
                 // Define mesh configuration
                 model.setGeometry({ rectangle: [4, 2] });
                 model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [8, 4] });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
-                model.addBoundaryCondition("left", ["symmetry"]);
-                model.addBoundaryCondition("top", ["convection", 1, 20]);
-                model.addBoundaryCondition("right", ["constantTemperature", 200]);
+                model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 });
+                model.addBoundaryCondition("left", { type: "symmetry" });
+                model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 });
+                model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });
 
-                // Set solver method
-                // model.setSolverMethod("jacobi");
-                model.setSolverMethod("lusolve");
-                // model.setSolverMethod("frontal");
 
                 // Solve the problem and get the solution
                 // const { solutionVector, nodesCoordinates } = model.solve(); // Destructuring syntax

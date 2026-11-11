@@ -235,15 +235,15 @@
       FEAScriptModel,
       importGmshMesh,
       plotInterpolatedSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/dist/feascript.esm.js";
 
     window.addEventListener("DOMContentLoaded", async () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("heatConductionScript");
+      model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
       // 2. Load the Gmsh mesh (.msh format version 4.1)
       const response = await fetch("./rect_quad_quadratic.msh");
@@ -255,13 +255,12 @@
       model.setMesh(mesh);
 
       // 3. Apply the boundary conditions, keyed by the names of the Gmsh physical groups
-      model.addBoundaryCondition("bottom", ["constantTemperature", 200]); // Bottom
-      model.addBoundaryCondition("left", ["symmetry"]);                 // Left
-      model.addBoundaryCondition("top", ["convection", 1, 20]);        // Top
-      model.addBoundaryCondition("right", ["constantTemperature", 200]); // Right
+      model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 }); // Bottom
+      model.addBoundaryCondition("left", { type: "symmetry" });                                // Left
+      model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 }); // Top
+      model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });  // Right
 
       // 4. Solve
-      model.setSolverMethod("lusolve");
       const result = model.solve();
 
       // 5. Plot the results
@@ -283,7 +282,7 @@
               <li>
                 <strong>Boundary conditions by name:</strong> the boundary conditions are keyed by the names
                 of the physical groups, for example
-                <code>model.addBoundaryCondition("bottom", ["constantTemperature", 200]);</code> for
+                <code>model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 });</code> for
                 <code>Physical Line("bottom", 1)</code>. The tag minus one, the key of FEAScript 0.3, still
                 works with a deprecation warning.
               </li>
@@ -368,19 +367,19 @@ Mesh 2;</pre
             <ul>
               <li>
                 <code>Physical Line("bottom", 1) = {1};</code> →
-                <code>model.addBoundaryCondition("bottom", ["constantTemperature", 200]);</code>
+                <code>model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 });</code>
               </li>
               <li>
                 <code>Physical Line("left", 2) = {4};</code> →
-                <code>model.addBoundaryCondition("left", ["symmetry"]);</code>
+                <code>model.addBoundaryCondition("left", { type: "symmetry" });</code>
               </li>
               <li>
                 <code>Physical Line("top", 3) = {3};</code> →
-                <code>model.addBoundaryCondition("top", ["convection", 1, 20]);</code>
+                <code>model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 });</code>
               </li>
               <li>
                 <code>Physical Line("right", 4) = {2};</code> →
-                <code>model.addBoundaryCondition("right", ["constantTemperature", 200]);</code>
+                <code>model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });</code>
               </li>
             </ul>
 
@@ -465,14 +464,14 @@ Mesh 2;</pre
                 FEAScriptModel,
                 importGmshMesh,
                 plotInterpolatedSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
               // import {
               //   FEAScriptModel,
               //   importGmshMesh,
               //   plotInterpolatedSolution,
-              //   printVersion,
+              //   version,
               //   logSystem,
               // } from "../../FEAScript-core/src/index.js";
 
@@ -481,7 +480,7 @@ Mesh 2;</pre
                 //logSystem("debug");
 
                 // Print FEAScript version in the console
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Fetch the mesh file
                 const response = await fetch("./rect_quad_quadratic.msh"); // .msh version 4.1 is currently supported
@@ -497,7 +496,7 @@ Mesh 2;</pre
                 const gmshModel = new FEAScriptModel();
 
                 // Set solver configuration
-                gmshModel.setModelConfig("heatConductionScript");
+                gmshModel.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
                 // Parse the mesh file
                 const rect_quad = await importGmshMesh(meshFile);
@@ -506,14 +505,11 @@ Mesh 2;</pre
                 gmshModel.setMesh(rect_quad);
 
                 // Define boundary conditions by the names of the Gmsh physical groups
-                gmshModel.addBoundaryCondition("bottom", ["constantTemperature", 200]); // Bottom boundary
-                gmshModel.addBoundaryCondition("left", ["symmetry"]); // Left boundary
-                gmshModel.addBoundaryCondition("top", ["convection", 1, 20]); // Top boundary
-                gmshModel.addBoundaryCondition("right", ["constantTemperature", 200]); // Right boundary
+                gmshModel.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 }); // Bottom boundary
+                gmshModel.addBoundaryCondition("left", { type: "symmetry" });                                // Left boundary
+                gmshModel.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 }); // Top boundary
+                gmshModel.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });  // Right boundary
 
-                // Set solver method
-                //model.setSolverMethod("jacobi");
-                gmshModel.setSolverMethod("lusolve");
 
                 // Solve the problem and get the solution
                 const result = gmshModel.solve();

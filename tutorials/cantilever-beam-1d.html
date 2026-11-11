@@ -288,11 +288,11 @@
     import {
       FEAScriptModel,
       plotSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/dist/feascript.esm.js";
 
     window.addEventListener("DOMContentLoaded", () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // Beam and load parameters
       const beamLength = 4;           // m
@@ -301,7 +301,8 @@
 
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("eulerBernoulliBeamScript", {
+      model.setModelConfig("eulerBernoulliBeam", {
+        solver: { method: "lusolve" },
         coefficientFunctions: {
           EI: (x) =&gt; bendingStiffness,
         },
@@ -312,11 +313,10 @@
       model.setMeshConfig({ elementOrder: "linear", divisions: 4 });
 
       // 3. Apply the boundary conditions (keyed by node number)
-      model.addBoundaryCondition("1", [["fixed"]]);          // Clamped support at x = 0
-      model.addBoundaryCondition("5", [["force", tipLoad]]); // Tip load at x = L (last node)
+      model.addBoundaryCondition("1", { type: "fixed" });                 // Clamped support at x = 0
+      model.addBoundaryCondition("5", { type: "force", force: tipLoad }); // Tip load at x = L (last node)
 
       // 4. Solve
-      model.setSolverMethod("lusolve");
       const result = model.solve();
 
       // 5. Plot the deflection
@@ -379,14 +379,14 @@
               import {
                 FEAScriptModel,
                 plotSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
-              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+              // import { FEAScriptModel, plotSolution, version } from "../../FEAScript-core/src/index.js";
 
               window.addEventListener("DOMContentLoaded", () => {
                 // Print FEAScript version
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Beam and load parameters
                 const beamLength = 4; // m
@@ -397,7 +397,8 @@
                 const model = new FEAScriptModel();
 
                 // Set solver configuration with coefficient functions
-                model.setModelConfig("eulerBernoulliBeamScript", {
+                model.setModelConfig("eulerBernoulliBeam", {
+                  solver: { method: "lusolve" },
                   coefficientFunctions: {
                     EI: (x) => bendingStiffness,
                   },
@@ -408,11 +409,9 @@
                 model.setMeshConfig({ elementOrder: "linear", divisions: 4 });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("1", [["fixed"]]); // Clamped support at x=0
-                model.addBoundaryCondition("5", [["force", tipLoad]]); // Tip point load at x=L (last node)
+                model.addBoundaryCondition("1", { type: "fixed" });                 // Clamped support at x=0
+                model.addBoundaryCondition("5", { type: "force", force: tipLoad }); // Tip point load at x=L (last node)
 
-                // Set solver method
-                model.setSolverMethod("lusolve");
 
                 // Solve the problem and get the solution
                 const result = model.solve();

@@ -229,29 +229,28 @@
     import {
       FEAScriptWorker,
       plotSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/src/index.js";
 
     window.addEventListener("DOMContentLoaded", async () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // 1. Create the model in a web worker and select the physics
       const model = new FEAScriptWorker();
       await model.ping(); // Wait until the worker is ready
-      await model.setModelConfig("heatConductionScript");
+      await model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
       // 2. Define the mesh
       await model.setGeometry({ rectangle: [4, 2] });
       await model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [8, 4] });
 
       // 3. Apply the boundary conditions
-      await model.addBoundaryCondition("bottom", ["constantTemperature", 200]); // Bottom
-      await model.addBoundaryCondition("left", ["symmetry"]);                 // Left
-      await model.addBoundaryCondition("top", ["convection", 1, 20]);        // Top
-      await model.addBoundaryCondition("right", ["constantTemperature", 200]); // Right
+      await model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 }); // Bottom
+      await model.addBoundaryCondition("left", { type: "symmetry" });                                // Left
+      await model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 }); // Top
+      await model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });  // Right
 
       // 4. Solve
-      await model.setSolverMethod("lusolve");
       const result = await model.solve();
 
       // 5. Plot the results
@@ -301,18 +300,18 @@
               import {
                 FEAScriptWorker,
                 plotSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/src/index.js";
 
               // Import FEAScript library from a local directory
-              // import { FEAScriptWorker, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+              // import { FEAScriptWorker, plotSolution, version } from "../../FEAScript-core/src/index.js";
 
               window.addEventListener("DOMContentLoaded", async () => {
                 // Show loading indicator
                 document.getElementById("loading").style.display = "block";
 
                 // Print FEAScript version
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Create a new FEAScriptWorker instance
                 const model = new FEAScriptWorker();
@@ -321,20 +320,18 @@
                 await model.ping();
 
                 // Set solver configuration
-                await model.setModelConfig("heatConductionScript");
+                await model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
                 // Define mesh configuration
                 await model.setGeometry({ rectangle: [4, 2] });
                 await model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [8, 4] });
 
                 // Define boundary conditions
-                await model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
-                await model.addBoundaryCondition("left", ["symmetry"]);
-                await model.addBoundaryCondition("top", ["convection", 1, 20]);
-                await model.addBoundaryCondition("right", ["constantTemperature", 200]);
+                await model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 });
+                await model.addBoundaryCondition("left", { type: "symmetry" });
+                await model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 });
+                await model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });
 
-                // Set solver method
-                await model.setSolverMethod("lusolve");
 
                 // Solve the problem and get the solution
                 const result = await model.solve();

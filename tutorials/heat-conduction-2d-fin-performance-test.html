@@ -256,15 +256,15 @@
             </aside>
 
             <script type="module">
-              import { FEAScriptModel, plotSolution, printVersion } from "https://core.feascript.com/dist/feascript.esm.js";
-              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js"; // Use this when running locally
+              import { FEAScriptModel, plotSolution, version } from "https://core.feascript.com/dist/feascript.esm.js";
+              // import { FEAScriptModel, plotSolution, version } from "../../FEAScript-core/src/index.js"; // Use this when running locally
 
               function runSpeedTest(selectedSolver) {
                 const numElementsX = parseInt(document.getElementById("numElementsX").value);
                 const numElementsY = parseInt(document.getElementById("numElementsY").value);
 
                 const model = new FEAScriptModel();
-                model.setModelConfig("heatConductionScript");
+                model.setModelConfig("heatConduction", { solver: { method: selectedSolver } });
                 model.setGeometry({ rectangle: [4, 2] });
                 model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "linear", divisions: [numElementsX, numElementsY] });
 
@@ -274,12 +274,11 @@
                 const totalNodes = (numElementsX + 1) * (numElementsY + 1);
                 console.log(`Total number of nodes in mesh: ${totalNodes}`);
 
-                model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
-                model.addBoundaryCondition("left", ["symmetry"]);
-                model.addBoundaryCondition("top", ["convection", 1, 20]);
-                model.addBoundaryCondition("right", ["constantTemperature", 200]);
+                model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: 200 });
+                model.addBoundaryCondition("left", { type: "symmetry" });
+                model.addBoundaryCondition("top", { type: "convection", h: 1, ambientTemperature: 20 });
+                model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 200 });
 
-                model.setSolverMethod(selectedSolver);
 
                 // Measure the solving time
                 const startTime = performance.now();
@@ -294,7 +293,7 @@
               }
 
               // Print FEAScript version
-              console.log("FEAScript version:", printVersion);
+              console.log("FEAScript version:", version);
 
               runSpeedTest(document.getElementById("solverSelect").value);
 

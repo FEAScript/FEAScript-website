@@ -286,26 +286,25 @@
     import {
       FEAScriptModel,
       plotSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/dist/feascript.esm.js";
 
     window.addEventListener("DOMContentLoaded", () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("heatConductionScript");
+      model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
       // 2. Define the mesh
       model.setGeometry({ line: 0.15 });
       model.setMeshConfig({ elementOrder: "linear", divisions: 10 });
 
       // 3. Apply the boundary conditions
-      model.addBoundaryCondition("left", ["convection", 1, 25]);      // Left
-      model.addBoundaryCondition("right", ["constantTemperature", 5]); // Right
+      model.addBoundaryCondition("left", { type: "convection", h: 1, ambientTemperature: 25 }); // Left
+      model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 5 });     // Right
 
       // 4. Solve
-      model.setSolverMethod("lusolve");
       const result = model.solve();
 
       // 5. Plot the results
@@ -387,34 +386,32 @@
               import {
                 FEAScriptModel,
                 plotSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
-              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+              // import { FEAScriptModel, plotSolution, version } from "../../FEAScript-core/src/index.js";
 
               window.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("resultsCanvas").style.display = "block";
 
                 // Print FEAScript version
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Create a new FEAScript model
                 const model = new FEAScriptModel();
 
                 // Set solver configuration
-                model.setModelConfig("heatConductionScript");
+                model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
 
                 // Define mesh configuration
                 model.setGeometry({ line: 0.15 });
                 model.setMeshConfig({ elementOrder: "linear", divisions: 10 });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("left", ["convection", 1, 25]);
-                //model.addBoundaryCondition("left", ["constantTemperature", 25]); // Temporary BC for testing
-                model.addBoundaryCondition("right", ["constantTemperature", 5]);
+                model.addBoundaryCondition("left", { type: "convection", h: 1, ambientTemperature: 25 });
+                //model.addBoundaryCondition("left", { type: "constantTemperature", temperature: 25 }); // Temporary BC for testing
+                model.addBoundaryCondition("right", { type: "constantTemperature", temperature: 5 });
 
-                // Set solver method
-                model.setSolverMethod("lusolve");
 
                 // Solve the problem and get the solution
                 const result = model.solve();

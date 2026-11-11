@@ -282,15 +282,16 @@
     import {
       FEAScriptModel,
       plotSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/dist/feascript.esm.js";
 
     window.addEventListener("DOMContentLoaded", () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("creepingFlowScript", {
+      model.setModelConfig("creepingFlow", {
+        solver: { method: "lusolve" },
         coefficientFunctions: {
           viscosity: 1, // μ
         },
@@ -301,13 +302,12 @@
       model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 6] });
 
       // 3. Apply the boundary conditions
-      model.addBoundaryCondition("bottom", ["constantVelocity", 0, 0]); // Bottom wall
-      model.addBoundaryCondition("left", ["constantVelocity", 0, 0]); // Left wall
-      model.addBoundaryCondition("top", ["constantVelocity", 1, 0]); // Moving lid
-      model.addBoundaryCondition("right", ["constantVelocity", 0, 0]); // Right wall
+      model.addBoundaryCondition("bottom", { type: "constantVelocity", u: 0, v: 0 }); // Bottom wall
+      model.addBoundaryCondition("left", { type: "constantVelocity", u: 0, v: 0 });   // Left wall
+      model.addBoundaryCondition("top", { type: "constantVelocity", u: 1, v: 0 });    // Moving lid
+      model.addBoundaryCondition("right", { type: "constantVelocity", u: 0, v: 0 });  // Right wall
 
       // 4. Solve
-      model.setSolverMethod("lusolve");
       const result = model.solve();
 
       // 5. Plot the results
@@ -435,8 +435,8 @@ import { FEAScriptWorker, plotSolution } from "https://core.feascript.com/src/in
 
 const model = new FEAScriptWorker();
 await model.ping(); // Wait until the worker is ready
-await model.setModelConfig("creepingFlowScript", { coefficientFunctions: { viscosity: 1 } });
-// ...setMeshConfig, addBoundaryCondition and setSolverMethod as above, each with await...
+await model.setModelConfig("creepingFlow", { coefficientFunctions: { viscosity: 1 } });
+// ...setGeometry, setMeshConfig and addBoundaryCondition as above, each with await...
 const result = await model.solve();
 
 const modelInfo = await model.getModelInfo();
@@ -459,20 +459,21 @@ model.terminate();</pre
               import {
                 FEAScriptModel,
                 plotSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
-              // import { FEAScriptModel, plotSolution, printVersion } from "../../FEAScript-core/src/index.js";
+              // import { FEAScriptModel, plotSolution, version } from "../../FEAScript-core/src/index.js";
 
               window.addEventListener("DOMContentLoaded", () => {
                 // Print FEAScript version
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Create a new FEAScript model
                 const model = new FEAScriptModel();
 
                 // Set model configuration
-                model.setModelConfig("creepingFlowScript", {
+                model.setModelConfig("creepingFlow", {
+                  solver: { method: "lusolve" },
                   coefficientFunctions: {
                     viscosity: 1, // μ
                   },
@@ -483,13 +484,11 @@ model.terminate();</pre
                 model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 6] });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("bottom", ["constantVelocity", 0, 0]); // Bottom wall (no-slip)
-                model.addBoundaryCondition("left", ["constantVelocity", 0, 0]); // Left wall (no-slip)
-                model.addBoundaryCondition("top", ["constantVelocity", 1, 0]); // Top lid (moving)
-                model.addBoundaryCondition("right", ["constantVelocity", 0, 0]); // Right wall (no-slip)
+                model.addBoundaryCondition("bottom", { type: "constantVelocity", u: 0, v: 0 }); // Bottom wall (no-slip)
+                model.addBoundaryCondition("left", { type: "constantVelocity", u: 0, v: 0 });   // Left wall (no-slip)
+                model.addBoundaryCondition("top", { type: "constantVelocity", u: 1, v: 0 });    // Top lid (moving)
+                model.addBoundaryCondition("right", { type: "constantVelocity", u: 0, v: 0 });  // Right wall (no-slip)
 
-                // Set solver method
-                model.setSolverMethod("lusolve");
 
                 // Solve the problem and get the solution
                 const result = model.solve();

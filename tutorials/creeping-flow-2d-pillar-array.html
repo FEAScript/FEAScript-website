@@ -323,15 +323,16 @@ Mesh.ElementOrder = 2;</pre>
       FEAScriptModel,
       importGmshMesh,
       plotInterpolatedSolution,
-      printVersion,
+      version,
     } from "https://core.feascript.com/dist/feascript.esm.js";
 
     window.addEventListener("DOMContentLoaded", async () =&gt; {
-      console.log("FEAScript version:", printVersion);
+      console.log("FEAScript version:", version);
 
       // 1. Create the model and select the physics
       const model = new FEAScriptModel();
-      model.setModelConfig("creepingFlowScript", {
+      model.setModelConfig("creepingFlow", {
+        solver: { method: "lusolve" },
         coefficientFunctions: {
           viscosity: 1, // μ
         },
@@ -343,13 +344,12 @@ Mesh.ElementOrder = 2;</pre>
       model.setMesh(await importGmshMesh(meshFile));
 
       // 3. Apply the boundary conditions, keyed by the names of the Gmsh physical groups
-      model.addBoundaryCondition("inlet", ["constantVelocity", 1, 0]); // Inlet
-      model.addBoundaryCondition("walls", ["constantVelocity", 0, 0]); // Channel walls
-      model.addBoundaryCondition("outlet", ["stressFree"]);             // Outlet
-      model.addBoundaryCondition("pillars", ["constantVelocity", 0, 0]); // Pillars
+      model.addBoundaryCondition("inlet", { type: "constantVelocity", u: 1, v: 0 });   // Inlet
+      model.addBoundaryCondition("walls", { type: "constantVelocity", u: 0, v: 0 });   // Channel walls
+      model.addBoundaryCondition("outlet", { type: "stressFree" });                    // Outlet
+      model.addBoundaryCondition("pillars", { type: "constantVelocity", u: 0, v: 0 }); // Pillars
 
       // 4. Solve
-      model.setSolverMethod("lusolve");
       const result = model.solve();
 
       // 5. Plot the results
@@ -488,19 +488,19 @@ Mesh.ElementOrder = 2;</pre>
                 FEAScriptModel,
                 importGmshMesh,
                 plotInterpolatedSolution,
-                printVersion,
+                version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
               // import {
               //   FEAScriptModel,
               //   importGmshMesh,
               //   plotInterpolatedSolution,
-              //   printVersion,
+              //   version,
               // } from "../../FEAScript-core/src/index.js";
 
               window.addEventListener("DOMContentLoaded", async () => {
                 // Print FEAScript version
-                console.log("FEAScript version:", printVersion);
+                console.log("FEAScript version:", version);
 
                 // Show the loading indicator and let it paint before the solve blocks the page
                 const loading = document.getElementById("loading");
@@ -518,7 +518,8 @@ Mesh.ElementOrder = 2;</pre>
                 const model = new FEAScriptModel();
 
                 // Set model configuration
-                model.setModelConfig("creepingFlowScript", {
+                model.setModelConfig("creepingFlow", {
+                  solver: { method: "lusolve" },
                   coefficientFunctions: {
                     viscosity: 1, // μ
                   },
@@ -528,13 +529,11 @@ Mesh.ElementOrder = 2;</pre>
                 model.setMesh(await importGmshMesh(meshFile));
 
                 // Define boundary conditions by the names of the Gmsh physical groups
-                model.addBoundaryCondition("inlet", ["constantVelocity", 1, 0]); // Inlet
-                model.addBoundaryCondition("walls", ["constantVelocity", 0, 0]); // Channel walls (no-slip)
-                model.addBoundaryCondition("outlet", ["stressFree"]); // Outlet
-                model.addBoundaryCondition("pillars", ["constantVelocity", 0, 0]); // Pillars (no-slip)
+                model.addBoundaryCondition("inlet", { type: "constantVelocity", u: 1, v: 0 });   // Inlet
+                model.addBoundaryCondition("walls", { type: "constantVelocity", u: 0, v: 0 });   // Channel walls (no-slip)
+                model.addBoundaryCondition("outlet", { type: "stressFree" });                    // Outlet
+                model.addBoundaryCondition("pillars", { type: "constantVelocity", u: 0, v: 0 }); // Pillars (no-slip)
 
-                // Set solver method
-                model.setSolverMethod("lusolve");
 
                 // Solve the problem and get the solution
                 const result = model.solve();

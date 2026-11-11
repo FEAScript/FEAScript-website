@@ -90,10 +90,10 @@
     updateDocBar();
   }
 
-  // Copy buttons that carry their text in data-copy
-  document.querySelectorAll("[data-copy]").forEach((button) => {
+  // Copy text to the clipboard on click, then show "Copied" on the button for 2 s
+  const copyOnClick = (button, getText) => {
     button.addEventListener("click", () => {
-      navigator.clipboard.writeText(button.dataset.copy).then(() => {
+      navigator.clipboard.writeText(getText()).then(() => {
         const label = button.querySelector("span");
         button.classList.add("copied");
         label.textContent = "Copied";
@@ -103,23 +103,38 @@
         }, 2000);
       });
     });
+  };
+  const copyIcon =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" ' +
+    'stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>' +
+    '<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+
+  // Copy buttons that carry their text in data-copy
+  document.querySelectorAll("[data-copy]").forEach((button) => {
+    copyOnClick(button, () => button.dataset.copy);
   });
 
   // Copy buttons that copy the text of another element, named in data-copy-target
   document.querySelectorAll("[data-copy-target]").forEach((button) => {
     const target = document.getElementById(button.dataset.copyTarget);
-    if (!target) return;
-    button.addEventListener("click", () => {
-      navigator.clipboard.writeText(target.innerText.trim()).then(() => {
-        const label = button.querySelector("span");
-        button.classList.add("copied");
-        label.textContent = "Copied";
-        setTimeout(() => {
-          button.classList.remove("copied");
-          label.textContent = "Copy";
-        }, 2000);
-      });
-    });
+    if (target) copyOnClick(button, () => target.innerText.trim());
+  });
+
+  // Tutorial code blocks without a bar get one with the language and a Copy button;
+  // data-no-copy leaves a block (an excerpt that does not run alone) as it is
+  document.querySelectorAll(".doc pre.prettyprint").forEach((pre) => {
+    if (pre.closest(".code-block") || pre.hasAttribute("data-no-copy")) return;
+    const block = document.createElement("div");
+    block.className = "code-block";
+    const lang = pre.dataset.lang || (pre.textContent.trim().startsWith("<") ? "HTML" : "JavaScript");
+    block.innerHTML =
+      '<div class="code-bar label"><span class="file"></span><div class="code-actions">' +
+      `<button class="code-btn" type="button" title="Copy code">${copyIcon}<span>Copy</span></button>` +
+      "</div></div>";
+    block.querySelector(".file").textContent = lang;
+    pre.replaceWith(block);
+    block.appendChild(pre);
+    copyOnClick(block.querySelector(".code-btn"), () => pre.innerText.trim());
   });
 
   // Copy the quick-start code
@@ -477,19 +492,7 @@
     });
   }
 
-  if (copyButton && codeBlock) {
-    copyButton.addEventListener("click", () => {
-      navigator.clipboard.writeText(codeBlock.innerText.trim()).then(() => {
-        const label = copyButton.querySelector("span");
-        copyButton.classList.add("copied");
-        label.textContent = "Copied";
-        setTimeout(() => {
-          copyButton.classList.remove("copied");
-          label.textContent = "Copy";
-        }, 2000);
-      });
-    });
-  }
+  if (copyButton && codeBlock) copyOnClick(copyButton, () => codeBlock.innerText.trim());
 
   // Footer year
   const year = document.getElementById("currentYear");

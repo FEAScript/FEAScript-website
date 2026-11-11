@@ -30,6 +30,8 @@ PAGES = {
                "Simulation apps, built in the browser."),
     "tutorials": ("tutorials/index.html", "tutorials", "tutorials/solidification-front-2d-results.png",
                   "Learn by running, with step-by-step tutorials."),
+    "work-with-feascript": ("work-with-feascript.html", "work with feascript", "assets/feascript-studio-app.png",
+                            "Simulation tools, built for your problem."),
     "advection-diffusion-1d": ("tutorials/advection-diffusion-1d.html", "tutorial",
                                "tutorials/advection-diffusion-1d-results.png", None),
     "cantilever-beam-1d": ("tutorials/cantilever-beam-1d.html", "tutorial",

@@ -766,7 +766,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   display: flex;
   flex-direction: column;
   padding-top: 3.875rem;
-  min-height: calc(100svh - 2rem);
+  min-height: 100svh;
 }
 
 #mesh-canvas {

@@ -1815,6 +1815,39 @@ h2 .accent {
   margin: 0 0 1rem;
 }
 
+/* Case list: one row per checked case, result right-aligned in mono */
+.verify-list {
+  align-self: stretch;
+  margin: 0 0 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.verify-list > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.verify-list dt {
+  font-size: 0.9375rem;
+}
+
+.verify-list dd {
+  margin: 0;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--gold-ink);
+}
+
+.verify-link {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
 /* Indented like the card text, since the section frame has no padding of its own */
 .verify-note {
   margin: 0;

@@ -611,45 +611,55 @@
               <h3>Published benchmarks</h3>
               <p class="verify-value">18.26 °C</p>
               <p class="verify-ref label text-faint">NAFEMS T4 target: 18.3 °C</p>
-              <p class="desc prose">
-                The temperature at the target point of NAFEMS T4, a heat conduction benchmark with convection, on
-                a 12 × 20 mesh of quadratic elements. Two cases of the Code_Aster validation manual are reproduced
-                too: TPLP302, a heated strip, to within 1.6e-4 °C of its series solution, and TPLP01, an L-shaped
-                domain, to within 0.24 % at 12 of 13 points.
+              <dl class="verify-list prose">
+                <div><dt>NAFEMS T4, convection</dt><dd>18.26 °C</dd></div>
+                <div><dt>Code_Aster TPLP302, heated strip</dt><dd>±1.6e-4 °C</dd></div>
+                <div><dt>Code_Aster TPLP01, L-shaped domain</dt><dd>0.24 %</dd></div>
+              </dl>
+              <p class="verify-link prose">
                 <a href="https://github.com/FEAScript/FEAScript-core/tree/main/tests/verification/benchmark"
-                  >Read the benchmark tests</a
-                >.
+                  >Benchmark tests</a
+                >
               </p>
             </article>
 
             <article class="cell cell-pad" data-reveal>
               <h3>Closed-form solutions</h3>
               <p class="verify-value">Exact</p>
-              <p class="verify-ref label text-faint">Up to rounding in double precision</p>
-              <p class="desc prose">
-                Couette flow, a cantilever beam under a tip load and special cases of heat conduction with
-                spatially varying conductivity are set up so that the finite element solution equals the exact
-                solution at the nodes. FEAScript matches it to about 15 significant digits.
+              <p class="verify-ref label text-faint">At the nodes, to about 15 digits</p>
+              <dl class="verify-list prose">
+                <div><dt>Couette flow</dt><dd>exact</dd></div>
+                <div><dt>Cantilever beam, tip load</dt><dd>exact</dd></div>
+                <div><dt>Heat conduction, varying conductivity</dt><dd>exact</dd></div>
+              </dl>
+              <p class="verify-link prose">
                 <a href="https://github.com/FEAScript/FEAScript-core/tree/main/tests/verification"
-                  >See the verification tests</a
-                >, or <a href="https://docs.feascript.com/verification/overview">every case in the docs</a>.
+                  >Verification tests</a
+                >
+                · <a href="https://docs.feascript.com/verification/overview">All cases in the docs</a>
               </p>
             </article>
 
             <article class="cell cell-pad" data-reveal>
               <h3>Other finite element software</h3>
               <p class="verify-value">11 digits</p>
-              <p class="verify-ref label text-faint">Agreement with scikit-fem, node by node</p>
-              <p class="desc prose">
-                For heat conduction in a 2D fin, on meshes up to 51,681 nodes, FEAScript 0.4.0 matches
-                <a href="https://github.com/kinnala/scikit-fem">scikit-fem</a> to 11 significant digits, a
-                largest difference of 1.7e-10 °C, and <a href="https://www.elmerfem.org/">Elmer</a> to within
-                5e-6 °C, the rounding of Elmer's output files. On the lid-driven cavity, the velocities agree with
-                scikit-fem to within 4.0e-13.
+              <p class="verify-ref label text-faint">Same meshes, node by node, up to 51,681 nodes</p>
+              <dl class="verify-list prose">
+                <div>
+                  <dt><a href="https://github.com/kinnala/scikit-fem">scikit-fem</a>, 2D fin</dt>
+                  <dd>1.7e-10 °C</dd>
+                </div>
+                <div>
+                  <dt><a href="https://www.elmerfem.org/">Elmer</a>, 2D fin</dt>
+                  <dd>1.9e-10 °C</dd>
+                </div>
+                <div><dt>scikit-fem, lid-driven cavity</dt><dd>4.0e-13</dd></div>
+              </dl>
+              <p class="verify-link prose">
                 <a
                   href="https://github.com/FEAScript/FEAScript-benchmark/tree/main/heatConduction2DFin/reports/amd-ryzen-5-9600x/0.4.0"
-                  >See the benchmark results</a
-                >.
+                  >Benchmark results</a
+                >
               </p>
             </article>
           </div>

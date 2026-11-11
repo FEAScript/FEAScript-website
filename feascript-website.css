@@ -1835,17 +1835,19 @@ h2 .accent {
   font-size: 0.9375rem;
 }
 
+/* Small, faint note after a case name, e.g. what a value is measured against */
+.verify-qualifier {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--faint);
+}
+
 .verify-list dd {
   margin: 0;
   flex-shrink: 0;
   font-family: var(--font-mono);
   font-size: 0.875rem;
   color: var(--gold-ink);
-}
-
-.verify-list dd sub {
-  font-size: 0.7em;
-  line-height: 0;
 }
 
 .verify-link {

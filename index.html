@@ -611,9 +611,18 @@
               <p class="verify-value">18.26 °C</p>
               <p class="verify-ref label text-faint">NAFEMS T4 target: 18.3 °C</p>
               <dl class="verify-list prose">
-                <div><dt>NAFEMS T4, convection</dt><dd>18.26 °C</dd></div>
-                <div><dt>Code_Aster TPLP302, heated strip</dt><dd>±1.6e-4 °C</dd></div>
-                <div><dt>Code_Aster TPLP01, L-shaped domain</dt><dd>0.24 %</dd></div>
+                <div>
+                  <dt>NAFEMS T4, convection <span class="verify-qualifier">temperature at point E</span></dt>
+                  <dd>18.26 °C</dd>
+                </div>
+                <div>
+                  <dt>Code_Aster TPLP302, heated strip <span class="verify-qualifier">largest error at 7 reference points</span></dt>
+                  <dd>±1.6e-4 °C</dd>
+                </div>
+                <div>
+                  <dt>Code_Aster TPLP01, L-shaped domain <span class="verify-qualifier">largest deviation at 12 of 13 reference points</span></dt>
+                  <dd>0.24 %</dd>
+                </div>
               </dl>
               <p class="verify-link prose">
                 <a href="https://github.com/FEAScript/FEAScript-core/tree/main/tests/verification/benchmark"
@@ -645,14 +654,17 @@
               <p class="verify-ref label text-faint">Same meshes, node by node, up to 51,681 nodes</p>
               <dl class="verify-list prose">
                 <div>
-                  <dt><a href="https://github.com/kinnala/scikit-fem">scikit-fem</a>, 2D fin</dt>
+                  <dt><a href="https://github.com/kinnala/scikit-fem">scikit-fem</a>, 2D fin <span class="verify-qualifier">largest temperature difference</span></dt>
                   <dd>1.7e-10 °C</dd>
                 </div>
                 <div>
-                  <dt><a href="https://www.elmerfem.org/">Elmer</a>, 2D fin</dt>
+                  <dt><a href="https://www.elmerfem.org/">Elmer</a>, 2D fin <span class="verify-qualifier">largest temperature difference</span></dt>
                   <dd>1.9e-10 °C</dd>
                 </div>
-                <div><dt>scikit-fem, lid-driven cavity</dt><dd>4.0e-13 U<sub>lid</sub></dd></div>
+                <div>
+                  <dt><a href="https://github.com/kinnala/scikit-fem">scikit-fem</a>, lid-driven cavity <span class="verify-qualifier">largest velocity difference, relative to the lid speed</span></dt>
+                  <dd>4.0e-13</dd>
+                </div>
               </dl>
               <p class="verify-link prose">
                 <a

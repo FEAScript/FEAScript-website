@@ -1843,6 +1843,11 @@ h2 .accent {
   color: var(--gold-ink);
 }
 
+.verify-list dd sub {
+  font-size: 0.7em;
+  line-height: 0;
+}
+
 .verify-link {
   margin: 0;
   font-size: 0.9375rem;

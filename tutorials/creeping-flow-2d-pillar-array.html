@@ -66,11 +66,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -265,11 +268,11 @@
               boundaries in four physical groups:
             </p>
             <pre class="prettyprint">
-// 4. Physical groups (FEAScript boundary key = tag - 1)
-Physical Curve("inlet", 1) = {inlet()};          // FEAScript boundary "0"
-Physical Curve("walls", 2) = {bottom(), top()};  // FEAScript boundary "1"
-Physical Curve("outlet", 3) = {outlet()};        // FEAScript boundary "2"
-Physical Curve("pillars", 4) = {pillars()};      // FEAScript boundary "3"
+// 4. Physical groups: FEAScript keys the boundary conditions by these names
+Physical Curve("inlet", 1) = {inlet()};          // FEAScript boundary "inlet"
+Physical Curve("walls", 2) = {bottom(), top()};  // FEAScript boundary "walls"
+Physical Curve("outlet", 3) = {outlet()};        // FEAScript boundary "outlet"
+Physical Curve("pillars", 4) = {pillars()};      // FEAScript boundary "pillars"
 Physical Surface("domain", 5) = {10};            // Domain
 
 // 5. Mesh: quadratic triangles (P2), refined on the pillars
@@ -281,8 +284,8 @@ Mesh.ElementOrder = 2;</pre>
               Run <code>gmsh pillar.geo -2 -format msh41 -o pillar_triang_quadratic.msh</code> to write the mesh in the
               <code>.msh</code> version 4.1 format that FEAScript reads, or download
               <a href="pillar_triang_quadratic.msh"><code>pillar_triang_quadratic.msh</code></a
-              >. FEAScript numbers each boundary by its physical group tag minus one, and these keys are used
-              in the boundary conditions below.
+              >. FEAScript keys each boundary by the name of its physical group, and these names are used in the
+              boundary conditions below.
             </p>
 
             <div class="center-image">
@@ -337,13 +340,13 @@ Mesh.ElementOrder = 2;</pre>
       // 2. Load the Gmsh mesh (P2 triangles)
       const response = await fetch("./pillar_triang_quadratic.msh");
       const meshFile = new File([await response.text()], "pillar_triang_quadratic.msh");
-      model.setMeshConfig({ parsedMesh: await importGmshMesh(meshFile) });
+      model.setMesh(await importGmshMesh(meshFile));
 
-      // 3. Apply the boundary conditions (key = Gmsh physical group tag - 1)
-      model.addBoundaryCondition("0", ["constantVelocity", 1, 0]); // Inlet
-      model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Channel walls
-      model.addBoundaryCondition("2", ["stressFree"]);             // Outlet
-      model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Pillars
+      // 3. Apply the boundary conditions, keyed by the names of the Gmsh physical groups
+      model.addBoundaryCondition("inlet", ["constantVelocity", 1, 0]); // Inlet
+      model.addBoundaryCondition("walls", ["constantVelocity", 0, 0]); // Channel walls
+      model.addBoundaryCondition("outlet", ["stressFree"]);             // Outlet
+      model.addBoundaryCondition("pillars", ["constantVelocity", 0, 0]); // Pillars
 
       // 4. Solve
       model.setSolverMethod("lusolve");
@@ -522,13 +525,13 @@ Mesh.ElementOrder = 2;</pre>
                 });
 
                 // Parse the mesh file and define the mesh configuration
-                model.setMeshConfig({ parsedMesh: await importGmshMesh(meshFile) });
+                model.setMesh(await importGmshMesh(meshFile));
 
-                // Define boundary conditions using Gmsh physical group tags
-                model.addBoundaryCondition("0", ["constantVelocity", 1, 0]); // Inlet
-                model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Channel walls (no-slip)
-                model.addBoundaryCondition("2", ["stressFree"]); // Outlet
-                model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Pillars (no-slip)
+                // Define boundary conditions by the names of the Gmsh physical groups
+                model.addBoundaryCondition("inlet", ["constantVelocity", 1, 0]); // Inlet
+                model.addBoundaryCondition("walls", ["constantVelocity", 0, 0]); // Channel walls (no-slip)
+                model.addBoundaryCondition("outlet", ["stressFree"]); // Outlet
+                model.addBoundaryCondition("pillars", ["constantVelocity", 0, 0]); // Pillars (no-slip)
 
                 // Set solver method
                 model.setSolverMethod("lusolve");

@@ -65,11 +65,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -239,20 +242,14 @@
       await model.setModelConfig("frontPropagationScript");
 
       // 2. Define the mesh
-      await model.setMeshConfig({
-        meshDimension: "2D",
-        elementOrder: "quadratic",
-        numElementsX: 12,
-        numElementsY: 8,
-        maxX: 4,
-        maxY: 2,
-      });
+      await model.setGeometry({ rectangle: [4, 2] });
+      await model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 8] });
 
       // 3. Apply the boundary conditions
-      await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom: initial front
-      await model.addBoundaryCondition("1", ["constantValue", 0]); // Left: initial front
-      await model.addBoundaryCondition("2", ["zeroGradient"]);     // Top
-      await model.addBoundaryCondition("3", ["constantValue", 0]); // Right: initial front
+      await model.addBoundaryCondition("bottom", ["constantValue", 0]); // Bottom: initial front
+      await model.addBoundaryCondition("left", ["constantValue", 0]); // Left: initial front
+      await model.addBoundaryCondition("top", ["zeroGradient"]);     // Top
+      await model.addBoundaryCondition("right", ["constantValue", 0]); // Right: initial front
 
       // 4. Solve
       await model.setSolverMethod("lusolve");
@@ -329,20 +326,14 @@
                   await model.setModelConfig("frontPropagationScript");
 
                   // Define mesh configuration
-                  await model.setMeshConfig({
-                    meshDimension: "2D",
-                    elementOrder: "quadratic",
-                    numElementsX: 12,
-                    numElementsY: 8,
-                    maxX: 4,
-                    maxY: 2,
-                  });
+                  await model.setGeometry({ rectangle: [4, 2] });
+                  await model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 8] });
 
                   // Define boundary conditions
-                  await model.addBoundaryCondition("0", ["constantValue", 0]); // Bottom
-                  await model.addBoundaryCondition("1", ["constantValue", 0]); // Left
-                  await model.addBoundaryCondition("2", ["zeroGradient"]); // Top
-                  await model.addBoundaryCondition("3", ["constantValue", 0]); // Right
+                  await model.addBoundaryCondition("bottom", ["constantValue", 0]); // Bottom
+                  await model.addBoundaryCondition("left", ["constantValue", 0]); // Left
+                  await model.addBoundaryCondition("top", ["zeroGradient"]); // Top
+                  await model.addBoundaryCondition("right", ["constantValue", 0]); // Right
 
                   // Set solver method
                   await model.setSolverMethod("lusolve");

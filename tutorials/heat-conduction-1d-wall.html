@@ -65,11 +65,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -294,16 +297,12 @@
       model.setModelConfig("heatConductionScript");
 
       // 2. Define the mesh
-      model.setMeshConfig({
-        meshDimension: "1D",
-        elementOrder: "linear",
-        numElementsX: 10,
-        maxX: 0.15,
-      });
+      model.setGeometry({ line: 0.15 });
+      model.setMeshConfig({ elementOrder: "linear", divisions: 10 });
 
       // 3. Apply the boundary conditions
-      model.addBoundaryCondition("0", ["convection", 1, 25]);      // Left
-      model.addBoundaryCondition("1", ["constantTemperature", 5]); // Right
+      model.addBoundaryCondition("left", ["convection", 1, 25]);      // Left
+      model.addBoundaryCondition("right", ["constantTemperature", 5]); // Right
 
       // 4. Solve
       model.setSolverMethod("lusolve");
@@ -406,17 +405,13 @@
                 model.setModelConfig("heatConductionScript");
 
                 // Define mesh configuration
-                model.setMeshConfig({
-                  meshDimension: "1D",
-                  elementOrder: "linear",
-                  numElementsX: 10,
-                  maxX: 0.15,
-                });
+                model.setGeometry({ line: 0.15 });
+                model.setMeshConfig({ elementOrder: "linear", divisions: 10 });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("0", ["convection", 1, 25]);
-                //model.addBoundaryCondition("0", ["constantTemperature", 25]); // Temporary BC for testing
-                model.addBoundaryCondition("1", ["constantTemperature", 5]);
+                model.addBoundaryCondition("left", ["convection", 1, 25]);
+                //model.addBoundaryCondition("left", ["constantTemperature", 25]); // Temporary BC for testing
+                model.addBoundaryCondition("right", ["constantTemperature", 5]);
 
                 // Set solver method
                 model.setSolverMethod("lusolve");

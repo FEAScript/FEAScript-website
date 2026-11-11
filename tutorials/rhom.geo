@@ -19,11 +19,11 @@ Line(4) = {4, 1};            // Left
 Line Loop(1) = {1, 2, 3, 4}; // Closed boundary
 Plane Surface(1) = {1};      // Domain
 
-// 4. Physical groups, tagged bottom, left, top, right (the side order of FEAScript structured meshes)
-Physical Line("bottom", 1) = {1};    // FEAScript boundary "0"
-Physical Line("left", 2)   = {4};    // FEAScript boundary "1"
-Physical Line("top", 3)    = {3};    // FEAScript boundary "2"
-Physical Line("right", 4)  = {2};    // FEAScript boundary "3"
+// 4. Physical groups: FEAScript keys the boundary conditions by these names
+Physical Line("bottom", 1) = {1};    // FEAScript boundary "bottom"
+Physical Line("left", 2)   = {4};    // FEAScript boundary "left"
+Physical Line("top", 3)    = {3};    // FEAScript boundary "top"
+Physical Line("right", 4)  = {2};    // FEAScript boundary "right"
 Physical Surface("domain", 5) = {1}; // Domain
 
 // 5. Mesh

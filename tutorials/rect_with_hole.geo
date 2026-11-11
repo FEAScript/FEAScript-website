@@ -31,12 +31,12 @@ Line Loop(1) = {1, 2, 3, 4};      // Outer boundary
 Line Loop(2) = {5, 6, 7, 8};      // Hole
 Plane Surface(1) = {1, 2};        // Domain
 
-// 4. Physical groups, tagged bottom, left, top, right (the side order of FEAScript structured meshes), then the hole
-Physical Line("bottom", 1) = {1};          // FEAScript boundary "0"
-Physical Line("left", 2)   = {4};          // FEAScript boundary "1"
-Physical Line("top", 3)    = {3};          // FEAScript boundary "2"
-Physical Line("right", 4)  = {2};          // FEAScript boundary "3"
-Physical Line("hole", 5)   = {5, 6, 7, 8}; // FEAScript boundary "4"
+// 4. Physical groups: FEAScript keys the boundary conditions by these names
+Physical Line("bottom", 1) = {1};          // FEAScript boundary "bottom"
+Physical Line("left", 2)   = {4};          // FEAScript boundary "left"
+Physical Line("top", 3)    = {3};          // FEAScript boundary "top"
+Physical Line("right", 4)  = {2};          // FEAScript boundary "right"
+Physical Line("hole", 5)   = {5, 6, 7, 8}; // FEAScript boundary "hole"
 Physical Surface("domain", 6) = {1};       // Domain
 
 // 5. Mesh

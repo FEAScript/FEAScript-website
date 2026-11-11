@@ -59,11 +59,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -262,25 +265,19 @@
 
                 const model = new FEAScriptModel();
                 model.setModelConfig("heatConductionScript");
-                model.setMeshConfig({
-                  meshDimension: "2D",
-                  elementOrder: "linear",
-                  numElementsX,
-                  numElementsY,
-                  maxX: 4,
-                  maxY: 2,
-                });
+                model.setGeometry({ rectangle: [4, 2] });
+                model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "linear", divisions: [numElementsX, numElementsY] });
 
-                const totalElements = model.meshConfig.numElementsX * model.meshConfig.numElementsY;
+                const totalElements = numElementsX * numElementsY;
                 console.log(`Total number of elements in mesh: ${totalElements}`);
 
                 const totalNodes = (numElementsX + 1) * (numElementsY + 1);
                 console.log(`Total number of nodes in mesh: ${totalNodes}`);
 
-                model.addBoundaryCondition("0", ["constantTemperature", 200]);
-                model.addBoundaryCondition("1", ["symmetry"]);
-                model.addBoundaryCondition("2", ["convection", 1, 20]);
-                model.addBoundaryCondition("3", ["constantTemperature", 200]);
+                model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
+                model.addBoundaryCondition("left", ["symmetry"]);
+                model.addBoundaryCondition("top", ["convection", 1, 20]);
+                model.addBoundaryCondition("right", ["constantTemperature", 200]);
 
                 model.setSolverMethod(selectedSolver);
 

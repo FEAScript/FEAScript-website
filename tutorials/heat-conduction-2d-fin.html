@@ -65,11 +65,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -296,20 +299,14 @@
       model.setModelConfig("heatConductionScript");
 
       // 2. Define the mesh
-      model.setMeshConfig({
-        meshDimension: "2D",
-        elementOrder: "quadratic",
-        numElementsX: 8,
-        numElementsY: 4,
-        maxX: 4,
-        maxY: 2,
-      });
+      model.setGeometry({ rectangle: [4, 2] });
+      model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [8, 4] });
 
       // 3. Apply the boundary conditions
-      model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom
-      model.addBoundaryCondition("1", ["symmetry"]);                 // Left
-      model.addBoundaryCondition("2", ["convection", 1, 20]);        // Top
-      model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right
+      model.addBoundaryCondition("bottom", ["constantTemperature", 200]); // Bottom
+      model.addBoundaryCondition("left", ["symmetry"]);                 // Left
+      model.addBoundaryCondition("top", ["convection", 1, 20]);        // Top
+      model.addBoundaryCondition("right", ["constantTemperature", 200]); // Right
 
       // 4. Solve
       model.setSolverMethod("lusolve");
@@ -510,7 +507,7 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
             >
             <p>
               The field is sampled at 50 points per unit length, so the units of the geometry matter: a fin
-              modeled in meters with <code>maxX: 0.004</code> gets a 2-point grid. Scale the model, or use
+              modeled in meters with <code>rectangle: [0.004, 0.002]</code> gets a 2-point grid. Scale the model, or use
               millimetres. Run it:
               <a href="https://feascript.com/tutorials/heat-conduction-2d-fin-vtk.html">fin with vtk.js</a>.
             </p>
@@ -569,20 +566,14 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
                 model.setModelConfig("heatConductionScript");
 
                 // Define mesh configuration
-                model.setMeshConfig({
-                  meshDimension: "2D",
-                  elementOrder: "quadratic",
-                  numElementsX: 8,
-                  numElementsY: 4,
-                  maxX: 4,
-                  maxY: 2,
-                });
+                model.setGeometry({ rectangle: [4, 2] });
+                model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [8, 4] });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("0", ["constantTemperature", 200]);
-                model.addBoundaryCondition("1", ["symmetry"]);
-                model.addBoundaryCondition("2", ["convection", 1, 20]);
-                model.addBoundaryCondition("3", ["constantTemperature", 200]);
+                model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
+                model.addBoundaryCondition("left", ["symmetry"]);
+                model.addBoundaryCondition("top", ["convection", 1, 20]);
+                model.addBoundaryCondition("right", ["constantTemperature", 200]);
 
                 // Set solver method
                 // model.setSolverMethod("jacobi");

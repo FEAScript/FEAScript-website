@@ -65,11 +65,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -249,13 +252,13 @@
       }
       const meshFile = new File([await response.text()], "rect_quad_quadratic.msh");
       const mesh = await importGmshMesh(meshFile);
-      model.setMeshConfig({ parsedMesh: mesh });
+      model.setMesh(mesh);
 
-      // 3. Apply the boundary conditions (key = Gmsh physical group tag - 1)
-      model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom
-      model.addBoundaryCondition("1", ["symmetry"]);                 // Left
-      model.addBoundaryCondition("2", ["convection", 1, 20]);        // Top
-      model.addBoundaryCondition("3", ["constantTemperature", 200]); // Right
+      // 3. Apply the boundary conditions, keyed by the names of the Gmsh physical groups
+      model.addBoundaryCondition("bottom", ["constantTemperature", 200]); // Bottom
+      model.addBoundaryCondition("left", ["symmetry"]);                 // Left
+      model.addBoundaryCondition("top", ["convection", 1, 20]);        // Top
+      model.addBoundaryCondition("right", ["constantTemperature", 200]); // Right
 
       // 4. Solve
       model.setSolverMethod("lusolve");
@@ -274,19 +277,15 @@
               <li>
                 <strong>Physical Groups in Gmsh:</strong> In your <code>.geo</code> file (see
                 <a href="#gmshgeofile">Example Gmsh <code>.geo</code> File</a>), you need to define physical
-                groups for boundaries using commands like <code>Physical Line("bottom", 1) = {1};</code>. These
-                are mapped to tags in the imported mesh.
+                groups for boundaries using commands like <code>Physical Line("bottom", 1) = {1};</code>. Give
+                each group a name: it becomes the name of the boundary in FEAScript.
               </li>
               <li>
-                <strong>Boundary Condition Mapping and Tag Indexing:</strong> When using Gmsh meshes in
-                FEAScript, you need to subtract 1 from the Gmsh physical group tag numbers. For example, if
-                your Gmsh file has physical groups with tags <code>"1"</code>, <code>"2"</code>,
-                <code>"3"</code>, <code>"4"</code>, you would reference them in FEAScript as <code>"0"</code>,
-                <code>"1"</code>, <code>"2"</code>, <code>"3"</code>, respectively. For example:
-                <code
-                  >model.addBoundaryCondition("0", ["constantTemperature", 200]); // Gmsh physical group tag 1</code
-                >. This conversion is necessary because Gmsh uses 1-based indexing while FEAScript uses
-                0-based indexing.
+                <strong>Boundary conditions by name:</strong> the boundary conditions are keyed by the names
+                of the physical groups, for example
+                <code>model.addBoundaryCondition("bottom", ["constantTemperature", 200]);</code> for
+                <code>Physical Line("bottom", 1)</code>. The tag minus one, the key of FEAScript 0.3, still
+                works with a deprecation warning.
               </li>
             </ul>
 
@@ -346,11 +345,11 @@ Line(4) = {4, 1};            // Left
 Line Loop(1) = {1, 2, 3, 4}; // Closed boundary
 Plane Surface(1) = {1};      // Domain
 
-// 4. Physical groups, tagged bottom, left, top, right (the side order of FEAScript structured meshes)
-Physical Line("bottom", 1) = {1};    // FEAScript boundary "0"
-Physical Line("left", 2)   = {4};    // FEAScript boundary "1"
-Physical Line("top", 3)    = {3};    // FEAScript boundary "2"
-Physical Line("right", 4)  = {2};    // FEAScript boundary "3"
+// 4. Physical groups: FEAScript keys the boundary conditions by these names
+Physical Line("bottom", 1) = {1};    // FEAScript boundary "bottom"
+Physical Line("left", 2)   = {4};    // FEAScript boundary "left"
+Physical Line("top", 3)    = {3};    // FEAScript boundary "top"
+Physical Line("right", 4)  = {2};    // FEAScript boundary "right"
 Physical Surface("domain", 5) = {1}; // Domain
 
 // 5. Mesh
@@ -361,27 +360,27 @@ Mesh 2;</pre
             </div>
 
             <p>
-              Note how the physical line tags in the <code>.geo</code> file correspond to the boundary
-              conditions in our FEAScript code. The tags are given in the order bottom, left, top, right, which
-              is the side order of FEAScript's structured meshes, so the boundary keys are the same as in the
-              <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">basic fin tutorial</a>:
+              Note how the names of the physical lines in the <code>.geo</code> file are the keys of the
+              boundary conditions in our FEAScript code. They are the same names as the sides of the rectangle
+              in the <a href="https://feascript.com/tutorials/heat-conduction-2d-fin.html">basic fin tutorial</a>,
+              so the conditions are written the same way:
             </p>
             <ul>
               <li>
                 <code>Physical Line("bottom", 1) = {1};</code> →
-                <code>model.addBoundaryCondition("0", ["constantTemperature", 200]);</code>
+                <code>model.addBoundaryCondition("bottom", ["constantTemperature", 200]);</code>
               </li>
               <li>
                 <code>Physical Line("left", 2) = {4};</code> →
-                <code>model.addBoundaryCondition("1", ["symmetry"]);</code>
+                <code>model.addBoundaryCondition("left", ["symmetry"]);</code>
               </li>
               <li>
                 <code>Physical Line("top", 3) = {3};</code> →
-                <code>model.addBoundaryCondition("2", ["convection", 1, 20]);</code>
+                <code>model.addBoundaryCondition("top", ["convection", 1, 20]);</code>
               </li>
               <li>
                 <code>Physical Line("right", 4) = {2};</code> →
-                <code>model.addBoundaryCondition("3", ["constantTemperature", 200]);</code>
+                <code>model.addBoundaryCondition("right", ["constantTemperature", 200]);</code>
               </li>
             </ul>
 
@@ -396,8 +395,7 @@ Mesh 2;</pre
               <code>Recombine Surface{1};</code> line so that Gmsh keeps the triangles. Set
               <code>Mesh.ElementOrder</code> to <code>1</code> for linear or <code>2</code> for quadratic
               elements; FEAScript detects the mesh dimension and element order from the imported mesh, so
-              there is no need to set <code>meshDimension</code> or <code>elementOrder</code> in the mesh
-              configuration.
+              <code>setMesh</code> needs nothing else.
             </p>
 
             <aside class="tri-tip" aria-label="Tip from Tri">
@@ -505,15 +503,13 @@ Mesh 2;</pre
                 const rect_quad = await importGmshMesh(meshFile);
 
                 // Define mesh configuration with the parsed rect_quad
-                gmshModel.setMeshConfig({
-                  parsedMesh: rect_quad,
-                });
+                gmshModel.setMesh(rect_quad);
 
-                // Define boundary conditions using Gmsh physical group tags
-                gmshModel.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
-                gmshModel.addBoundaryCondition("1", ["symmetry"]); // Left boundary
-                gmshModel.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-                gmshModel.addBoundaryCondition("3", ["constantTemperature", 200]); // Right boundary
+                // Define boundary conditions by the names of the Gmsh physical groups
+                gmshModel.addBoundaryCondition("bottom", ["constantTemperature", 200]); // Bottom boundary
+                gmshModel.addBoundaryCondition("left", ["symmetry"]); // Left boundary
+                gmshModel.addBoundaryCondition("top", ["convection", 1, 20]); // Top boundary
+                gmshModel.addBoundaryCondition("right", ["constantTemperature", 200]); // Right boundary
 
                 // Set solver method
                 //model.setSolverMethod("jacobi");

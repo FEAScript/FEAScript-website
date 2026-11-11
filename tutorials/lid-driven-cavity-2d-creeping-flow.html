@@ -65,11 +65,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -294,20 +297,14 @@
       });
 
       // 2. Define the mesh (creeping flow needs quadratic elements)
-      model.setMeshConfig({
-        meshDimension: "2D",
-        elementOrder: "quadratic",
-        numElementsX: 12,
-        numElementsY: 6,
-        maxX: 4,
-        maxY: 2,
-      });
+      model.setGeometry({ rectangle: [4, 2] });
+      model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 6] });
 
       // 3. Apply the boundary conditions
-      model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom wall
-      model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left wall
-      model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Moving lid
-      model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right wall
+      model.addBoundaryCondition("bottom", ["constantVelocity", 0, 0]); // Bottom wall
+      model.addBoundaryCondition("left", ["constantVelocity", 0, 0]); // Left wall
+      model.addBoundaryCondition("top", ["constantVelocity", 1, 0]); // Moving lid
+      model.addBoundaryCondition("right", ["constantVelocity", 0, 0]); // Right wall
 
       // 4. Solve
       model.setSolverMethod("lusolve");
@@ -482,20 +479,14 @@ model.terminate();</pre
                 });
 
                 // Define mesh configuration
-                model.setMeshConfig({
-                  meshDimension: "2D",
-                  elementOrder: "quadratic",
-                  numElementsX: 12,
-                  numElementsY: 6,
-                  maxX: 4,
-                  maxY: 2,
-                });
+                model.setGeometry({ rectangle: [4, 2] });
+                model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [12, 6] });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("0", ["constantVelocity", 0, 0]); // Bottom wall (no-slip)
-                model.addBoundaryCondition("1", ["constantVelocity", 0, 0]); // Left wall (no-slip)
-                model.addBoundaryCondition("2", ["constantVelocity", 1, 0]); // Top lid (moving)
-                model.addBoundaryCondition("3", ["constantVelocity", 0, 0]); // Right wall (no-slip)
+                model.addBoundaryCondition("bottom", ["constantVelocity", 0, 0]); // Bottom wall (no-slip)
+                model.addBoundaryCondition("left", ["constantVelocity", 0, 0]); // Left wall (no-slip)
+                model.addBoundaryCondition("top", ["constantVelocity", 1, 0]); // Top lid (moving)
+                model.addBoundaryCondition("right", ["constantVelocity", 0, 0]); // Right wall (no-slip)
 
                 // Set solver method
                 model.setSolverMethod("lusolve");

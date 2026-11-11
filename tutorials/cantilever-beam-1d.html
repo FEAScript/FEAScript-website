@@ -65,11 +65,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -305,12 +308,8 @@
       });
 
       // 2. Define the mesh
-      model.setMeshConfig({
-        meshDimension: "1D",
-        elementOrder: "linear",
-        numElementsX: 4,
-        maxX: beamLength,
-      });
+      model.setGeometry({ line: beamLength });
+      model.setMeshConfig({ elementOrder: "linear", divisions: 4 });
 
       // 3. Apply the boundary conditions (keyed by node number)
       model.addBoundaryCondition("1", [["fixed"]]);          // Clamped support at x = 0
@@ -346,7 +345,7 @@
                 <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="https://lab.feascript.com/#tri">Who is Tri?</a></p>
                 <p>
                   Point loads and supports are keyed by node, so a load must sit on a node: a
-                  mid-span load needs an even <code>numElementsX</code>. With constant \(EI\) and no
+                  mid-span load needs an even number of <code>divisions</code>. With constant \(EI\) and no
                   foundation term, Hermite elements give exact nodal \(w\) and \(\theta\) for a
                   uniform \(q\) too, but the exact deflection is then quartic, so values between
                   nodes, and the moment \(EI\,w''\) (linear per element, discontinuous across
@@ -405,12 +404,8 @@
                 });
 
                 // Define mesh configuration
-                model.setMeshConfig({
-                  meshDimension: "1D",
-                  elementOrder: "linear",
-                  numElementsX: 4,
-                  maxX: beamLength,
-                });
+                model.setGeometry({ line: beamLength });
+                model.setMeshConfig({ elementOrder: "linear", divisions: 4 });
 
                 // Define boundary conditions
                 model.addBoundaryCondition("1", [["fixed"]]); // Clamped support at x=0

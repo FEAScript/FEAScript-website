@@ -59,11 +59,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
           "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm",
           "@kitware/vtk.js/": "https://cdn.jsdelivr.net/npm/@kitware/vtk.js@32.12.0/",
           "gl-matrix": "https://esm.sh/v135/gl-matrix@3.4.3",
           "d3-scale": "https://esm.sh/v135/d3-scale@4.0.2",
@@ -296,8 +299,8 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
                   <code>plotInterpolatedSolutionVtk</code> evaluates the elements' own shape
                   functions on a grid of 50 points per unit length (200 × 100 here), so quadratic
                   elements show curved contours inside each element. Because the density is per unit
-                  length, the units of the geometry matter: a 4 mm fin modelled with <code>maxX:
-                  0.004</code> gets a 2-point grid. Scale the model, or use millimetres.
+                  length, the units of the geometry matter: a 4 mm fin modelled with <code>rectangle:
+                  [0.004, 0.002]</code> gets a 2-point grid. Scale the model, or use millimetres.
                   Docs: <a href="https://docs.feascript.com/api/visualization#vtkjs">vtk.js plotting</a>.
                 </p>
               </div>
@@ -326,19 +329,13 @@ await plotInterpolatedSolutionVtk(model, result, "contour", "resultsCanvas", {
 
                 const model = new FEAScriptModel();
                 model.setModelConfig("heatConductionScript");
-                model.setMeshConfig({
-                  meshDimension: "2D",
-                  elementOrder: "quadratic",
-                  numElementsX: 8,
-                  numElementsY: 4,
-                  maxX: 4,
-                  maxY: 2,
-                });
+                model.setGeometry({ rectangle: [4, 2] });
+                model.setMeshConfig({ elements: "quadrilaterals", elementOrder: "quadratic", divisions: [8, 4] });
 
-                model.addBoundaryCondition("0", ["constantTemperature", 200]);
-                model.addBoundaryCondition("1", ["symmetry"]);
-                model.addBoundaryCondition("2", ["convection", 1, 20]);
-                model.addBoundaryCondition("3", ["constantTemperature", 200]);
+                model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
+                model.addBoundaryCondition("left", ["symmetry"]);
+                model.addBoundaryCondition("top", ["convection", 1, 20]);
+                model.addBoundaryCondition("right", ["constantTemperature", 200]);
 
                 model.setSolverMethod("lusolve");
                 const result = model.solve();

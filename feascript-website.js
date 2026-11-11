@@ -373,12 +373,12 @@
       const { temp, hk, ext } = values();
       const model = new core.FEAScriptModel();
       model.setModelConfig("heatConductionScript");
-      model.setMeshConfig({ parsedMesh: mesh });
-      model.addBoundaryCondition("0", ["constantTemperature", temp]);
-      model.addBoundaryCondition("1", ["symmetry"]);
-      model.addBoundaryCondition("2", ["convection", hk, ext]);
-      model.addBoundaryCondition("3", ["constantTemperature", temp]);
-      model.addBoundaryCondition("4", ["convection", hk, ext]);
+      model.setMesh(mesh);
+      model.addBoundaryCondition("bottom", ["constantTemperature", temp]);
+      model.addBoundaryCondition("left", ["symmetry"]);
+      model.addBoundaryCondition("top", ["convection", hk, ext]);
+      model.addBoundaryCondition("right", ["constantTemperature", temp]);
+      model.addBoundaryCondition("hole", ["convection", hk, ext]);
       model.setSolverMethod("lusolve");
       const start = performance.now();
       const result = model.solve();

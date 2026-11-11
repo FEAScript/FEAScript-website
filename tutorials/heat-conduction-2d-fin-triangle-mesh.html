@@ -16,14 +16,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta
       name="description"
-      content="This example solves the 2D heat conduction fin problem on a mesh of triangles that FEAScript generates itself, with generateTriangleMesh."
+      content="This example solves the 2D heat conduction fin problem on a mesh of triangles that FEAScript generates itself from the geometry."
     />
     <!-- Link previews (LinkedIn, Bluesky and others); cards from scripts/generate-social-cards.py -->
     <link rel="canonical" href="https://feascript.com/tutorials/heat-conduction-2d-fin-triangle-mesh.html" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="FEAScript" />
     <meta property="og:title" content="Heat conduction in a 2D fin, on a generated triangle mesh · FEAScript tutorial" />
-    <meta property="og:description" content="This example solves the 2D heat conduction fin problem on a mesh of triangles that FEAScript generates itself, with generateTriangleMesh." />
+    <meta property="og:description" content="This example solves the 2D heat conduction fin problem on a mesh of triangles that FEAScript generates itself from the geometry." />
     <meta property="og:url" content="https://feascript.com/tutorials/heat-conduction-2d-fin-triangle-mesh.html" />
     <meta property="og:image" content="https://feascript.com/assets/social-heat-conduction-2d-fin-triangle-mesh.png" />
     <meta property="og:image:width" content="1200" />
@@ -65,11 +65,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -209,7 +212,7 @@
             <div class="highlight-container">
               <p>
                 This page solves the 2D heat conduction fin problem on a mesh of triangles that FEAScript
-                generates itself, from the corners of the domain, with <code>generateTriangleMesh</code>. No
+                generates itself, from the geometry of the domain, with <code>elements: "triangles"</code>. No
                 mesh file and no external tool are needed. For the formulation and the theory, see the
                 <a href="heat-conduction-2d-fin.html">basic tutorial</a>; for a mesh made with Gmsh, see the
                 <a href="heat-conduction-2d-fin-gmsh.html">Gmsh variant</a>.
@@ -220,9 +223,10 @@
               <p><a name="meshgeneration"></a>Mesh generation</p>
             </div>
             <p>
-              <code>generateTriangleMesh</code> takes the polygon of the domain, the name of each of its edges
-              and the size and quality of the elements, and returns a mesh in the same form as one imported
-              from Gmsh, so it is passed to the model through <code>parsedMesh</code>:
+              The domain is set up in two steps, as in every FEAScript model: <code>setGeometry</code> describes
+              the domain and names its boundaries, and <code>setMeshConfig</code> says how to mesh it. Here the
+              geometry is the same 4 m × 2 m rectangle as in the basic tutorial, and only the elements change,
+              from quadrilaterals to triangles:
             </p>
 
             <pre class="prettyprint">
@@ -231,7 +235,6 @@
   &lt;script type="module"&gt;
     import {
       FEAScriptModel,
-      generateTriangleMesh,
       plotInterpolatedSolution,
       printVersion,
     } from "https://core.feascript.com/dist/feascript.esm.js";
@@ -243,28 +246,15 @@
       const model = new FEAScriptModel();
       model.setModelConfig("heatConductionScript");
 
-      // 2. Generate the mesh: a 4 m × 2 m rectangle, quadratic triangles of area 0.1 m² at most
-      const parsedMesh = generateTriangleMesh({
-        polygon: {
-          points: [
-            [0, 0], // Bottom left
-            [4, 0], // Bottom right
-            [4, 2], // Top right
-            [0, 2], // Top left
-          ],
-          boundaries: ["bottom", "right", "top", "left"], // One name per edge, from point i to point i + 1
-        },
-        maxArea: 0.1,
-        minAngle: 30,
-        elementOrder: "quadratic",
-      });
-      model.setMeshConfig({ parsedMesh });
+      // 2. Define the geometry and mesh it with quadratic triangles of side 0.5 m at most
+      model.setGeometry({ rectangle: [4, 2] }); // Boundaries "bottom", "right", "top", "left"
+      model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.5, minAngle: 30 });
 
-      // 3. Apply the boundary conditions (key = order in which the boundary names first appear)
-      model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom
-      model.addBoundaryCondition("1", ["constantTemperature", 200]); // Right
-      model.addBoundaryCondition("2", ["convection", 1, 20]);        // Top
-      model.addBoundaryCondition("3", ["symmetry"]);                 // Left
+      // 3. Apply the boundary conditions, keyed by the boundary names
+      model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
+      model.addBoundaryCondition("right", ["constantTemperature", 200]);
+      model.addBoundaryCondition("top", ["convection", 1, 20]);
+      model.addBoundaryCondition("left", ["symmetry"]);
 
       // 4. Solve
       model.setSolverMethod("lusolve");
@@ -281,22 +271,14 @@
             <p>The settings of the mesh:</p>
             <ul>
               <li>
-                <strong><code>polygon</code>:</strong> the corners of the domain, in order around it, in either
-                direction. The edge <code>i</code> goes from point <code>i</code> to point <code>i + 1</code>,
-                and the last edge closes the polygon. Holes are polygons in the same form, listed in
-                <code>holes</code>.
+                <strong><code>elements</code>:</strong> <code>"triangles"</code> meshes any shape, with holes,
+                by Delaunay refinement; <code>"quadrilaterals"</code> gives the grid of the basic tutorial.
               </li>
               <li>
-                <strong><code>boundaries</code>:</strong> one name per edge, or one name for all of them. Edges
-                with the same name form one boundary, so a curved side made of many short edges can take one
-                name.
-              </li>
-              <li>
-                <strong><code>maxArea</code>:</strong> the largest element area. For elements of side about
-                <code>h</code>, use <code>0.433 * h ** 2</code>, the area of the equilateral triangle of side
-                <code>h</code>. A function <code>(x, y)</code> of the element center grades the mesh, for
-                example <code>maxArea: (x, y) => 0.01 + 0.05 * (2 - y)</code> for finer elements towards the
-                convective top edge.
+                <strong><code>size</code>:</strong> the length of an element side. Each element has at most the
+                area of the equilateral triangle of that side. A function <code>(x, y)</code> grades the mesh,
+                for example <code>size: (x, y) =&gt; 0.15 + 0.35 * (2 - y) / 2</code> for finer elements towards
+                the convective top edge.
               </li>
               <li>
                 <strong><code>minAngle</code>:</strong> the smallest angle of the elements, in degrees. The
@@ -304,30 +286,42 @@
               </li>
               <li>
                 <strong><code>elementOrder</code>:</strong> <code>"linear"</code> (3-node) or
-                <code>"quadratic"</code> (6-node) triangles. The mesh dimension and the element order are
-                carried by the mesh, so <code>setMeshConfig</code> needs nothing else.
+                <code>"quadratic"</code> (6-node) triangles.
               </li>
             </ul>
 
             <div class="eyebrow label" id="boundaries" role="heading" aria-level="2">
-              <p><a name="boundaries"></a>Boundary keys</p>
+              <p><a name="boundaries"></a>Boundaries</p>
             </div>
             <p>
-              The boundaries are numbered in the order in which their names first appear, the outer polygon
-              first and then the holes, and get the keys <code>"0"</code>, <code>"1"</code>, ... in that order.
-              With the points above, the edges are the bottom, right, top and left sides, so:
+              A rectangle names its sides <code>"bottom"</code>, <code>"right"</code>, <code>"top"</code> and
+              <code>"left"</code>, so the conditions are the same as in the
+              <a href="heat-conduction-2d-fin.html">basic tutorial</a> and the
+              <a href="heat-conduction-2d-fin-gmsh.html">Gmsh variant</a>. For any other shape, the geometry is
+              written as a path: a <code>start</code> point and the boundaries, each running from where the
+              previous one ended to its <code>to</code> point. The last one may leave out <code>to</code> to
+              close the shape. The fin written that way, with the same result:
             </p>
-            <ul>
-              <li><code>"bottom"</code> → <code>model.addBoundaryCondition("0", ["constantTemperature", 200]);</code></li>
-              <li><code>"right"</code> → <code>model.addBoundaryCondition("1", ["constantTemperature", 200]);</code></li>
-              <li><code>"top"</code> → <code>model.addBoundaryCondition("2", ["convection", 1, 20]);</code></li>
-              <li><code>"left"</code> → <code>model.addBoundaryCondition("3", ["symmetry"]);</code></li>
-            </ul>
+
+            <pre class="prettyprint">
+model.setGeometry({
+  shape: {
+    start: [0, 0],
+    boundaries: [
+      { name: "bottom", to: [4, 0] },
+      { name: "right", to: [4, 2] },
+      { name: "top", to: [0, 2] },
+      { name: "left" }, // No "to": closes the shape
+    ],
+  },
+});</pre
+            >
+
             <p>
-              This order differs from the one of FEAScript's structured meshes (bottom, left, top, right), which
-              the <a href="heat-conduction-2d-fin.html">basic tutorial</a> and the
-              <a href="heat-conduction-2d-fin-gmsh.html">Gmsh variant</a> use, so the keys of the right and left
-              sides are swapped here.
+              Boundaries with the same name form one boundary of the model, so a curved side made of many
+              short segments, or two sides with the same condition, can share a name. A <code>to</code> may also
+              be a list of points. Holes are listed in <code>holes</code>, usually as
+              <code>{ name: "hole", points: [...] }</code>.
             </p>
 
             <aside class="tri-tip" aria-label="Tip from Tri">
@@ -336,11 +330,12 @@
                 <p class="tri-tip-label label">Tri's tip <a class="tri-tip-who" href="https://lab.feascript.com/#tri">Who is Tri?</a></p>
                 <p>
                   Points where you want to read the result, for example the tip of the fin, can be made nodes
-                  with the <code>points</code> option, so no interpolation is needed. A point that is not
-                  inside the domain, or a polygon whose edges cross, stops the generation with a
-                  <code>FEAScriptError</code> of code <code>"INVALID_INPUT"</code>, and a mesh that would pass
-                  <code>maxNodes</code> (100,000 vertices by default) with <code>"MESH_TOO_FINE"</code>.
-                  Docs: <a href="https://docs.feascript.com/fundamentals/mesh#generated-triangle-meshes">Generated triangle meshes</a>.
+                  with <code>points</code> in the geometry, so no interpolation is needed. A hole that is not
+                  inside the shape, a point outside the domain, or a polygon whose edges cross stops
+                  <code>setGeometry</code> with a <code>FEAScriptError</code> of code
+                  <code>"INVALID_INPUT"</code> that lists every problem, and a mesh that would pass
+                  <code>maxNodes</code> (100,000 vertices by default) stops with <code>"MESH_TOO_FINE"</code>.
+                  Docs: <a href="https://docs.feascript.com/fundamentals/mesh#polygon-with-holes">Polygon with holes</a>.
                 </p>
               </div>
             </aside>
@@ -358,11 +353,11 @@
               <img
                 class="schematic"
                 src="heat-conduction-2d-fin-triangle-mesh.svg"
-                alt="Triangle mesh of the fin generated by FEAScript, with the boundary keys"
+                alt="Triangle mesh of the fin generated by FEAScript, with the boundary names"
                 width="580"
               />
               <p class="image-caption">
-                Quadratic triangle mesh of the 4 m × 2 m fin, generated by <code>generateTriangleMesh</code>
+                Quadratic triangle mesh of the 4 m × 2 m fin, generated by FEAScript
               </p>
             </div>
 
@@ -375,33 +370,29 @@
               as on any mesh of this size.
             </p>
             <p>
-              For a mesh of varied, well-shaped triangles, give the polygon points along its sides at about the
-              element size, with the name of each side repeated for its edges. The refinement then starts from
-              a boundary that already has the right size:
+              For a mesh of varied, well-shaped triangles, give the boundaries points along the sides at about
+              the element size. The refinement then starts from a boundary that already has the right size:
             </p>
 
             <pre class="prettyprint">
 // The 4 m × 2 m rectangle with a point every 0.5 m along its sides
-const h = 0.5;
-const points = [];
-const boundaries = [];
-for (let x = 0; x &lt; 4; x += h) {
-  points.push([x, 0]);
-  boundaries.push("bottom");
-}
-for (let y = 0; y &lt; 2; y += h) {
-  points.push([4, y]);
-  boundaries.push("right");
-}
-for (let x = 4; x &gt; 0; x -= h) {
-  points.push([x, 2]);
-  boundaries.push("top");
-}
-for (let y = 2; y &gt; 0; y -= h) {
-  points.push([0, y]);
-  boundaries.push("left");
-}
-const parsedMesh = generateTriangleMesh({ polygon: { points, boundaries }, maxArea: 0.1, minAngle: 30 });</pre
+const along = (from, to, count) =&gt;
+  Array.from({ length: count + 1 }, (_, i) =&gt; [
+    from[0] + ((to[0] - from[0]) * i) / count,
+    from[1] + ((to[1] - from[1]) * i) / count,
+  ]);
+model.setGeometry({
+  shape: {
+    start: [0, 0],
+    boundaries: [
+      { name: "bottom", to: along([0, 0], [4, 0], 8).slice(1) },
+      { name: "right", to: along([4, 0], [4, 2], 4).slice(1) },
+      { name: "top", to: along([4, 2], [0, 2], 8).slice(1) },
+      { name: "left", to: along([0, 2], [0, 0], 4).slice(1) },
+    ],
+  },
+});
+model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.5, minAngle: 30 });</pre
             >
 
             <p>
@@ -432,14 +423,12 @@ const parsedMesh = generateTriangleMesh({ polygon: { points, boundaries }, maxAr
               // Import FEAScript library from GitHub
               import {
                 FEAScriptModel,
-                generateTriangleMesh,
                 plotInterpolatedSolution,
                 printVersion,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
               // import {
               //   FEAScriptModel,
-              //   generateTriangleMesh,
               //   plotInterpolatedSolution,
               //   printVersion,
               //   logSystem,
@@ -458,28 +447,15 @@ const parsedMesh = generateTriangleMesh({ polygon: { points, boundaries }, maxAr
                 // Set solver configuration
                 model.setModelConfig("heatConductionScript");
 
-                // Generate the mesh: a 4 m x 2 m rectangle, quadratic triangles of area 0.1 at most
-                const parsedMesh = generateTriangleMesh({
-                  polygon: {
-                    points: [
-                      [0, 0], // Bottom left
-                      [4, 0], // Bottom right
-                      [4, 2], // Top right
-                      [0, 2], // Top left
-                    ],
-                    boundaries: ["bottom", "right", "top", "left"],
-                  },
-                  maxArea: 0.1,
-                  minAngle: 30,
-                  elementOrder: "quadratic",
-                });
-                model.setMeshConfig({ parsedMesh });
+                // Define the geometry and mesh it with quadratic triangles of side 0.5 at most
+                model.setGeometry({ rectangle: [4, 2] });
+                model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.5, minAngle: 30 });
 
-                // Define boundary conditions (keys in the order the boundary names first appear)
-                model.addBoundaryCondition("0", ["constantTemperature", 200]); // Bottom boundary
-                model.addBoundaryCondition("1", ["constantTemperature", 200]); // Right boundary
-                model.addBoundaryCondition("2", ["convection", 1, 20]); // Top boundary
-                model.addBoundaryCondition("3", ["symmetry"]); // Left boundary
+                // Define boundary conditions, keyed by the boundary names
+                model.addBoundaryCondition("bottom", ["constantTemperature", 200]);
+                model.addBoundaryCondition("right", ["constantTemperature", 200]);
+                model.addBoundaryCondition("top", ["convection", 1, 20]);
+                model.addBoundaryCondition("left", ["symmetry"]);
 
                 // Set solver method
                 model.setSolverMethod("lusolve");

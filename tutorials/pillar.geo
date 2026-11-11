@@ -32,11 +32,11 @@ top() = Curve In BoundingBox{-eps, H - eps, -eps, L + eps, H + eps, eps};
 pillars() = Abs(Boundary{ Surface{10}; });
 pillars() -= {inlet(), outlet(), bottom(), top()};
 
-// 4. Physical groups (FEAScript boundary key = tag - 1)
-Physical Curve("inlet", 1) = {inlet()};          // FEAScript boundary "0"
-Physical Curve("walls", 2) = {bottom(), top()};  // FEAScript boundary "1"
-Physical Curve("outlet", 3) = {outlet()};        // FEAScript boundary "2"
-Physical Curve("pillars", 4) = {pillars()};      // FEAScript boundary "3"
+// 4. Physical groups: FEAScript keys the boundary conditions by these names
+Physical Curve("inlet", 1) = {inlet()};          // FEAScript boundary "inlet"
+Physical Curve("walls", 2) = {bottom(), top()};  // FEAScript boundary "walls"
+Physical Curve("outlet", 3) = {outlet()};        // FEAScript boundary "outlet"
+Physical Curve("pillars", 4) = {pillars()};      // FEAScript boundary "pillars"
 Physical Surface("domain", 5) = {10};            // Domain
 
 // 5. Mesh: quadratic triangles (P2), refined on the pillars

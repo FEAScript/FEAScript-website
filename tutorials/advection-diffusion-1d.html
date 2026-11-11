@@ -65,11 +65,14 @@
     <script type="importmap">
       {
         "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
           "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
           "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
           "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
           "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
-          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm"
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
         }
       }
     </script>
@@ -312,16 +315,12 @@
       });
 
       // 2. Define the mesh
-      model.setMeshConfig({
-        meshDimension: "1D",
-        elementOrder: "quadratic",
-        numElementsX: 20,
-        maxX: 1.0,
-      });
+      model.setGeometry({ line: 1.0 });
+      model.setMeshConfig({ elementOrder: "quadratic", divisions: 20 });
 
       // 3. Apply the boundary conditions
-      model.addBoundaryCondition("0", ["constantValue", 1]); // Left
-      model.addBoundaryCondition("1", ["zeroGradient"]);     // Right
+      model.addBoundaryCondition("left", ["constantValue", 1]); // Left
+      model.addBoundaryCondition("right", ["zeroGradient"]);     // Right
 
       // 4. Solve
       model.setSolverMethod("lusolve");
@@ -435,16 +434,12 @@
                 });
 
                 // Define mesh configuration
-                model.setMeshConfig({
-                  meshDimension: "1D",
-                  elementOrder: "quadratic",
-                  numElementsX: 20,
-                  maxX: 1.0,
-                });
+                model.setGeometry({ line: 1.0 });
+                model.setMeshConfig({ elementOrder: "quadratic", divisions: 20 });
 
                 // Define boundary conditions
-                model.addBoundaryCondition("0", ["constantValue", 1]); // Left boundary, u(0) = 1
-                model.addBoundaryCondition("1", ["zeroGradient"]); // Right boundary, zero gradient (du/dx = 0)
+                model.addBoundaryCondition("left", ["constantValue", 1]); // Left boundary, u(0) = 1
+                model.addBoundaryCondition("right", ["zeroGradient"]); // Right boundary, zero gradient (du/dx = 0)
 
                 // Set solver method
                 model.setSolverMethod("lusolve");

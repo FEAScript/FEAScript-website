@@ -2016,6 +2016,13 @@ h2 .accent {
   gap: 2.25rem 1.5rem;
 }
 
+/* On tablets the three link columns share one row under the brand, instead of breaking two and one */
+@media (min-width: 640px) {
+  .footer-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 /* On desktop the brand takes the first, wider column and each link column after it gets an equal share, */
 @media (min-width: 1024px) {
   .footer-grid {

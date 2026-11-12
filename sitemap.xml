@@ -81,4 +81,12 @@
     <loc>https://feascript.com/tutorials/cantilever-beam-1d.html</loc>
     <priority>0.4</priority>
   </url>
+  <url>
+    <loc>https://feascript.com/tutorials/heat-conduction-2d-fin-vtk.html</loc>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://feascript.com/tutorials/creeping-flow-2d-pillar-array.html</loc>
+    <priority>0.4</priority>
+  </url>
 </urlset>

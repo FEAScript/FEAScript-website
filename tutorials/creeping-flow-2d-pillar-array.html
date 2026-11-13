@@ -418,7 +418,7 @@ Mesh.ElementOrder = 2;</pre>
             </div>
             <p>
               There is no analytical solution for this geometry, but two checks show whether the result is
-              sound:
+              sound, and one point needs care:
             </p>
             <ul>
               <li>
@@ -432,6 +432,12 @@ Mesh.ElementOrder = 2;</pre>
                 <strong>Mesh convergence.</strong> A finer mesh (element size 0.15 in the channel and 0.05 on
                 the pillars, 11,265 nodes) raises the largest velocity from 5.18 to 5.28, a change of 2%.
                 Refine the mesh in <code>pillar.geo</code> to see how the result changes.
+              </li>
+              <li>
+                <strong>Corner pressure.</strong> At the two inlet corners the velocity jumps from 1 to 0,
+                and the pressure is singular there: its peak (564 on this mesh) grows as the mesh is refined
+                instead of converging. Read the pressure drop away from the corners. Docs:
+                <a href="https://docs.feascript.com/models/creeping-flow#pressure-level">Pressure level</a>.
               </li>
             </ul>
 

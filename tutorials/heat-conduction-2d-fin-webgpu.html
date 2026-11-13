@@ -293,9 +293,11 @@
                 <p>
                   Jacobi needs many more iterations as the mesh is refined (roughly 4× per halving
                   of the element size), and the GPU does not reduce that number.
-                  <code>solveAsync()</code> returns no convergence flag: if the console shows
-                  <code>Jacobi: Did not converge</code>, the result is the last iterate. Raise the
-                  limit with <code>model.solveAsync(null, { maxIterations, tolerance })</code>.
+                  If it does not converge within its iteration limit, <code>solveAsync()</code> throws a
+                  <code>FEAScriptError</code> with the code <code>NOT_CONVERGED</code>; raise the limit
+                  with <code>model.solveAsync(null, { maxIterations, tolerance })</code>.
+                  <code>result.info</code> reports the iterations and the residual. The GPU computes in
+                  32-bit floats, so a tolerance much below <code>1e-5</code> may never be reached.
                   Docs: <a href="https://docs.feascript.com/fundamentals/solvers#jacobi-method-on-the-gpu-jacobi-gpu">Jacobi on the GPU</a>.
                 </p>
               </div>

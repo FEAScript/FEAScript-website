@@ -319,7 +319,7 @@ Mesh.ElementOrder = 2;</pre>
   &lt;!-- ...body region... --&gt;
   &lt;script type="module"&gt;
     import {
-      FEAScriptModel,
+      FEAScriptWorker,
       importGmshMesh,
       plotInterpolatedSolution,
       version,
@@ -328,9 +328,9 @@ Mesh.ElementOrder = 2;</pre>
     window.addEventListener("DOMContentLoaded", async () =&gt; {
       console.log("FEAScript version:", version);
 
-      // 1. Create the model and select the physics
-      const model = new FEAScriptModel();
-      model.setModelConfig("creepingFlow", {
+      // 1. Create the model in a web worker, so the solve does not block the page, and select the physics
+      const model = new FEAScriptWorker();
+      await model.setModelConfig("creepingFlow", {
         solver: { method: "lusolve" },
         coefficientFunctions: {
           viscosity: 1, // μ
@@ -340,22 +340,23 @@ Mesh.ElementOrder = 2;</pre>
       // 2. Load the Gmsh mesh (P2 triangles)
       const response = await fetch("./pillar_triang_quadratic.msh");
       const meshFile = new File([await response.text()], "pillar_triang_quadratic.msh");
-      model.setMesh(await importGmshMesh(meshFile));
+      await model.setMesh(await importGmshMesh(meshFile));
 
       // 3. Apply the boundary conditions, keyed by the names of the Gmsh physical groups
-      model.addBoundaryCondition("inlet", { type: "constantVelocity", u: 1, v: 0 });   // Inlet
-      model.addBoundaryCondition("walls", { type: "constantVelocity", u: 0, v: 0 });   // Channel walls
-      model.addBoundaryCondition("outlet", { type: "stressFree" });                    // Outlet
-      model.addBoundaryCondition("pillars", { type: "constantVelocity", u: 0, v: 0 }); // Pillars
+      await model.addBoundaryCondition("inlet", { type: "constantVelocity", u: 1, v: 0 });   // Inlet
+      await model.addBoundaryCondition("walls", { type: "constantVelocity", u: 0, v: 0 });   // Channel walls
+      await model.addBoundaryCondition("outlet", { type: "stressFree" });                    // Outlet
+      await model.addBoundaryCondition("pillars", { type: "constantVelocity", u: 0, v: 0 }); // Pillars
 
-      // 4. Solve
-      const result = model.solve();
+      // 4. Solve in the worker
+      const result = await model.solve();
 
-      // 5. Plot the results
-      plotInterpolatedSolution(model, result, "contour", "velocityMagnitudeCanvas");
-      plotInterpolatedSolution(model, result, "contour", "uVelocityCanvas", { field: "u" });
-      plotInterpolatedSolution(model, result, "contour", "vVelocityCanvas", { field: "v" });
-      plotInterpolatedSolution(model, result, "contour", "pressureCanvas", { field: "p" });
+      // 5. Plot the velocity magnitude, with the model information of the worker
+      const modelInfo = await model.getModelInfo();
+      plotInterpolatedSolution(modelInfo, result, "contour", "velocityMagnitudeCanvas");
+
+      // 6. Terminate the worker
+      model.terminate();
     });
   &lt;/script&gt;
   &lt;!-- ...rest of body region... --&gt;
@@ -365,16 +366,14 @@ Mesh.ElementOrder = 2;</pre>
               formulation, so it adds nothing to the system; it is listed so that every boundary has a
               condition. Because the outlet is open, the pressure level is fixed by the outlet and no pressure
               node needs to be pinned. <code>plotInterpolatedSolution</code> evaluates the quadratic shape
-              functions inside each triangle, so the plots show the curved contours of the P2 solution. Add
-              the containers where the plots will render:
+              functions inside each triangle, so the plot shows the curved contours of the P2 solution. The
+              solve runs in a web worker (<code>FEAScriptWorker</code>), so the page stays responsive while it
+              runs. Add the container where the plot will render:
             </p>
             <pre class="prettyprint">
 &lt;body&gt;
   &lt;!-- ...body region... --&gt;
   &lt;div id="velocityMagnitudeCanvas"&gt;&lt;/div&gt;
-  &lt;div id="uVelocityCanvas"&gt;&lt;/div&gt;
-  &lt;div id="vVelocityCanvas"&gt;&lt;/div&gt;
-  &lt;div id="pressureCanvas"&gt;&lt;/div&gt;
   &lt;!-- ...rest of body region... --&gt;
 &lt;/body&gt;</pre>
 
@@ -382,8 +381,10 @@ Mesh.ElementOrder = 2;</pre>
               <p><a name="Results"></a>Results</p>
             </div>
             <p>
-              Below are the 2D contour plots of the velocity magnitude \(|\mathbf{u}| = \sqrt{u^2+v^2}\), the
-              two velocity components and the pressure, computed in your browser when the page loads. A
+              Below is the 2D contour plot of the velocity magnitude \(|\mathbf{u}| = \sqrt{u^2+v^2}\), computed
+              in your browser when the page loads. The velocity components and the pressure are in
+              <code>result.fields</code> (<code>u</code>, <code>v</code> and <code>p</code>), and plot the same
+              way, e.g. with <code>{ field: "p" }</code>. A
               Node.js version of this tutorial, which also prints the flow rates, is in the
               <a
                 href="https://github.com/FEAScript/FEAScript-core/tree/main/examples/creepingFlow/pillarArray2DCreepingFlow"
@@ -400,21 +401,6 @@ Mesh.ElementOrder = 2;</pre>
               <p>Velocity magnitude</p>
             </div>
             <div id="velocityMagnitudeCanvas"></div>
-
-            <div class="eyebrow label" role="heading" aria-level="3">
-              <p>Horizontal velocity (\(u\))</p>
-            </div>
-            <div id="uVelocityCanvas"></div>
-
-            <div class="eyebrow label" role="heading" aria-level="3">
-              <p>Vertical velocity (\(v\))</p>
-            </div>
-            <div id="vVelocityCanvas"></div>
-
-            <div class="eyebrow label" role="heading" aria-level="3">
-              <p>Pressure (\(p\))</p>
-            </div>
-            <div id="pressureCanvas"></div>
 
             <p>
               The flow accelerates through the gaps between the pillars. The fastest jets, with a velocity of
@@ -484,14 +470,14 @@ Mesh.ElementOrder = 2;</pre>
             <script type="module">
               // Import FEAScript library from GitHub
               import {
-                FEAScriptModel,
+                FEAScriptWorker,
                 importGmshMesh,
                 plotInterpolatedSolution,
                 version,
               } from "https://core.feascript.com/dist/feascript.esm.js";
               // Import FEAScript library from a local directory
               // import {
-              //   FEAScriptModel,
+              //   FEAScriptWorker,
               //   importGmshMesh,
               //   plotInterpolatedSolution,
               //   version,
@@ -501,7 +487,7 @@ Mesh.ElementOrder = 2;</pre>
                 // Print FEAScript version
                 console.log("FEAScript version:", version);
 
-                // Show the loading indicator and let it paint before the solve blocks the page
+                // Show the loading indicator (the solve runs in a web worker, so it keeps spinning)
                 const loading = document.getElementById("loading");
                 loading.style.display = "block";
 
@@ -511,13 +497,12 @@ Mesh.ElementOrder = 2;</pre>
                   throw new Error(`Failed to load mesh file: ${response.status} ${response.statusText}`);
                 }
                 const meshFile = new File([await response.text()], "pillar_triang_quadratic.msh");
-                await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
 
-                // Create a new FEAScript model
-                const model = new FEAScriptModel();
+                // Create a new FEAScript model in a web worker
+                const model = new FEAScriptWorker();
 
                 // Set model configuration
-                model.setModelConfig("creepingFlow", {
+                await model.setModelConfig("creepingFlow", {
                   solver: { method: "lusolve" },
                   coefficientFunctions: {
                     viscosity: 1, // μ
@@ -525,26 +510,28 @@ Mesh.ElementOrder = 2;</pre>
                 });
 
                 // Parse the mesh file and define the mesh configuration
-                model.setMesh(await importGmshMesh(meshFile));
+                await model.setMesh(await importGmshMesh(meshFile));
 
                 // Define boundary conditions by the names of the Gmsh physical groups
-                model.addBoundaryCondition("inlet", { type: "constantVelocity", u: 1, v: 0 });   // Inlet
-                model.addBoundaryCondition("walls", { type: "constantVelocity", u: 0, v: 0 });   // Channel walls (no-slip)
-                model.addBoundaryCondition("outlet", { type: "stressFree" });                    // Outlet
-                model.addBoundaryCondition("pillars", { type: "constantVelocity", u: 0, v: 0 }); // Pillars (no-slip)
+                await model.addBoundaryCondition("inlet", { type: "constantVelocity", u: 1, v: 0 });   // Inlet
+                await model.addBoundaryCondition("walls", { type: "constantVelocity", u: 0, v: 0 });   // Channel walls (no-slip)
+                await model.addBoundaryCondition("outlet", { type: "stressFree" });                    // Outlet
+                await model.addBoundaryCondition("pillars", { type: "constantVelocity", u: 0, v: 0 }); // Pillars (no-slip)
 
+                // Solve the problem in the worker and get the solution
+                const result = await model.solve();
 
-                // Solve the problem and get the solution
-                const result = model.solve();
+                // Get the model information of the worker for plotting
+                const modelInfo = await model.getModelInfo();
 
                 // Hide the loading indicator
                 loading.style.display = "none";
 
-                // Plot the velocity magnitude, the velocity components and the pressure
-                plotInterpolatedSolution(model, result, "contour", "velocityMagnitudeCanvas");
-                plotInterpolatedSolution(model, result, "contour", "uVelocityCanvas", { field: "u" });
-                plotInterpolatedSolution(model, result, "contour", "vVelocityCanvas", { field: "v" });
-                plotInterpolatedSolution(model, result, "contour", "pressureCanvas", { field: "p" });
+                // Plot the velocity magnitude
+                plotInterpolatedSolution(modelInfo, result, "contour", "velocityMagnitudeCanvas");
+
+                // Terminate the worker
+                model.terminate();
               });
             </script>
 

@@ -1821,6 +1821,10 @@ h2 .accent {
   --dot: #8a9277;
 }
 
+.badge-triangle {
+  --dot: #c08a5a;
+}
+
 .badge-scribbler {
   --dot: #e6c400;
 }

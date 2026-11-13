@@ -59,6 +59,9 @@ PAGES = {
                                          "tutorials/gmsh_rhom_quad.svg", None),
     "lid-driven-cavity-2d-creeping-flow": ("tutorials/lid-driven-cavity-2d-creeping-flow.html", "tutorial",
                                            "tutorials/lid-driven-cavity-2d-stokes-u-results.png", None),
+    "lid-driven-cavity-2d-creeping-flow-triangle-mesh": (
+        "tutorials/lid-driven-cavity-2d-creeping-flow-triangle-mesh.html", "tutorial",
+        "tutorials/lid-driven-cavity-2d-stokes-u-results.png", None),
     "lid-driven-cavity-2d-creeping-flow-worker": ("tutorials/lid-driven-cavity-2d-creeping-flow-worker.html",
                                                   "tutorial", "tutorials/lid-driven-cavity-2d-stokes-u-results.png",
                                                   None),

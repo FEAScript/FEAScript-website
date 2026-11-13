@@ -1,0 +1,541 @@
+<!doctype html>
+
+<!--
+ * ════════════════════════════════════════════════════════════════
+ *  FEAScript Website
+ *  Finite Element Simulation in JavaScript
+ *  https://feascript.com
+ *  CC BY 4.0 License © 2023–2026 FEAScript
+ * ════════════════════════════════════════════════════════════════
+-->
+
+<html lang="en" class="site">
+  <head>
+    <title>Creeping flow in a 2D lid-driven cavity, on a generated triangle mesh · FEAScript tutorial</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="description"
+      content="This example solves the 2D lid-driven cavity creeping flow problem on a mesh of triangles that FEAScript generates itself, with Taylor-Hood (P2-P1) mixed finite elements."
+    />
+    <!-- Link previews (LinkedIn, Bluesky and others); cards from scripts/generate-social-cards.py -->
+    <link rel="canonical" href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow-triangle-mesh.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FEAScript" />
+    <meta property="og:title" content="Creeping flow in a 2D lid-driven cavity, on a generated triangle mesh · FEAScript tutorial" />
+    <meta property="og:description" content="This example solves the 2D lid-driven cavity creeping flow problem on a mesh of triangles that FEAScript generates itself, with Taylor-Hood (P2-P1) mixed finite elements." />
+    <meta property="og:url" content="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow-triangle-mesh.html" />
+    <meta property="og:image" content="https://feascript.com/assets/social-lid-driven-cavity-2d-creeping-flow-triangle-mesh.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="keywords"
+      content="finite elements, fem, galerkin, computational mechanics, javascript, stokes flow, lid-driven cavity, Taylor-Hood, mixed finite elements, mesh generation, triangles, FEAScript"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Link to the CSS files -->
+    <script>
+      // Apply stored theme before first paint and enable JS-only styles
+      (function () {
+        var d = document.documentElement;
+        d.className += " js";
+        try {
+          var t = localStorage.getItem("feascript-theme");
+          if (t === "light" || t === "dark") d.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../feascript-website.css" rel="stylesheet" type="text/css" />
+    <!-- Import the Plotly.js library for plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"></script>
+    <!-- Import MathJax for writing equations -->
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Import map: remap npm bare specifiers used in FEAScript source to CDN ESM builds -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@kninnug/constrainautor": "https://cdn.jsdelivr.net/npm/@kninnug/constrainautor@4.1.0/+esm",
+          "delaunator": "https://cdn.jsdelivr.net/npm/delaunator@5.1.0/+esm",
+          "@stdlib/blas-base-daxpy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-daxpy@0.4.1/+esm",
+          "@stdlib/blas-base-dcopy": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dcopy@0.4.1/+esm",
+          "@stdlib/blas-base-ddot": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-ddot@0.4.1/+esm",
+          "@stdlib/blas-base-dnrm2": "https://cdn.jsdelivr.net/npm/@stdlib/blas-base-dnrm2@0.4.1/+esm",
+          "mathjs": "https://cdn.jsdelivr.net/npm/mathjs@11.12.0/+esm",
+          "robust-predicates": "https://cdn.jsdelivr.net/npm/robust-predicates@3.0.3/+esm"
+        }
+      }
+    </script>
+
+    <!-- Cloudflare Web Analytics (no cookies) -->
+    <script
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "b688c1274c374e5a95647253cf19085e"}'
+    ></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-nav">
+      <div class="nav-inner">
+        <div class="nav-group">
+          <a class="nav-brand" href="../index.html">
+            <svg viewBox="14 79 242 242" aria-hidden="true">
+              <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+            </svg>
+            <span
+              >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+            ></span>
+          </a>
+          <nav class="nav-links label" aria-label="Main">
+            <a class="nav-link" href="#meshgeneration"><span>Mesh generation</span></a>
+            <a class="nav-link" href="#generatedmesh"><span>Mesh</span></a>
+            <a class="nav-link" href="#results"><span>Results</span></a>
+            <a class="nav-link" href="index.html"><span>All tutorials</span></a>
+            <a class="nav-link nav-link-out" href="https://docs.feascript.com" data-icon="documentation"><span>Documentation</span></a>
+            <a class="nav-link nav-link-out" href="../studio.html" data-icon="studio"><span>Studio</span></a>
+            <a class="nav-link nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab"><span>Tri's Lab</span></a>
+          </nav>
+        </div>
+
+        <div class="nav-group">
+          <a
+            class="nav-icon nav-github"
+            href="https://github.com/FEAScript/FEAScript-core"
+            aria-label="FEAScript on GitHub"
+            title="FEAScript on GitHub"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              />
+            </svg>
+            <span id="github-stars" class="label"></span>
+          </a>
+          <button
+            id="theme-toggle"
+            class="nav-icon theme-toggle"
+            type="button"
+            aria-label="Toggle color theme"
+          >
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+              />
+            </svg>
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+              />
+            </svg>
+          </button>
+          <a class="nav-cta" href="#maillist">Join mailing list</a>
+          <button
+            id="nav-burger"
+            class="nav-icon nav-burger"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-nav"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+        <a href="#meshgeneration">Mesh generation</a>
+        <a href="#generatedmesh">Mesh</a>
+        <a href="#results">Results</a>
+        <a href="index.html">All tutorials</a>
+        <a class="nav-link-out" href="https://docs.feascript.com" data-icon="documentation">Documentation</a>
+        <a class="nav-link-out" href="../studio.html" data-icon="studio">FEAScript Studio</a>
+        <a class="nav-link-out nav-link-lab" href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab by FEAScript</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="section">
+        <div class="section-frame">
+          <div class="eyebrow label">
+            <p data-doc-bar>Overview</p>
+          </div>
+
+          <div class="section-head doc-head">
+            <h1>Creeping flow in a 2D lid-driven cavity, <span class="accent">on a generated triangle mesh.</span></h1>
+          </div>
+
+          <div class="doc">
+            <div class="highlight-container">
+              <p>
+                This page solves the 2D lid-driven cavity creeping flow problem on a mesh of triangles that
+                FEAScript generates itself, from the geometry of the domain, with
+                <code>elements: "triangles"</code>. No mesh file and no external tool are needed. For the
+                formulation and the boundary conditions, see the
+                <a href="lid-driven-cavity-2d-creeping-flow.html">basic tutorial</a>, which solves the same cavity
+                on a structured mesh of quadrilaterals.
+              </p>
+            </div>
+
+            <div class="eyebrow label" id="meshgeneration" role="heading" aria-level="2">
+              <p><a name="meshgeneration"></a>Mesh generation</p>
+            </div>
+            <p>
+              The geometry is the same 4 × 2 rectangle as in the basic tutorial, and only the mesh settings
+              change, from quadrilaterals to triangles. A rectangle names its sides <code>"bottom"</code>,
+              <code>"right"</code>, <code>"top"</code> and <code>"left"</code>, so the boundary conditions stay
+              the same:
+            </p>
+
+            <pre class="prettyprint">
+&lt;body&gt;
+  &lt;!-- ...body region... --&gt;
+  &lt;script type="module"&gt;
+    import {
+      FEAScriptModel,
+      plotInterpolatedSolution,
+      version,
+    } from "https://core.feascript.com/dist/feascript.esm.js";
+
+    window.addEventListener("DOMContentLoaded", () =&gt; {
+      console.log("FEAScript version:", version);
+
+      // 1. Create the model and select the physics
+      const model = new FEAScriptModel();
+      model.setModelConfig("creepingFlow", {
+        solver: { method: "lusolve" },
+        coefficientFunctions: {
+          viscosity: 1, // μ
+        },
+      });
+
+      // 2. Define the geometry and mesh it with quadratic triangles of side 0.5 at most
+      model.setGeometry({ rectangle: [4, 2] }); // Boundaries "bottom", "right", "top", "left"
+      model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.5, minAngle: 30 });
+
+      // 3. Apply the boundary conditions, keyed by the boundary names
+      model.addBoundaryCondition("bottom", { type: "constantVelocity", u: 0, v: 0 }); // Bottom wall
+      model.addBoundaryCondition("left", { type: "constantVelocity", u: 0, v: 0 });   // Left wall
+      model.addBoundaryCondition("top", { type: "constantVelocity", u: 1, v: 0 });    // Moving lid
+      model.addBoundaryCondition("right", { type: "constantVelocity", u: 0, v: 0 });  // Right wall
+
+      // 4. Solve
+      const result = model.solve();
+
+      // 5. Plot the results
+      plotInterpolatedSolution(model, result, "contour", "velocityMagnitudeCanvas");
+      plotInterpolatedSolution(model, result, "contour", "uVelocityCanvas", { field: "u" });
+      plotInterpolatedSolution(model, result, "contour", "vVelocityCanvas", { field: "v" });
+    });
+  &lt;/script&gt;
+  &lt;!-- ...rest of body region... --&gt;
+&lt;/body&gt;</pre
+            >
+
+            <p>
+              Creeping flow needs <code>elementOrder: "quadratic"</code>. On triangles, FEAScript uses the
+              Taylor-Hood P2-P1 pair: the velocity on 6-node quadratic triangles and the pressure on the 3
+              corner nodes, the triangle counterpart of the Q2-Q1 quadrilaterals of the basic tutorial.
+              <code>plotInterpolatedSolution</code> evaluates the quadratic shape functions inside each
+              triangle, so the plots show the curved contours of the P2 solution. For the other mesh settings
+              (<code>size</code>, <code>minAngle</code>, graded sizes and holes), see the
+              <a href="heat-conduction-2d-fin-triangle-mesh.html">fin on a generated triangle mesh</a>.
+            </p>
+
+            <div class="eyebrow label" id="generatedmesh" role="heading" aria-level="2">
+              <p><a name="generatedmesh"></a>Generated mesh</p>
+            </div>
+            <p>
+              Below is the mesh that the settings above generate: 128 quadratic triangles with 281 nodes (with
+              FEAScript 0.4.0), all with angles of at least 30 degrees. It has about as many nodes as the
+              12 × 6 quadrilaterals of the basic tutorial (325).
+            </p>
+
+            <div class="center-image">
+              <img
+                class="schematic"
+                src="heat-conduction-2d-fin-triangle-mesh.svg"
+                alt="Triangle mesh of the 4 × 2 cavity generated by FEAScript, with the boundary names"
+                width="580"
+              />
+              <p class="image-caption">
+                Quadratic triangle mesh of the 4 × 2 cavity, generated by FEAScript; the lid is the top side
+              </p>
+            </div>
+
+            <aside class="tri-tip" aria-label="Tip from Tri">
+              <img class="tri-tip-avatar" src="../assets/tri-tip.svg" alt="" width="56" height="56" />
+              <div>
+                <p class="tri-tip-label label">
+                  Tri's tip <a class="tri-tip-who" href="https://lab.feascript.com/#tri">Who is Tri?</a>
+                </p>
+                <p>
+                  Look at the corners of the mesh before you trust a flow result. With <code>size: 0.35</code>,
+                  the generator puts one triangle in each corner of the cavity with two sides on the walls, and
+                  all of its velocity nodes but one are then fixed by the boundary conditions. Such a triangle
+                  cannot carry the flow: the strongest return flow, about \(u = -0.32\) near the middle of the
+                  cavity, moves into a lid corner and grows to \(-0.35\). Sizes 0.5, 0.4 and 0.2 give no such
+                  triangles; if your geometry has them, change <code>size</code> until they are gone.
+                </p>
+              </div>
+            </aside>
+
+            <div class="eyebrow label" id="results" role="heading" aria-level="2">
+              <p><a name="Results"></a>Results</p>
+            </div>
+            <p>
+              Below are the 2D contour plots of the computed velocity magnitude \(|\mathbf{u}| =
+              \sqrt{u^2+v^2}\), horizontal velocity component \(u\), and vertical velocity component \(v\),
+              generated in real time with FEAScript. They match the
+              <a href="lid-driven-cavity-2d-creeping-flow.html#results">quadrilateral results</a>: the
+              strongest return flow is \(u = -0.322\) here and \(-0.325\) on the quadrilaterals, a difference of
+              1%.
+            </p>
+
+            <div class="eyebrow label" role="heading" aria-level="3">
+              <p>Velocity magnitude</p>
+            </div>
+            <div id="velocityMagnitudeCanvas"></div>
+
+            <div class="eyebrow label" role="heading" aria-level="3">
+              <p>Horizontal velocity (\(u\))</p>
+            </div>
+            <div id="uVelocityCanvas"></div>
+
+            <div class="eyebrow label" role="heading" aria-level="3">
+              <p>Vertical velocity (\(v\))</p>
+            </div>
+            <div id="vVelocityCanvas"></div>
+
+            <p>
+              Stokes flow is mirror-symmetric about \(x = 2\), but this mesh is not, so the symmetry holds only
+              up to the discretization error: at \((1, 1.5)\) and \((3, 1.5)\), \(u\) is 0.0755 and 0.0766. On
+              the quadrilaterals, which are symmetric, the two values are equal. For a flow problem on a Gmsh
+              mesh of quadratic triangles, see
+              <a href="creeping-flow-2d-pillar-array.html">creeping flow through a 2D pillar array</a>.
+            </p>
+
+            <script type="module">
+              // Import FEAScript library from GitHub
+              import {
+                FEAScriptModel,
+                plotInterpolatedSolution,
+                version,
+              } from "https://core.feascript.com/dist/feascript.esm.js";
+              // Import FEAScript library from a local directory
+              // import { FEAScriptModel, plotInterpolatedSolution, version } from "../../FEAScript-core/src/index.js";
+
+              window.addEventListener("DOMContentLoaded", () => {
+                // Print FEAScript version
+                console.log("FEAScript version:", version);
+
+                // Create a new FEAScript model
+                const model = new FEAScriptModel();
+
+                // Set model configuration
+                model.setModelConfig("creepingFlow", {
+                  solver: { method: "lusolve" },
+                  coefficientFunctions: {
+                    viscosity: 1, // μ
+                  },
+                });
+
+                // Define the geometry and mesh it with quadratic triangles of side 0.5 at most
+                model.setGeometry({ rectangle: [4, 2] });
+                model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.5, minAngle: 30 });
+
+                // Define boundary conditions, keyed by the boundary names
+                model.addBoundaryCondition("bottom", { type: "constantVelocity", u: 0, v: 0 }); // Bottom wall (no-slip)
+                model.addBoundaryCondition("left", { type: "constantVelocity", u: 0, v: 0 });   // Left wall (no-slip)
+                model.addBoundaryCondition("top", { type: "constantVelocity", u: 1, v: 0 });    // Top lid (moving)
+                model.addBoundaryCondition("right", { type: "constantVelocity", u: 0, v: 0 });  // Right wall (no-slip)
+
+                // Solve the problem and get the solution
+                const result = model.solve();
+
+                // Plot the velocity magnitude and the velocity components as 2D contour plots
+                plotInterpolatedSolution(model, result, "contour", "velocityMagnitudeCanvas");
+                plotInterpolatedSolution(model, result, "contour", "uVelocityCanvas", { field: "u" });
+                plotInterpolatedSolution(model, result, "contour", "vVelocityCanvas", { field: "v" });
+              });
+            </script>
+
+            <aside class="callout cell-pad" aria-label="Change this model with an AI assistant">
+              <p class="callout-tag label">AI-ready</p>
+              <h3>Change this model with your <span class="accent">AI assistant.</span></h3>
+              <p class="desc">
+                Give ChatGPT, Claude, Copilot or any other assistant
+                <a href="https://docs.feascript.com/llms.txt">llms.txt</a>, a one-file summary of the FEAScript
+                API, together with the code of this page, and describe the change you want. For example:
+                <em>Make the cavity square and refine the mesh towards the moving lid.</em>
+              </p>
+              <div class="cmd cmd-ai">
+                <span class="cmd-prompt" aria-hidden="true">&rarr;</span>
+                <code>docs.feascript.com/llms.txt</code>
+                <button
+                  class="cmd-copy"
+                  type="button"
+                  data-copy="https://docs.feascript.com/llms.txt"
+                  aria-label="Copy the llms.txt link"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── MAILING LIST AND GITHUB STAR ───────────── -->
+      <section id="maillist" class="section">
+        <div class="section-frame">
+          <div class="cta">
+            <div class="cta-main">
+            <p class="label text-faint">Stay in the loop</p>
+            <h2 data-reveal>Join the <span class="accent">mailing list.</span></h2>
+            <p class="lede">Receive new tutorials, project updates and news.</p>
+
+            <form
+              class="maillist-form"
+              action="https://feascript.us10.list-manage.com/subscribe/post?u=83b4dec50b84e136c2e82c6a4&amp;id=4aa4a60f27&amp;f_id=009362e3f0"
+              method="post"
+              id="mc-embedded-subscribe-form"
+              name="mc-embedded-subscribe-form"
+              target="_blank"
+            >
+              <label class="label" for="mce-EMAIL">Email address</label>
+              <div class="maillist-row">
+                <input type="email" name="EMAIL" id="mce-EMAIL" autocomplete="email" required value="" />
+                <input
+                  type="submit"
+                  name="subscribe"
+                  id="mc-embedded-subscribe"
+                  class="btn btn-solid"
+                  value="Subscribe"
+                />
+              </div>
+
+              <div class="maillist-honeypot" aria-hidden="true">
+                <input type="text" name="b_83b4dec50b84e136c2e82c6a4_4aa4a60f27" tabindex="-1" value="" />
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="footer-wordmark" href="../index.html">
+              <svg viewBox="14 79 242 242" aria-hidden="true">
+                <polygon points="17,254 190,82 253,317" fill="#d4aa00" />
+              </svg>
+              <span
+                >FEAScrip<svg class="wm-t" viewBox="0 0 30 115" fill="none" stroke="currentColor">
+                  <path stroke-width="5.9" d="M15 0V100A11.4 11.4 0 0 0 26.4 111.4H29.5" />
+                  <path stroke-width="5.4" d="M0.4 16.9H29.6" /></svg
+              ></span>
+            </a>
+            <p class="footer-tagline">
+              Finite element simulation in JavaScript, for the browser and Node.js.
+            </p>
+            <a class="footer-mail" data-icon="mail" href="mailto:info@feascript.com">info@feascript.com</a>
+            <div class="footer-social">
+              <a href="https://www.youtube.com/@FEAScript" data-icon="youtube" aria-label="YouTube" title="YouTube"></a>
+              <a href="https://www.linkedin.com/company/feascript/" data-icon="linkedin" aria-label="LinkedIn" title="LinkedIn"></a>
+              <a href="https://bsky.app/profile/feascript.com" data-icon="bluesky" aria-label="Bluesky" title="Bluesky"></a>
+            </div>
+          </div>
+          <nav class="footer-col" aria-label="Learn">
+            <h2>Learn</h2>
+            <ul>
+              <li><a href="index.html" data-icon="tutorials">Tutorials</a></li>
+              <li><a href="https://codepen.io/FEAScript" data-icon="codepen">CodePen</a></li>
+              <li><a href="https://hub.scribbler.live/portfolio/#!nikoscham/FEAScript-Scribbler-examples" data-icon="scribbler">Scribbler</a></li>
+              <li><a href="https://docs.feascript.com" data-icon="documentation">Documentation</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Build">
+            <h2>Build</h2>
+            <ul>
+              <li><a href="../studio.html" data-icon="studio">FEAScript Studio</a></li>
+              <li><a href="https://lab.feascript.com/" data-icon="tris-lab">Tri's Lab</a></li>
+              <li><a href="https://www.npmjs.com/package/feascript" data-icon="npm">npm package</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core" data-icon="github">GitHub</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-label="Community">
+            <h2>Community</h2>
+            <ul>
+              <li><a href="https://blog.feascript.com/" data-icon="blog">Blog</a></li>
+              <li><a href="https://discord.gg/3DVjNcuW4f" data-icon="discord">Discord</a></li>
+              <li><a href="https://github.com/FEAScript/FEAScript-core/issues" data-icon="support">Support</a></li>
+              <li><a href="../sponsors.html" data-icon="sponsors">Sponsors</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>&#169; 2023–<span id="currentYear"></span> FEAScript &middot; <a href="../privacy.html">Privacy</a> &middot; <span data-icon="no-cookies">This site uses no cookies</span></span>
+          <span>Core: MIT license &middot; Website: CC BY 4.0</span>
+        </div>
+      </div>
+    </footer>
+    <script src="../feascript-website.js"></script>
+  </body>
+</html>

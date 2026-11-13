@@ -344,6 +344,14 @@
             </div>
 
             <p>
+              FEAScript can also mesh the cavity with triangles, from the same geometry and with the same
+              boundary conditions:
+              <a href="https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow-triangle-mesh.html"
+                >Creeping flow in a 2D lid-driven cavity, on a generated triangle mesh</a
+              >.
+            </p>
+
+            <p>
               Since the Stokes solver uses a mixed formulation, the result of <code>solve()</code> also
               contains the named fields <code>velocityMagnitude</code>, <code>u</code>, <code>v</code> and
               <code>p</code>, each with one value per mesh node (the pressure, solved at the corner nodes, is

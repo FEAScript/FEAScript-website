@@ -92,6 +92,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow-triangle-mesh.html</loc>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://feascript.com/tutorials/lid-driven-cavity-2d-creeping-flow-worker.html</loc>
     <lastmod>2026-11-13</lastmod>
     <priority>0.7</priority>

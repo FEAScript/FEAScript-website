@@ -365,12 +365,14 @@ model.setGeometry({
               boundary, and no node lies in the middle of another element's edge. The pattern is so regular
               because the generator starts from the four corners only: it splits the sides at their midpoints,
               then at their quarters, and fills the inside from there, so on a rectangle all the triangles come
-              out with angles of 45 or 90 degrees. This is a valid mesh, and the solution on it is as accurate
-              as on any mesh of this size.
+              out with angles of 45 or 90 degrees.
             </p>
             <p>
-              For a mesh of varied, well-shaped triangles, give the boundaries points along the sides at about
-              the element size. The refinement then starts from a boundary that already has the right size:
+              The tutorial keeps the four-corner rectangle because it is the shortest way to write the fin. To
+              get a mesh of varied, well-shaped triangles instead, which is how a generated mesh usually looks,
+              give the boundaries points along the sides at about the element size, so the refinement starts
+              from a boundary that already has the right size. This code replaces step 2 above; the rest of the
+              model stays the same:
             </p>
 
             <pre class="prettyprint">
@@ -394,6 +396,23 @@ model.setGeometry({
 model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.5, minAngle: 30 });</pre
             >
 
+            <div class="center-image">
+              <img
+                class="schematic"
+                src="heat-conduction-2d-fin-triangle-mesh-seeded.svg"
+                alt="Triangle mesh of the fin generated from points along its sides, with the boundary names"
+                width="580"
+              />
+              <p class="image-caption">
+                Quadratic triangle mesh of the fin, generated from a point every 0.5 m along its sides
+              </p>
+            </div>
+
+            <p>
+              This mesh has 131 triangles with 290 nodes, against 128 with 281, and the temperature at the tip
+              of the fin is the same on both, 81.32 °C (with FEAScript 0.4.0): the two codes differ in the
+              shape of the triangles, not in the result.
+            </p>
             <p>
               The generator meshes any polygon with holes, so it covers geometries that the structured mesh
               cannot, without leaving the browser. For curved boundaries, approximate them by short edges with
@@ -472,7 +491,7 @@ model.setMeshConfig({ elements: "triangles", elementOrder: "quadratic", size: 0.
                 Give ChatGPT, Claude, Copilot or any other assistant
                 <a href="https://docs.feascript.com/llms.txt">llms.txt</a>, a one-file summary of the FEAScript
                 API, together with the code of this page, and describe the change you want. For example:
-                <em>Add a second hole to the fin and refine the mesh around both holes.</em>
+                <em>Add a circular hole in the middle of the fin and refine the mesh around it.</em>
               </p>
               <div class="cmd cmd-ai">
                 <span class="cmd-prompt" aria-hidden="true">&rarr;</span>

@@ -350,7 +350,10 @@
           </div>
 
           <div class="section-head">
-            <h2 data-reveal>Run a simulation with <span class="accent">a few lines.</span></h2>
+            <h2 class="h2-wide" data-reveal>
+              Run a simulation with a few lines,<br />
+              <span class="accent">or let your AI assistant do it.</span>
+            </h2>
             <p class="prose" data-reveal>
               Call FEAScript from JavaScript in a web page, in a playground such as CodePen or Scribbler, or in
               Node.js. The example below solves heat conduction in a 2D fin with a hole, live in this page: move
@@ -501,6 +504,42 @@
               </figure>
               </div>
             </div>
+
+            <article id="ai-assistants" class="cell cell-pad callout" data-reveal>
+              <p class="callout-tag label">AI-ready</p>
+              <h3>Or describe it to your <span class="accent">AI assistant.</span></h3>
+              <p class="desc prose">
+                FEAScript needs no installation, so an AI assistant can write a complete simulation that runs
+                in your browser: just describe the problem. Give ChatGPT, Claude, Copilot or any other
+                assistant <a href="https://docs.feascript.com/llms.txt">llms.txt</a>, a one-file summary of the
+                FEAScript API, so the code it writes uses the actual models and options. Save its answer as an
+                HTML file and open it, or run it on CodePen.
+              </p>
+              <div class="cmd cmd-ai">
+                <span class="cmd-prompt" aria-hidden="true">&rarr;</span>
+                <code>docs.feascript.com/llms.txt</code>
+                <button
+                  class="cmd-copy"
+                  type="button"
+                  data-copy="https://docs.feascript.com/llms.txt"
+                  aria-label="Copy the llms.txt link"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+            </article>
           </div>
         </div>
       </section>
@@ -698,11 +737,18 @@
           </div>
 
           <div class="grid grid-2">
-            <p class="cell cell-note prose" style="grid-column: 1 / -1">
-              <span class="tag">New to finite elements?</span>
-              Start with <a href="https://lab.feascript.com/">Tri's Lab by FEAScript</a>, where you learn the
-              finite element method through games and block-based missions, with no code to write.
-            </p>
+            <article class="cell cell-pad callout" style="grid-column: 1 / -1" data-reveal>
+              <p class="callout-tag label">New to finite elements?</p>
+              <h3>Learn the method <span class="accent">by playing.</span></h3>
+              <p class="desc prose">
+                Start with <a href="https://lab.feascript.com/">Tri's Lab by FEAScript</a>, where you learn the
+                finite element method through games and block-based missions, with no code to write.
+              </p>
+              <a class="cmd cmd-link cmd-ai" href="https://lab.feascript.com/">
+                <span class="cmd-prompt" aria-hidden="true">&rarr;</span>
+                <span>lab.feascript.com</span>
+              </a>
+            </article>
 
             <article class="cell tutorial" data-physics="heat" data-reveal>
               <img
@@ -967,8 +1013,9 @@
               </p>
             </article>
 
-            <article class="cell cell-pad" data-reveal>
-              <h3>Help FEAScript grow</h3>
+            <article class="cell cell-pad callout" data-reveal>
+              <p class="callout-tag label">Support</p>
+              <h3>Help FEAScript <span class="accent">grow.</span></h3>
               <p class="desc prose" style="margin-top: 1rem">
                 If you find FEAScript useful, please consider
                 <strong>supporting its development with a donation</strong>. Your support helps fund new

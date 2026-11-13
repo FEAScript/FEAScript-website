@@ -929,6 +929,107 @@ h2 .accent {
   white-space: nowrap;
 }
 
+/* Callout: the one highlighted block style of the site, for what a reader should not miss (the AI
+   assistant card, the Tri's Lab note, the sponsor ask, the AI block at the end of each tutorial).
+   A gold tint and a gold bar at the left, a tag pill, a larger title and darker text. Keep it rare:
+   one or two per page. .cell.callout wins over the plain .cell rule further down */
+.callout,
+.cell.callout {
+  background: color-mix(in srgb, var(--gold) 9%, var(--bg));
+  box-shadow:
+    inset 4px 0 0 var(--gold),
+    0 0 0 1px var(--line);
+}
+
+.callout-tag {
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  color: var(--gold-ink);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Two classes, so the title also wins over .doc h3 in the tutorials */
+.cell-pad.callout h3 {
+  margin-top: 0.9rem;
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: 400;
+}
+
+.callout h3 .accent {
+  white-space: nowrap;
+}
+
+.cell-pad.callout .desc {
+  max-width: 48rem;
+  margin-top: 0.75rem;
+  color: var(--ink);
+  font-size: 1.0625rem;
+}
+
+.doc .callout {
+  margin: 3rem 0 1rem;
+}
+
+/* In the tutorials, keep the Copy button of the callout as on the home page, not as a .doc button */
+.doc .callout .cmd-copy {
+  height: auto;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: none;
+  color: #e6e3da;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.doc .callout .cmd-copy:hover {
+  background: var(--cream);
+  color: #1d1d1d;
+}
+
+.doc .callout .cmd-copy.copied {
+  border-color: #2e7d32;
+  background: #2e7d32;
+  color: #fff;
+}
+
+/* The llms.txt link in the AI callouts: it shortens before the Copy button wraps */
+.cmd-ai {
+  margin-top: 1.25rem;
+}
+
+.cmd-ai code {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Narrow phones: smaller text so the whole llms.txt link fits beside Copy */
+@media (max-width: 420px) {
+  .cmd-ai {
+    gap: 0.5rem;
+    padding-left: 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .cmd-ai .cmd-copy,
+  .doc .callout .cmd-copy {
+    padding: 0.35rem 0.6rem;
+  }
+
+  .cmd-ai .cmd-copy svg {
+    display: none;
+  }
+
+  .cmd-ai .cmd-prompt {
+    display: none;
+  }
+}
+
 .cmd-copy {
   display: inline-flex;
   align-items: center;
@@ -1113,6 +1214,11 @@ h2 .accent {
   line-height: 1.1;
   letter-spacing: -0.015em;
   color: var(--ink-strong);
+}
+
+/* A two-line heading whose first line needs more than the usual width */
+.section-head h2.h2-wide {
+  max-width: 60rem;
 }
 
 .section-head p {

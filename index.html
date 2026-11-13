@@ -573,8 +573,12 @@
             <article class="cell cell-pad" data-reveal>
               <h3>Geometry and meshing</h3>
               <ul class="feature-list">
-                <li>Simple mesh generation (1D and 2D domains)</li>
-                <li>Triangle mesh generation in a polygon with holes, with named boundaries</li>
+                <li>
+                  Built-in mesh generation for lines, rectangles and polygons with holes, with named
+                  boundaries (quadrilateral or triangular elements; triangulation built on
+                  <a href="https://github.com/mapbox/delaunator">Delaunator</a> and
+                  <a href="https://github.com/kninnug/Constrainautor">Constrainautor</a>)
+                </li>
                 <li>
                   Unstructured mesh import from <a href="https://gmsh.info/">Gmsh</a> (<code>.msh</code> file
                   format) with quadrilateral and triangular elements (linear and quadratic)

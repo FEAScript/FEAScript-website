@@ -2779,6 +2779,55 @@ html[data-theme="dark"] .doc .center-image img.schematic {
   color: var(--muted);
 }
 
+/* Comparison of one case on several meshes */
+.doc .mesh-table-wrap {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+}
+
+.doc .mesh-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.doc .mesh-table th,
+.doc .mesh-table td {
+  padding: 0.45rem 0.65rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.doc .mesh-table thead th {
+  border-bottom: 1px solid var(--line-strong);
+  color: var(--ink-strong);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.doc .mesh-table td.num {
+  font-family: var(--font-mono);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.doc .mesh-table thead th.num {
+  text-align: right;
+}
+
+.doc .mesh-table tr.reference td {
+  color: var(--muted);
+}
+
+.doc .mesh-table caption {
+  caption-side: bottom;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--faint);
+  text-align: left;
+}
+
 .doc mjx-container {
   text-align: left;
 }

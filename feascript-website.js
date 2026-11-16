@@ -275,7 +275,11 @@
       // Keep the plot no taller than about 22rem, so the sliders stay in view
       const style = getComputedStyle(plotDiv);
       const room = plotDiv.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
-      const width = Math.round(Math.min(room, 300 / aspect + 90));
+      // Fixed margins: the colour bar sits in the right one, so its tick labels (60 or 240, two ticks or five) never
+      // change the size of the plot. 92 px fits three-digit labels and the title
+      const margin = { l: 34, r: 92, t: 10, b: 30, autoexpand: false };
+      const sides = margin.l + margin.r;
+      const width = Math.round(Math.min(room, 300 / aspect + sides));
       const xMid = (xRange[0] + xRange[1]) / 2;
       const yMid = (yRange[0] + yRange[1]) / 2;
       // Name the boundary condition on each side, with the values the sliders set
@@ -308,8 +312,8 @@
         ...solution.layout,
         title: { text: "" },
         width,
-        height: Math.round((width - 90) * aspect) + 50,
-        margin: { l: 34, r: 8, t: 10, b: 30 },
+        height: Math.round((width - sides) * aspect) + margin.t + margin.b,
+        margin,
         annotations: [
           label(`T = ${temp} °C`, xMid, yRange[0], { yanchor: "bottom", yshift: 4 }),
           label(`T = ${temp} °C`, xRange[1], yMid, { xanchor: "right", xshift: -4, textangle: -90 }),

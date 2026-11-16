@@ -196,9 +196,11 @@
     };
     const meshButton = document.getElementById("qs-mesh");
     const baseCode = codeBlock.textContent;
-    let core = null;
-    let mesh = null;
+    let worker = null; // Solves and samples the example off the main thread (qs-worker.js)
+    let version = "";
     let meshLines = null; // Element edges as one polyline, with null gaps between edges
+    let solution = null; // The latest result from the worker: field trace, plot layout and node coordinates
+    const sent = []; // The values of each solve sent to the worker, in order, so the labels match the field they sit on
     let showMesh = false;
     let busy = false;
     let pending = false;
@@ -251,56 +253,7 @@
       }
     };
 
-    // Trace each element edge once, through its mid-side node (Gmsh 9-node quad order, 1-based)
-    const buildMeshLines = (parsed) => {
-      const xs = parsed.nodesXCoordinates;
-      const ys = parsed.nodesYCoordinates;
-      const x = [];
-      const y = [];
-      const seen = new Set();
-      for (const nodes of parsed.nodalNumbering.quadElements) {
-        for (let side = 0; side < 4; side++) {
-          const a = nodes[side];
-          const b = nodes[(side + 1) % 4];
-          const key = a < b ? `${a}-${b}` : `${b}-${a}`;
-          if (seen.has(key)) continue;
-          seen.add(key);
-          const path = nodes.length === 9 ? [a, nodes[4 + side], b] : [a, b];
-          path.forEach((n) => {
-            x.push(xs[n - 1]);
-            y.push(ys[n - 1]);
-          });
-          x.push(null);
-          y.push(null);
-        }
-      }
-      return { x, y };
-    };
-
     const meshColor = () => getComputedStyle(root).getPropertyValue("--ink-strong").trim();
-
-    const meshTraceIndex = () => (plotDiv.data || []).findIndex((trace) => trace.name === "mesh");
-
-    const drawMesh = () => {
-      if (!plotDiv.data || !meshLines) return;
-      const index = meshTraceIndex();
-      if (!showMesh) {
-        if (index >= 0) window.Plotly.deleteTraces(plotDiv, index);
-        return;
-      }
-      if (index >= 0) return;
-      window.Plotly.addTraces(plotDiv, {
-        type: "scatter",
-        mode: "lines",
-        name: "mesh",
-        x: meshLines.x,
-        y: meshLines.y,
-        line: { width: 0.5, color: meshColor() },
-        opacity: 0.45,
-        hoverinfo: "skip",
-        showlegend: false,
-      });
-    };
 
     const showValues = ({ temp, hk, ext }) => {
       outputs.temp.textContent = `${temp} °C`;
@@ -308,13 +261,14 @@
       outputs.ext.textContent = `${ext} °C`;
     };
 
-    // Plotly draws with fixed colours: take them from the site tokens instead
-    const themePlot = () => {
-      if (!plotDiv.data) return;
+    // Draw the latest result in one go: Plotly draws with fixed colours, so take them from the site tokens, and add
+    // the mesh on top when it is shown
+    const render = () => {
+      if (!solution) return;
       const css = getComputedStyle(root);
       const ink = css.getPropertyValue("--muted").trim();
       const line = css.getPropertyValue("--line").trim();
-      const { nodesXCoordinates: xs, nodesYCoordinates: ys } = plotDiv.feascriptNodes;
+      const { nodesXCoordinates: xs, nodesYCoordinates: ys } = solution.nodes;
       const xRange = [Math.min(...xs), Math.max(...xs)];
       const yRange = [Math.min(...ys), Math.max(...ys)];
       const aspect = (yRange[1] - yRange[0]) / (xRange[1] - xRange[0]);
@@ -325,7 +279,7 @@
       const xMid = (xRange[0] + xRange[1]) / 2;
       const yMid = (yRange[0] + yRange[1]) / 2;
       // Name the boundary condition on each side, with the values the sliders set
-      const { temp, hk, ext } = values();
+      const { temp, hk, ext } = solution.values;
       // Small and see-through, so the labels do not hide the field underneath
       const label = (text, x, y, extra) => ({
         text,
@@ -340,78 +294,82 @@
       });
       // On a phone the sliders below show the values, so the label names the condition only
       const convection = width < 480 ? "Convection" : `Convection, h/k = ${hk} m⁻¹, T<sub>ext</sub> = ${ext} °C`;
-      const annotations = [
-        label(`T = ${temp} °C`, xMid, yRange[0], { yanchor: "bottom", yshift: 4 }),
-        label(`T = ${temp} °C`, xRange[1], yMid, { xanchor: "right", xshift: -4, textangle: -90 }),
-        label("Symmetry", xRange[0], yMid, { xanchor: "left", xshift: 4, textangle: -90 }),
-        label(convection, xMid, yRange[1], { yanchor: "top", yshift: -4 }),
-        label("Convection", 2, 1), // Hole centre
-      ];
-      window.Plotly.relayout(plotDiv, {
+      // A preview: fixed to the domain (so the mesh overlay does not pad the axes), with no zoom or pan
+      const axis = (base, range) => ({
+        ...base,
+        title: { text: "" },
+        gridcolor: line,
+        zeroline: false,
+        range,
+        autorange: false,
+        fixedrange: true,
+      });
+      const layout = {
+        ...solution.layout,
         title: { text: "" },
         width,
         height: Math.round((width - 90) * aspect) + 50,
         margin: { l: 34, r: 8, t: 10, b: 30 },
-        annotations,
+        annotations: [
+          label(`T = ${temp} °C`, xMid, yRange[0], { yanchor: "bottom", yshift: 4 }),
+          label(`T = ${temp} °C`, xRange[1], yMid, { xanchor: "right", xshift: -4, textangle: -90 }),
+          label("Symmetry", xRange[0], yMid, { xanchor: "left", xshift: 4, textangle: -90 }),
+          label(convection, xMid, yRange[1], { yanchor: "top", yshift: -4 }),
+          label("Convection", 2, 1), // Hole centre
+        ],
         paper_bgcolor: "rgba(0,0,0,0)",
         plot_bgcolor: "rgba(0,0,0,0)",
         font: { family: "Roboto, sans-serif", size: 11, color: ink },
-        "xaxis.title.text": "",
-        "yaxis.title.text": "",
-        "xaxis.gridcolor": line,
-        "yaxis.gridcolor": line,
-        "xaxis.zeroline": false,
-        "yaxis.zeroline": false,
-        // Fixed to the domain, so the mesh overlay does not pad the axes and shrink the plot
-        "xaxis.range": xRange,
-        "yaxis.range": yRange,
-        "xaxis.autorange": false,
-        "yaxis.autorange": false,
-        // A preview: no zoom or pan, so there is no view to reset
-        "xaxis.fixedrange": true,
-        "yaxis.fixedrange": true,
-      });
-      const fields = plotDiv.data
-        .map((trace, index) => (trace.name === "mesh" ? -1 : index))
-        .filter((index) => index >= 0);
-      window.Plotly.restyle(plotDiv, { "colorbar.title.text": "T (°C)", "colorbar.thickness": 12 }, fields);
-      const index = meshTraceIndex();
-      if (index >= 0) window.Plotly.restyle(plotDiv, { "line.color": meshColor() }, [index]);
+        xaxis: axis(solution.layout.xaxis, xRange),
+        yaxis: axis(solution.layout.yaxis, yRange),
+      };
+      const traces = [
+        {
+          ...solution.field,
+          colorbar: { ...solution.field.colorbar, title: { text: "T (°C)", side: "right" }, thickness: 12 },
+        },
+      ];
+      if (showMesh && meshLines) {
+        traces.push({
+          type: "scatter",
+          mode: "lines",
+          name: "mesh",
+          x: meshLines.x,
+          y: meshLines.y,
+          line: { width: 0.5, color: meshColor() },
+          opacity: 0.45,
+          hoverinfo: "skip",
+          showlegend: false,
+        });
+      }
+      if (!plotDiv.data) plotDiv.textContent = ""; // Clear the loading message before the first plot
+      window.Plotly.react(plotDiv, traces, layout, { responsive: true });
     };
 
+    // Send the slider values to the worker; while it works, keep only the latest values for the next solve
     const solve = () => {
       if (busy) {
         pending = true;
         return;
       }
       busy = true;
-      const { temp, hk, ext } = values();
-      const model = new core.FEAScriptModel();
-      model.setModelConfig("heatConduction", { solver: { method: "lusolve" } });
-      model.setMesh(mesh);
-      model.addBoundaryCondition("bottom", { type: "constantTemperature", temperature: temp });
-      model.addBoundaryCondition("left", { type: "symmetry" });
-      model.addBoundaryCondition("top", { type: "convection", h: hk, ambientTemperature: ext });
-      model.addBoundaryCondition("right", { type: "constantTemperature", temperature: temp });
-      model.addBoundaryCondition("hole", { type: "convection", h: hk, ambientTemperature: ext });
-      const start = performance.now();
-      const result = model.solve();
-      const time = performance.now() - start;
-      plotDiv.textContent = "";
-      core.plotInterpolatedSolution(model, result, "contour", "qs-plot");
-      plotDiv.feascriptNodes = result.nodesCoordinates;
-      drawMesh();
-      themePlot();
-      const nodes = result.nodesCoordinates.nodesXCoordinates.length;
-      status.textContent = `Solved in ${time < 10 ? time.toFixed(1) : Math.round(time)} ms · ${nodes} nodes · FEAScript ${core.version}`;
+      const current = values();
+      sent.push(current);
+      worker.postMessage({ type: "solve", values: current });
+    };
+
+    const onResult = ({ time, nodes, field, layout }, values) => {
+      solution = { nodes, field, layout, values };
+      render();
+      status.textContent = `Solved in ${time < 10 ? time.toFixed(1) : Math.round(time)} ms · ${nodes.nodesXCoordinates.length} nodes · FEAScript ${version}`;
       // Let the browser paint before the next solve
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         busy = false;
         if (pending) {
           pending = false;
           solve();
         }
-      }, 0);
+      });
     };
 
     const loadScript = (src) =>
@@ -423,27 +381,49 @@
         document.head.appendChild(script);
       });
 
+    const fail = (error) => {
+      console.error("Live example:", error);
+      worker?.terminate();
+      live.classList.add("is-failed");
+      plotDiv.innerHTML = '<p class="qs-wait">The live result could not be loaded. Run the code on CodePen.</p>';
+      status.textContent = "";
+    };
+
     const start = async () => {
       status.textContent = "Loading FEAScript…";
       try {
-        const [module] = await Promise.all([
-          import("https://core.feascript.com/dist/feascript.esm.js"),
+        const [meshText] = await Promise.all([
+          fetch("tutorials/rect_with_hole_quad_quadratic.msh").then((response) => {
+            if (!response.ok) throw new Error(`Mesh file: ${response.status}`);
+            return response.text();
+          }),
           window.Plotly
             ? null
             : loadScript("https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.3/plotly.min.js"),
         ]);
-        core = module;
-        const response = await fetch("tutorials/rect_with_hole_quad_quadratic.msh");
-        if (!response.ok) throw new Error(`Mesh file: ${response.status}`);
-        mesh = await core.importGmshMesh(new File([await response.text()], "rect_with_hole_quad_quadratic.msh"));
-        // Read the edges now: the first solve renumbers the elements in place
-        meshLines = buildMeshLines(mesh);
+        worker = new Worker("qs-worker.js", { type: "module" });
+        await new Promise((resolve, reject) => {
+          // Before the worker is ready a failure stops the start; after it, it replaces the plot with the message
+          let ready = false;
+          const failed = (error) => (ready ? fail(error) : reject(error));
+          worker.onerror = (event) => failed(new Error(event.message || "Worker error"));
+          worker.onmessage = ({ data }) => {
+            if (data.type === "ready") {
+              ready = true;
+              version = data.version;
+              meshLines = data.meshLines;
+              resolve();
+            } else if (data.type === "result") onResult(data, sent.shift());
+            else failed(new Error(data.message));
+          };
+          worker.postMessage({ type: "init", coreUrl: "https://core.feascript.com/dist/feascript.esm.js", meshText });
+        });
         meshButton.disabled = false;
         meshButton.addEventListener("click", () => {
           showMesh = !showMesh;
           meshButton.setAttribute("aria-pressed", String(showMesh));
           meshButton.textContent = showMesh ? "Hide mesh" : "Show mesh";
-          drawMesh();
+          render();
         });
         Object.values(inputs).forEach((input) => {
           input.disabled = false;
@@ -457,11 +437,7 @@
         live.classList.add("is-live");
         solve();
       } catch (error) {
-        console.error("Live example:", error);
-        live.classList.add("is-failed");
-        plotDiv.innerHTML =
-          '<p class="qs-wait">The live result could not be loaded. Run the code on CodePen.</p>';
-        status.textContent = "";
+        fail(error);
       }
     };
 
@@ -482,12 +458,12 @@
     }
 
     // Follow the theme and the width of the page
-    new MutationObserver(themePlot).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", themePlot);
+    new MutationObserver(render).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
     let resizeTimer;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(themePlot, 150);
+      resizeTimer = setTimeout(render, 150);
     });
   }
 

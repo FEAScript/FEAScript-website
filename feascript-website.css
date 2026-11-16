@@ -1402,18 +1402,10 @@ h2 .accent {
   color: #fff;
 }
 
-.code-btn-video::before,
 .code-btn-codepen::before {
   content: "";
   width: 6px;
   height: 6px;
-}
-
-.code-btn-video::before {
-  background: #ff3b3b;
-}
-
-.code-btn-codepen::before {
   background: #47cf73;
 }
 

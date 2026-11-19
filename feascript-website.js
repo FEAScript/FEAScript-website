@@ -204,6 +204,33 @@
     let showMesh = false;
     let busy = false;
     let pending = false;
+    let moving = false; // A slider is moving: draw a coarser field, which Plotly draws in about half the time
+    let settleTimer;
+    let coarse = null; // The points of the coarser plot grid
+
+    // The grid is the same for every result: pick its coarse points once
+    const coarseField = (field) => {
+      if (!coarse || coarse.size !== field.z.length) {
+        // Every second grid line, and the last one, so the field still reaches the edges
+        const keep = (values) => {
+          const lines = [...new Set(values)].sort((a, b) => a - b);
+          return new Set(lines.filter((_, i) => i % 2 === 0 || i === lines.length - 1));
+        };
+        const keepX = keep(field.x);
+        const keepY = keep(field.y);
+        const points = [];
+        field.x.forEach((x, i) => {
+          if (keepX.has(x) && keepY.has(field.y[i])) points.push(i);
+        });
+        coarse = {
+          size: field.z.length,
+          points,
+          x: points.map((i) => field.x[i]),
+          y: points.map((i) => field.y[i]),
+        };
+      }
+      return { ...field, x: coarse.x, y: coarse.y, z: coarse.points.map((i) => field.z[i]) };
+    };
 
     const values = () => ({
       temp: Number(inputs.temp.value),
@@ -329,7 +356,7 @@
       };
       const traces = [
         {
-          ...solution.field,
+          ...(moving ? coarseField(solution.field) : solution.field),
           colorbar: { ...solution.field.colorbar, title: { text: "T (°C)", side: "right" }, thickness: 12 },
         },
       ];
@@ -420,7 +447,12 @@
             } else if (data.type === "result") onResult(data, sent.shift());
             else failed(new Error(data.message));
           };
-          worker.postMessage({ type: "init", coreUrl: "https://core.feascript.com/dist/feascript.esm.js", meshText });
+          worker.postMessage({
+            type: "init",
+            coreUrl: "https://core.feascript.com/dist/feascript.esm.js",
+            meshText,
+            hkSteps,
+          });
         });
         meshButton.disabled = false;
         meshButton.addEventListener("click", () => {
@@ -435,6 +467,13 @@
             const current = values();
             showValues(current);
             updateCode(current);
+            // Draw the full field once the slider rests
+            moving = true;
+            clearTimeout(settleTimer);
+            settleTimer = setTimeout(() => {
+              moving = false;
+              render();
+            }, 150);
             solve();
           });
         });

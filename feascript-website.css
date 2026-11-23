@@ -2702,9 +2702,10 @@ h2 .accent {
   padding: 1rem 1.25rem;
   border: 1px dashed var(--line-strong);
   border-left: 3px solid var(--gold);
+  background: var(--bg-sunken);
 }
 
-/* Pale badge in both themes, so Tri's dark outline and feet stay visible */
+/* Pale badge in both themes, so Tri's dark outline and feet stay visible on the tip's fill */
 .doc .tri-tip-avatar {
   flex: 0 0 auto;
   width: 3.5rem;
@@ -2806,10 +2807,18 @@ html[data-theme="dark"] .doc .center-image img[src$=".svg"] {
   overflow-x: auto;
 }
 
+/* Like the tables of the docs: opaque, so the paper grid does not show through, with a sunken header row and
+   striped rows */
 .doc .mesh-table {
   width: 100%;
   border-collapse: collapse;
+  border: 1px solid var(--line);
+  background-color: var(--bg);
   font-size: 0.875rem;
+}
+
+.doc .mesh-table tbody tr:nth-child(2n) {
+  background-color: var(--paper);
 }
 
 .doc .mesh-table th,
@@ -2822,7 +2831,10 @@ html[data-theme="dark"] .doc .center-image img[src$=".svg"] {
 
 .doc .mesh-table thead th {
   border-bottom: 1px solid var(--line-strong);
+  background: var(--bg-sunken);
   color: var(--ink-strong);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
   font-weight: 500;
   white-space: nowrap;
 }

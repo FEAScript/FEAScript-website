@@ -9,14 +9,14 @@
     .fig [stroke="#fff"] { stroke: var(--fig-bg, #fdfaf2); }
     .fig [fill="#f6efd9"] { fill: var(--fig-area, #f6efd9); }
     .fig [stroke="#f6efd9"] { stroke: var(--fig-area, #f6efd9); }
-    .fig [stroke="#c8003f"] { stroke: var(--fig-value, #c8003f); }
-    .fig [fill="#c8003f"] { fill: var(--fig-value, #c8003f); }
-    .fig [stroke="#d4aa00"] { stroke: var(--fig-robin, #d4aa00); }
-    .fig [fill="#d4aa00"] { fill: var(--fig-robin, #d4aa00); }
-    .fig [stroke="#0086d4"] { stroke: var(--fig-flux, #0086d4); }
-    .fig [fill="#0086d4"] { fill: var(--fig-flux, #0086d4); }
-    .fig [stroke="#00a86b"] { stroke: var(--fig-zero, #00a86b); }
-    .fig [fill="#00a86b"] { fill: var(--fig-zero, #00a86b); }
+    .fig [stroke="#c8003f"] { stroke: var(--fig-heat, #c8003f); }
+    .fig [fill="#c8003f"] { fill: var(--fig-heat, #c8003f); }
+    .fig [stroke="#d4aa00"] { stroke: var(--fig-gold, #d4aa00); }
+    .fig [fill="#d4aa00"] { fill: var(--fig-gold, #d4aa00); }
+    .fig [stroke="#0086d4"] { stroke: var(--fig-flow, #0086d4); }
+    .fig [fill="#0086d4"] { fill: var(--fig-flow, #0086d4); }
+    .fig [stroke="#00a86b"] { stroke: var(--fig-structure, #00a86b); }
+    .fig [fill="#00a86b"] { fill: var(--fig-structure, #00a86b); }
     .fig [fill="#8f7200"] { fill: var(--fig-gold-ink, #8f7200); }
     .fig [font-size="11"] { font-size: 10px; }
     .fig [font-size="12"] { font-size: 11px; }
@@ -28,8 +28,11 @@
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
     </marker>
-    <marker id="arrow-flux" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arrow-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#0086d4"/>
+    </marker>
+    <marker id="arrow-structure" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#00a86b"/>
     </marker>
   </defs>
   <g fill="#f6efd9" stroke="#000" stroke-width="0.6" stroke-opacity="0.45" stroke-linejoin="round">

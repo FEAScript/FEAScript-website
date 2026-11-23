@@ -2,26 +2,35 @@
 
 The same file is in FEAScript-documentation/scripts and FEAScript-website/scripts; keep the two copies identical.
 
-Style: line art in the FEAScript colors, Roboto Mono labels, a sunken fill for domains, and boundaries colored by the
-type of their condition. Every SVG carries a small stylesheet that maps a few fixed colors to CSS variables:
+Style: line art in the FEAScript colors, Roboto Mono labels and a sunken fill for domains. A color always means its
+physics, as in the rest of FEAScript (heat crimson, flow blue, structure green, front gold), so the boundaries are
+colored by what they do:
 
-    #000 ink, #666 muted text, #fff background, #f6efd9 domain fill,
-    #c8003f given value (Dirichlet), #d4aa00 convection or spring (Robin), #0086d4 given flux, force or load,
-    #00a86b zero flux (symmetry, insulated, zero gradient, stress-free), #8f7200 gold text.
+    heat       a prescribed temperature in crimson on the hot side and blue on the cold side (compared with the
+               other temperatures of the problem, fixed or ambient); convection in gold
+    flow       moving walls and inlets in blue; no-slip walls in ink
+    front      the initial front in gold
+    beam       supports in ink, loads (force, moment, distributed load) in green, springs in gold
+    any model  zero flux or no condition (symmetry, insulated, zero gradient, stress-free) as a dashed ink line;
+               a given value of an abstract unknown (the u of the general form PDE) in ink
 
-The variables (--fig-ink, --fig-muted, --fig-bg, --fig-area, --fig-value, --fig-robin, --fig-flux, --fig-zero,
+Every SVG carries a small stylesheet that maps the fixed colors to CSS variables: #000 ink, #666 muted text, #fff
+background, #f6efd9 domain fill, #c8003f heat, #0086d4 flow, #00a86b structure, #d4aa00 gold, #8f7200 gold text. The
+variables (--fig-ink, --fig-muted, --fig-bg, --fig-area, --fig-heat, --fig-flow, --fig-structure, --fig-gold,
 --fig-gold-ink) are set by the page for its light and dark themes, and the pages inline the SVG so that it follows the
-theme. Opened on its own, an SVG falls back to the light colors. The fixed colors double as names: draw with them,
-never with other colors, so that every figure stays in the scheme.
+theme. Opened on its own, an SVG falls back to the light colors. Draw only with these fixed colors, so that every
+figure stays in the scheme.
 
-Series in plots: FEAScript results in flow blue (#0086d4), references and exact solutions in ink, dashed.
+Series in plots: FEAScript results in flow blue, references and exact solutions in ink, dashed.
 """
 
 import math
 
 INK, MUTED, BG, AREA = "#000", "#666", "#fff", "#f6efd9"
-VALUE, ROBIN, FLUX, ZERO, GOLD_TEXT = "#c8003f", "#d4aa00", "#0086d4", "#00a86b", "#8f7200"
-SERIES = [FLUX, VALUE, ROBIN]  # Colors of the first, second and third series of a plot
+HEAT, FLOW, STRUCTURE, GOLD, GOLD_TEXT = "#c8003f", "#0086d4", "#00a86b", "#d4aa00", "#8f7200"
+HOT, COLD = HEAT, FLOW  # A prescribed temperature on the hot or the cold side
+ZERO = "zero"  # Zero flux or no condition: drawn as a dashed ink line, not a color
+SERIES = [FLOW, HEAT, GOLD]  # Colors of the first, second and third series of a plot
 
 STYLE = """  <style>
     .fig { font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
@@ -32,14 +41,14 @@ STYLE = """  <style>
     .fig [stroke="#fff"] { stroke: var(--fig-bg, #fdfaf2); }
     .fig [fill="#f6efd9"] { fill: var(--fig-area, #f6efd9); }
     .fig [stroke="#f6efd9"] { stroke: var(--fig-area, #f6efd9); }
-    .fig [stroke="#c8003f"] { stroke: var(--fig-value, #c8003f); }
-    .fig [fill="#c8003f"] { fill: var(--fig-value, #c8003f); }
-    .fig [stroke="#d4aa00"] { stroke: var(--fig-robin, #d4aa00); }
-    .fig [fill="#d4aa00"] { fill: var(--fig-robin, #d4aa00); }
-    .fig [stroke="#0086d4"] { stroke: var(--fig-flux, #0086d4); }
-    .fig [fill="#0086d4"] { fill: var(--fig-flux, #0086d4); }
-    .fig [stroke="#00a86b"] { stroke: var(--fig-zero, #00a86b); }
-    .fig [fill="#00a86b"] { fill: var(--fig-zero, #00a86b); }
+    .fig [stroke="#c8003f"] { stroke: var(--fig-heat, #c8003f); }
+    .fig [fill="#c8003f"] { fill: var(--fig-heat, #c8003f); }
+    .fig [stroke="#d4aa00"] { stroke: var(--fig-gold, #d4aa00); }
+    .fig [fill="#d4aa00"] { fill: var(--fig-gold, #d4aa00); }
+    .fig [stroke="#0086d4"] { stroke: var(--fig-flow, #0086d4); }
+    .fig [fill="#0086d4"] { fill: var(--fig-flow, #0086d4); }
+    .fig [stroke="#00a86b"] { stroke: var(--fig-structure, #00a86b); }
+    .fig [fill="#00a86b"] { fill: var(--fig-structure, #00a86b); }
     .fig [fill="#8f7200"] { fill: var(--fig-gold-ink, #8f7200); }
     .fig [font-size="11"] { font-size: 10px; }
     .fig [font-size="12"] { font-size: 11px; }
@@ -52,8 +61,11 @@ DEFS = """  <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
     </marker>
-    <marker id="arrow-flux" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arrow-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#0086d4"/>
+    </marker>
+    <marker id="arrow-structure" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#00a86b"/>
     </marker>
   </defs>"""
 
@@ -107,23 +119,39 @@ def bname(boundary):
 
 
 def kind(condition):
-    """The color of a boundary from the wording of its condition (see the module docstring)."""
+    """The color of a boundary from the wording of its condition (see the module docstring).
+
+    A prescribed temperature is taken as the hot side; pass COLD explicitly where it is the cold side."""
     plain = condition.lower()
     for tag in ("<tspan", "</tspan>"):
         plain = plain.replace(tag, " ")
-    if "convection" in plain or "spring" in plain:
-        return ROBIN
-    if any(word in plain for word in ("symmetry", "insulated", "zero gradient", "stress-free", "∂", "d<")):
+    if "convection" in plain or "spring" in plain or "initial front" in plain:
+        return GOLD
+    if any(word in plain for word in ("symmetry", "insulated", "zero gradient", "stress-free", "∂")) or ("/d" in plain and "= 0" in plain):
         return ZERO
-    if "force" in plain or "load" in plain:
-        return FLUX
-    return VALUE
+    if any(word in plain for word in ("moving", "lid", "inlet")):
+        return FLOW
+    if any(word in plain for word in ("force", "load", "moment")):
+        return STRUCTURE
+    if "temperature" in plain or "°c" in plain:
+        return HOT
+    return INK  # No-slip walls, supports and the given values of an abstract unknown
 
 
 def edge(points, color, width=4):
-    """A boundary drawn over the outline in the color of its condition."""
+    """A boundary drawn over the outline in the color of its condition; ZERO is a dashed ink line."""
     path = " ".join(f"{fmt(x)},{fmt(y)}" for x, y in points)
+    if color == ZERO:
+        return (
+            f'<polyline points="{path}" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'
+            f'<polyline points="{path}" fill="none" stroke="#000" stroke-width="2" stroke-dasharray="7 5" stroke-linejoin="round"/>'
+        )
     return f'<polyline points="{path}" fill="none" stroke="{color}" stroke-width="{width}" stroke-linecap="round" stroke-linejoin="round"/>'
+
+
+def end_dot(x, y, color):
+    """The end node of a 1D domain in the color of its condition: open for zero flux or no condition."""
+    return dot(x, y, 5, filled=False) if color == ZERO else dot(x, y, 5, color=color)
 
 
 def label(x, y, condition, key, side):

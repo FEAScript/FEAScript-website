@@ -2756,19 +2756,19 @@ h2 .accent {
   --fig-muted: #6b6960;
   --fig-bg: var(--bg);
   --fig-area: var(--bg-sunken);
-  --fig-value: #c8003f;
-  --fig-robin: #d4aa00;
-  --fig-flux: #0086d4;
-  --fig-zero: #00a86b;
+  --fig-heat: #c8003f;
+  --fig-gold: #d4aa00;
+  --fig-flow: #0086d4;
+  --fig-structure: #00a86b;
   --fig-gold-ink: var(--gold-ink);
 }
 
 html[data-theme="dark"] {
   --fig-muted: var(--muted);
-  --fig-value: #ff5c8d;
-  --fig-robin: #e6c230;
-  --fig-flux: #5aa2ec;
-  --fig-zero: #2fcf93;
+  --fig-heat: #ff5c8d;
+  --fig-gold: #e6c230;
+  --fig-flow: #5aa2ec;
+  --fig-structure: #2fcf93;
 }
 
 .doc .center-image img[src$=".svg"] {

@@ -1,37 +1,120 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 320" width="580" height="320" font-family="sans-serif" font-size="15" fill="#000">
-  <!-- Lid-driven cavity: 12 x 6 quadratic quadrilaterals (25 x 13 nodes), internally generated -->
+<svg xmlns="http://www.w3.org/2000/svg" class="fig" viewBox="0 0 560 310" width="560" height="310" font-family="Roboto Mono, monospace" font-size="13" fill="#000">
+  <!-- Lid-driven cavity: 12 x 6 quadratic quadrilaterals (25 x 13 nodes) -->
+  <style>
+    .fig { font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+    .fig[fill="#000"], .fig [fill="#000"] { fill: var(--fig-ink, #333333); }
+    .fig [stroke="#000"] { stroke: var(--fig-ink, #333333); }
+    .fig [fill="#666"] { fill: var(--fig-muted, #6b6960); }
+    .fig [fill="#fff"] { fill: var(--fig-bg, #fdfaf2); }
+    .fig [stroke="#fff"] { stroke: var(--fig-bg, #fdfaf2); }
+    .fig [fill="#f6efd9"] { fill: var(--fig-area, #f6efd9); }
+    .fig [stroke="#f6efd9"] { stroke: var(--fig-area, #f6efd9); }
+    .fig [stroke="#c8003f"] { stroke: var(--fig-value, #c8003f); }
+    .fig [fill="#c8003f"] { fill: var(--fig-value, #c8003f); }
+    .fig [stroke="#d4aa00"] { stroke: var(--fig-robin, #d4aa00); }
+    .fig [fill="#d4aa00"] { fill: var(--fig-robin, #d4aa00); }
+    .fig [stroke="#0086d4"] { stroke: var(--fig-flux, #0086d4); }
+    .fig [fill="#0086d4"] { fill: var(--fig-flux, #0086d4); }
+    .fig [stroke="#00a86b"] { stroke: var(--fig-zero, #00a86b); }
+    .fig [fill="#00a86b"] { fill: var(--fig-zero, #00a86b); }
+    .fig [fill="#8f7200"] { fill: var(--fig-gold-ink, #8f7200); }
+    .fig [font-size="11"] { font-size: 10px; }
+    .fig [font-size="12"] { font-size: 11px; }
+    .fig [font-size="13"] { font-size: 12px; }
+    .fig [font-size="16"] { font-size: 14px; }
+    .fig [font-size="18"] { font-size: 15px; }
+  </style>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
     </marker>
+    <marker id="arrow-flux" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0086d4"/>
+    </marker>
   </defs>
-  <g fill="none" stroke="#000" stroke-width="0.8" stroke-opacity="0.55" stroke-linejoin="round">
-    <line x1="156.67" y1="240" x2="156.67" y2="80"/>
-    <line x1="183.33" y1="240" x2="183.33" y2="80"/>
-    <line x1="210" y1="240" x2="210" y2="80"/>
-    <line x1="236.67" y1="240" x2="236.67" y2="80"/>
-    <line x1="263.33" y1="240" x2="263.33" y2="80"/>
-    <line x1="290" y1="240" x2="290" y2="80"/>
-    <line x1="316.67" y1="240" x2="316.67" y2="80"/>
-    <line x1="343.33" y1="240" x2="343.33" y2="80"/>
-    <line x1="370" y1="240" x2="370" y2="80"/>
-    <line x1="396.67" y1="240" x2="396.67" y2="80"/>
-    <line x1="423.33" y1="240" x2="423.33" y2="80"/>
-    <line x1="130" y1="213.33" x2="450" y2="213.33"/>
-    <line x1="130" y1="186.67" x2="450" y2="186.67"/>
-    <line x1="130" y1="160" x2="450" y2="160"/>
-    <line x1="130" y1="133.33" x2="450" y2="133.33"/>
-    <line x1="130" y1="106.67" x2="450" y2="106.67"/>
+  <g fill="#f6efd9" stroke="#000" stroke-width="0.6" stroke-opacity="0.45" stroke-linejoin="round">
+    <polygon points="130,240 156.67,240 156.67,213.33 130,213.33"/>
+    <polygon points="130,213.33 156.67,213.33 156.67,186.67 130,186.67"/>
+    <polygon points="130,186.67 156.67,186.67 156.67,160 130,160"/>
+    <polygon points="130,160 156.67,160 156.67,133.33 130,133.33"/>
+    <polygon points="130,133.33 156.67,133.33 156.67,106.67 130,106.67"/>
+    <polygon points="130,106.67 156.67,106.67 156.67,80 130,80"/>
+    <polygon points="156.67,240 183.33,240 183.33,213.33 156.67,213.33"/>
+    <polygon points="156.67,213.33 183.33,213.33 183.33,186.67 156.67,186.67"/>
+    <polygon points="156.67,186.67 183.33,186.67 183.33,160 156.67,160"/>
+    <polygon points="156.67,160 183.33,160 183.33,133.33 156.67,133.33"/>
+    <polygon points="156.67,133.33 183.33,133.33 183.33,106.67 156.67,106.67"/>
+    <polygon points="156.67,106.67 183.33,106.67 183.33,80 156.67,80"/>
+    <polygon points="183.33,240 210,240 210,213.33 183.33,213.33"/>
+    <polygon points="183.33,213.33 210,213.33 210,186.67 183.33,186.67"/>
+    <polygon points="183.33,186.67 210,186.67 210,160 183.33,160"/>
+    <polygon points="183.33,160 210,160 210,133.33 183.33,133.33"/>
+    <polygon points="183.33,133.33 210,133.33 210,106.67 183.33,106.67"/>
+    <polygon points="183.33,106.67 210,106.67 210,80 183.33,80"/>
+    <polygon points="210,240 236.67,240 236.67,213.33 210,213.33"/>
+    <polygon points="210,213.33 236.67,213.33 236.67,186.67 210,186.67"/>
+    <polygon points="210,186.67 236.67,186.67 236.67,160 210,160"/>
+    <polygon points="210,160 236.67,160 236.67,133.33 210,133.33"/>
+    <polygon points="210,133.33 236.67,133.33 236.67,106.67 210,106.67"/>
+    <polygon points="210,106.67 236.67,106.67 236.67,80 210,80"/>
+    <polygon points="236.67,240 263.33,240 263.33,213.33 236.67,213.33"/>
+    <polygon points="236.67,213.33 263.33,213.33 263.33,186.67 236.67,186.67"/>
+    <polygon points="236.67,186.67 263.33,186.67 263.33,160 236.67,160"/>
+    <polygon points="236.67,160 263.33,160 263.33,133.33 236.67,133.33"/>
+    <polygon points="236.67,133.33 263.33,133.33 263.33,106.67 236.67,106.67"/>
+    <polygon points="236.67,106.67 263.33,106.67 263.33,80 236.67,80"/>
+    <polygon points="263.33,240 290,240 290,213.33 263.33,213.33"/>
+    <polygon points="263.33,213.33 290,213.33 290,186.67 263.33,186.67"/>
+    <polygon points="263.33,186.67 290,186.67 290,160 263.33,160"/>
+    <polygon points="263.33,160 290,160 290,133.33 263.33,133.33"/>
+    <polygon points="263.33,133.33 290,133.33 290,106.67 263.33,106.67"/>
+    <polygon points="263.33,106.67 290,106.67 290,80 263.33,80"/>
+    <polygon points="290,240 316.67,240 316.67,213.33 290,213.33"/>
+    <polygon points="290,213.33 316.67,213.33 316.67,186.67 290,186.67"/>
+    <polygon points="290,186.67 316.67,186.67 316.67,160 290,160"/>
+    <polygon points="290,160 316.67,160 316.67,133.33 290,133.33"/>
+    <polygon points="290,133.33 316.67,133.33 316.67,106.67 290,106.67"/>
+    <polygon points="290,106.67 316.67,106.67 316.67,80 290,80"/>
+    <polygon points="316.67,240 343.33,240 343.33,213.33 316.67,213.33"/>
+    <polygon points="316.67,213.33 343.33,213.33 343.33,186.67 316.67,186.67"/>
+    <polygon points="316.67,186.67 343.33,186.67 343.33,160 316.67,160"/>
+    <polygon points="316.67,160 343.33,160 343.33,133.33 316.67,133.33"/>
+    <polygon points="316.67,133.33 343.33,133.33 343.33,106.67 316.67,106.67"/>
+    <polygon points="316.67,106.67 343.33,106.67 343.33,80 316.67,80"/>
+    <polygon points="343.33,240 370,240 370,213.33 343.33,213.33"/>
+    <polygon points="343.33,213.33 370,213.33 370,186.67 343.33,186.67"/>
+    <polygon points="343.33,186.67 370,186.67 370,160 343.33,160"/>
+    <polygon points="343.33,160 370,160 370,133.33 343.33,133.33"/>
+    <polygon points="343.33,133.33 370,133.33 370,106.67 343.33,106.67"/>
+    <polygon points="343.33,106.67 370,106.67 370,80 343.33,80"/>
+    <polygon points="370,240 396.67,240 396.67,213.33 370,213.33"/>
+    <polygon points="370,213.33 396.67,213.33 396.67,186.67 370,186.67"/>
+    <polygon points="370,186.67 396.67,186.67 396.67,160 370,160"/>
+    <polygon points="370,160 396.67,160 396.67,133.33 370,133.33"/>
+    <polygon points="370,133.33 396.67,133.33 396.67,106.67 370,106.67"/>
+    <polygon points="370,106.67 396.67,106.67 396.67,80 370,80"/>
+    <polygon points="396.67,240 423.33,240 423.33,213.33 396.67,213.33"/>
+    <polygon points="396.67,213.33 423.33,213.33 423.33,186.67 396.67,186.67"/>
+    <polygon points="396.67,186.67 423.33,186.67 423.33,160 396.67,160"/>
+    <polygon points="396.67,160 423.33,160 423.33,133.33 396.67,133.33"/>
+    <polygon points="396.67,133.33 423.33,133.33 423.33,106.67 396.67,106.67"/>
+    <polygon points="396.67,106.67 423.33,106.67 423.33,80 396.67,80"/>
+    <polygon points="423.33,240 450,240 450,213.33 423.33,213.33"/>
+    <polygon points="423.33,213.33 450,213.33 450,186.67 423.33,186.67"/>
+    <polygon points="423.33,186.67 450,186.67 450,160 423.33,160"/>
+    <polygon points="423.33,160 450,160 450,133.33 423.33,133.33"/>
+    <polygon points="423.33,133.33 450,133.33 450,106.67 423.33,106.67"/>
+    <polygon points="423.33,106.67 450,106.67 450,80 423.33,80"/>
   </g>
-  <rect x="130" y="80" width="320" height="160" fill="none" stroke="#000" stroke-width="2"/>
-  <text x="290" y="268" text-anchor="middle">bottom</text>
-  <text x="290" y="284" font-size="12" fill="#666" text-anchor="middle">boundary "0"</text>
-  <text x="116" y="160" text-anchor="middle" transform="rotate(-90 116 160)">left</text>
-  <text x="98" y="160" font-size="12" fill="#666" text-anchor="middle" transform="rotate(-90 98 160)">boundary "1"</text>
-  <text x="290" y="70" text-anchor="middle">top</text>
-  <text x="290" y="52" font-size="12" fill="#666" text-anchor="middle">boundary "2"</text>
-  <text x="470" y="160" text-anchor="middle" transform="rotate(90 470 160)">right</text>
-  <text x="488" y="160" font-size="12" fill="#666" text-anchor="middle" transform="rotate(90 488 160)">boundary "3"</text>
-  <circle cx="130" cy="240" r="3"/>
+  <polygon points="130,240 450,240 450,80 130,80" fill="none" stroke="#000" stroke-width="2" stroke-linejoin="round"/>
+  <text x="290" y="262" text-anchor="middle">"bottom"</text>
+  <text x="290" y="278" font-size="12" fill="#666" text-anchor="middle"></text>
+  <text x="116" y="160" text-anchor="middle" transform="rotate(-90 116 160)">"left"</text>
+  <text x="100" y="160" font-size="12" fill="#666" text-anchor="middle" transform="rotate(-90 100 160)"></text>
+  <text x="290" y="68" text-anchor="middle">"top"</text>
+  <text x="290" y="50" font-size="12" fill="#666" text-anchor="middle"></text>
+  <text x="470" y="160" text-anchor="middle" transform="rotate(90 470 160)">"right"</text>
+  <text x="486" y="160" font-size="12" fill="#666" text-anchor="middle" transform="rotate(90 486 160)"></text>
+  <circle cx="130" cy="240" r="3" fill="#000" stroke="#000" stroke-width="1.2"/>
   <text x="122" y="260" font-size="13" text-anchor="end">(0, 0)</text>
 </svg>

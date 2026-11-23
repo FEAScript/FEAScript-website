@@ -30,6 +30,25 @@
     });
   }
 
+  // Tutorial figures: replace each SVG image of the FEAScript figure style (root class "fig") with the SVG itself,
+  // so that its colors follow the theme variables. The same code is in src/clientModules/inlineFigures.js of
+  // FEAScript-documentation.
+  document.querySelectorAll('.doc .center-image img[src$=".svg"]').forEach((image) => {
+    fetch(image.getAttribute("src"))
+      .then((response) => (response.ok ? response.text() : ""))
+      .then((content) => {
+        if (!/<svg[^>]*class="fig"/.test(content) || !image.isConnected) return;
+        const svg = new DOMParser().parseFromString(content, "image/svg+xml").documentElement;
+        if (svg.nodeName !== "svg") return;
+        svg.setAttribute("role", "img");
+        svg.setAttribute("aria-label", image.getAttribute("alt") || "");
+        svg.removeAttribute("height");
+        if (image.getAttribute("width")) svg.setAttribute("width", image.getAttribute("width"));
+        image.replaceWith(document.importNode(svg, true));
+      })
+      .catch(() => {});
+  });
+
   // Mobile navigation
   const burger = document.getElementById("nav-burger");
   const mobileNav = document.getElementById("mobile-nav");

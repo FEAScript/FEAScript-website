@@ -2747,14 +2747,43 @@ h2 .accent {
   background: #fff;
 }
 
-/* Tutorial schematics: line art without a frame, inverted in dark mode */
-.doc .center-image img.schematic {
+/* Tutorial figures (scripts/figure_style.py, shared with the docs): SVGs whose root has the class "fig". The
+   script inlines them, so their colors follow these variables in both themes. Until a figure is inlined it is an
+   image in the light colors, inverted in dark mode with its hues kept. */
+:root {
+  --fig-ink: var(--ink);
+  --fig-muted: #6b6960;
+  --fig-bg: var(--bg);
+  --fig-area: var(--bg-sunken);
+  --fig-value: #c8003f;
+  --fig-robin: #d4aa00;
+  --fig-flux: #0086d4;
+  --fig-zero: #00a86b;
+  --fig-gold-ink: var(--gold-ink);
+}
+
+html[data-theme="dark"] {
+  --fig-muted: var(--muted);
+  --fig-value: #ff5c8d;
+  --fig-robin: #e6c230;
+  --fig-flux: #5aa2ec;
+  --fig-zero: #2fcf93;
+}
+
+.doc .center-image img[src$=".svg"] {
   border: none;
   background: none;
 }
 
-html[data-theme="dark"] .doc .center-image img.schematic {
-  filter: invert(0.88);
+html[data-theme="dark"] .doc .center-image img[src$=".svg"] {
+  filter: invert(0.88) hue-rotate(180deg);
+}
+
+.doc .center-image svg.fig {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 
 .doc .image-caption {

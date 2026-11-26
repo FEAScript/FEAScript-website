@@ -1872,6 +1872,16 @@ h2 .accent {
   width: auto;
 }
 
+/* Logos with a light and a dark version: show the one that matches the theme */
+.case-study-logo .logo-dark,
+html[data-theme="dark"] .case-study-logo .logo-light {
+  display: none;
+}
+
+html[data-theme="dark"] .case-study-logo .logo-dark {
+  display: block;
+}
+
 .case-study h3 {
   margin-top: 1.5rem;
   font-size: clamp(1.5rem, 3vw, 2rem);
